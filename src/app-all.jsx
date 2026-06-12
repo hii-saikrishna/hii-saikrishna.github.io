@@ -53,9 +53,17 @@ function ThreeScene({ build, className, style }) {
       camera.aspect = nw / nh;
       camera.updateProjectionMatrix();
     };
+    let resizeRaf = 0;
+    const scheduleResize = () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        onResize();
+      });
+    };
     // Defer out of the observer callback to avoid the benign
     // "ResizeObserver loop completed with undelivered notifications" warning.
-    const ro = new ResizeObserver(() => requestAnimationFrame(onResize));
+    const ro = new ResizeObserver(scheduleResize);
     ro.observe(el);
 
     const onMove = (e) => {
@@ -67,6 +75,7 @@ function ThreeScene({ build, className, style }) {
 
     return () => {
       stopLoop();
+      cancelAnimationFrame(resizeRaf);
       io.disconnect();
       ro.disconnect();
       document.removeEventListener("visibilitychange", onVis);

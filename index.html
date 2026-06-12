@@ -21,13 +21,24 @@
       var box = document.getElementById('err-overlay');
       // Benign browser noise that must never surface as an "error".
       function benign(msg) {
-        return /ResizeObserver loop/i.test(msg);
+        return /ResizeObserver loop/i.test(String(msg || ''));
+      }
+      function silenceIfBenign(e) {
+        var msg = e && ((e.error && e.error.message) || e.message || String(e.error || ''));
+        if (!benign(msg)) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return false;
       }
       function show(label, msg) {
         if (!box || benign(msg)) return;
         box.style.display = 'block';
         box.textContent += '[' + label + '] ' + msg + '\n\n';
       }
+      window.addEventListener('error', silenceIfBenign, true);
+      window.onerror = function (msg) {
+        return benign(msg) || undefined;
+      };
       window.addEventListener('error', function (e) {
         var loc = e.filename ? ('\n  at ' + e.filename + ':' + e.lineno + ':' + e.colno) : '';
         show('ERROR', ((e.error && e.error.stack) || e.message || String(e.error)) + loc);
