@@ -2031,7 +2031,9 @@ function ThreeScene({
       camera.aspect = nw / nh;
       camera.updateProjectionMatrix();
     };
-    const ro = new ResizeObserver(onResize);
+    // Defer out of the observer callback to avoid the benign
+    // "ResizeObserver loop completed with undelivered notifications" warning.
+    const ro = new ResizeObserver(() => requestAnimationFrame(onResize));
     ro.observe(el);
     const onMove = e => {
       const r = el.getBoundingClientRect();

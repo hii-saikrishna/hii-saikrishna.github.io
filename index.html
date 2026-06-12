@@ -15,12 +15,16 @@
 </head>
 <body>
     <div id="root"></div>
-    <div id="err-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#fff;color:#b00020;font:12px/1.5 ui-monospace,Menlo,monospace;padding:20px;overflow:auto;white-space:pre-wrap;border-top:4px solid #b00020;"></div>
+    <div id="err-overlay" style="display:none;position:fixed;left:0;right:0;bottom:0;max-height:40vh;z-index:99999;background:#fff;color:#b00020;font:12px/1.5 ui-monospace,Menlo,monospace;padding:14px 18px;overflow:auto;white-space:pre-wrap;border-top:4px solid #b00020;box-shadow:0 -6px 24px rgba(0,0,0,0.12);"></div>
     <script>
     (function () {
       var box = document.getElementById('err-overlay');
+      // Benign browser noise that must never surface as an "error".
+      function benign(msg) {
+        return /ResizeObserver loop/i.test(msg);
+      }
       function show(label, msg) {
-        if (!box) return;
+        if (!box || benign(msg)) return;
         box.style.display = 'block';
         box.textContent += '[' + label + '] ' + msg + '\n\n';
       }
@@ -32,22 +36,10 @@
         var r = e.reason;
         show('PROMISE', (r && (r.stack || r.message)) || String(r));
       });
-      var orig = console.error.bind(console);
-      console.error = function () {
-        try {
-          var parts = [];
-          for (var i = 0; i < arguments.length; i++) {
-            var a = arguments[i];
-            parts.push((a && (a.stack || a.message)) || String(a));
-          }
-          show('console.error', parts.join(' '));
-        } catch (_) {}
-        orig.apply(null, arguments);
-      };
       setTimeout(function () {
         var root = document.getElementById('root');
         if (root && root.children.length === 0) {
-          show('NOTE', '#root is still empty after 7s — the app never mounted. The first error above is the cause.');
+          show('NOTE', '#root is still empty after 7s — the app never mounted.');
         }
       }, 7000);
     })();
