@@ -348,6 +348,74 @@ function dioramaScene(kind) {
       };
     }
 
+    if (kind === "embodied") {
+      // open dollhouse room — robots living and working in a real home
+      camera.position.set(4.4, 3.6, 4.6); camera.lookAt(0, 0.35, 0);
+      const home = new THREE.Group();
+      stage.add(home);
+
+      const mFloor = rMat(0xece2d0, { roughness: 0.95 });
+      const mRug = rMat(0xcfe3cf, { roughness: 1 });
+      const mWall = rMat(0xf5f5f1, { roughness: 0.95 });
+      const mWood = rMat(0xb08a5e, { roughness: 0.85 });
+      const mSofa = rMat(RB.grass, { roughness: 1 });
+      const mPot = rMat(0xc96f4a, { roughness: 0.9 });
+
+      rBox(home, mFloor, 6, 0.18, 5, 0, -0.09, 0);
+      const rug = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.03, 24), mRug);
+      rug.position.set(-1.0, 0.02, 0.7); home.add(rug);
+      // two open walls
+      rBox(home, mWall, 6, 0.95, 0.12, 0, 0.47, -2.44);
+      rBox(home, mWall, 0.12, 0.95, 5, -2.94, 0.47, 0);
+      // kitchen counter + fridge
+      rBox(home, mWood, 1.7, 0.5, 0.5, -1.7, 0.25, -2.0);
+      rBox(home, mWall, 0.5, 0.8, 0.45, -0.5, 0.4, -2.05);
+      // sofa + coffee table
+      const sofa = new THREE.Group(); sofa.position.set(1.7, 0, 0.4); sofa.rotation.y = -Math.PI / 2;
+      rBox(sofa, mSofa, 1.5, 0.34, 0.6, 0, 0.18, 0);
+      rBox(sofa, mSofa, 1.5, 0.4, 0.18, 0, 0.5, -0.22);
+      home.add(sofa);
+      rBox(home, mWood, 0.7, 0.22, 0.4, 0.7, 0.12, 0.5);
+      // plants
+      const addPlant = (x, z, s = 1) => {
+        const p = new THREE.Group();
+        rCyl(p, mPot, 0.13, 0.1, 0.2, 0, 0.1, 0, 8);
+        const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.46, 7), rMat(RB.grass2)); l1.position.y = 0.42; p.add(l1);
+        const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.32, 7), rMat(RB.grass)); l2.position.set(0.07, 0.56, 0.04); p.add(l2);
+        p.position.set(x, 0, z); p.scale.setScalar(s); home.add(p);
+      };
+      addPlant(-2.4, -1.9, 1.0); addPlant(2.3, -2.0, 0.85); addPlant(-2.4, 1.9, 0.9);
+
+      // robots doing chores
+      const vac = buildRoverModel(); vac.group.scale.setScalar(0.42); home.add(vac.group);
+      const chef = buildHumanoidModel("wave"); chef.group.scale.setScalar(0.5);
+      chef.group.position.set(-1.7, 0, -1.45); chef.group.rotation.y = Math.PI; home.add(chef.group);
+      const duster = buildDroneModel(); duster.group.scale.setScalar(0.42); home.add(duster.group);
+      const patrol = buildQuadrupedModel(); patrol.group.scale.setScalar(0.4); home.add(patrol.group);
+      const waypoints = [
+        new THREE.Vector3(2.2, 0, 1.7), new THREE.Vector3(2.2, 0, -1.4),
+        new THREE.Vector3(0.4, 0, -1.4), new THREE.Vector3(0.4, 0, 1.7),
+      ];
+
+      update = (t) => {
+        vac.update(t * 1.6);
+        vac.group.position.set(-1.0 + Math.sin(t * 0.5) * 1.0, 0, 0.7 + Math.sin(t * 0.78 + 1.2) * 0.9);
+        vac.group.rotation.y = Math.atan2(Math.cos(t * 0.78 + 1.2) * 0.7, Math.cos(t * 0.5) * 0.5);
+        chef.update(t);
+        duster.update(t);
+        duster.group.position.set(-0.6 + Math.sin(t * 0.4) * 1.6, 1.4 + Math.sin(t * 1.1) * 0.12, -1.9);
+        duster.group.rotation.y = Math.sin(t * 0.4) > 0 ? 0 : Math.PI;
+        patrol.update(t);
+        const total = waypoints.length;
+        const prog = (t * 0.18) % total;
+        const i0 = Math.floor(prog), i1 = (i0 + 1) % total, f = prog - i0;
+        patrol.group.position.lerpVectors(waypoints[i0], waypoints[i1], f);
+        const dir = waypoints[i1].clone().sub(waypoints[i0]);
+        patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
+        stage.rotation.y = Math.sin(t * 0.12) * 0.14 + ctx.mouse.x * 0.22;
+      };
+    }
+
     if (kind === "swarm") {
       camera.position.set(2.9, 2.1, 3.4); camera.lookAt(0, 0.5, 0);
       addMeadow(stage, 1.9);

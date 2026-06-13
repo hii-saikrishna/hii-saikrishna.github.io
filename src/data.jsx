@@ -13,6 +13,15 @@ const PROFILE = {
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf",
 };
 
+// Hero gallery — first frame is the portrait, the rest give a sense of the work.
+const HOME_GALLERY = [
+  { src: "attached_assets/Profile_Pic.png",        label: "Athens, GA · 2026",          caption: "Sai Krishna Ghanta" },
+  { src: "attached_assets/Multi_Robot_Systems.png", label: "Multi-Robot Systems",        caption: "Cooperative mapping with the HeRoLab fleet" },
+  { src: "attached_assets/Robot_Learning.png",      label: "Robot Learning",             caption: "Embodied reasoning over invisible fields" },
+  { src: "attached_assets/Computer_Vision.png",     label: "Computer Vision",            caption: "Semantic SLAM in dynamic indoor scenes" },
+  { src: "attached_assets/Machine_Learning.png",    label: "Spatial Intelligence",       caption: "Gaussian-process belief over space" },
+];
+
 const INTERESTS = [
   { id: "robot",  title: "Robot Learning",        desc: "Foundation models & reasoning frameworks for embodied agents.", topics: ["LLM Planning", "Neuro-Symbolic", "VLMs"] },
   { id: "multi",  title: "Multi-Robot Systems",   desc: "Distributed mapping, cooperative SLAM and exploration.",       topics: ["Cooperative SLAM", "Task Allocation", "Exploration"] },
@@ -20,30 +29,50 @@ const INTERESTS = [
   { id: "ml",     title: "Machine Learning",      desc: "Gaussian processes, uncertainty, continuous-thought models.",   topics: ["GPs", "RL", "Cognitive ML"] },
 ];
 
+// Research thrusts — colorful, resourceful, no "T#" index.
+// accent / tint drive the per-thrust color theme; scene picks the inline 3D diorama.
 const THRUSTS = [
   {
-    num: "T1",
-    title: "Robot Learning & Embodied Reasoning",
-    scene: "learning",
-    img: "attached_assets/Robot_Learning.png",
-    body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them. The goal is robots that can reason in language about a physical environment, then plan over it.",
+    id: "embodied",
+    title: "Robot Learning & Embodied Intelligence",
+    tagline: "Robots that reason about the world they live in",
+    scene: "embodied",
+    accent: "#2e8f5b", tint: "#eaf6ee",
+    body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them inside real homes and buildings. The goal is agents that reason in language about a physical environment, then plan and move through it.",
     keywords: ["Embodied AI", "LLM Planning", "Spatial Grounding", "VLM Reasoning"],
+    stats: [{ k: "Domains", v: "Homes · Warehouses" }, { k: "Modalities", v: "Vision · Language · RF" }],
+    resources: [
+      { label: "Embodied reasoning — blog", href: "#/blog/embodied-reasoning" },
+      { label: "Smart-home robotics — blog", href: "#/blog/smart-home-robots" },
+    ],
   },
   {
-    num: "T2",
-    title: "Mapping and Localization for Multi-Robot Systems",
+    id: "multirobot",
+    title: "Mapping & Localization for Multi-Robot Systems",
+    tagline: "Many robots, one shared map — even when comms drop",
     scene: "swarm",
-    img: "attached_assets/Multi_Robot_Systems.png",
-    body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
+    accent: "#2f6df0", tint: "#e8f0ff",
+    body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting-trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
     keywords: ["SPACE", "MGPRL", "3DS-SLAM", "Distributed Mapping"],
+    stats: [{ k: "Boundary artifacts", v: "−34%" }, { k: "Comms dropout", v: "robust to 90s" }],
+    resources: [
+      { label: "SPACE — arXiv:2411.02524", href: "https://arxiv.org/abs/2411.02524" },
+      { label: "3DS-SLAM — arXiv:2310.06385", href: "https://arxiv.org/abs/2310.06385" },
+    ],
   },
   {
-    num: "T4",
+    id: "spatial",
     title: "Spatial Intelligence",
+    tagline: "Learning a belief over space itself",
     scene: "gp",
-    img: "attached_assets/Machine_Learning.png",
+    accent: "#c9821f", tint: "#fbf1df",
     body: "Robots that learn a belief over space itself: Gaussian-process fields for Wi-Fi, humidity, and other invisible signals, floating above the real world they describe. MGPRL uses these uncertainty-aware fields for multi-robot relative localization where GPS can't reach.",
     keywords: ["Gaussian Processes", "MGPRL", "Wi-Fi RSSI", "Uncertainty"],
+    stats: [{ k: "Signal", v: "Wi-Fi RSSI" }, { k: "Estimate", v: "Uncertainty-aware" }],
+    resources: [
+      { label: "Invisible fields — blog", href: "#/blog/gp-fields" },
+      { label: "MGPRL — IEEE IROS 2025", href: PROFILE.scholar },
+    ],
   },
 ];
 
@@ -53,6 +82,7 @@ const PUBLICATIONS = [
     title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
     authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
     venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025",
+    link: "https://arxiv.org/abs/2411.02524",
   },
   {
     year: 2025, kind: "conference", featured: true,
@@ -71,6 +101,7 @@ const PUBLICATIONS = [
     title: "3DS-SLAM: A 3D Object Detection-based Semantic SLAM towards Dynamic Indoor Environments",
     authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
     venue: "arXiv:2310.06385",
+    link: "https://arxiv.org/abs/2310.06385",
   },
   {
     year: 2023, kind: "conference",
@@ -98,7 +129,68 @@ const PUBLICATIONS = [
   },
 ];
 
+// Groups for the segregated Publications view (order matters).
+const PUB_GROUPS = [
+  { kind: "conference", label: "Conference Papers" },
+  { kind: "journal",    label: "Journal Articles" },
+  { kind: "submitted",  label: "Under Review" },
+];
+
+// ===== CV (rendered inline on the home page) =====
+const EDUCATION = [
+  {
+    date: "2024 — present",
+    role: "PhD, Artificial Intelligence",
+    org: "University of Georgia",
+    desc: "Multi-robot systems, embodied reasoning, and spatial intelligence at the Heterogeneous Robotics Lab (HeRoLab) with Dr. Ramviyas Parasuraman.",
+  },
+  {
+    date: "2019 — 2023",
+    role: "B.Tech, Computer Science & Engineering",
+    org: "IIIT Naya Raipur",
+    desc: "Graduated with research in computer vision, semantic SLAM, and deep learning for speech and sensing.",
+  },
+];
+
+const EXPERIENCE = [
+  {
+    date: "2024 — present",
+    role: "Graduate Research Assistant",
+    org: "HeRoLab, University of Georgia",
+    desc: "Building SPACE and MGPRL — cooperative mapping and Wi-Fi relative localization for GPS-denied multi-robot teams.",
+  },
+  {
+    date: "2023",
+    role: "Software Engineer Intern",
+    org: "Samsung R&D Institute",
+    desc: "On-device ML and systems engineering for consumer devices.",
+  },
+  {
+    date: "2021 — 2023",
+    role: "AI / ML Researcher",
+    org: "IIIT Naya Raipur",
+    desc: "Semantic SLAM, visual speech recognition, and explainable vision transformers for fault diagnosis.",
+  },
+];
+
 const BLOG_POSTS = [
+  {
+    id: "smart-home-robots",
+    title: "A Day in a Robot Home: What Embodied Intelligence Looks Like",
+    category: "Embodied AI",
+    date: "Jun 2024",
+    readTime: "7 min",
+    excerpt: "Vacuums, quadrupeds, drones and humanoids sharing one home. A field note on grounding language plans in a lived-in space.",
+    cover: "home",
+    body: [
+      ["p", "Picture an ordinary apartment: a rover sweeping the living room, a quadruped patrolling the hallway, a drone dusting the shelves, a humanoid prepping the kitchen counter. None of them are impressive on their own. Together, in one space, they are a small model of embodied intelligence."],
+      ["h2", "Why the home is the hard problem"],
+      ["p", "A home is cluttered, dynamic, and full of intent. Furniture moves, people cross paths, and a plan written in language — 'tidy the living room' — has to survive contact with a physical, changing world. That is exactly the setting where robot learning stops being a benchmark and starts being a behavior."],
+      ["p", "We use the home scene as a sandbox for grounding: every object the robots reason about has a place, a cost to reach, and a consequence if you bump it. The language plan is only as good as the spatial grounding underneath it."],
+      ["h2", "From chores to capabilities"],
+      ["p", "Each chore exercises a different capability — coverage, patrolling, manipulation, aerial inspection. Stitching them into one coherent home is what moves us from 'a robot that can' to 'robots that live here.'"],
+    ],
+  },
   {
     id: "slam-odyssey",
     title: "The SLAM Odyssey: From Monocular Vision to Cooperative Mapping",
@@ -182,7 +274,7 @@ const BLOG_POSTS = [
     category: "AI",
     date: "Jan 2024",
     readTime: "8 min",
-    excerpt: "We probed GPT-4 and Llama-2 with spatial reasoning tasks. The results are surprising.",
+    excerpt: "We probed frontier LLMs with spatial reasoning tasks. The results are surprising.",
     cover: "llm",
     body: [
       ["p", "An LLM trained on human text has never felt gravity, never brushed against a wall, never gripped an object. Can it reason about physics at all?"],
@@ -194,13 +286,23 @@ const BLOG_POSTS = [
   },
 ];
 
+// Milestones — grouped by year in the UI; tag drives the color pill.
 const UPDATES = [
-  { date: "Dec 2025", text: "SPACE framework submitted to IROS 2025. Excited to see it in the community." },
-  { date: "Nov 2025", text: "Started collaborating with TU Delft on distributed Bayesian optimization for multi-robot exploration." },
-  { date: "Oct 2025", text: "Gave a talk on embodied reasoning at the NeurIPS 2025 workshop on Embodied AI. Great discussions." },
-  { date: "Sep 2025", text: "Completed field trials of MGPRL in the HeRoLab warehouse. Four quadrupeds, GPS-denied, 10 hours of autonomous operation." },
-  { date: "Aug 2025", text: "Started PhD at UGA under Dr. Ramviyas Parasuraman. Building robots that think." },
-  { date: "Jun 2025", text: "Graduated from IIIT Naya Raipur with B.Tech in Computer Science and Engineering." },
+  { date: "Dec 2025", year: 2025, tag: "Paper",      text: "SPACE framework submitted to IROS 2025. Excited to see it in the community." },
+  { date: "Nov 2025", year: 2025, tag: "Collab",     text: "Started collaborating with TU Delft on distributed Bayesian optimization for multi-robot exploration." },
+  { date: "Oct 2025", year: 2025, tag: "Talk",       text: "Gave a talk on embodied reasoning at the NeurIPS 2025 workshop on Embodied AI. Great discussions." },
+  { date: "Sep 2025", year: 2025, tag: "Field Work", text: "Completed field trials of MGPRL in the HeRoLab warehouse. Four quadrupeds, GPS-denied, 10 hours of autonomous operation." },
+  { date: "Jul 2025", year: 2025, tag: "Paper",      text: "MGPRL submitted to IROS 2025 — Wi-Fi-based relative localization for large indoor teams." },
+  { date: "Aug 2024", year: 2024, tag: "Milestone",  text: "Started PhD at UGA under Dr. Ramviyas Parasuraman. Building robots that think." },
+  { date: "Jun 2024", year: 2024, tag: "Milestone",  text: "Graduated from IIIT Naya Raipur with a B.Tech in Computer Science & Engineering." },
+  { date: "Mar 2024", year: 2024, tag: "Award",      text: "Recognized for undergraduate research in semantic SLAM and explainable vision." },
+  { date: "Oct 2023", year: 2023, tag: "Paper",      text: "3DS-SLAM released on arXiv — semantic SLAM for dynamic indoor environments." },
+  { date: "May 2023", year: 2023, tag: "Internship", text: "Joined Samsung R&D as a Software Engineer Intern, working on on-device ML." },
+  { date: "Feb 2023", year: 2023, tag: "Paper",      text: "Adversarial security & differential privacy for mmWave beam prediction accepted at IEEE CSNet 2023." },
+  { date: "2022",     year: 2022, tag: "Paper",      text: "Holistic visual speech recognition published in IEEE Transactions on Artificial Intelligence." },
 ];
 
-Object.assign(window, { PROFILE, INTERESTS, THRUSTS, PUBLICATIONS, BLOG_POSTS, UPDATES });
+Object.assign(window, {
+  PROFILE, HOME_GALLERY, INTERESTS, THRUSTS, PUBLICATIONS, PUB_GROUPS,
+  EDUCATION, EXPERIENCE, BLOG_POSTS, UPDATES,
+});

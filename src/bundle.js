@@ -15,6 +15,29 @@ const PROFILE = {
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf"
 };
+
+// Hero gallery — first frame is the portrait, the rest give a sense of the work.
+const HOME_GALLERY = [{
+  src: "attached_assets/Profile_Pic.png",
+  label: "Athens, GA · 2026",
+  caption: "Sai Krishna Ghanta"
+}, {
+  src: "attached_assets/Multi_Robot_Systems.png",
+  label: "Multi-Robot Systems",
+  caption: "Cooperative mapping with the HeRoLab fleet"
+}, {
+  src: "attached_assets/Robot_Learning.png",
+  label: "Robot Learning",
+  caption: "Embodied reasoning over invisible fields"
+}, {
+  src: "attached_assets/Computer_Vision.png",
+  label: "Computer Vision",
+  caption: "Semantic SLAM in dynamic indoor scenes"
+}, {
+  src: "attached_assets/Machine_Learning.png",
+  label: "Spatial Intelligence",
+  caption: "Gaussian-process belief over space"
+}];
 const INTERESTS = [{
   id: "robot",
   title: "Robot Learning",
@@ -36,27 +59,78 @@ const INTERESTS = [{
   desc: "Gaussian processes, uncertainty, continuous-thought models.",
   topics: ["GPs", "RL", "Cognitive ML"]
 }];
+
+// Research thrusts — colorful, resourceful, no "T#" index.
+// accent / tint drive the per-thrust color theme; scene picks the inline 3D diorama.
 const THRUSTS = [{
-  num: "T1",
-  title: "Robot Learning & Embodied Reasoning",
-  scene: "learning",
-  img: "attached_assets/Robot_Learning.png",
-  body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them. The goal is robots that can reason in language about a physical environment, then plan over it.",
-  keywords: ["Embodied AI", "LLM Planning", "Spatial Grounding", "VLM Reasoning"]
+  id: "embodied",
+  title: "Robot Learning & Embodied Intelligence",
+  tagline: "Robots that reason about the world they live in",
+  scene: "embodied",
+  accent: "#2e8f5b",
+  tint: "#eaf6ee",
+  body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them inside real homes and buildings. The goal is agents that reason in language about a physical environment, then plan and move through it.",
+  keywords: ["Embodied AI", "LLM Planning", "Spatial Grounding", "VLM Reasoning"],
+  stats: [{
+    k: "Domains",
+    v: "Homes · Warehouses"
+  }, {
+    k: "Modalities",
+    v: "Vision · Language · RF"
+  }],
+  resources: [{
+    label: "Embodied reasoning — blog",
+    href: "#/blog/embodied-reasoning"
+  }, {
+    label: "Smart-home robotics — blog",
+    href: "#/blog/smart-home-robots"
+  }]
 }, {
-  num: "T2",
-  title: "Mapping and Localization for Multi-Robot Systems",
+  id: "multirobot",
+  title: "Mapping & Localization for Multi-Robot Systems",
+  tagline: "Many robots, one shared map — even when comms drop",
   scene: "swarm",
-  img: "attached_assets/Multi_Robot_Systems.png",
-  body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
-  keywords: ["SPACE", "MGPRL", "3DS-SLAM", "Distributed Mapping"]
+  accent: "#2f6df0",
+  tint: "#e8f0ff",
+  body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting-trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
+  keywords: ["SPACE", "MGPRL", "3DS-SLAM", "Distributed Mapping"],
+  stats: [{
+    k: "Boundary artifacts",
+    v: "−34%"
+  }, {
+    k: "Comms dropout",
+    v: "robust to 90s"
+  }],
+  resources: [{
+    label: "SPACE — arXiv:2411.02524",
+    href: "https://arxiv.org/abs/2411.02524"
+  }, {
+    label: "3DS-SLAM — arXiv:2310.06385",
+    href: "https://arxiv.org/abs/2310.06385"
+  }]
 }, {
-  num: "T4",
+  id: "spatial",
   title: "Spatial Intelligence",
+  tagline: "Learning a belief over space itself",
   scene: "gp",
-  img: "attached_assets/Machine_Learning.png",
+  accent: "#c9821f",
+  tint: "#fbf1df",
   body: "Robots that learn a belief over space itself: Gaussian-process fields for Wi-Fi, humidity, and other invisible signals, floating above the real world they describe. MGPRL uses these uncertainty-aware fields for multi-robot relative localization where GPS can't reach.",
-  keywords: ["Gaussian Processes", "MGPRL", "Wi-Fi RSSI", "Uncertainty"]
+  keywords: ["Gaussian Processes", "MGPRL", "Wi-Fi RSSI", "Uncertainty"],
+  stats: [{
+    k: "Signal",
+    v: "Wi-Fi RSSI"
+  }, {
+    k: "Estimate",
+    v: "Uncertainty-aware"
+  }],
+  resources: [{
+    label: "Invisible fields — blog",
+    href: "#/blog/gp-fields"
+  }, {
+    label: "MGPRL — IEEE IROS 2025",
+    href: PROFILE.scholar
+  }]
 }];
 const PUBLICATIONS = [{
   year: 2025,
@@ -64,7 +138,8 @@ const PUBLICATIONS = [{
   featured: true,
   title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025"
+  venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025",
+  link: "https://arxiv.org/abs/2411.02524"
 }, {
   year: 2025,
   kind: "conference",
@@ -83,7 +158,8 @@ const PUBLICATIONS = [{
   kind: "conference",
   title: "3DS-SLAM: A 3D Object Detection-based Semantic SLAM towards Dynamic Indoor Environments",
   authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
-  venue: "arXiv:2310.06385"
+  venue: "arXiv:2310.06385",
+  link: "https://arxiv.org/abs/2310.06385"
 }, {
   year: 2023,
   kind: "conference",
@@ -109,7 +185,57 @@ const PUBLICATIONS = [{
   authors: ["P. Nemani", "Sai Krishna Ghanta", "N. Ramisetty", "B. D. S. Sai", "S. Kumar"],
   venue: "IEEE Transactions on Artificial Intelligence, 2022"
 }];
+
+// Groups for the segregated Publications view (order matters).
+const PUB_GROUPS = [{
+  kind: "conference",
+  label: "Conference Papers"
+}, {
+  kind: "journal",
+  label: "Journal Articles"
+}, {
+  kind: "submitted",
+  label: "Under Review"
+}];
+
+// ===== CV (rendered inline on the home page) =====
+const EDUCATION = [{
+  date: "2024 — present",
+  role: "PhD, Artificial Intelligence",
+  org: "University of Georgia",
+  desc: "Multi-robot systems, embodied reasoning, and spatial intelligence at the Heterogeneous Robotics Lab (HeRoLab) with Dr. Ramviyas Parasuraman."
+}, {
+  date: "2019 — 2023",
+  role: "B.Tech, Computer Science & Engineering",
+  org: "IIIT Naya Raipur",
+  desc: "Graduated with research in computer vision, semantic SLAM, and deep learning for speech and sensing."
+}];
+const EXPERIENCE = [{
+  date: "2024 — present",
+  role: "Graduate Research Assistant",
+  org: "HeRoLab, University of Georgia",
+  desc: "Building SPACE and MGPRL — cooperative mapping and Wi-Fi relative localization for GPS-denied multi-robot teams."
+}, {
+  date: "2023",
+  role: "Software Engineer Intern",
+  org: "Samsung R&D Institute",
+  desc: "On-device ML and systems engineering for consumer devices."
+}, {
+  date: "2021 — 2023",
+  role: "AI / ML Researcher",
+  org: "IIIT Naya Raipur",
+  desc: "Semantic SLAM, visual speech recognition, and explainable vision transformers for fault diagnosis."
+}];
 const BLOG_POSTS = [{
+  id: "smart-home-robots",
+  title: "A Day in a Robot Home: What Embodied Intelligence Looks Like",
+  category: "Embodied AI",
+  date: "Jun 2024",
+  readTime: "7 min",
+  excerpt: "Vacuums, quadrupeds, drones and humanoids sharing one home. A field note on grounding language plans in a lived-in space.",
+  cover: "home",
+  body: [["p", "Picture an ordinary apartment: a rover sweeping the living room, a quadruped patrolling the hallway, a drone dusting the shelves, a humanoid prepping the kitchen counter. None of them are impressive on their own. Together, in one space, they are a small model of embodied intelligence."], ["h2", "Why the home is the hard problem"], ["p", "A home is cluttered, dynamic, and full of intent. Furniture moves, people cross paths, and a plan written in language — 'tidy the living room' — has to survive contact with a physical, changing world. That is exactly the setting where robot learning stops being a benchmark and starts being a behavior."], ["p", "We use the home scene as a sandbox for grounding: every object the robots reason about has a place, a cost to reach, and a consequence if you bump it. The language plan is only as good as the spatial grounding underneath it."], ["h2", "From chores to capabilities"], ["p", "Each chore exercises a different capability — coverage, patrolling, manipulation, aerial inspection. Stitching them into one coherent home is what moves us from 'a robot that can' to 'robots that live here.'"]]
+}, {
   id: "slam-odyssey",
   title: "The SLAM Odyssey: From Monocular Vision to Cooperative Mapping",
   category: "Research",
@@ -160,34 +286,82 @@ const BLOG_POSTS = [{
   category: "AI",
   date: "Jan 2024",
   readTime: "8 min",
-  excerpt: "We probed GPT-4 and Llama-2 with spatial reasoning tasks. The results are surprising.",
+  excerpt: "We probed frontier LLMs with spatial reasoning tasks. The results are surprising.",
   cover: "llm",
   body: [["p", "An LLM trained on human text has never felt gravity, never brushed against a wall, never gripped an object. Can it reason about physics at all?"], ["h2", "The Experiment"], ["p", "We created 150 spatial reasoning tasks (e.g., 'A box slides off a table. Where will it land?') and tested state-of-the-art LLMs. Average accuracy: 64%. Humans: 96%."], ["h2", "What This Means"], ["p", "LLMs are useful for high-level planning and communication, but they need grounding. Embodied feedback from robots closes the gap."]]
 }];
+
+// Milestones — grouped by year in the UI; tag drives the color pill.
 const UPDATES = [{
   date: "Dec 2025",
+  year: 2025,
+  tag: "Paper",
   text: "SPACE framework submitted to IROS 2025. Excited to see it in the community."
 }, {
   date: "Nov 2025",
+  year: 2025,
+  tag: "Collab",
   text: "Started collaborating with TU Delft on distributed Bayesian optimization for multi-robot exploration."
 }, {
   date: "Oct 2025",
+  year: 2025,
+  tag: "Talk",
   text: "Gave a talk on embodied reasoning at the NeurIPS 2025 workshop on Embodied AI. Great discussions."
 }, {
   date: "Sep 2025",
+  year: 2025,
+  tag: "Field Work",
   text: "Completed field trials of MGPRL in the HeRoLab warehouse. Four quadrupeds, GPS-denied, 10 hours of autonomous operation."
 }, {
-  date: "Aug 2025",
+  date: "Jul 2025",
+  year: 2025,
+  tag: "Paper",
+  text: "MGPRL submitted to IROS 2025 — Wi-Fi-based relative localization for large indoor teams."
+}, {
+  date: "Aug 2024",
+  year: 2024,
+  tag: "Milestone",
   text: "Started PhD at UGA under Dr. Ramviyas Parasuraman. Building robots that think."
 }, {
-  date: "Jun 2025",
-  text: "Graduated from IIIT Naya Raipur with B.Tech in Computer Science and Engineering."
+  date: "Jun 2024",
+  year: 2024,
+  tag: "Milestone",
+  text: "Graduated from IIIT Naya Raipur with a B.Tech in Computer Science & Engineering."
+}, {
+  date: "Mar 2024",
+  year: 2024,
+  tag: "Award",
+  text: "Recognized for undergraduate research in semantic SLAM and explainable vision."
+}, {
+  date: "Oct 2023",
+  year: 2023,
+  tag: "Paper",
+  text: "3DS-SLAM released on arXiv — semantic SLAM for dynamic indoor environments."
+}, {
+  date: "May 2023",
+  year: 2023,
+  tag: "Internship",
+  text: "Joined Samsung R&D as a Software Engineer Intern, working on on-device ML."
+}, {
+  date: "Feb 2023",
+  year: 2023,
+  tag: "Paper",
+  text: "Adversarial security & differential privacy for mmWave beam prediction accepted at IEEE CSNet 2023."
+}, {
+  date: "2022",
+  year: 2022,
+  tag: "Paper",
+  text: "Holistic visual speech recognition published in IEEE Transactions on Artificial Intelligence."
 }];
 Object.assign(window, {
   PROFILE,
+  HOME_GALLERY,
   INTERESTS,
   THRUSTS,
   PUBLICATIONS,
+  PUB_GROUPS,
+  EDUCATION,
+  EXPERIENCE,
   BLOG_POSTS,
   UPDATES
 });
@@ -634,6 +808,102 @@ function dioramaScene(kind) {
         lineGeo.attributes.position.needsUpdate = true;
       };
     }
+    if (kind === "embodied") {
+      // open dollhouse room — robots living and working in a real home
+      camera.position.set(4.4, 3.6, 4.6);
+      camera.lookAt(0, 0.35, 0);
+      const home = new THREE.Group();
+      stage.add(home);
+      const mFloor = rMat(0xece2d0, {
+        roughness: 0.95
+      });
+      const mRug = rMat(0xcfe3cf, {
+        roughness: 1
+      });
+      const mWall = rMat(0xf5f5f1, {
+        roughness: 0.95
+      });
+      const mWood = rMat(0xb08a5e, {
+        roughness: 0.85
+      });
+      const mSofa = rMat(RB.grass, {
+        roughness: 1
+      });
+      const mPot = rMat(0xc96f4a, {
+        roughness: 0.9
+      });
+      rBox(home, mFloor, 6, 0.18, 5, 0, -0.09, 0);
+      const rug = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.03, 24), mRug);
+      rug.position.set(-1.0, 0.02, 0.7);
+      home.add(rug);
+      // two open walls
+      rBox(home, mWall, 6, 0.95, 0.12, 0, 0.47, -2.44);
+      rBox(home, mWall, 0.12, 0.95, 5, -2.94, 0.47, 0);
+      // kitchen counter + fridge
+      rBox(home, mWood, 1.7, 0.5, 0.5, -1.7, 0.25, -2.0);
+      rBox(home, mWall, 0.5, 0.8, 0.45, -0.5, 0.4, -2.05);
+      // sofa + coffee table
+      const sofa = new THREE.Group();
+      sofa.position.set(1.7, 0, 0.4);
+      sofa.rotation.y = -Math.PI / 2;
+      rBox(sofa, mSofa, 1.5, 0.34, 0.6, 0, 0.18, 0);
+      rBox(sofa, mSofa, 1.5, 0.4, 0.18, 0, 0.5, -0.22);
+      home.add(sofa);
+      rBox(home, mWood, 0.7, 0.22, 0.4, 0.7, 0.12, 0.5);
+      // plants
+      const addPlant = (x, z, s = 1) => {
+        const p = new THREE.Group();
+        rCyl(p, mPot, 0.13, 0.1, 0.2, 0, 0.1, 0, 8);
+        const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.46, 7), rMat(RB.grass2));
+        l1.position.y = 0.42;
+        p.add(l1);
+        const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.32, 7), rMat(RB.grass));
+        l2.position.set(0.07, 0.56, 0.04);
+        p.add(l2);
+        p.position.set(x, 0, z);
+        p.scale.setScalar(s);
+        home.add(p);
+      };
+      addPlant(-2.4, -1.9, 1.0);
+      addPlant(2.3, -2.0, 0.85);
+      addPlant(-2.4, 1.9, 0.9);
+
+      // robots doing chores
+      const vac = buildRoverModel();
+      vac.group.scale.setScalar(0.42);
+      home.add(vac.group);
+      const chef = buildHumanoidModel("wave");
+      chef.group.scale.setScalar(0.5);
+      chef.group.position.set(-1.7, 0, -1.45);
+      chef.group.rotation.y = Math.PI;
+      home.add(chef.group);
+      const duster = buildDroneModel();
+      duster.group.scale.setScalar(0.42);
+      home.add(duster.group);
+      const patrol = buildQuadrupedModel();
+      patrol.group.scale.setScalar(0.4);
+      home.add(patrol.group);
+      const waypoints = [new THREE.Vector3(2.2, 0, 1.7), new THREE.Vector3(2.2, 0, -1.4), new THREE.Vector3(0.4, 0, -1.4), new THREE.Vector3(0.4, 0, 1.7)];
+      update = t => {
+        vac.update(t * 1.6);
+        vac.group.position.set(-1.0 + Math.sin(t * 0.5) * 1.0, 0, 0.7 + Math.sin(t * 0.78 + 1.2) * 0.9);
+        vac.group.rotation.y = Math.atan2(Math.cos(t * 0.78 + 1.2) * 0.7, Math.cos(t * 0.5) * 0.5);
+        chef.update(t);
+        duster.update(t);
+        duster.group.position.set(-0.6 + Math.sin(t * 0.4) * 1.6, 1.4 + Math.sin(t * 1.1) * 0.12, -1.9);
+        duster.group.rotation.y = Math.sin(t * 0.4) > 0 ? 0 : Math.PI;
+        patrol.update(t);
+        const total = waypoints.length;
+        const prog = t * 0.18 % total;
+        const i0 = Math.floor(prog),
+          i1 = (i0 + 1) % total,
+          f = prog - i0;
+        patrol.group.position.lerpVectors(waypoints[i0], waypoints[i1], f);
+        const dir = waypoints[i1].clone().sub(waypoints[i0]);
+        patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
+        stage.rotation.y = Math.sin(t * 0.12) * 0.14 + ctx.mouse.x * 0.22;
+      };
+    }
     if (kind === "swarm") {
       camera.position.set(2.9, 2.1, 3.4);
       camera.lookAt(0, 0.5, 0);
@@ -907,321 +1177,330 @@ function JourneyWorld() {
   React.useEffect(() => {
     const el = ref.current;
     if (!el || !window.THREE) return;
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    renderer.setSize(window.innerWidth, window.innerHeight, false);
-    el.appendChild(renderer.domElement);
-    const scene = new THREE.Scene();
-    const fogGreen = new THREE.Color(0xe9f3ea);
-    const fogBlue = new THREE.Color(0xcfe8fa);
-    scene.fog = new THREE.Fog(fogGreen.clone(), 26, 150);
-    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 400);
-    scene.add(new THREE.HemisphereLight(0xfdfffa, 0xb9d8ae, 1.1));
-    const sun = new THREE.DirectionalLight(0xfff4dd, 1.5);
-    sun.position.set(40, 60, -30);
-    scene.add(sun);
-    const disposables = [];
-    const track = o => {
-      disposables.push(o);
-      return o;
-    };
-
-    // ---- Terrain ----
-    const tGeo = track(new THREE.PlaneGeometry(140, 380, 64, 170));
-    tGeo.rotateX(-Math.PI / 2);
-    {
-      const p = tGeo.attributes.position;
-      const colors = new Float32Array(p.count * 3);
-      const cLow = new THREE.Color(0x8fc177),
-        cMid = new THREE.Color(0x5fa763),
-        cHigh = new THREE.Color(0x47885c),
-        cPath = new THREE.Color(0xb6d8a4);
-      for (let i = 0; i < p.count; i++) {
-        const x = p.array[i * 3],
-          z = p.array[i * 3 + 2] - 150;
-        const h = jTerrainH(x - jPathX(z), z);
-        p.array[i * 3 + 1] = h;
-        p.array[i * 3 + 2] = z;
-        const c = new THREE.Color();
-        const onPath = 1 - THREE.MathUtils.smoothstep(Math.abs(x - jPathX(z)), 1.5, 5);
-        if (h < 1.4) c.lerpColors(cLow, cMid, h / 1.4);else c.lerpColors(cMid, cHigh, Math.min(1, (h - 1.4) / 4));
-        c.lerp(cPath, onPath * 0.7);
-        colors[i * 3] = c.r;
-        colors[i * 3 + 1] = c.g;
-        colors[i * 3 + 2] = c.b;
-      }
-      tGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-      tGeo.computeVertexNormals();
-    }
-    scene.add(new THREE.Mesh(tGeo, track(new THREE.MeshStandardMaterial({
-      vertexColors: true,
-      flatShading: true,
-      roughness: 0.95
-    }))));
-    const groundY = (x, z) => jTerrainH(x - jPathX(z), z);
-
-    // ---- Mountains ----
-    const mGeo = track(new THREE.ConeGeometry(1, 1, 6));
-    const mMat = track(new THREE.MeshStandardMaterial({
-      color: 0x93b8a6,
-      flatShading: true,
-      roughness: 1
-    }));
-    const sMat = track(new THREE.MeshStandardMaterial({
-      color: 0xf4f9f4,
-      flatShading: true,
-      roughness: 1
-    }));
-    for (let i = 0; i < 14; i++) {
-      const side = i % 2 === 0 ? 1 : -1;
-      const z = 10 - i * 24 - Math.random() * 10;
-      const x = side * (30 + Math.random() * 28);
-      const h = 10 + Math.random() * 16,
-        r = 7 + Math.random() * 9;
-      const m = new THREE.Mesh(mGeo, mMat);
-      m.scale.set(r, h, r);
-      m.position.set(x, h / 2 - 1.5, z);
-      m.rotation.y = Math.random() * Math.PI;
-      scene.add(m);
-      if (h > 17) {
-        const cap = new THREE.Mesh(mGeo, sMat);
-        cap.scale.set(r * 0.36, h * 0.3, r * 0.36);
-        cap.position.set(x, h - h * 0.15 - 1.5, z);
-        cap.rotation.y = m.rotation.y;
-        scene.add(cap);
-      }
-    }
-
-    // ---- Trees ----
-    const trunkGeo = track(new THREE.CylinderGeometry(0.07, 0.1, 0.6, 6));
-    const trunkMat = track(new THREE.MeshStandardMaterial({
-      color: 0x7a5b3e,
-      flatShading: true,
-      roughness: 1
-    }));
-    const folGeo = track(new THREE.ConeGeometry(0.6, 1.3, 7));
-    const folMats = [0x4e9e5f, 0x66ab5e, 0x3f8f58].map(c => track(new THREE.MeshStandardMaterial({
-      color: c,
-      flatShading: true,
-      roughness: 1
-    })));
-    for (let i = 0; i < 70; i++) {
-      const z = 14 - Math.random() * 330;
-      const side = Math.random() > 0.5 ? 1 : -1;
-      const x = jPathX(z) + side * (4.5 + Math.random() * 22);
-      const y = groundY(x, z);
-      const tree = new THREE.Group();
-      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-      trunk.position.y = 0.3;
-      tree.add(trunk);
-      const fol = new THREE.Mesh(folGeo, folMats[i % 3]);
-      fol.position.y = 1.1;
-      tree.add(fol);
-      if (i % 2) {
-        const f2 = new THREE.Mesh(folGeo, folMats[(i + 1) % 3]);
-        f2.scale.setScalar(0.7);
-        f2.position.y = 1.7;
-        tree.add(f2);
-      }
-      tree.position.set(x, y, z);
-      tree.scale.setScalar(0.8 + Math.random() * 1.6);
-      tree.rotation.y = Math.random() * Math.PI;
-      scene.add(tree);
-    }
-
-    // ---- Floating islands ----
-    const islands = [];
-    for (let i = 0; i < 4; i++) {
-      const isl = new THREE.Group();
-      const top = new THREE.Mesh(track(new THREE.CylinderGeometry(2.2, 1.6, 0.7, 9)), track(new THREE.MeshStandardMaterial({
-        color: 0x6db36a,
-        flatShading: true,
-        roughness: 1
-      })));
-      isl.add(top);
-      const rock = new THREE.Mesh(track(new THREE.ConeGeometry(1.7, 2.4, 8)), track(new THREE.MeshStandardMaterial({
-        color: 0x8e9a90,
-        flatShading: true,
-        roughness: 1
-      })));
-      rock.rotation.x = Math.PI;
-      rock.position.y = -1.4;
-      isl.add(rock);
-      const tr = new THREE.Mesh(folGeo, folMats[i % 3]);
-      tr.position.y = 1.0;
-      tr.scale.setScalar(1.1);
-      isl.add(tr);
-      const z = -30 - i * 65;
-      isl.position.set(jPathX(z) + (i % 2 ? 1 : -1) * (10 + Math.random() * 8), 11 + Math.random() * 5, z);
-      isl.scale.setScalar(0.8 + Math.random() * 0.8);
-      isl.userData = {
-        baseY: isl.position.y,
-        ph: Math.random() * 6
-      };
-      scene.add(isl);
-      islands.push(isl);
-    }
-
-    // ---- Clouds ----
-    const cloudGeo = track(new THREE.SphereGeometry(1, 7, 7));
-    const cloudMat = track(new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      flatShading: true,
-      roughness: 1,
-      transparent: true,
-      opacity: 0.85
-    }));
-    for (let i = 0; i < 6; i++) {
-      const c = new THREE.Group();
-      for (let j = 0; j < 3; j++) {
-        const s = new THREE.Mesh(cloudGeo, cloudMat);
-        s.position.set(j * 1.4 - 1.4, Math.random() * 0.4, Math.random() * 0.8);
-        s.scale.set(1.6 + Math.random(), 0.55, 1);
-        c.add(s);
-      }
-      const z = 8 - i * 55;
-      c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 17 + Math.random() * 6, z);
-      scene.add(c);
-    }
-
-    // ---- Robots along the trail ----
-    const worldRobots = [];
-    const placeRobot = (kind, z, side, scale = 1.4, rotY = 0.6) => {
-      const built = ROBOT_BUILDERS[kind]();
-      const x = jPathX(z) + side * 3.4;
-      const y = kind === "drone" ? groundY(x, z) + 3 : groundY(x, z);
-      built.group.position.set(x, y, z);
-      built.group.scale.setScalar(scale);
-      built.group.rotation.y = rotY * -side;
-      scene.add(built.group);
-      worldRobots.push({
-        built,
-        kind,
-        baseY: y,
-        ph: Math.random() * 6
+    let cleanup = null;
+    try {
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
       });
-    };
-    placeRobot("quadruped", -38, 1, 1.5, 0.9);
-    placeRobot("rover", -105, -1, 1.6, 0.4);
-    placeRobot("humanoid", -170, 1, 1.4, 0.7);
-    placeRobot("quadruped", -235, -1, 1.5, 0.5);
-    const skyDrones = [];
-    for (let i = 0; i < 2; i++) {
-      const d = ROBOT_BUILDERS.drone();
-      d.group.scale.setScalar(2.2);
-      scene.add(d.group);
-      skyDrones.push({
-        d,
-        z: -60 - i * 120,
-        r: 6 + i * 2,
-        h: 7 + i * 1.5,
-        sp: 0.25 + i * 0.06,
-        ph: i * 2
-      });
-    }
-
-    // ---- Scroll → camera ----
-    let target = 0,
-      p = 0;
-    const onScroll = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      target = Math.min(1, Math.max(0, window.scrollY / max));
-    };
-    window.addEventListener("scroll", onScroll, {
-      passive: true
-    });
-    onScroll();
-    const mouse = {
-      x: 0,
-      y: 0
-    };
-    const onMove = e => {
-      mouse.x = e.clientX / window.innerWidth * 2 - 1;
-      mouse.y = e.clientY / window.innerHeight * 2 - 1;
-    };
-    window.addEventListener("pointermove", onMove, {
-      passive: true
-    });
-    const onResize = () => {
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.setSize(window.innerWidth, window.innerHeight, false);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    };
-    window.addEventListener("resize", onResize);
-    let raf = 0,
-      running = true;
-    const t0 = performance.now();
-    const tick = () => {
-      if (!running) return;
-      const t = (performance.now() - t0) / 1000;
-      p += (target - p) * 0.07;
-      const z = J_PATH.zStart + (J_PATH.zEnd - J_PATH.zStart) * p;
-      // near the end, the camera lifts toward the sky
-      const lift = THREE.MathUtils.smoothstep(p, 0.82, 1) * 7;
-      const cx = jPathX(z) + mouse.x * 0.7;
-      const cy = 2.6 + Math.sin(z * 0.05) * 0.25 - mouse.y * 0.4 + lift;
-      camera.position.set(cx, cy, z);
-      camera.lookAt(jPathX(z - 14), 2.1 + lift * 1.6, z - 14);
+      el.appendChild(renderer.domElement);
+      const scene = new THREE.Scene();
+      const fogGreen = new THREE.Color(0xe9f3ea);
+      const fogBlue = new THREE.Color(0xcfe8fa);
+      scene.fog = new THREE.Fog(fogGreen.clone(), 26, 150);
+      const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 400);
+      scene.add(new THREE.HemisphereLight(0xfdfffa, 0xb9d8ae, 1.1));
+      const sun = new THREE.DirectionalLight(0xfff4dd, 1.5);
+      sun.position.set(40, 60, -30);
+      scene.add(sun);
+      const disposables = [];
+      const track = o => {
+        disposables.push(o);
+        return o;
+      };
 
-      // sky finale: fog + overlay blend to blue
-      const skyAmt = THREE.MathUtils.smoothstep(p, 0.72, 0.98);
-      scene.fog.color.lerpColors(fogGreen, fogBlue, skyAmt);
-      const skyEl = document.getElementById("j-sky");
-      if (skyEl) skyEl.style.opacity = skyAmt;
-      islands.forEach(isl => {
-        isl.position.y = isl.userData.baseY + Math.sin(t * 0.5 + isl.userData.ph) * 0.5;
-        isl.rotation.y = t * 0.04;
+      // ---- Terrain ----
+      const tGeo = track(new THREE.PlaneGeometry(140, 380, 64, 170));
+      tGeo.rotateX(-Math.PI / 2);
+      {
+        const p = tGeo.attributes.position;
+        const colors = new Float32Array(p.count * 3);
+        const cLow = new THREE.Color(0x8fc177),
+          cMid = new THREE.Color(0x5fa763),
+          cHigh = new THREE.Color(0x47885c),
+          cPath = new THREE.Color(0xb6d8a4);
+        for (let i = 0; i < p.count; i++) {
+          const x = p.array[i * 3],
+            z = p.array[i * 3 + 2] - 150;
+          const h = jTerrainH(x - jPathX(z), z);
+          p.array[i * 3 + 1] = h;
+          p.array[i * 3 + 2] = z;
+          const c = new THREE.Color();
+          const onPath = 1 - THREE.MathUtils.smoothstep(Math.abs(x - jPathX(z)), 1.5, 5);
+          if (h < 1.4) c.lerpColors(cLow, cMid, h / 1.4);else c.lerpColors(cMid, cHigh, Math.min(1, (h - 1.4) / 4));
+          c.lerp(cPath, onPath * 0.7);
+          colors[i * 3] = c.r;
+          colors[i * 3 + 1] = c.g;
+          colors[i * 3 + 2] = c.b;
+        }
+        tGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+        tGeo.computeVertexNormals();
+      }
+      scene.add(new THREE.Mesh(tGeo, track(new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        flatShading: true,
+        roughness: 0.95
+      }))));
+      const groundY = (x, z) => jTerrainH(x - jPathX(z), z);
+
+      // ---- Mountains ----
+      const mGeo = track(new THREE.ConeGeometry(1, 1, 6));
+      const mMat = track(new THREE.MeshStandardMaterial({
+        color: 0x93b8a6,
+        flatShading: true,
+        roughness: 1
+      }));
+      const sMat = track(new THREE.MeshStandardMaterial({
+        color: 0xf4f9f4,
+        flatShading: true,
+        roughness: 1
+      }));
+      for (let i = 0; i < 14; i++) {
+        const side = i % 2 === 0 ? 1 : -1;
+        const z = 10 - i * 24 - Math.random() * 10;
+        const x = side * (30 + Math.random() * 28);
+        const h = 10 + Math.random() * 16,
+          r = 7 + Math.random() * 9;
+        const m = new THREE.Mesh(mGeo, mMat);
+        m.scale.set(r, h, r);
+        m.position.set(x, h / 2 - 1.5, z);
+        m.rotation.y = Math.random() * Math.PI;
+        scene.add(m);
+        if (h > 17) {
+          const cap = new THREE.Mesh(mGeo, sMat);
+          cap.scale.set(r * 0.36, h * 0.3, r * 0.36);
+          cap.position.set(x, h - h * 0.15 - 1.5, z);
+          cap.rotation.y = m.rotation.y;
+          scene.add(cap);
+        }
+      }
+
+      // ---- Trees ----
+      const trunkGeo = track(new THREE.CylinderGeometry(0.07, 0.1, 0.6, 6));
+      const trunkMat = track(new THREE.MeshStandardMaterial({
+        color: 0x7a5b3e,
+        flatShading: true,
+        roughness: 1
+      }));
+      const folGeo = track(new THREE.ConeGeometry(0.6, 1.3, 7));
+      const folMats = [0x4e9e5f, 0x66ab5e, 0x3f8f58].map(c => track(new THREE.MeshStandardMaterial({
+        color: c,
+        flatShading: true,
+        roughness: 1
+      })));
+      for (let i = 0; i < 70; i++) {
+        const z = 14 - Math.random() * 330;
+        const side = Math.random() > 0.5 ? 1 : -1;
+        const x = jPathX(z) + side * (4.5 + Math.random() * 22);
+        const y = groundY(x, z);
+        const tree = new THREE.Group();
+        const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+        trunk.position.y = 0.3;
+        tree.add(trunk);
+        const fol = new THREE.Mesh(folGeo, folMats[i % 3]);
+        fol.position.y = 1.1;
+        tree.add(fol);
+        if (i % 2) {
+          const f2 = new THREE.Mesh(folGeo, folMats[(i + 1) % 3]);
+          f2.scale.setScalar(0.7);
+          f2.position.y = 1.7;
+          tree.add(f2);
+        }
+        tree.position.set(x, y, z);
+        tree.scale.setScalar(0.8 + Math.random() * 1.6);
+        tree.rotation.y = Math.random() * Math.PI;
+        scene.add(tree);
+      }
+
+      // ---- Floating islands ----
+      const islands = [];
+      for (let i = 0; i < 4; i++) {
+        const isl = new THREE.Group();
+        const top = new THREE.Mesh(track(new THREE.CylinderGeometry(2.2, 1.6, 0.7, 9)), track(new THREE.MeshStandardMaterial({
+          color: 0x6db36a,
+          flatShading: true,
+          roughness: 1
+        })));
+        isl.add(top);
+        const rock = new THREE.Mesh(track(new THREE.ConeGeometry(1.7, 2.4, 8)), track(new THREE.MeshStandardMaterial({
+          color: 0x8e9a90,
+          flatShading: true,
+          roughness: 1
+        })));
+        rock.rotation.x = Math.PI;
+        rock.position.y = -1.4;
+        isl.add(rock);
+        const tr = new THREE.Mesh(folGeo, folMats[i % 3]);
+        tr.position.y = 1.0;
+        tr.scale.setScalar(1.1);
+        isl.add(tr);
+        const z = -30 - i * 65;
+        isl.position.set(jPathX(z) + (i % 2 ? 1 : -1) * (10 + Math.random() * 8), 11 + Math.random() * 5, z);
+        isl.scale.setScalar(0.8 + Math.random() * 0.8);
+        isl.userData = {
+          baseY: isl.position.y,
+          ph: Math.random() * 6
+        };
+        scene.add(isl);
+        islands.push(isl);
+      }
+
+      // ---- Clouds ----
+      const cloudGeo = track(new THREE.SphereGeometry(1, 7, 7));
+      const cloudMat = track(new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        flatShading: true,
+        roughness: 1,
+        transparent: true,
+        opacity: 0.85
+      }));
+      for (let i = 0; i < 6; i++) {
+        const c = new THREE.Group();
+        for (let j = 0; j < 3; j++) {
+          const s = new THREE.Mesh(cloudGeo, cloudMat);
+          s.position.set(j * 1.4 - 1.4, Math.random() * 0.4, Math.random() * 0.8);
+          s.scale.set(1.6 + Math.random(), 0.55, 1);
+          c.add(s);
+        }
+        const z = 8 - i * 55;
+        c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 17 + Math.random() * 6, z);
+        scene.add(c);
+      }
+
+      // ---- Robots along the trail ----
+      const worldRobots = [];
+      const placeRobot = (kind, z, side, scale = 1.4, rotY = 0.6) => {
+        const built = ROBOT_BUILDERS[kind]();
+        const x = jPathX(z) + side * 3.4;
+        const y = kind === "drone" ? groundY(x, z) + 3 : groundY(x, z);
+        built.group.position.set(x, y, z);
+        built.group.scale.setScalar(scale);
+        built.group.rotation.y = rotY * -side;
+        scene.add(built.group);
+        worldRobots.push({
+          built,
+          kind,
+          baseY: y,
+          ph: Math.random() * 6
+        });
+      };
+      placeRobot("quadruped", -38, 1, 1.5, 0.9);
+      placeRobot("rover", -105, -1, 1.6, 0.4);
+      placeRobot("humanoid", -170, 1, 1.4, 0.7);
+      placeRobot("quadruped", -235, -1, 1.5, 0.5);
+      const skyDrones = [];
+      for (let i = 0; i < 2; i++) {
+        const d = ROBOT_BUILDERS.drone();
+        d.group.scale.setScalar(2.2);
+        scene.add(d.group);
+        skyDrones.push({
+          d,
+          z: -60 - i * 120,
+          r: 6 + i * 2,
+          h: 7 + i * 1.5,
+          sp: 0.25 + i * 0.06,
+          ph: i * 2
+        });
+      }
+
+      // ---- Scroll → camera ----
+      let target = 0,
+        p = 0;
+      const onScroll = () => {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        target = Math.min(1, Math.max(0, window.scrollY / max));
+      };
+      window.addEventListener("scroll", onScroll, {
+        passive: true
       });
-      worldRobots.forEach(r => {
-        r.built.update(t + r.ph);
-        if (r.kind === "drone") r.built.group.position.y = r.baseY + Math.sin(t + r.ph) * 0.3;
+      onScroll();
+      const mouse = {
+        x: 0,
+        y: 0
+      };
+      const onMove = e => {
+        mouse.x = e.clientX / window.innerWidth * 2 - 1;
+        mouse.y = e.clientY / window.innerHeight * 2 - 1;
+      };
+      window.addEventListener("pointermove", onMove, {
+        passive: true
       });
-      skyDrones.forEach(({
-        d,
-        z: dz,
-        r,
-        h,
-        sp,
-        ph
-      }) => {
-        const a = t * sp + ph;
-        d.group.position.set(jPathX(dz) + Math.cos(a) * r, h + Math.sin(t * 0.7 + ph) * 0.6, dz + Math.sin(a) * r);
-        d.group.rotation.y = -a + Math.PI / 2;
-        d.update(t + ph);
-      });
-      const pf = document.getElementById("j-progress-fill");
-      if (pf) pf.style.transform = `scaleX(${p})`;
-      renderer.render(scene, camera);
+      const onResize = () => {
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      };
+      window.addEventListener("resize", onResize);
+      let raf = 0,
+        running = true;
+      const t0 = performance.now();
+      const tick = () => {
+        if (!running) return;
+        const t = (performance.now() - t0) / 1000;
+        p += (target - p) * 0.07;
+        const z = J_PATH.zStart + (J_PATH.zEnd - J_PATH.zStart) * p;
+        // near the end, the camera lifts toward the sky
+        const lift = THREE.MathUtils.smoothstep(p, 0.82, 1) * 7;
+        const cx = jPathX(z) + mouse.x * 0.7;
+        const cy = 2.6 + Math.sin(z * 0.05) * 0.25 - mouse.y * 0.4 + lift;
+        camera.position.set(cx, cy, z);
+        camera.lookAt(jPathX(z - 14), 2.1 + lift * 1.6, z - 14);
+
+        // sky finale: fog + overlay blend to blue
+        const skyAmt = THREE.MathUtils.smoothstep(p, 0.72, 0.98);
+        scene.fog.color.lerpColors(fogGreen, fogBlue, skyAmt);
+        const skyEl = document.getElementById("j-sky");
+        if (skyEl) skyEl.style.opacity = skyAmt;
+        islands.forEach(isl => {
+          isl.position.y = isl.userData.baseY + Math.sin(t * 0.5 + isl.userData.ph) * 0.5;
+          isl.rotation.y = t * 0.04;
+        });
+        worldRobots.forEach(r => {
+          r.built.update(t + r.ph);
+          if (r.kind === "drone") r.built.group.position.y = r.baseY + Math.sin(t + r.ph) * 0.3;
+        });
+        skyDrones.forEach(({
+          d,
+          z: dz,
+          r,
+          h,
+          sp,
+          ph
+        }) => {
+          const a = t * sp + ph;
+          d.group.position.set(jPathX(dz) + Math.cos(a) * r, h + Math.sin(t * 0.7 + ph) * 0.6, dz + Math.sin(a) * r);
+          d.group.rotation.y = -a + Math.PI / 2;
+          d.update(t + ph);
+        });
+        const pf = document.getElementById("j-progress-fill");
+        if (pf) pf.style.transform = `scaleX(${p})`;
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(tick);
+      };
       raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    const onVis = () => {
-      if (document.hidden) {
+      const onVis = () => {
+        if (document.hidden) {
+          running = false;
+          cancelAnimationFrame(raf);
+        } else if (!running) {
+          running = true;
+          raf = requestAnimationFrame(tick);
+        }
+      };
+      document.addEventListener("visibilitychange", onVis);
+      cleanup = () => {
         running = false;
         cancelAnimationFrame(raf);
-      } else if (!running) {
-        running = true;
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    document.addEventListener("visibilitychange", onVis);
+        document.removeEventListener("visibilitychange", onVis);
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("resize", onResize);
+        scene.traverse(o => {
+          if (o.geometry) o.geometry.dispose();
+          if (o.material && o.material.dispose) o.material.dispose();
+        });
+        disposables.forEach(d => d.dispose && d.dispose());
+        renderer.dispose();
+        while (el.firstChild) el.removeChild(el.firstChild);
+      };
+    } catch (e) {
+      // WebGL/scene failure must not blank the Milestones page — drop the 3D bg only.
+      if (el) while (el.firstChild) el.removeChild(el.firstChild);
+    }
     return () => {
-      running = false;
-      cancelAnimationFrame(raf);
-      document.removeEventListener("visibilitychange", onVis);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("resize", onResize);
-      scene.traverse(o => {
-        if (o.geometry) o.geometry.dispose();
-        if (o.material && o.material.dispose) o.material.dispose();
-      });
-      disposables.forEach(d => d.dispose && d.dispose());
-      renderer.dispose();
-      while (el.firstChild) el.removeChild(el.firstChild);
+      cleanup && cleanup();
     };
   }, []);
   return /*#__PURE__*/React.createElement("div", {
@@ -1301,7 +1580,7 @@ Object.assign(window, {
 });
 
 /* ===== src/scenes-pages.jsx ===== */
-// ===== Fixed background worlds for Publications (paper archive) & Blog (smart home) =====
+// ===== Fixed background world for Publications (calm paper archive) =====
 
 function fixedWorldHost(buildFn) {
   return function WorldComp() {
@@ -1309,81 +1588,90 @@ function fixedWorldHost(buildFn) {
     React.useEffect(() => {
       const el = ref.current;
       if (!el || !window.THREE) return;
-      const renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
-      });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
-      el.appendChild(renderer.domElement);
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 100);
-      const state = {
-        mouse: {
-          x: 0,
-          y: 0
-        },
-        scroll: 0
-      };
-      const api = buildFn({
-        scene,
-        camera,
-        state
-      }) || {};
-      const onScroll = () => {
-        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        state.scroll = Math.min(1, Math.max(0, window.scrollY / max));
-      };
-      const onMove = e => {
-        state.mouse.x = e.clientX / window.innerWidth * 2 - 1;
-        state.mouse.y = e.clientY / window.innerHeight * 2 - 1;
-      };
-      const onResize = () => {
+      let cleanup = null;
+      try {
+        const renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
         renderer.setSize(window.innerWidth, window.innerHeight, false);
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-      };
-      window.addEventListener("scroll", onScroll, {
-        passive: true
-      });
-      window.addEventListener("pointermove", onMove, {
-        passive: true
-      });
-      window.addEventListener("resize", onResize);
-      onScroll();
-      let raf = 0,
-        running = true;
-      const t0 = performance.now();
-      const tick = () => {
-        if (!running) return;
-        api.update && api.update((performance.now() - t0) / 1000);
-        renderer.render(scene, camera);
+        el.appendChild(renderer.domElement);
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 100);
+        const state = {
+          mouse: {
+            x: 0,
+            y: 0
+          },
+          scroll: 0
+        };
+        const api = buildFn({
+          scene,
+          camera,
+          state
+        }) || {};
+        const onScroll = () => {
+          const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          state.scroll = Math.min(1, Math.max(0, window.scrollY / max));
+        };
+        const onMove = e => {
+          state.mouse.x = e.clientX / window.innerWidth * 2 - 1;
+          state.mouse.y = e.clientY / window.innerHeight * 2 - 1;
+        };
+        const onResize = () => {
+          renderer.setSize(window.innerWidth, window.innerHeight, false);
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+        };
+        window.addEventListener("scroll", onScroll, {
+          passive: true
+        });
+        window.addEventListener("pointermove", onMove, {
+          passive: true
+        });
+        window.addEventListener("resize", onResize);
+        onScroll();
+        let raf = 0,
+          running = true;
+        const t0 = performance.now();
+        const tick = () => {
+          if (!running) return;
+          api.update && api.update((performance.now() - t0) / 1000);
+          renderer.render(scene, camera);
+          raf = requestAnimationFrame(tick);
+        };
         raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-      const onVis = () => {
-        if (document.hidden) {
+        const onVis = () => {
+          if (document.hidden) {
+            running = false;
+            cancelAnimationFrame(raf);
+          } else if (!running) {
+            running = true;
+            raf = requestAnimationFrame(tick);
+          }
+        };
+        document.addEventListener("visibilitychange", onVis);
+        cleanup = () => {
           running = false;
           cancelAnimationFrame(raf);
-        } else if (!running) {
-          running = true;
-          raf = requestAnimationFrame(tick);
-        }
-      };
-      document.addEventListener("visibilitychange", onVis);
-      return () => {
-        running = false;
-        cancelAnimationFrame(raf);
-        document.removeEventListener("visibilitychange", onVis);
-        window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("pointermove", onMove);
-        window.removeEventListener("resize", onResize);
-        scene.traverse(o => {
-          if (o.geometry) o.geometry.dispose();
-          if (o.material && o.material.dispose) o.material.dispose();
-        });
-        renderer.dispose();
+          document.removeEventListener("visibilitychange", onVis);
+          window.removeEventListener("scroll", onScroll);
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("resize", onResize);
+          scene.traverse(o => {
+            if (o.geometry) o.geometry.dispose();
+            if (o.material && o.material.dispose) o.material.dispose();
+          });
+          renderer.dispose();
+          while (el.firstChild) el.removeChild(el.firstChild);
+        };
+      } catch (e) {
+        // A WebGL/scene failure must never blank the page — leave the empty host.
         while (el.firstChild) el.removeChild(el.firstChild);
+      }
+      return () => {
+        cleanup && cleanup();
       };
     }, []);
     return /*#__PURE__*/React.createElement("div", {
@@ -1408,7 +1696,8 @@ function makePaperTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-// ---------- Publications: floating paper archive ----------
+// ---------- Publications: calm floating paper archive (papers + courier drone) ----------
+// Kept deliberately quiet and pushed to the sides/back so it never competes with text.
 const PaperWorld = fixedWorldHost(({
   scene,
   camera,
@@ -1420,228 +1709,61 @@ const PaperWorld = fixedWorldHost(({
   const paperTex = makePaperTexture();
   const paperGeo = new THREE.PlaneGeometry(0.62, 0.82);
   const papers = [];
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 12; i++) {
     const m = new THREE.Mesh(paperGeo, new THREE.MeshBasicMaterial({
       map: paperTex,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.55 + Math.random() * 0.4
+      opacity: 0.28 + Math.random() * 0.22 // faint, so body copy stays readable
     }));
     const side = i % 2 ? 1 : -1;
-    m.position.set(side * (2.6 + Math.random() * 2.6), Math.random() * 6 - 1, -1.5 - Math.random() * 3);
-    m.rotation.set(Math.random() * 0.5 - 0.25, Math.random() * 0.9 - 0.45, Math.random() * 0.3 - 0.15);
+    // hold them out toward the edges and pushed back behind the content column
+    m.position.set(side * (4.0 + Math.random() * 2.6), Math.random() * 7 - 1.5, -2.5 - Math.random() * 3.5);
+    m.rotation.set(Math.random() * 0.4 - 0.2, Math.random() * 0.8 - 0.4, Math.random() * 0.25 - 0.12);
     m.userData = {
-      sp: 0.12 + Math.random() * 0.22,
-      rs: (Math.random() - 0.5) * 0.3,
+      sp: 0.05 + Math.random() * 0.09,
+      rs: (Math.random() - 0.5) * 0.12,
       ph: Math.random() * 6
     };
     scene.add(m);
     papers.push(m);
   }
 
-  // ground meadow strip at the bottom
-  const ground = new THREE.Group();
-  ground.position.y = -1.9;
-  scene.add(ground);
-  addMeadow(ground, 3.4);
-  addTree(ground, -2.6, -0.8, 0.8);
-  addTree(ground, 2.8, -0.5, 0.6);
-
-  // humanoid reading at the left
-  const reader = buildHumanoidModel("wave");
-  reader.group.position.set(-2.5, 0, 0.4);
-  reader.group.rotation.y = 0.6;
-  ground.add(reader.group);
-
-  // drone carrying a paper across the sky
+  // a single courier drone carrying a paper, drifting slowly along the back
   const courier = buildDroneModel();
-  courier.group.scale.setScalar(0.7);
+  courier.group.scale.setScalar(0.6);
   scene.add(courier.group);
   const carried = new THREE.Mesh(paperGeo, new THREE.MeshBasicMaterial({
     map: paperTex,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.85
   }));
   carried.scale.setScalar(0.7);
   carried.position.y = -0.45;
   carried.rotation.x = 0.15;
   courier.group.add(carried);
-
-  // quadruped trotting on the right
-  const dog = buildQuadrupedModel();
-  dog.group.scale.setScalar(0.8);
-  dog.group.position.set(2.4, 0, 0.6);
-  dog.group.rotation.y = -0.7;
-  ground.add(dog.group);
   return {
     update(t) {
       papers.forEach(m => {
         m.position.y += m.userData.sp * 0.012;
         m.rotation.y += m.userData.rs * 0.004;
-        m.position.x += Math.sin(t * 0.4 + m.userData.ph) * 0.0015;
-        if (m.position.y > 5.4) m.position.y = -1.6;
+        m.position.x += Math.sin(t * 0.25 + m.userData.ph) * 0.0008;
+        if (m.position.y > 5.6) m.position.y = -1.8;
       });
-      reader.update(t);
-      dog.update(t);
-      courier.update(t);
-      const a = t * 0.16;
-      courier.group.position.set(Math.sin(a) * 4.2, 2.6 + Math.sin(t * 0.8) * 0.25, -1.6 + Math.cos(a) * 1.2);
+      courier.update(t * 0.6);
+      const a = t * 0.07; // slow, wide arc kept to the back
+      courier.group.position.set(Math.sin(a) * 5.0, 3.2 + Math.sin(t * 0.5) * 0.2, -3.0 + Math.cos(a) * 1.0);
       courier.group.rotation.y = -a;
-      // gentle dolly with scroll + mouse parallax
-      camera.position.x = state.mouse.x * 0.45;
-      camera.position.y = 1.3 - state.scroll * 1.6 - state.mouse.y * 0.25;
-      camera.lookAt(0, 1.1 - state.scroll * 1.6, 0);
-    }
-  };
-});
-
-// ---------- Blog: smart-home interior with robots doing chores ----------
-const HouseWorld = fixedWorldHost(({
-  scene,
-  camera,
-  state
-}) => {
-  camera.position.set(7.2, 6.4, 7.2);
-  camera.lookAt(0, 0, 0);
-  addRobotLights(scene);
-  const house = new THREE.Group();
-  scene.add(house);
-  const mFloor = rMat(0xe9dfcd, {
-    roughness: 0.9
-  });
-  const mRug = rMat(0xcfe3cf, {
-    roughness: 1
-  });
-  const mWall = rMat(0xf4f4f0, {
-    roughness: 0.95
-  });
-  const mWood = rMat(0xb08a5e, {
-    roughness: 0.85
-  });
-  const mSofa = rMat(0x7da883, {
-    roughness: 1
-  });
-  const mPot = rMat(0xc96f4a, {
-    roughness: 0.9
-  });
-
-  // floor 10 x 8
-  const floor = new THREE.Mesh(new THREE.BoxGeometry(10, 0.2, 8), mFloor);
-  floor.position.y = -0.1;
-  house.add(floor);
-  const rug = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.04, 24), mRug);
-  rug.position.set(-1.8, 0.02, 1.2);
-  house.add(rug);
-
-  // perimeter low walls (open dollhouse style)
-  const wall = (w, d, x, z) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, 1.1, d), mWall);
-    m.position.set(x, 0.55, z);
-    house.add(m);
-  };
-  wall(10, 0.18, 0, -4); // back
-  wall(0.18, 8, -5, 0); // left
-  wall(0.18, 3.2, 5, -2.4); // right partial
-  wall(4.2, 0.18, -2.9, 0.4); // inner divider (kitchen/living)
-
-  // kitchen counter (back-left)
-  const counter = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.55, 0.7), mWood);
-  counter.position.set(-3.4, 0.275, -3.3);
-  house.add(counter);
-  rBox(house, mWall, 0.7, 0.9, 0.65, -1.6, 0.45, -3.35); // fridge
-
-  // dining table + chairs (back-right)
-  const table = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.06, 12), mWood);
-  table.position.set(2.4, 0.55, -2.2);
-  house.add(table);
-  rCyl(house, mWood, 0.06, 0.06, 0.5, 2.4, 0.27, -2.2);
-  [[1.5, -2.2], [3.3, -2.2], [2.4, -1.3]].forEach(([x, z]) => {
-    rBox(house, mSofa, 0.4, 0.45, 0.4, x, 0.22, z);
-  });
-
-  // sofa (living, front-left)
-  const sofa = new THREE.Group();
-  sofa.position.set(-3.6, 0, 1.4);
-  sofa.rotation.y = Math.PI / 2;
-  rBox(sofa, mSofa, 2.0, 0.42, 0.8, 0, 0.21, 0);
-  rBox(sofa, mSofa, 2.0, 0.5, 0.22, 0, 0.62, -0.3);
-  rBox(sofa, mSofa, 0.24, 0.55, 0.8, -0.94, 0.4, 0);
-  rBox(sofa, mSofa, 0.24, 0.55, 0.8, 0.94, 0.4, 0);
-  house.add(sofa);
-  // coffee table
-  rBox(house, mWood, 0.9, 0.3, 0.5, -1.8, 0.15, 1.2);
-
-  // plants (greenery)
-  const addPlant = (x, z, s = 1) => {
-    const p = new THREE.Group();
-    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.22, 8), mPot);
-    pot.position.y = 0.11;
-    p.add(pot);
-    const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.5, 7), rMat(RB.grass2));
-    leaf.position.y = 0.45;
-    p.add(leaf);
-    const leaf2 = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.35, 7), rMat(RB.grass));
-    leaf2.position.set(0.08, 0.6, 0.04);
-    p.add(leaf2);
-    p.position.set(x, 0, z);
-    p.scale.setScalar(s);
-    house.add(p);
-  };
-  addPlant(-4.5, -3.4, 1.3);
-  addPlant(4.5, -3.5, 1.1);
-  addPlant(-4.5, 3.4, 1.2);
-  addPlant(0.3, 0.7, 0.9);
-
-  // --- robots doing chores ---
-  // vacuum rover sweeping the living room (lissajous path)
-  const vac = buildRoverModel();
-  vac.group.scale.setScalar(0.55);
-  house.add(vac.group);
-  // quadruped patrolling the perimeter
-  const patrol = buildQuadrupedModel();
-  patrol.group.scale.setScalar(0.6);
-  house.add(patrol.group);
-  const waypoints = [new THREE.Vector3(3.8, 0, 2.8), new THREE.Vector3(3.8, 0, -1.0), new THREE.Vector3(0.6, 0, -1.0), new THREE.Vector3(0.6, 0, 2.8)];
-  // humanoid at the kitchen counter
-  const chef = buildHumanoidModel("wave");
-  chef.group.scale.setScalar(0.62);
-  chef.group.position.set(-3.4, 0, -2.6);
-  chef.group.rotation.y = Math.PI;
-  house.add(chef.group);
-  // drone dusting the shelves
-  const duster = buildDroneModel();
-  duster.group.scale.setScalar(0.5);
-  house.add(duster.group);
-  const segLen = 1; // per-edge progress seconds-ish
-  return {
-    update(t) {
-      vac.update(t * 2);
-      vac.group.position.set(-1.8 + Math.sin(t * 0.55) * 1.6, 0, 1.3 + Math.sin(t * 0.83 + 1.2) * 1.3);
-      vac.group.rotation.y = Math.atan2(Math.cos(t * 0.83 + 1.2) * 1.08, Math.cos(t * 0.55) * 0.88);
-      patrol.update(t);
-      const total = waypoints.length;
-      const prog = t * 0.22 % total;
-      const i0 = Math.floor(prog),
-        i1 = (i0 + 1) % total;
-      const f = prog - i0;
-      patrol.group.position.lerpVectors(waypoints[i0], waypoints[i1], f);
-      const dir = waypoints[i1].clone().sub(waypoints[i0]);
-      patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
-      chef.update(t);
-      duster.update(t);
-      duster.group.position.set(-1 + Math.sin(t * 0.4) * 3, 1.7 + Math.sin(t * 1.1) * 0.15, -3.2);
-      duster.group.rotation.y = Math.sin(t * 0.4) > 0 ? 0 : Math.PI;
-
-      // camera: slow orbital sway + scroll descends slightly + mouse parallax
-      const ang = Math.PI / 4 + Math.sin(t * 0.07) * 0.08 + state.mouse.x * 0.06;
-      const rad = 10.2 - state.scroll * 1.2;
-      camera.position.set(Math.sin(ang) * rad, 6.4 - state.scroll * 1.4 - state.mouse.y * 0.4, Math.cos(ang) * rad);
-      camera.lookAt(0, 0.2, 0);
+      // very gentle parallax only — no scroll-driven dolly over the text
+      camera.position.x = state.mouse.x * 0.25;
+      camera.position.y = 1.3 - state.mouse.y * 0.15;
+      camera.lookAt(0, 1.2, 0);
     }
   };
 });
 Object.assign(window, {
-  PaperWorld,
-  HouseWorld
+  PaperWorld
 });
 
 /* ===== src/globe.jsx ===== */
@@ -1749,45 +1871,88 @@ function makeHeatTexture(color) {
   return new THREE.CanvasTexture(c);
 }
 
-// Load NASA earth texture, recolor into the site palette (green land / paper ocean)
-function loadLandTexture(onReady) {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.onload = () => {
-    try {
-      const W = 1024,
-        H = 512;
-      const c = document.createElement("canvas");
-      c.width = W;
-      c.height = H;
-      const x = c.getContext("2d");
-      x.drawImage(img, 0, 0, W, H);
-      const d = x.getImageData(0, 0, W, H);
-      const px = d.data;
-      for (let i = 0; i < px.length; i += 4) {
-        const r = px[i],
-          g = px[i + 1],
-          b = px[i + 2];
-        const ocean = b > r + 12 && b > g + 5;
-        if (ocean) {
-          px[i] = 240;
-          px[i + 1] = 247;
-          px[i + 2] = 241;
-        } else {
-          // land: shade by brightness for relief
-          const lum = (r + g + b) / (3 * 255);
-          px[i] = 110 + lum * 60;
-          px[i + 1] = 165 + lum * 40;
-          px[i + 2] = 122 + lum * 45;
-        }
-      }
-      x.putImageData(d, 0, 0);
-      const tex = new THREE.CanvasTexture(c);
+// Procedural earth — always available, no network. Ocean + clearly-readable land
+// masses with a touch of relief, so the globe never renders as a flat single color.
+function makeProceduralEarth() {
+  const W = 1024,
+    H = 512;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const x = c.getContext("2d");
+
+  // ocean
+  const og = x.createLinearGradient(0, 0, 0, H);
+  og.addColorStop(0, "#2b5f96");
+  og.addColorStop(0.5, "#2f6ea8");
+  og.addColorStop(1, "#2b5f96");
+  x.fillStyle = og;
+  x.fillRect(0, 0, W, H);
+
+  // helper: lon/lat (deg) -> equirectangular px
+  const P = (lon, lat) => [(lon + 180) / 360 * W, (90 - lat) / 180 * H];
+  // rough continent outlines (lon, lat) — readable, not survey-accurate
+  const LAND = [
+  // North America
+  [[-168, 65], [-150, 70], [-95, 72], [-60, 60], [-55, 48], [-80, 25], [-97, 17], [-110, 23], [-125, 40], [-130, 55], [-168, 65]],
+  // South America
+  [[-80, 9], [-60, 7], [-50, -5], [-38, -12], [-55, -35], [-72, -52], [-75, -30], [-81, -5], [-80, 9]],
+  // Africa
+  [[-17, 15], [10, 33], [32, 31], [43, 12], [40, -5], [35, -26], [20, -35], [12, -18], [-5, 5], [-17, 15]],
+  // Europe
+  [[-10, 43], [0, 51], [10, 55], [28, 60], [40, 48], [28, 40], [10, 38], [-10, 43]],
+  // Asia
+  [[40, 48], [60, 55], [90, 72], [140, 72], [170, 66], [140, 52], [122, 40], [105, 20], [95, 8], [78, 8], [70, 25], [55, 38], [40, 48]],
+  // India peninsula accent
+  [[70, 25], [88, 22], [80, 8], [72, 18], [70, 25]],
+  // Australia
+  [[113, -22], [130, -12], [145, -15], [153, -28], [140, -38], [120, -34], [113, -22]],
+  // Antarctica strip
+  [[-180, -78], [180, -78], [180, -90], [-180, -90], [-180, -78]],
+  // Greenland
+  [[-55, 60], [-30, 60], [-22, 70], [-40, 82], [-58, 76], [-55, 60]]];
+  const drawBlob = (pts, fill) => {
+    x.beginPath();
+    pts.forEach((p, i) => {
+      const [px, py] = P(p[0], p[1]);
+      i ? x.lineTo(px, py) : x.moveTo(px, py);
+    });
+    x.closePath();
+    x.fillStyle = fill;
+    x.fill();
+  };
+  LAND.forEach(pts => drawBlob(pts, "#5a9e5e"));
+  // relief speckle for a hint of terrain
+  for (let i = 0; i < 2600; i++) {
+    const px = Math.random() * W,
+      py = Math.random() * H;
+    const d = x.getImageData(px, py, 1, 1).data;
+    if (d[1] > d[2]) {
+      // only over land (green > blue)
+      x.fillStyle = Math.random() > 0.5 ? "rgba(80,130,70,0.5)" : "rgba(170,150,110,0.4)";
+      x.fillRect(px, py, 2, 2);
+    }
+  }
+  // ice caps
+  x.fillStyle = "rgba(244,249,250,0.85)";
+  x.fillRect(0, 0, W, 16);
+  x.fillRect(0, H - 22, W, 22);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+// Upgrade to the photoreal NASA earth-day texture if it loads (kept full-color:
+// blue oceans, green/tan land, polar ice — water & relief clearly visible).
+function loadRealEarth(onReady) {
+  try {
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin("anonymous");
+    loader.load("https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg", tex => {
       tex.colorSpace = THREE.SRGBColorSpace;
       onReady(tex);
-    } catch (e) {/* keep fallback */}
-  };
-  img.src = "https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg";
+    }, undefined, () => {/* keep procedural fallback */});
+  } catch (e) {/* keep procedural fallback */}
 }
 function buildGlobeScene(ctx) {
   const {
@@ -1795,38 +1960,41 @@ function buildGlobeScene(ctx) {
     camera,
     el
   } = ctx;
-  camera.position.set(0, 0.5, 3.6);
+  // smaller globe in frame — pulled back + reduced radius
+  camera.position.set(0, 0.35, 4.2);
   camera.lookAt(0, 0, 0);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xd6e8d8, 1.25));
-  const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xbcd0e8, 1.1));
+  const dir = new THREE.DirectionalLight(0xffffff, 0.85);
   dir.position.set(3, 4, 5);
   scene.add(dir);
-  const R = 1.32;
+  const R = 1.0;
   const globe = new THREE.Group();
   scene.add(globe);
   const sphereMat = new THREE.MeshStandardMaterial({
-    color: 0xf0f7f1,
-    roughness: 0.85
+    map: makeProceduralEarth(),
+    roughness: 0.92,
+    metalness: 0.0
   });
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 56, 56), sphereMat));
-  loadLandTexture(tex => {
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 64, 64), sphereMat));
+  loadRealEarth(tex => {
     sphereMat.map = tex;
-    sphereMat.color.set(0xffffff);
     sphereMat.needsUpdate = true;
   });
-  const halo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.06, 32, 32), new THREE.MeshBasicMaterial({
-    color: 0xcde7d2,
+
+  // soft atmospheric halo (cool blue)
+  const halo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.07, 32, 32), new THREE.MeshBasicMaterial({
+    color: 0x9cc4ec,
     transparent: true,
-    opacity: 0.25,
+    opacity: 0.22,
     side: THREE.BackSide
   }));
   scene.add(halo);
 
   // subtle graticule
   const gratMat = new THREE.LineBasicMaterial({
-    color: 0xb3cdba,
+    color: 0xbfd6ea,
     transparent: true,
-    opacity: 0.3
+    opacity: 0.22
   });
   const gratPts = [];
   for (let lat = -60; lat <= 60; lat += 30) {
@@ -1861,7 +2029,7 @@ function buildGlobeScene(ctx) {
       transparent: true,
       depthWrite: false
     }));
-    const s = 0.22 + p.w * 0.55;
+    const s = 0.16 + p.w * 0.38;
     spr.scale.set(s, s, 1);
     spr.position.copy(latLonToV3(p.lat, p.lon, R * 1.01));
     globe.add(spr);
@@ -1955,11 +2123,43 @@ Object.assign(window, {
 });
 
 /* ===== src/app-all.jsx ===== */
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 // ===== CONSOLIDATED APP =====
 // Rich 3D scenes live in their own files and are loaded BEFORE this one:
 //   data.jsx → robots.jsx → world.jsx → scenes-pages.jsx → globe.jsx → app-all.jsx
-// This file owns the inline ThreeScene host + page components + routing, and
-// wires each page to the detailed scene built in those modules.
+// This file owns the inline ThreeScene host + page components + routing.
+
+// ===== Error boundary — a thrown render/effect error must never blank the page =====
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      failed: false
+    };
+  }
+  static getDerivedStateFromError() {
+    return {
+      failed: true
+    };
+  }
+  componentDidCatch() {/* swallow — keep the shell usable */}
+  render() {
+    if (this.state.failed) {
+      return /*#__PURE__*/React.createElement("section", {
+        className: "page"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "container"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "page-eyebrow"
+      }, "Something hiccuped"), /*#__PURE__*/React.createElement("h1", {
+        className: "page-title"
+      }, "A piece didn't load"), /*#__PURE__*/React.createElement("p", {
+        className: "page-lede"
+      }, "Try refreshing the page. The rest of the site is still here in the menu above.")));
+    }
+    return this.props.children;
+  }
+}
 
 // ===== Three.js Scene Host (inline, sized canvases) =====
 function ThreeScene({
@@ -1971,94 +2171,101 @@ function ThreeScene({
   React.useEffect(() => {
     const el = ref.current;
     if (!el || !window.THREE) return;
-    const w = el.clientWidth || 400;
-    const h = el.clientHeight || 400;
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(w, h, false);
-    renderer.setClearColor(0x000000, 0);
-    el.appendChild(renderer.domElement);
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-    camera.position.set(0, 0, 5);
-    const ctx = {
-      scene,
-      camera,
-      renderer,
-      el,
-      mouse: {
-        x: 0,
-        y: 0
-      }
-    };
-    const api = build(ctx) || {};
-    let raf = 0,
-      running = false;
-    const start = performance.now();
-    const tick = () => {
-      if (!running) return;
-      const t = (performance.now() - start) / 1000;
-      api.update && api.update(t);
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(tick);
-    };
-    const startLoop = () => {
-      if (!running) {
-        running = true;
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    const stopLoop = () => {
-      running = false;
-      cancelAnimationFrame(raf);
-    };
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => e.isIntersecting ? startLoop() : stopLoop());
-    }, {
-      rootMargin: "60px"
-    });
-    io.observe(el);
-    const onVis = () => document.hidden ? stopLoop() : startLoop();
-    document.addEventListener("visibilitychange", onVis);
-    const onResize = () => {
-      const nw = el.clientWidth,
-        nh = el.clientHeight;
-      if (!nw || !nh) return;
-      renderer.setSize(nw, nh, false);
-      camera.aspect = nw / nh;
-      camera.updateProjectionMatrix();
-    };
-    let resizeRaf = 0;
-    const scheduleResize = () => {
-      if (resizeRaf) return;
-      resizeRaf = requestAnimationFrame(() => {
-        resizeRaf = 0;
-        onResize();
+    let cleanup = null;
+    try {
+      const w = el.clientWidth || 400;
+      const h = el.clientHeight || 400;
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true
       });
-    };
-    // Defer out of the observer callback to avoid the benign
-    // "ResizeObserver loop completed with undelivered notifications" warning.
-    const ro = new ResizeObserver(scheduleResize);
-    ro.observe(el);
-    const onMove = e => {
-      const r = el.getBoundingClientRect();
-      ctx.mouse.x = (e.clientX - r.left) / r.width * 2 - 1;
-      ctx.mouse.y = -((e.clientY - r.top) / r.height * 2 - 1);
-    };
-    el.addEventListener("pointermove", onMove);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h, false);
+      renderer.setClearColor(0x000000, 0);
+      el.appendChild(renderer.domElement);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+      camera.position.set(0, 0, 5);
+      const ctx = {
+        scene,
+        camera,
+        renderer,
+        el,
+        mouse: {
+          x: 0,
+          y: 0
+        }
+      };
+      const api = build(ctx) || {};
+      let raf = 0,
+        running = false;
+      const start = performance.now();
+      const tick = () => {
+        if (!running) return;
+        const t = (performance.now() - start) / 1000;
+        api.update && api.update(t);
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(tick);
+      };
+      const startLoop = () => {
+        if (!running) {
+          running = true;
+          raf = requestAnimationFrame(tick);
+        }
+      };
+      const stopLoop = () => {
+        running = false;
+        cancelAnimationFrame(raf);
+      };
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? startLoop() : stopLoop());
+      }, {
+        rootMargin: "60px"
+      });
+      io.observe(el);
+      const onVis = () => document.hidden ? stopLoop() : startLoop();
+      document.addEventListener("visibilitychange", onVis);
+      const onResize = () => {
+        const nw = el.clientWidth,
+          nh = el.clientHeight;
+        if (!nw || !nh) return;
+        renderer.setSize(nw, nh, false);
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+      };
+      let resizeRaf = 0;
+      const scheduleResize = () => {
+        if (resizeRaf) return;
+        resizeRaf = requestAnimationFrame(() => {
+          resizeRaf = 0;
+          onResize();
+        });
+      };
+      const ro = new ResizeObserver(scheduleResize);
+      ro.observe(el);
+      const onMove = e => {
+        const r = el.getBoundingClientRect();
+        ctx.mouse.x = (e.clientX - r.left) / r.width * 2 - 1;
+        ctx.mouse.y = -((e.clientY - r.top) / r.height * 2 - 1);
+      };
+      el.addEventListener("pointermove", onMove);
+      cleanup = () => {
+        stopLoop();
+        cancelAnimationFrame(resizeRaf);
+        io.disconnect();
+        ro.disconnect();
+        document.removeEventListener("visibilitychange", onVis);
+        el.removeEventListener("pointermove", onMove);
+        api.dispose && api.dispose();
+        renderer.dispose();
+        while (el.firstChild) el.removeChild(el.firstChild);
+      };
+    } catch (e) {
+      // WebGL unavailable / scene build failed — leave the host empty, page stays alive.
+      if (el) while (el.firstChild) el.removeChild(el.firstChild);
+    }
     return () => {
-      stopLoop();
-      cancelAnimationFrame(resizeRaf);
-      io.disconnect();
-      ro.disconnect();
-      document.removeEventListener("visibilitychange", onVis);
-      el.removeEventListener("pointermove", onMove);
-      api.dispose && api.dispose();
-      renderer.dispose();
-      while (el.firstChild) el.removeChild(el.firstChild);
+      cleanup && cleanup();
     };
   }, [build]);
   return /*#__PURE__*/React.createElement("div", {
@@ -2068,58 +2275,7 @@ function ThreeScene({
   });
 }
 
-// ===== Hero diorama: the four detailed robots on a meadow =====
-// Uses ROBOT_BUILDERS / addRobotLights / addMeadow from robots.jsx (loaded first).
-function buildHeroDiorama(ctx) {
-  const {
-    scene,
-    camera
-  } = ctx;
-  camera.position.set(2.6, 1.8, 3.4);
-  camera.lookAt(0, 0.7, 0);
-  addRobotLights(scene);
-  const stage = new THREE.Group();
-  scene.add(stage);
-  addMeadow(stage, 2.2);
-  const built = [];
-  const place = (kind, x, z, s, ry) => {
-    const b = ROBOT_BUILDERS[kind]();
-    b.group.position.set(x, kind === "drone" ? 1.0 : 0, z);
-    b.group.scale.setScalar(s);
-    b.group.rotation.y = ry;
-    stage.add(b.group);
-    built.push({
-      b,
-      kind,
-      baseY: b.group.position.y
-    });
-  };
-  place("humanoid", -1.3, 0.15, 0.62, 0.5);
-  place("quadruped", -0.25, -0.55, 0.66, -0.4);
-  place("drone", 0.75, -0.3, 0.6, 0.2);
-  place("rover", 1.3, 0.2, 0.62, -0.7);
-  return {
-    update(t) {
-      built.forEach(({
-        b,
-        kind,
-        baseY
-      }, i) => {
-        b.update(t + i * 0.7);
-        if (kind === "drone") b.group.position.y = baseY + Math.sin(t * 1.3) * 0.08;
-      });
-      stage.rotation.y = Math.sin(t * 0.16) * 0.4 + ctx.mouse.x * 0.35;
-    },
-    dispose() {
-      scene.traverse(o => {
-        if (o.geometry) o.geometry.dispose();
-        if (o.material && o.material.dispose) o.material.dispose();
-      });
-    }
-  };
-}
-
-// ===== Page Components =====
+// ===== Reveal on scroll =====
 function Reveal({
   children,
   delay = 0
@@ -2146,14 +2302,116 @@ function Reveal({
     className: "reveal"
   }, children);
 }
+const Arrow = ({
+  dir = "right"
+}) => /*#__PURE__*/React.createElement("svg", {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}, dir === "left" ? /*#__PURE__*/React.createElement("path", {
+  d: "M15 18l-6-6 6-6"
+}) : /*#__PURE__*/React.createElement("path", {
+  d: "M9 18l6-6-6-6"
+}));
+
+// ===== Hero photo gallery — scroll through images, with a 3D robot "scroller" =====
+function HeroGallery() {
+  const items = window.HOME_GALLERY || [];
+  const n = items.length;
+  const [idx, setIdx] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const go = d => setIdx(i => (i + d + n) % n);
+  React.useEffect(() => {
+    if (paused || n < 2) return;
+    const id = setInterval(() => setIdx(i => (i + 1) % n), 6000);
+    return () => clearInterval(id);
+  }, [paused, n]);
+  if (!n) return null;
+  const cur = items[idx];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "hero-gallery",
+    onMouseEnter: () => setPaused(true),
+    onMouseLeave: () => setPaused(false)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hg-stage"
+  }, items.map((g, i) => /*#__PURE__*/React.createElement("img", {
+    key: g.src,
+    src: g.src,
+    alt: g.caption,
+    className: `hg-img ${i === idx ? "active" : ""}`,
+    draggable: "false"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "hg-grad"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "hg-tag"
+  }, cur.label), /*#__PURE__*/React.createElement("div", {
+    className: "hg-caption"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hg-cap-title"
+  }, cur.caption), /*#__PURE__*/React.createElement("div", {
+    className: "hg-cap-idx"
+  }, String(idx + 1).padStart(2, "0"), " / ", String(n).padStart(2, "0"))), /*#__PURE__*/React.createElement("button", {
+    className: "hg-nav prev",
+    onClick: () => go(-1),
+    "aria-label": "Previous image"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "left"
+  })), /*#__PURE__*/React.createElement("button", {
+    className: "hg-nav next",
+    onClick: () => go(1),
+    "aria-label": "Next image"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "hg-bot-hint"
+  }, "tap me \u2192"), /*#__PURE__*/React.createElement("div", {
+    className: "hg-bot",
+    onClick: () => go(1),
+    title: "Next image",
+    role: "button",
+    "aria-label": "Next image"
+  }, /*#__PURE__*/React.createElement(ThreeScene, {
+    build: heroDroneScene
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "hg-rail"
+  }, items.map((g, i) => /*#__PURE__*/React.createElement("div", {
+    key: g.src,
+    className: `hg-thumb ${i === idx ? "active" : ""}`,
+    onClick: () => setIdx(i),
+    role: "button",
+    "aria-label": g.caption
+  }, /*#__PURE__*/React.createElement("img", {
+    src: g.src,
+    alt: "",
+    draggable: "false"
+  })))));
+}
+
+// ===== CV row =====
+function CVRow({
+  r
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cv-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cv-date"
+  }, r.date), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+    className: "cv-role"
+  }, r.role), /*#__PURE__*/React.createElement("div", {
+    className: "cv-org"
+  }, r.org), /*#__PURE__*/React.createElement("p", {
+    className: "cv-desc"
+  }, r.desc)));
+}
+
+// ===== Publication row =====
 function PubRow({
   p
 }) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "pub"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "pub-year"
-  }, p.year), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, p.title), /*#__PURE__*/React.createElement("p", {
+  const inner = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h4", null, p.title), /*#__PURE__*/React.createElement("p", {
     className: "pub-authors"
   }, p.authors.map((a, idx) => /*#__PURE__*/React.createElement(React.Fragment, {
     key: idx
@@ -2161,7 +2419,17 @@ function PubRow({
     className: a.toLowerCase().includes("sai krishna") ? "me" : ""
   }, a)))), /*#__PURE__*/React.createElement("div", {
     className: "pub-venue"
-  }, p.venue)), /*#__PURE__*/React.createElement("div", {
+  }, p.venue), p.link && /*#__PURE__*/React.createElement("span", {
+    className: "pub-link"
+  }, "View paper ", /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  })));
+  return /*#__PURE__*/React.createElement("div", {
+    className: `pub ${p.link ? "linked" : ""}`,
+    onClick: p.link ? () => window.open(p.link, "_blank", "noopener") : undefined
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pub-year"
+  }, p.year), /*#__PURE__*/React.createElement("div", null, inner), /*#__PURE__*/React.createElement("div", {
     className: "pub-actions"
   }, p.featured && /*#__PURE__*/React.createElement("span", {
     className: "pub-chip featured"
@@ -2169,6 +2437,8 @@ function PubRow({
     className: "pub-chip"
   }, p.kind)));
 }
+
+// ===== Pages =====
 function HomePage({
   go
 }) {
@@ -2198,8 +2468,8 @@ function HomePage({
   }, "Currently with ", /*#__PURE__*/React.createElement("em", null, "Dr. Ramviyas Parasuraman"), " at the HeRoLab. Previously: Samsung R&D, IIIT Naya Raipur."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      gap: 12,
-      marginTop: 20,
+      gap: 10,
+      marginTop: 24,
       flexWrap: "wrap"
     }
   }, /*#__PURE__*/React.createElement("a", {
@@ -2213,96 +2483,167 @@ function HomePage({
     rel: "noopener noreferrer",
     className: "btn-link"
   }, "GitHub"), /*#__PURE__*/React.createElement("a", {
-    href: `mailto:${PROFILE.email}`,
+    href: PROFILE.linkedin,
+    target: "_blank",
+    rel: "noopener noreferrer",
     className: "btn-link"
-  }, "Email")))), /*#__PURE__*/React.createElement("div", {
-    className: "hero-scene"
-  }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: buildHeroDiorama,
-    style: {
-      width: "100%",
-      height: "100%",
-      minHeight: 440
-    }
-  }))))), /*#__PURE__*/React.createElement("section", {
-    className: "interests",
+  }, "LinkedIn"), /*#__PURE__*/React.createElement("a", {
+    href: `mailto:${PROFILE.email}`,
+    className: "btn-link solid"
+  }, "Email")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
+    className: "section interests",
     "data-screen-label": "Interests"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow",
+    style: {
+      textAlign: "center"
+    }
+  }, "Focus areas"), /*#__PURE__*/React.createElement("h2", {
     style: {
       textAlign: "center",
-      marginBottom: 60
+      marginBottom: 48
     }
-  }, "Research Interests"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 40
-    }
+  }, "Research ", /*#__PURE__*/React.createElement("span", {
+    className: "ital"
+  }, "Interests")), /*#__PURE__*/React.createElement("div", {
+    className: "interest-grid"
   }, INTERESTS.map(int => /*#__PURE__*/React.createElement("div", {
     key: int.id,
     className: "interest-card"
   }, /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 8,
-      flexWrap: "wrap",
-      marginTop: 12
-    }
+    className: "topics"
   }, int.topics.map(t => /*#__PURE__*/React.createElement("span", {
     key: t,
-    className: "chip"
-  }, t))))))))));
+    className: "topic"
+  }, t))))))))), /*#__PURE__*/React.createElement("section", {
+    className: "section home-cv",
+    id: "cv",
+    "data-screen-label": "CV"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "Background"), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      marginBottom: 6
+    }
+  }, "Curriculum ", /*#__PURE__*/React.createElement("span", {
+    className: "ital"
+  }, "Vitae")), /*#__PURE__*/React.createElement("p", {
+    className: "page-lede",
+    style: {
+      marginBottom: 8
+    }
+  }, "Education, research, and the path that led here."), /*#__PURE__*/React.createElement("div", {
+    className: "cv-columns",
+    style: {
+      marginTop: 40
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cv-col"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "cv-col-title"
+  }, "Education"), EDUCATION.map(r => /*#__PURE__*/React.createElement(CVRow, {
+    key: r.role,
+    r: r
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "cv-col"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "cv-col-title"
+  }, "Experience"), EXPERIENCE.map(r => /*#__PURE__*/React.createElement(CVRow, {
+    key: r.role + r.org,
+    r: r
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "cv-actions"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: PROFILE.cv,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "btn-link solid"
+  }, "Download full CV (PDF)"), /*#__PURE__*/React.createElement("a", {
+    href: PROFILE.scholar,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "btn-link"
+  }, "Google Scholar"), /*#__PURE__*/React.createElement("span", {
+    className: "btn-link",
+    onClick: () => go("publications"),
+    style: {
+      cursor: "pointer"
+    }
+  }, "Publications"))))));
 }
 function ResearchPage() {
   return /*#__PURE__*/React.createElement("section", {
-    className: "research",
+    className: "research page",
     "data-screen-label": "Research"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      marginBottom: 60
-    }
-  }, "Research Thrusts"), THRUSTS.map((t, i) => /*#__PURE__*/React.createElement("div", {
-    key: t.num,
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "What I work on"), /*#__PURE__*/React.createElement("h1", {
+    className: "page-title"
+  }, "Research ", /*#__PURE__*/React.createElement("span", {
+    className: "ital"
+  }, "Thrusts")), /*#__PURE__*/React.createElement("p", {
+    className: "page-lede"
+  }, "Three intertwined directions \u2014 embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.")), THRUSTS.map((t, i) => /*#__PURE__*/React.createElement(Reveal, {
+    key: t.id,
+    delay: i * 80
+  }, /*#__PURE__*/React.createElement("div", {
     className: "thrust",
     style: {
-      marginBottom: 100
+      "--t-accent": t.accent,
+      "--t-tint": t.tint
     }
-  }, /*#__PURE__*/React.createElement(Reveal, {
-    delay: i * 100
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 40,
-      alignItems: "start"
-    }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "thrust-num"
-  }, t.num), /*#__PURE__*/React.createElement("h2", null, t.title), /*#__PURE__*/React.createElement("p", {
     className: "thrust-body"
-  }, t.body), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 6,
-      flexWrap: "wrap"
-    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "thrust-badge"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "b-dot"
+  }), "Thrust ", String(i + 1).padStart(2, "0")), /*#__PURE__*/React.createElement("h3", null, t.title), /*#__PURE__*/React.createElement("p", {
+    className: "thrust-tagline"
+  }, t.tagline), /*#__PURE__*/React.createElement("p", null, t.body), /*#__PURE__*/React.createElement("div", {
+    className: "thrust-stats"
+  }, t.stats.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.k,
+    className: "thrust-stat"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "k"
+  }, s.k), /*#__PURE__*/React.createElement("span", {
+    className: "v"
+  }, s.v)))), /*#__PURE__*/React.createElement("div", {
+    className: "thrust-keywords"
   }, t.keywords.map(k => /*#__PURE__*/React.createElement("span", {
     key: k,
-    className: "chip small"
-  }, k)))), /*#__PURE__*/React.createElement("div", {
-    className: "thrust-img"
+    className: "thrust-keyword"
+  }, k))), /*#__PURE__*/React.createElement("div", {
+    className: "thrust-resources"
+  }, t.resources.map(r => /*#__PURE__*/React.createElement("a", _extends({
+    key: r.label,
+    className: "thrust-resource",
+    href: r.href
+  }, r.href.startsWith("#") ? {} : {
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }), /*#__PURE__*/React.createElement("span", null, r.label), /*#__PURE__*/React.createElement("span", {
+    className: "arr"
+  }, "\u2192"))))), /*#__PURE__*/React.createElement("div", {
+    className: "thrust-media"
   }, /*#__PURE__*/React.createElement(ThreeScene, {
     build: dioramaScene(t.scene),
     style: {
+      position: "absolute",
+      inset: 0,
       width: "100%",
-      height: "100%",
-      minHeight: 340
+      height: "100%"
     }
-  }))))))));
+  })))))));
 }
 function PublicationsPage() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(PaperWorld, null), /*#__PURE__*/React.createElement("section", {
@@ -2311,17 +2652,41 @@ function PublicationsPage() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "iw-content"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/React.createElement("h1", {
+    className: "iw-hero"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "Selected work"), /*#__PURE__*/React.createElement("h1", {
+    className: "iw-title"
+  }, "Publications"), /*#__PURE__*/React.createElement("p", {
+    className: "page-lede",
     style: {
-      marginBottom: 60
+      marginTop: 14
     }
-  }, "Publications"), /*#__PURE__*/React.createElement("div", null, PUBLICATIONS.map(p => /*#__PURE__*/React.createElement(PubRow, {
-    key: p.title,
-    p: p
-  })))))));
+  }, "Peer-reviewed and in-review work on multi-robot mapping, semantic SLAM, and spatial learning. ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--accent-ink)"
+    }
+  }, "* indicates lead / first author."))), PUB_GROUPS.map(group => {
+    const items = PUBLICATIONS.filter(p => p.kind === group.kind).sort((a, b) => b.year - a.year);
+    if (!items.length) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: group.kind,
+      className: "iw-card"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "pub-group-head"
+    }, /*#__PURE__*/React.createElement("h2", null, group.label), /*#__PURE__*/React.createElement("span", {
+      className: "count"
+    }, items.length)), items.map(p => /*#__PURE__*/React.createElement(PubRow, {
+      key: p.title,
+      p: p
+    })));
+  }))));
 }
 function UpdatesPage() {
+  const years = [];
+  UPDATES.forEach(u => {
+    if (!years.includes(u.year)) years.push(u.year);
+  });
   return /*#__PURE__*/React.createElement("div", {
     className: "journey"
   }, /*#__PURE__*/React.createElement(JourneyWorld, null), /*#__PURE__*/React.createElement("div", {
@@ -2334,85 +2699,119 @@ function UpdatesPage() {
     className: "j-progress-bar"
   })), /*#__PURE__*/React.createElement("div", {
     className: "j-content"
-  }, /*#__PURE__*/React.createElement("section", {
-    className: "updates",
-    "data-screen-label": "Updates"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "j-hero",
+    "data-screen-label": "Milestones"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      marginBottom: 60
-    }
-  }, "Updates"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      maxWidth: 600
-    }
-  }, UPDATES.map(u => /*#__PURE__*/React.createElement("div", {
-    key: u.date,
-    className: "update-item"
+    className: "j-eyebrow"
+  }, "The road so far"), /*#__PURE__*/React.createElement("h1", {
+    className: "j-title"
+  }, "Mile", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+    className: "outline"
+  }, "stones")), /*#__PURE__*/React.createElement("p", {
+    className: "j-lede"
+  }, "A scrolling trail through the work \u2014 papers shipped, field trials run, and the moves that got me here."), /*#__PURE__*/React.createElement("div", {
+    className: "j-cue"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "j-cue-line"
+  }), "Scroll to travel")), /*#__PURE__*/React.createElement("section", {
+    className: "j-section",
+    "data-screen-label": "Timeline"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "update-date"
-  }, u.date), /*#__PURE__*/React.createElement("p", null, u.text))))))));
-}
-function CVPage() {
-  return /*#__PURE__*/React.createElement("section", {
-    className: "cv",
-    "data-screen-label": "CV"
+    className: "j-card wide"
+  }, years.map(y => /*#__PURE__*/React.createElement("div", {
+    key: y,
+    className: "timeline-year"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/React.createElement("h1", null, "Curriculum Vitae"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginTop: 20,
-      marginBottom: 40
-    }
-  }, /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.cv,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "Download PDF")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: "var(--mono)",
-      fontSize: 13,
-      lineHeight: 1.8,
-      color: "var(--ink-2)"
-    }
-  }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Education")), /*#__PURE__*/React.createElement("p", null, "PhD in Artificial Intelligence \xB7 University of Georgia (2024\u2013present)"), /*#__PURE__*/React.createElement("p", null, "B.Tech in Computer Science and Engineering \xB7 IIIT Naya Raipur (2019\u20132023)"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginTop: 30
-    }
-  }, /*#__PURE__*/React.createElement("strong", null, "Experience")), /*#__PURE__*/React.createElement("p", null, "Robotics Research Intern \xB7 HeRoLab, UGA (2024\u2013present)"), /*#__PURE__*/React.createElement("p", null, "Software Engineer Intern \xB7 Samsung R&D (2023)"), /*#__PURE__*/React.createElement("p", null, "AI/ML Researcher \xB7 IIIT Naya Raipur (2021\u20132023)"))));
+    className: "ty-label"
+  }, y), /*#__PURE__*/React.createElement("div", {
+    className: "ty-items"
+  }, UPDATES.filter(u => u.year === y).map((u, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "ms-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ms-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "ms-date"
+  }, u.date), /*#__PURE__*/React.createElement("span", {
+    className: "ms-tag"
+  }, u.tag)), /*#__PURE__*/React.createElement("p", {
+    className: "ms-text"
+  }, u.text)))))))), /*#__PURE__*/React.createElement("footer", {
+    className: "j-outro"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "j-outro-word"
+  }, "onward."), /*#__PURE__*/React.createElement("button", {
+    className: "btn",
+    onClick: () => window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    })
+  }, "Back to the trailhead \u2191"))));
 }
 function ContactPage() {
   return /*#__PURE__*/React.createElement("section", {
-    className: "contact",
+    className: "contact page",
     "data-screen-label": "Contact"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      marginBottom: 40
-    }
-  }, "Get in Touch"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "Say hello"), /*#__PURE__*/React.createElement("h1", {
+    className: "page-title"
+  }, "Get in ", /*#__PURE__*/React.createElement("span", {
+    className: "ital"
+  }, "touch"))), /*#__PURE__*/React.createElement("div", {
     className: "contact-grid"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
   }, "I'm always interested in collaborations, research discussions, or just talking robots. Feel free to reach out."), /*#__PURE__*/React.createElement("div", {
-    className: "contact-links",
-    style: {
-      marginTop: 30
-    }
-  }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Email:"), " ", /*#__PURE__*/React.createElement("a", {
-    href: `mailto:${PROFILE.email}`
-  }, PROFILE.email)), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "GitHub:"), " ", /*#__PURE__*/React.createElement("a", {
+    className: "contact-links"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: `mailto:${PROFILE.email}`,
+    className: "contact-link"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Email"), PROFILE.email), /*#__PURE__*/React.createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))), /*#__PURE__*/React.createElement("a", {
     href: PROFILE.github,
     target: "_blank",
-    rel: "noopener noreferrer"
-  }, PROFILE.github)), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Scholar:"), " ", /*#__PURE__*/React.createElement("a", {
+    rel: "noopener noreferrer",
+    className: "contact-link"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "GitHub"), "sai-krishna-ghanta"), /*#__PURE__*/React.createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))), /*#__PURE__*/React.createElement("a", {
     href: PROFILE.scholar,
     target: "_blank",
-    rel: "noopener noreferrer"
-  }, PROFILE.scholar)))), /*#__PURE__*/React.createElement("div", {
+    rel: "noopener noreferrer",
+    className: "contact-link"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Scholar"), "Google Scholar profile"), /*#__PURE__*/React.createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))), /*#__PURE__*/React.createElement("a", {
+    href: PROFILE.linkedin,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "contact-link"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "LinkedIn"), "sai-krishna-ghanta"), /*#__PURE__*/React.createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))))), /*#__PURE__*/React.createElement("div", {
     className: "contact-globe"
   }, /*#__PURE__*/React.createElement(ThreeScene, {
     build: buildGlobeScene,
@@ -2428,128 +2827,82 @@ function ContactPage() {
 function BlogList({
   openPost
 }) {
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(HouseWorld, null), /*#__PURE__*/React.createElement("section", {
-    className: "blog",
+  return /*#__PURE__*/React.createElement("section", {
+    className: "blog-page",
     "data-screen-label": "Blog"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "iw-content"
-  }, /*#__PURE__*/React.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      marginBottom: 60
-    }
-  }, "Blog"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 30
-    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "Writing"), /*#__PURE__*/React.createElement("h1", {
+    className: "page-title"
+  }, "Blog"), /*#__PURE__*/React.createElement("p", {
+    className: "page-lede"
+  }, "Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.")), /*#__PURE__*/React.createElement("div", {
+    className: "blog-grid"
   }, BLOG_POSTS.map(p => /*#__PURE__*/React.createElement("div", {
     key: p.id,
     className: "blog-card",
-    onClick: () => openPost(p.id),
-    style: {
-      cursor: "pointer"
-    }
+    onClick: () => openPost(p.id)
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "var(--ink-3)",
-      marginBottom: 8
-    }
-  }, p.category, " \xB7 ", p.date, " \xB7 ", p.readTime), /*#__PURE__*/React.createElement("h3", null, p.title), /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginTop: 12,
-      marginBottom: 16
-    }
-  }, p.excerpt), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "var(--accent)",
-      fontWeight: 500
-    }
-  }, "Read \u2192"))))))));
+    className: "meta"
+  }, /*#__PURE__*/React.createElement("span", null, p.category), /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  }), /*#__PURE__*/React.createElement("span", null, p.date), /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  }), /*#__PURE__*/React.createElement("span", null, p.readTime)), /*#__PURE__*/React.createElement("h3", null, p.title), /*#__PURE__*/React.createElement("p", null, p.excerpt), /*#__PURE__*/React.createElement("span", {
+    className: "arrow"
+  }, "Read ", /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  })))))));
 }
 function BlogReader({
   postId,
-  back,
-  openPost
+  back
 }) {
   const post = BLOG_POSTS.find(p => p.id === postId);
   if (!post) {
     return /*#__PURE__*/React.createElement("div", {
-      className: "container"
+      className: "blog-reader"
     }, /*#__PURE__*/React.createElement("a", {
       onClick: back,
+      className: "blog-back",
       style: {
-        cursor: "pointer",
-        color: "var(--accent)"
+        cursor: "pointer"
       }
-    }, "\u2190 Back"), /*#__PURE__*/React.createElement("p", null, "Post not found."));
+    }, /*#__PURE__*/React.createElement(Arrow, {
+      dir: "left"
+    }), " Back"), /*#__PURE__*/React.createElement("p", null, "Post not found."));
   }
-  return /*#__PURE__*/React.createElement("section", {
+  return /*#__PURE__*/React.createElement("article", {
     className: "blog-reader",
     "data-screen-label": `Blog: ${post.title}`
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
   }, /*#__PURE__*/React.createElement("a", {
     onClick: back,
+    className: "blog-back",
     style: {
-      cursor: "pointer",
-      color: "var(--accent)",
-      marginBottom: 40,
-      display: "inline-block"
+      cursor: "pointer"
     }
-  }, "\u2190 Back to blog"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "var(--ink-3)",
-      marginBottom: 12
-    }
-  }, post.category, " \xB7 ", post.date, " \xB7 ", post.readTime), /*#__PURE__*/React.createElement("h1", {
-    style: {
-      marginBottom: 40
-    }
-  }, post.title), /*#__PURE__*/React.createElement("article", {
-    style: {
-      maxWidth: 600,
-      lineHeight: 1.8
-    }
-  }, post.body.map(([tag, content], i) => {
-    if (tag === "p") return /*#__PURE__*/React.createElement("p", {
-      key: i,
-      style: {
-        marginBottom: 20
-      }
-    }, content);
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "left"
+  }), " Back to blog"), /*#__PURE__*/React.createElement("div", {
+    className: "reader-meta"
+  }, post.category, " \xB7 ", post.date, " \xB7 ", post.readTime), /*#__PURE__*/React.createElement("h1", null, post.title), /*#__PURE__*/React.createElement("div", null, post.body.map(([tag, content], i) => {
     if (tag === "h2") return /*#__PURE__*/React.createElement("h2", {
-      key: i,
-      style: {
-        marginTop: 40,
-        marginBottom: 20
-      }
+      key: i
     }, content);
     if (tag === "h3") return /*#__PURE__*/React.createElement("h3", {
-      key: i,
-      style: {
-        marginTop: 30,
-        marginBottom: 15
-      }
+      key: i
     }, content);
     if (tag === "blockquote") return /*#__PURE__*/React.createElement("blockquote", {
-      key: i,
-      style: {
-        borderLeft: "3px solid var(--accent)",
-        paddingLeft: 20,
-        marginLeft: 0,
-        marginBottom: 20,
-        fontStyle: "italic"
-      }
+      key: i
     }, content);
     return /*#__PURE__*/React.createElement("p", {
       key: i
     }, content);
-  }))));
+  })));
 }
 
 // ===== Nav & Footer =====
@@ -2573,10 +2926,7 @@ function Nav({
     label: "Blog"
   }, {
     id: "updates",
-    label: "Updates"
-  }, {
-    id: "cv",
-    label: "CV"
+    label: "Milestones"
   }, {
     id: "contact",
     label: "Contact"
@@ -2667,10 +3017,10 @@ function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
   React.useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant"
-    });
+    // Safe scroll-to-top — older Safari throws on { behavior: "instant" }.
+    try {
+      window.scrollTo(0, 0);
+    } catch (e) {/* no-op */}
   }, [route.page, route.post]);
   const go = page => {
     window.location.hash = page === "home" ? "" : `#/${page}`;
@@ -2682,17 +3032,15 @@ function App() {
     window.location.hash = "#/blog";
   };
   let content;
-  if (route.page === "home") content = /*#__PURE__*/React.createElement(HomePage, {
-    go: go
-  });else if (route.page === "research") content = /*#__PURE__*/React.createElement(ResearchPage, null);else if (route.page === "publications") content = /*#__PURE__*/React.createElement(PublicationsPage, null);else if (route.page === "updates") content = /*#__PURE__*/React.createElement(UpdatesPage, null);else if (route.page === "cv" || route.page === "resume") content = /*#__PURE__*/React.createElement(CVPage, null);else if (route.page === "contact") content = /*#__PURE__*/React.createElement(ContactPage, null);else if (route.page === "blog") {
+  if (route.page === "research") content = /*#__PURE__*/React.createElement(ResearchPage, null);else if (route.page === "publications") content = /*#__PURE__*/React.createElement(PublicationsPage, null);else if (route.page === "updates") content = /*#__PURE__*/React.createElement(UpdatesPage, null);else if (route.page === "contact") content = /*#__PURE__*/React.createElement(ContactPage, null);else if (route.page === "blog") {
     content = route.post ? /*#__PURE__*/React.createElement(BlogReader, {
       postId: route.post,
-      back: backToBlog,
-      openPost: openPost
+      back: backToBlog
     }) : /*#__PURE__*/React.createElement(BlogList, {
       openPost: openPost
     });
   } else {
+    // home (also catches the retired cv/resume routes)
     content = /*#__PURE__*/React.createElement(HomePage, {
       go: go
     });
@@ -2701,7 +3049,7 @@ function App() {
     page: route.page,
     go: go,
     blogPostOpen: !!route.post
-  }), /*#__PURE__*/React.createElement("main", null, content), /*#__PURE__*/React.createElement(Footer, null));
+  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(ErrorBoundary, null, content)), /*#__PURE__*/React.createElement(Footer, null));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 

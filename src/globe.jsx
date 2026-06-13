@@ -49,70 +49,120 @@ function makeHeatTexture(color) {
   return new THREE.CanvasTexture(c);
 }
 
-// Load NASA earth texture, recolor into the site palette (green land / paper ocean)
-function loadLandTexture(onReady) {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.onload = () => {
-    try {
-      const W = 1024, H = 512;
-      const c = document.createElement("canvas");
-      c.width = W; c.height = H;
-      const x = c.getContext("2d");
-      x.drawImage(img, 0, 0, W, H);
-      const d = x.getImageData(0, 0, W, H);
-      const px = d.data;
-      for (let i = 0; i < px.length; i += 4) {
-        const r = px[i], g = px[i + 1], b = px[i + 2];
-        const ocean = b > r + 12 && b > g + 5;
-        if (ocean) { px[i] = 240; px[i + 1] = 247; px[i + 2] = 241; }
-        else {
-          // land: shade by brightness for relief
-          const lum = (r + g + b) / (3 * 255);
-          px[i] = 110 + lum * 60;
-          px[i + 1] = 165 + lum * 40;
-          px[i + 2] = 122 + lum * 45;
-        }
-      }
-      x.putImageData(d, 0, 0);
-      const tex = new THREE.CanvasTexture(c);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      onReady(tex);
-    } catch (e) { /* keep fallback */ }
+// Procedural earth — always available, no network. Ocean + clearly-readable land
+// masses with a touch of relief, so the globe never renders as a flat single color.
+function makeProceduralEarth() {
+  const W = 1024, H = 512;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const x = c.getContext("2d");
+
+  // ocean
+  const og = x.createLinearGradient(0, 0, 0, H);
+  og.addColorStop(0, "#2b5f96");
+  og.addColorStop(0.5, "#2f6ea8");
+  og.addColorStop(1, "#2b5f96");
+  x.fillStyle = og;
+  x.fillRect(0, 0, W, H);
+
+  // helper: lon/lat (deg) -> equirectangular px
+  const P = (lon, lat) => [((lon + 180) / 360) * W, ((90 - lat) / 180) * H];
+  // rough continent outlines (lon, lat) — readable, not survey-accurate
+  const LAND = [
+    // North America
+    [[-168,65],[-150,70],[-95,72],[-60,60],[-55,48],[-80,25],[-97,17],[-110,23],[-125,40],[-130,55],[-168,65]],
+    // South America
+    [[-80,9],[-60,7],[-50,-5],[-38,-12],[-55,-35],[-72,-52],[-75,-30],[-81,-5],[-80,9]],
+    // Africa
+    [[-17,15],[10,33],[32,31],[43,12],[40,-5],[35,-26],[20,-35],[12,-18],[-5,5],[-17,15]],
+    // Europe
+    [[-10,43],[0,51],[10,55],[28,60],[40,48],[28,40],[10,38],[-10,43]],
+    // Asia
+    [[40,48],[60,55],[90,72],[140,72],[170,66],[140,52],[122,40],[105,20],[95,8],[78,8],[70,25],[55,38],[40,48]],
+    // India peninsula accent
+    [[70,25],[88,22],[80,8],[72,18],[70,25]],
+    // Australia
+    [[113,-22],[130,-12],[145,-15],[153,-28],[140,-38],[120,-34],[113,-22]],
+    // Antarctica strip
+    [[-180,-78],[180,-78],[180,-90],[-180,-90],[-180,-78]],
+    // Greenland
+    [[-55,60],[-30,60],[-22,70],[-40,82],[-58,76],[-55,60]],
+  ];
+  const drawBlob = (pts, fill) => {
+    x.beginPath();
+    pts.forEach((p, i) => { const [px, py] = P(p[0], p[1]); i ? x.lineTo(px, py) : x.moveTo(px, py); });
+    x.closePath();
+    x.fillStyle = fill;
+    x.fill();
   };
-  img.src = "https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg";
+  LAND.forEach((pts) => drawBlob(pts, "#5a9e5e"));
+  // relief speckle for a hint of terrain
+  for (let i = 0; i < 2600; i++) {
+    const px = Math.random() * W, py = Math.random() * H;
+    const d = x.getImageData(px, py, 1, 1).data;
+    if (d[1] > d[2]) { // only over land (green > blue)
+      x.fillStyle = Math.random() > 0.5 ? "rgba(80,130,70,0.5)" : "rgba(170,150,110,0.4)";
+      x.fillRect(px, py, 2, 2);
+    }
+  }
+  // ice caps
+  x.fillStyle = "rgba(244,249,250,0.85)";
+  x.fillRect(0, 0, W, 16);
+  x.fillRect(0, H - 22, W, 22);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+// Upgrade to the photoreal NASA earth-day texture if it loads (kept full-color:
+// blue oceans, green/tan land, polar ice — water & relief clearly visible).
+function loadRealEarth(onReady) {
+  try {
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin("anonymous");
+    loader.load(
+      "https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg",
+      (tex) => { tex.colorSpace = THREE.SRGBColorSpace; onReady(tex); },
+      undefined,
+      () => { /* keep procedural fallback */ }
+    );
+  } catch (e) { /* keep procedural fallback */ }
 }
 
 function buildGlobeScene(ctx) {
   const { scene, camera, el } = ctx;
-  camera.position.set(0, 0.5, 3.6);
+  // smaller globe in frame — pulled back + reduced radius
+  camera.position.set(0, 0.35, 4.2);
   camera.lookAt(0, 0, 0);
 
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xd6e8d8, 1.25));
-  const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xbcd0e8, 1.1));
+  const dir = new THREE.DirectionalLight(0xffffff, 0.85);
   dir.position.set(3, 4, 5);
   scene.add(dir);
 
-  const R = 1.32;
+  const R = 1.0;
   const globe = new THREE.Group();
   scene.add(globe);
 
-  const sphereMat = new THREE.MeshStandardMaterial({ color: 0xf0f7f1, roughness: 0.85 });
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 56, 56), sphereMat));
-  loadLandTexture((tex) => {
+  const sphereMat = new THREE.MeshStandardMaterial({
+    map: makeProceduralEarth(), roughness: 0.92, metalness: 0.0,
+  });
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 64, 64), sphereMat));
+  loadRealEarth((tex) => {
     sphereMat.map = tex;
-    sphereMat.color.set(0xffffff);
     sphereMat.needsUpdate = true;
   });
 
+  // soft atmospheric halo (cool blue)
   const halo = new THREE.Mesh(
-    new THREE.SphereGeometry(R * 1.06, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0xcde7d2, transparent: true, opacity: 0.25, side: THREE.BackSide })
+    new THREE.SphereGeometry(R * 1.07, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x9cc4ec, transparent: true, opacity: 0.22, side: THREE.BackSide })
   );
   scene.add(halo);
 
   // subtle graticule
-  const gratMat = new THREE.LineBasicMaterial({ color: 0xb3cdba, transparent: true, opacity: 0.3 });
+  const gratMat = new THREE.LineBasicMaterial({ color: 0xbfd6ea, transparent: true, opacity: 0.22 });
   const gratPts = [];
   for (let lat = -60; lat <= 60; lat += 30) {
     const r2 = R * Math.cos(lat * Math.PI / 180), y = R * Math.sin(lat * Math.PI / 180);
@@ -138,7 +188,7 @@ function buildGlobeScene(ctx) {
     const spr = new THREE.Sprite(new THREE.SpriteMaterial({
       map: p.w > 0.6 ? heatAmber : heatGreen, transparent: true, depthWrite: false,
     }));
-    const s = 0.22 + p.w * 0.55;
+    const s = 0.16 + p.w * 0.38;
     spr.scale.set(s, s, 1);
     spr.position.copy(latLonToV3(p.lat, p.lon, R * 1.01));
     globe.add(spr);

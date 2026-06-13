@@ -26,6 +26,8 @@ function JourneyWorld() {
   React.useEffect(() => {
     const el = ref.current;
     if (!el || !window.THREE) return;
+    let cleanup = null;
+    try {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -241,7 +243,7 @@ function JourneyWorld() {
     };
     document.addEventListener("visibilitychange", onVis);
 
-    return () => {
+    cleanup = () => {
       running = false;
       cancelAnimationFrame(raf);
       document.removeEventListener("visibilitychange", onVis);
@@ -256,6 +258,11 @@ function JourneyWorld() {
       renderer.dispose();
       while (el.firstChild) el.removeChild(el.firstChild);
     };
+    } catch (e) {
+      // WebGL/scene failure must not blank the Milestones page — drop the 3D bg only.
+      if (el) while (el.firstChild) el.removeChild(el.firstChild);
+    }
+    return () => { cleanup && cleanup(); };
   }, []);
   return <div ref={ref} className="j-canvas" />;
 }

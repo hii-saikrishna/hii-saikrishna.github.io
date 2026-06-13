@@ -1,8 +1,28 @@
 // ===== CONSOLIDATED APP =====
 // Rich 3D scenes live in their own files and are loaded BEFORE this one:
 //   data.jsx → robots.jsx → world.jsx → scenes-pages.jsx → globe.jsx → app-all.jsx
-// This file owns the inline ThreeScene host + page components + routing, and
-// wires each page to the detailed scene built in those modules.
+// This file owns the inline ThreeScene host + page components + routing.
+
+// ===== Error boundary — a thrown render/effect error must never blank the page =====
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { failed: false }; }
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch() { /* swallow — keep the shell usable */ }
+  render() {
+    if (this.state.failed) {
+      return (
+        <section className="page">
+          <div className="container">
+            <div className="page-eyebrow">Something hiccuped</div>
+            <h1 className="page-title">A piece didn't load</h1>
+            <p className="page-lede">Try refreshing the page. The rest of the site is still here in the menu above.</p>
+          </div>
+        </section>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // ===== Three.js Scene Host (inline, sized canvases) =====
 function ThreeScene({ build, className, style }) {
@@ -10,128 +30,87 @@ function ThreeScene({ build, className, style }) {
   React.useEffect(() => {
     const el = ref.current;
     if (!el || !window.THREE) return;
-    const w = el.clientWidth || 400;
-    const h = el.clientHeight || 400;
+    let cleanup = null;
+    try {
+      const w = el.clientWidth || 400;
+      const h = el.clientHeight || 400;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(w, h, false);
-    renderer.setClearColor(0x000000, 0);
-    el.appendChild(renderer.domElement);
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h, false);
+      renderer.setClearColor(0x000000, 0);
+      el.appendChild(renderer.domElement);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-    camera.position.set(0, 0, 5);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+      camera.position.set(0, 0, 5);
 
-    const ctx = { scene, camera, renderer, el, mouse: { x: 0, y: 0 } };
-    const api = build(ctx) || {};
+      const ctx = { scene, camera, renderer, el, mouse: { x: 0, y: 0 } };
+      const api = build(ctx) || {};
 
-    let raf = 0, running = false;
-    const start = performance.now();
-    const tick = () => {
-      if (!running) return;
-      const t = (performance.now() - start) / 1000;
-      api.update && api.update(t);
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(tick);
-    };
-    const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(tick); } };
-    const stopLoop = () => { running = false; cancelAnimationFrame(raf); };
+      let raf = 0, running = false;
+      const start = performance.now();
+      const tick = () => {
+        if (!running) return;
+        const t = (performance.now() - start) / 1000;
+        api.update && api.update(t);
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(tick);
+      };
+      const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(tick); } };
+      const stopLoop = () => { running = false; cancelAnimationFrame(raf); };
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => (e.isIntersecting ? startLoop() : stopLoop()));
-    }, { rootMargin: "60px" });
-    io.observe(el);
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => (e.isIntersecting ? startLoop() : stopLoop()));
+      }, { rootMargin: "60px" });
+      io.observe(el);
 
-    const onVis = () => (document.hidden ? stopLoop() : startLoop());
-    document.addEventListener("visibilitychange", onVis);
+      const onVis = () => (document.hidden ? stopLoop() : startLoop());
+      document.addEventListener("visibilitychange", onVis);
 
-    const onResize = () => {
-      const nw = el.clientWidth, nh = el.clientHeight;
-      if (!nw || !nh) return;
-      renderer.setSize(nw, nh, false);
-      camera.aspect = nw / nh;
-      camera.updateProjectionMatrix();
-    };
-    let resizeRaf = 0;
-    const scheduleResize = () => {
-      if (resizeRaf) return;
-      resizeRaf = requestAnimationFrame(() => {
-        resizeRaf = 0;
-        onResize();
-      });
-    };
-    // Defer out of the observer callback to avoid the benign
-    // "ResizeObserver loop completed with undelivered notifications" warning.
-    const ro = new ResizeObserver(scheduleResize);
-    ro.observe(el);
+      const onResize = () => {
+        const nw = el.clientWidth, nh = el.clientHeight;
+        if (!nw || !nh) return;
+        renderer.setSize(nw, nh, false);
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+      };
+      let resizeRaf = 0;
+      const scheduleResize = () => {
+        if (resizeRaf) return;
+        resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; onResize(); });
+      };
+      const ro = new ResizeObserver(scheduleResize);
+      ro.observe(el);
 
-    const onMove = (e) => {
-      const r = el.getBoundingClientRect();
-      ctx.mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-      ctx.mouse.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
-    };
-    el.addEventListener("pointermove", onMove);
+      const onMove = (e) => {
+        const r = el.getBoundingClientRect();
+        ctx.mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+        ctx.mouse.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
+      };
+      el.addEventListener("pointermove", onMove);
 
-    return () => {
-      stopLoop();
-      cancelAnimationFrame(resizeRaf);
-      io.disconnect();
-      ro.disconnect();
-      document.removeEventListener("visibilitychange", onVis);
-      el.removeEventListener("pointermove", onMove);
-      api.dispose && api.dispose();
-      renderer.dispose();
-      while (el.firstChild) el.removeChild(el.firstChild);
-    };
+      cleanup = () => {
+        stopLoop();
+        cancelAnimationFrame(resizeRaf);
+        io.disconnect();
+        ro.disconnect();
+        document.removeEventListener("visibilitychange", onVis);
+        el.removeEventListener("pointermove", onMove);
+        api.dispose && api.dispose();
+        renderer.dispose();
+        while (el.firstChild) el.removeChild(el.firstChild);
+      };
+    } catch (e) {
+      // WebGL unavailable / scene build failed — leave the host empty, page stays alive.
+      if (el) while (el.firstChild) el.removeChild(el.firstChild);
+    }
+    return () => { cleanup && cleanup(); };
   }, [build]);
   return <div ref={ref} className={className} style={style}></div>;
 }
 
-// ===== Hero diorama: the four detailed robots on a meadow =====
-// Uses ROBOT_BUILDERS / addRobotLights / addMeadow from robots.jsx (loaded first).
-function buildHeroDiorama(ctx) {
-  const { scene, camera } = ctx;
-  camera.position.set(2.6, 1.8, 3.4);
-  camera.lookAt(0, 0.7, 0);
-  addRobotLights(scene);
-
-  const stage = new THREE.Group();
-  scene.add(stage);
-  addMeadow(stage, 2.2);
-
-  const built = [];
-  const place = (kind, x, z, s, ry) => {
-    const b = ROBOT_BUILDERS[kind]();
-    b.group.position.set(x, kind === "drone" ? 1.0 : 0, z);
-    b.group.scale.setScalar(s);
-    b.group.rotation.y = ry;
-    stage.add(b.group);
-    built.push({ b, kind, baseY: b.group.position.y });
-  };
-  place("humanoid", -1.3, 0.15, 0.62, 0.5);
-  place("quadruped", -0.25, -0.55, 0.66, -0.4);
-  place("drone", 0.75, -0.3, 0.6, 0.2);
-  place("rover", 1.3, 0.2, 0.62, -0.7);
-
-  return {
-    update(t) {
-      built.forEach(({ b, kind, baseY }, i) => {
-        b.update(t + i * 0.7);
-        if (kind === "drone") b.group.position.y = baseY + Math.sin(t * 1.3) * 0.08;
-      });
-      stage.rotation.y = Math.sin(t * 0.16) * 0.4 + ctx.mouse.x * 0.35;
-    },
-    dispose() {
-      scene.traverse((o) => {
-        if (o.geometry) o.geometry.dispose();
-        if (o.material && o.material.dispose) o.material.dispose();
-      });
-    },
-  };
-}
-
-// ===== Page Components =====
+// ===== Reveal on scroll =====
 function Reveal({ children, delay = 0 }) {
   const ref = React.useRef(null);
   React.useEffect(() => {
@@ -151,22 +130,100 @@ function Reveal({ children, delay = 0 }) {
   return <div ref={ref} className="reveal">{children}</div>;
 }
 
-function PubRow({ p }) {
+const Arrow = ({ dir = "right" }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    {dir === "left"
+      ? <path d="M15 18l-6-6 6-6" />
+      : <path d="M9 18l6-6-6-6" />}
+  </svg>
+);
+
+// ===== Hero photo gallery — scroll through images, with a 3D robot "scroller" =====
+function HeroGallery() {
+  const items = window.HOME_GALLERY || [];
+  const n = items.length;
+  const [idx, setIdx] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const go = (d) => setIdx((i) => (i + d + n) % n);
+
+  React.useEffect(() => {
+    if (paused || n < 2) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % n), 6000);
+    return () => clearInterval(id);
+  }, [paused, n]);
+
+  if (!n) return null;
+  const cur = items[idx];
   return (
-    <div className="pub">
-      <div className="pub-year">{p.year}</div>
-      <div>
-        <h4>{p.title}</h4>
-        <p className="pub-authors">
-          {p.authors.map((a, idx) => (
-            <React.Fragment key={idx}>
-              {idx > 0 && ", "}
-              <span className={a.toLowerCase().includes("sai krishna") ? "me" : ""}>{a}</span>
-            </React.Fragment>
-          ))}
-        </p>
-        <div className="pub-venue">{p.venue}</div>
+    <div className="hero-gallery"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}>
+      <div className="hg-stage">
+        {items.map((g, i) => (
+          <img key={g.src} src={g.src} alt={g.caption}
+            className={`hg-img ${i === idx ? "active" : ""}`} draggable="false" />
+        ))}
+        <div className="hg-grad"></div>
+        <div className="hg-tag">{cur.label}</div>
+        <div className="hg-caption">
+          <div className="hg-cap-title">{cur.caption}</div>
+          <div className="hg-cap-idx">{String(idx + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</div>
+        </div>
+        <button className="hg-nav prev" onClick={() => go(-1)} aria-label="Previous image"><Arrow dir="left" /></button>
+        <button className="hg-nav next" onClick={() => go(1)} aria-label="Next image"><Arrow dir="right" /></button>
+        <div className="hg-bot-hint">tap me →</div>
+        <div className="hg-bot" onClick={() => go(1)} title="Next image" role="button" aria-label="Next image">
+          <ThreeScene build={heroDroneScene} />
+        </div>
       </div>
+      <div className="hg-rail">
+        {items.map((g, i) => (
+          <div key={g.src} className={`hg-thumb ${i === idx ? "active" : ""}`}
+            onClick={() => setIdx(i)} role="button" aria-label={g.caption}>
+            <img src={g.src} alt="" draggable="false" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===== CV row =====
+function CVRow({ r }) {
+  return (
+    <div className="cv-row">
+      <div className="cv-date">{r.date}</div>
+      <div>
+        <h4 className="cv-role">{r.role}</h4>
+        <div className="cv-org">{r.org}</div>
+        <p className="cv-desc">{r.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+// ===== Publication row =====
+function PubRow({ p }) {
+  const inner = (
+    <>
+      <h4>{p.title}</h4>
+      <p className="pub-authors">
+        {p.authors.map((a, idx) => (
+          <React.Fragment key={idx}>
+            {idx > 0 && ", "}
+            <span className={a.toLowerCase().includes("sai krishna") ? "me" : ""}>{a}</span>
+          </React.Fragment>
+        ))}
+      </p>
+      <div className="pub-venue">{p.venue}</div>
+      {p.link && <span className="pub-link">View paper <Arrow dir="right" /></span>}
+    </>
+  );
+  return (
+    <div className={`pub ${p.link ? "linked" : ""}`}
+      onClick={p.link ? () => window.open(p.link, "_blank", "noopener") : undefined}>
+      <div className="pub-year">{p.year}</div>
+      <div>{inner}</div>
       <div className="pub-actions">
         {p.featured && <span className="pub-chip featured">Featured</span>}
         <span className="pub-chip">{p.kind}</span>
@@ -175,6 +232,7 @@ function PubRow({ p }) {
   );
 }
 
+// ===== Pages =====
 function HomePage({ go }) {
   return (
     <>
@@ -188,7 +246,7 @@ function HomePage({ go }) {
                   <span>Athens · Georgia</span>
                 </div>
                 <h1 className="hero-name">
-                  Sai Krishna<br/>
+                  Sai Krishna<br />
                   <span className="italic">Ghanta</span>
                 </h1>
                 <p className="hero-role">
@@ -200,34 +258,59 @@ function HomePage({ go }) {
                 <p className="hero-bio">
                   Currently with <em>Dr. Ramviyas Parasuraman</em> at the HeRoLab. Previously: Samsung R&amp;D, IIIT Naya Raipur.
                 </p>
-                <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: 10, marginTop: 24, flexWrap: "wrap" }}>
                   <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link">Scholar</a>
                   <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn-link">GitHub</a>
-                  <a href={`mailto:${PROFILE.email}`} className="btn-link">Email</a>
+                  <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="btn-link">LinkedIn</a>
+                  <a href={`mailto:${PROFILE.email}`} className="btn-link solid">Email</a>
                 </div>
               </Reveal>
             </div>
-            <div className="hero-scene">
-              <ThreeScene build={buildHeroDiorama} style={{ width: "100%", height: "100%", minHeight: 440 }} />
-            </div>
+            <HeroGallery />
           </div>
         </div>
       </section>
 
-      <section className="interests" data-screen-label="Interests">
+      <section className="section interests" data-screen-label="Interests">
         <div className="container">
           <Reveal>
-            <h2 style={{ textAlign: "center", marginBottom: 60 }}>Research Interests</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
-              {INTERESTS.map(int => (
+            <div className="page-eyebrow" style={{ textAlign: "center" }}>Focus areas</div>
+            <h2 style={{ textAlign: "center", marginBottom: 48 }}>Research <span className="ital">Interests</span></h2>
+            <div className="interest-grid">
+              {INTERESTS.map((int) => (
                 <div key={int.id} className="interest-card">
                   <h3>{int.title}</h3>
                   <p>{int.desc}</p>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
-                    {int.topics.map(t => <span key={t} className="chip">{t}</span>)}
+                  <div className="topics">
+                    {int.topics.map((t) => <span key={t} className="topic">{t}</span>)}
                   </div>
                 </div>
               ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="section home-cv" id="cv" data-screen-label="CV">
+        <div className="container">
+          <Reveal>
+            <div className="page-eyebrow">Background</div>
+            <h2 style={{ marginBottom: 6 }}>Curriculum <span className="ital">Vitae</span></h2>
+            <p className="page-lede" style={{ marginBottom: 8 }}>Education, research, and the path that led here.</p>
+            <div className="cv-columns" style={{ marginTop: 40 }}>
+              <div className="cv-col">
+                <h3 className="cv-col-title">Education</h3>
+                {EDUCATION.map((r) => <CVRow key={r.role} r={r} />)}
+              </div>
+              <div className="cv-col">
+                <h3 className="cv-col-title">Experience</h3>
+                {EXPERIENCE.map((r) => <CVRow key={r.role + r.org} r={r} />)}
+              </div>
+            </div>
+            <div className="cv-actions">
+              <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn-link solid">Download full CV (PDF)</a>
+              <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link">Google Scholar</a>
+              <span className="btn-link" onClick={() => go("publications")} style={{ cursor: "pointer" }}>Publications</span>
             </div>
           </Reveal>
         </div>
@@ -238,27 +321,46 @@ function HomePage({ go }) {
 
 function ResearchPage() {
   return (
-    <section className="research" data-screen-label="Research">
+    <section className="research page" data-screen-label="Research">
       <div className="container">
-        <h1 style={{ marginBottom: 60 }}>Research Thrusts</h1>
+        <div className="page-head">
+          <div className="page-eyebrow">What I work on</div>
+          <h1 className="page-title">Research <span className="ital">Thrusts</span></h1>
+          <p className="page-lede">Three intertwined directions — embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.</p>
+        </div>
         {THRUSTS.map((t, i) => (
-          <div key={t.num} className="thrust" style={{ marginBottom: 100 }}>
-            <Reveal delay={i * 100}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
-                <div>
-                  <div className="thrust-num">{t.num}</div>
-                  <h2>{t.title}</h2>
-                  <p className="thrust-body">{t.body}</p>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    {t.keywords.map(k => <span key={k} className="chip small">{k}</span>)}
-                  </div>
+          <Reveal key={t.id} delay={i * 80}>
+            <div className="thrust" style={{ "--t-accent": t.accent, "--t-tint": t.tint }}>
+              <div className="thrust-body">
+                <span className="thrust-badge"><span className="b-dot"></span>Thrust {String(i + 1).padStart(2, "0")}</span>
+                <h3>{t.title}</h3>
+                <p className="thrust-tagline">{t.tagline}</p>
+                <p>{t.body}</p>
+                <div className="thrust-stats">
+                  {t.stats.map((s) => (
+                    <div key={s.k} className="thrust-stat">
+                      <span className="k">{s.k}</span>
+                      <span className="v">{s.v}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="thrust-img">
-                  <ThreeScene build={dioramaScene(t.scene)} style={{ width: "100%", height: "100%", minHeight: 340 }} />
+                <div className="thrust-keywords">
+                  {t.keywords.map((k) => <span key={k} className="thrust-keyword">{k}</span>)}
+                </div>
+                <div className="thrust-resources">
+                  {t.resources.map((r) => (
+                    <a key={r.label} className="thrust-resource" href={r.href}
+                      {...(r.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+                      <span>{r.label}</span><span className="arr">→</span>
+                    </a>
+                  ))}
                 </div>
               </div>
-            </Reveal>
-          </div>
+              <div className="thrust-media">
+                <ThreeScene build={dioramaScene(t.scene)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+              </div>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -271,14 +373,26 @@ function PublicationsPage() {
       <PaperWorld />
       <section className="publications" data-screen-label="Publications">
         <div className="iw-content">
-          <div className="container">
-            <h1 style={{ marginBottom: 60 }}>Publications</h1>
-            <div>
-              {PUBLICATIONS.map(p => (
-                <PubRow key={p.title} p={p} />
-              ))}
-            </div>
+          <div className="iw-hero">
+            <div className="page-eyebrow">Selected work</div>
+            <h1 className="iw-title">Publications</h1>
+            <p className="page-lede" style={{ marginTop: 14 }}>Peer-reviewed and in-review work on multi-robot mapping, semantic SLAM, and spatial learning. <span style={{ color: "var(--accent-ink)" }}>* indicates lead / first author.</span></p>
           </div>
+          {PUB_GROUPS.map((group) => {
+            const items = PUBLICATIONS
+              .filter((p) => p.kind === group.kind)
+              .sort((a, b) => b.year - a.year);
+            if (!items.length) return null;
+            return (
+              <div key={group.kind} className="iw-card">
+                <div className="pub-group-head">
+                  <h2>{group.label}</h2>
+                  <span className="count">{items.length}</span>
+                </div>
+                {items.map((p) => <PubRow key={p.title} p={p} />)}
+              </div>
+            );
+          })}
         </div>
       </section>
     </>
@@ -286,66 +400,79 @@ function PublicationsPage() {
 }
 
 function UpdatesPage() {
+  const years = [];
+  UPDATES.forEach((u) => { if (!years.includes(u.year)) years.push(u.year); });
   return (
     <div className="journey">
       <JourneyWorld />
       <div className="j-sky" id="j-sky"></div>
       <div className="j-progress"><div id="j-progress-fill" className="j-progress-bar"></div></div>
       <div className="j-content">
-        <section className="updates" data-screen-label="Updates">
-          <div className="container">
-            <h1 style={{ marginBottom: 60 }}>Updates</h1>
-            <div style={{ maxWidth: 600 }}>
-              {UPDATES.map(u => (
-                <div key={u.date} className="update-item">
-                  <div className="update-date">{u.date}</div>
-                  <p>{u.text}</p>
+        <header className="j-hero" data-screen-label="Milestones">
+          <div className="j-eyebrow">The road so far</div>
+          <h1 className="j-title">Mile<br /><span className="outline">stones</span></h1>
+          <p className="j-lede">A scrolling trail through the work — papers shipped, field trials run, and the moves that got me here.</p>
+          <div className="j-cue"><span className="j-cue-line"></span>Scroll to travel</div>
+        </header>
+        <section className="j-section" data-screen-label="Timeline">
+          <div className="j-card wide">
+            {years.map((y) => (
+              <div key={y} className="timeline-year">
+                <div className="ty-label">{y}</div>
+                <div className="ty-items">
+                  {UPDATES.filter((u) => u.year === y).map((u, i) => (
+                    <div key={i} className="ms-item">
+                      <div className="ms-head">
+                        <span className="ms-date">{u.date}</span>
+                        <span className="ms-tag">{u.tag}</span>
+                      </div>
+                      <p className="ms-text">{u.text}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
+        <footer className="j-outro">
+          <div className="j-outro-word">onward.</div>
+          <button className="btn" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Back to the trailhead ↑</button>
+        </footer>
       </div>
     </div>
   );
 }
 
-function CVPage() {
-  return (
-    <section className="cv" data-screen-label="CV">
-      <div className="container">
-        <h1>Curriculum Vitae</h1>
-        <p style={{ marginTop: 20, marginBottom: 40 }}>
-          <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn-link">Download PDF</a>
-        </p>
-        <div style={{ fontFamily: "var(--mono)", fontSize: 13, lineHeight: 1.8, color: "var(--ink-2)" }}>
-          <p><strong>Education</strong></p>
-          <p>PhD in Artificial Intelligence · University of Georgia (2024–present)</p>
-          <p>B.Tech in Computer Science and Engineering · IIIT Naya Raipur (2019–2023)</p>
-          <p style={{ marginTop: 30 }}><strong>Experience</strong></p>
-          <p>Robotics Research Intern · HeRoLab, UGA (2024–present)</p>
-          <p>Software Engineer Intern · Samsung R&amp;D (2023)</p>
-          <p>AI/ML Researcher · IIIT Naya Raipur (2021–2023)</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ContactPage() {
   return (
-    <section className="contact" data-screen-label="Contact">
+    <section className="contact page" data-screen-label="Contact">
       <div className="container">
-        <h1 style={{ marginBottom: 40 }}>Get in Touch</h1>
+        <div className="page-head">
+          <div className="page-eyebrow">Say hello</div>
+          <h1 className="page-title">Get in <span className="ital">touch</span></h1>
+        </div>
         <div className="contact-grid">
           <div>
             <p className="hero-bio">
               I'm always interested in collaborations, research discussions, or just talking robots. Feel free to reach out.
             </p>
-            <div className="contact-links" style={{ marginTop: 30 }}>
-              <p><strong>Email:</strong> <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a></p>
-              <p><strong>GitHub:</strong> <a href={PROFILE.github} target="_blank" rel="noopener noreferrer">{PROFILE.github}</a></p>
-              <p><strong>Scholar:</strong> <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer">{PROFILE.scholar}</a></p>
+            <div className="contact-links">
+              <a href={`mailto:${PROFILE.email}`} className="contact-link">
+                <span><span className="label">Email</span>{PROFILE.email}</span>
+                <span className="arrow"><Arrow dir="right" /></span>
+              </a>
+              <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="contact-link">
+                <span><span className="label">GitHub</span>sai-krishna-ghanta</span>
+                <span className="arrow"><Arrow dir="right" /></span>
+              </a>
+              <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="contact-link">
+                <span><span className="label">Scholar</span>Google Scholar profile</span>
+                <span className="arrow"><Arrow dir="right" /></span>
+              </a>
+              <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
+                <span><span className="label">LinkedIn</span>sai-krishna-ghanta</span>
+                <span className="arrow"><Arrow dir="right" /></span>
+              </a>
             </div>
           </div>
           <div className="contact-globe">
@@ -360,61 +487,56 @@ function ContactPage() {
 
 function BlogList({ openPost }) {
   return (
-    <>
-      <HouseWorld />
-      <section className="blog" data-screen-label="Blog">
-        <div className="iw-content">
-          <div className="container">
-            <h1 style={{ marginBottom: 60 }}>Blog</h1>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-              {BLOG_POSTS.map(p => (
-                <div key={p.id} className="blog-card" onClick={() => openPost(p.id)} style={{ cursor: "pointer" }}>
-                  <div style={{ fontSize: 12, color: "var(--ink-3)", marginBottom: 8 }}>
-                    {p.category} · {p.date} · {p.readTime}
-                  </div>
-                  <h3>{p.title}</h3>
-                  <p style={{ marginTop: 12, marginBottom: 16 }}>{p.excerpt}</p>
-                  <span style={{ color: "var(--accent)", fontWeight: 500 }}>Read →</span>
-                </div>
-              ))}
-            </div>
-          </div>
+    <section className="blog-page" data-screen-label="Blog">
+      <div className="container">
+        <div className="page-head">
+          <div className="page-eyebrow">Writing</div>
+          <h1 className="page-title">Blog</h1>
+          <p className="page-lede">Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.</p>
         </div>
-      </section>
-    </>
+        <div className="blog-grid">
+          {BLOG_POSTS.map((p) => (
+            <div key={p.id} className="blog-card" onClick={() => openPost(p.id)}>
+              <div className="meta">
+                <span>{p.category}</span><span className="dot"></span>
+                <span>{p.date}</span><span className="dot"></span>
+                <span>{p.readTime}</span>
+              </div>
+              <h3>{p.title}</h3>
+              <p>{p.excerpt}</p>
+              <span className="arrow">Read <Arrow dir="right" /></span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-function BlogReader({ postId, back, openPost }) {
-  const post = BLOG_POSTS.find(p => p.id === postId);
+function BlogReader({ postId, back }) {
+  const post = BLOG_POSTS.find((p) => p.id === postId);
   if (!post) {
     return (
-      <div className="container">
-        <a onClick={back} style={{ cursor: "pointer", color: "var(--accent)" }}>← Back</a>
+      <div className="blog-reader">
+        <a onClick={back} className="blog-back" style={{ cursor: "pointer" }}><Arrow dir="left" /> Back</a>
         <p>Post not found.</p>
       </div>
     );
   }
-
   return (
-    <section className="blog-reader" data-screen-label={`Blog: ${post.title}`}>
-      <div className="container">
-        <a onClick={back} style={{ cursor: "pointer", color: "var(--accent)", marginBottom: 40, display: "inline-block" }}>← Back to blog</a>
-        <div style={{ fontSize: 12, color: "var(--ink-3)", marginBottom: 12 }}>
-          {post.category} · {post.date} · {post.readTime}
-        </div>
-        <h1 style={{ marginBottom: 40 }}>{post.title}</h1>
-        <article style={{ maxWidth: 600, lineHeight: 1.8 }}>
-          {post.body.map(([tag, content], i) => {
-            if (tag === "p") return <p key={i} style={{ marginBottom: 20 }}>{content}</p>;
-            if (tag === "h2") return <h2 key={i} style={{ marginTop: 40, marginBottom: 20 }}>{content}</h2>;
-            if (tag === "h3") return <h3 key={i} style={{ marginTop: 30, marginBottom: 15 }}>{content}</h3>;
-            if (tag === "blockquote") return <blockquote key={i} style={{ borderLeft: "3px solid var(--accent)", paddingLeft: 20, marginLeft: 0, marginBottom: 20, fontStyle: "italic" }}>{content}</blockquote>;
-            return <p key={i}>{content}</p>;
-          })}
-        </article>
+    <article className="blog-reader" data-screen-label={`Blog: ${post.title}`}>
+      <a onClick={back} className="blog-back" style={{ cursor: "pointer" }}><Arrow dir="left" /> Back to blog</a>
+      <div className="reader-meta">{post.category} · {post.date} · {post.readTime}</div>
+      <h1>{post.title}</h1>
+      <div>
+        {post.body.map(([tag, content], i) => {
+          if (tag === "h2") return <h2 key={i}>{content}</h2>;
+          if (tag === "h3") return <h3 key={i}>{content}</h3>;
+          if (tag === "blockquote") return <blockquote key={i}>{content}</blockquote>;
+          return <p key={i}>{content}</p>;
+        })}
       </div>
-    </section>
+    </article>
   );
 }
 
@@ -426,8 +548,7 @@ function Nav({ page, go, blogPostOpen }) {
     { id: "research", label: "Research" },
     { id: "publications", label: "Publications" },
     { id: "blog", label: "Blog" },
-    { id: "updates", label: "Updates" },
-    { id: "cv", label: "CV" },
+    { id: "updates", label: "Milestones" },
     { id: "contact", label: "Contact" },
   ];
   const activeId = blogPostOpen ? "blog" : page;
@@ -439,7 +560,7 @@ function Nav({ page, go, blogPostOpen }) {
           <span>Sai Krishna Ghanta</span>
         </div>
         <div className={`nav-links ${open ? "open" : ""}`}>
-          {items.map(it => (
+          {items.map((it) => (
             <span
               key={it.id}
               className={`nav-link ${activeId === it.id ? "active" : ""}`}
@@ -447,9 +568,9 @@ function Nav({ page, go, blogPostOpen }) {
             >{it.label}</span>
           ))}
         </div>
-        <button className="menu-btn" onClick={() => setOpen(o => !o)} aria-label="menu">
+        <button className="menu-btn" onClick={() => setOpen((o) => !o)} aria-label="menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: 22, height: 22 }}>
-            <path d={open ? "M6 6l12 12M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"}/>
+            <path d={open ? "M6 6l12 12M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"} />
           </svg>
         </button>
       </div>
@@ -488,38 +609,32 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    // Safe scroll-to-top — older Safari throws on { behavior: "instant" }.
+    try { window.scrollTo(0, 0); } catch (e) { /* no-op */ }
   }, [route.page, route.post]);
 
-  const go = (page) => {
-    window.location.hash = page === "home" ? "" : `#/${page}`;
-  };
-  const openPost = (id) => {
-    window.location.hash = `#/blog/${id}`;
-  };
-  const backToBlog = () => {
-    window.location.hash = "#/blog";
-  };
+  const go = (page) => { window.location.hash = page === "home" ? "" : `#/${page}`; };
+  const openPost = (id) => { window.location.hash = `#/blog/${id}`; };
+  const backToBlog = () => { window.location.hash = "#/blog"; };
 
   let content;
-  if (route.page === "home") content = <HomePage go={go} />;
-  else if (route.page === "research") content = <ResearchPage />;
+  if (route.page === "research") content = <ResearchPage />;
   else if (route.page === "publications") content = <PublicationsPage />;
   else if (route.page === "updates") content = <UpdatesPage />;
-  else if (route.page === "cv" || route.page === "resume") content = <CVPage />;
   else if (route.page === "contact") content = <ContactPage />;
   else if (route.page === "blog") {
     content = route.post
-      ? <BlogReader postId={route.post} back={backToBlog} openPost={openPost} />
+      ? <BlogReader postId={route.post} back={backToBlog} />
       : <BlogList openPost={openPost} />;
   } else {
+    // home (also catches the retired cv/resume routes)
     content = <HomePage go={go} />;
   }
 
   return (
     <>
       <Nav page={route.page} go={go} blogPostOpen={!!route.post} />
-      <main>{content}</main>
+      <main><ErrorBoundary>{content}</ErrorBoundary></main>
       <Footer />
     </>
   );
