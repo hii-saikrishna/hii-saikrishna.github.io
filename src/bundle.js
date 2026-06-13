@@ -16,27 +16,13 @@ const PROFILE = {
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf"
 };
 
-// Hero gallery — first frame is the portrait, the rest give a sense of the work.
+// Hero gallery — just photos of me (portrait first). Both are 4:5-ish.
 const HOME_GALLERY = [{
+  src: "profile_picture.jpeg",
+  label: "Athens, GA · 2026"
+}, {
   src: "attached_assets/Profile_Pic.png",
-  label: "Athens, GA · 2026",
-  caption: "Sai Krishna Ghanta"
-}, {
-  src: "attached_assets/Multi_Robot_Systems.png",
-  label: "Multi-Robot Systems",
-  caption: "Cooperative mapping with the HeRoLab fleet"
-}, {
-  src: "attached_assets/Robot_Learning.png",
-  label: "Robot Learning",
-  caption: "Embodied reasoning over invisible fields"
-}, {
-  src: "attached_assets/Computer_Vision.png",
-  label: "Computer Vision",
-  caption: "Semantic SLAM in dynamic indoor scenes"
-}, {
-  src: "attached_assets/Machine_Learning.png",
-  label: "Spatial Intelligence",
-  caption: "Gaussian-process belief over space"
+  label: "In the lab"
 }];
 const INTERESTS = [{
   id: "robot",
@@ -132,6 +118,9 @@ const THRUSTS = [{
     href: PROFILE.scholar
   }]
 }];
+
+// Each paper carries a thumbnail, a one-line overview, and a links object.
+// Only links that exist are rendered — add paper / preprint / github / video / blog as available.
 const PUBLICATIONS = [{
   year: 2025,
   kind: "conference",
@@ -139,51 +128,92 @@ const PUBLICATIONS = [{
   title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
   venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025",
-  link: "https://arxiv.org/abs/2411.02524"
+  image: "attached_assets/Multi_Robot_Systems.png",
+  overview: "A 3D spatial cooperation and exploration framework that mitigates the ghosting-trail effect in fused multi-robot reconstructions and stays robust to communication dropouts — cutting boundary artifacts by 34% in a GPS-denied warehouse.",
+  links: {
+    preprint: "https://arxiv.org/abs/2411.02524",
+    github: "https://github.com/herolab-uga",
+    blog: "#/blog/slam-odyssey"
+  }
 }, {
   year: 2025,
   kind: "conference",
   featured: true,
   title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "submitted to IEEE IROS 2025"
+  venue: "submitted to IEEE IROS 2025",
+  image: "attached_assets/Machine_Learning.png",
+  overview: "Distributed multi-Gaussian-process fields recover relative poses from Wi-Fi RSSI where GPS can't reach, giving uncertainty-aware localization across large indoor multi-robot teams.",
+  links: {
+    blog: "#/blog/gp-fields",
+    scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao"
+  }
 }, {
   year: 2025,
   kind: "submitted",
   title: "Thermographic Fault Diagnosis: An eXplainable Compact Vision in Transformer Approach for Electrical Machines",
   authors: ["Sai Krishna Ghanta", "Anmol Agarwal", "Aparna Sinha", "Debanjan Das"],
-  venue: "submitted to IEEE Sensors Journal"
+  venue: "submitted to IEEE Sensors Journal",
+  image: "attached_assets/Machine_Learning.png",
+  overview: "A compact, explainable vision-transformer that diagnoses electrical-machine faults directly from thermographic images — accurate yet light enough for edge deployment.",
+  links: {}
 }, {
   year: 2023,
   kind: "conference",
   title: "3DS-SLAM: A 3D Object Detection-based Semantic SLAM towards Dynamic Indoor Environments",
   authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
   venue: "arXiv:2310.06385",
-  link: "https://arxiv.org/abs/2310.06385"
+  image: "attached_assets/Computer_Vision.png",
+  overview: "Semantic SLAM that tracks 3D-detected objects instead of discarding them as noise, reducing drift by 26% and improving loop closure in crowded, dynamic indoor scenes.",
+  links: {
+    preprint: "https://arxiv.org/abs/2310.06385",
+    github: "https://github.com/sai-krishna-ghanta",
+    blog: "#/blog/vision-3d"
+  }
 }, {
   year: 2023,
   kind: "conference",
   title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
   authors: ["Sai Krishna Ghanta", "Kundrapu Supriya", "Sabur Baidya"],
-  venue: "IEEE CSNet 2023"
+  venue: "IEEE CSNet 2023",
+  image: "attached_assets/Robot_Learning.png",
+  overview: "Studies adversarial robustness and differential privacy for deep mmWave beam prediction, hardening 6G physical-layer models against poisoning and leakage.",
+  links: {
+    paper: "https://ieeexplore.ieee.org/"
+  }
 }, {
   year: 2023,
   kind: "journal",
   title: "Speaker-Independent Visual Speech Recognition: A Systematic Review and Futuristic Applications",
   authors: ["P. Nemani", "Sai Krishna Ghanta", "K. Supriya", "Santosh Kumar"],
-  venue: "Elsevier — Image and Vision Computing, vol. 123"
+  venue: "Elsevier — Image and Vision Computing, vol. 123",
+  image: "attached_assets/Computer_Vision.png",
+  overview: "A systematic review of speaker-independent lip-reading, surveying datasets, architectures, and open problems, with a roadmap for real-world applications.",
+  links: {
+    paper: "https://doi.org/10.1016/j.imavis.2022.104477"
+  }
 }, {
   year: 2023,
   kind: "journal",
   title: "Data Preprocessing Techniques: Emergence and Selection Towards Machine Learning Models — A Practical Review Using the HPA Dataset",
   authors: ["K. Mallikharjuna Rao", "Sai Krishna Ghanta", "Kundrapu Supriya"],
-  venue: "Multimedia Tools and Applications, 2023"
+  venue: "Multimedia Tools and Applications, 2023",
+  image: "attached_assets/Machine_Learning.png",
+  overview: "A practical guide to choosing preprocessing pipelines, benchmarked on the Human Protein Atlas dataset to show how preprocessing choices move model performance.",
+  links: {
+    paper: "https://link.springer.com/"
+  }
 }, {
   year: 2022,
   kind: "journal",
   title: "Deep Learning-based Holistic Speaker-Independent Visual Speech Recognition",
   authors: ["P. Nemani", "Sai Krishna Ghanta", "N. Ramisetty", "B. D. S. Sai", "S. Kumar"],
-  venue: "IEEE Transactions on Artificial Intelligence, 2022"
+  venue: "IEEE Transactions on Artificial Intelligence, 2022",
+  image: "attached_assets/Computer_Vision.png",
+  overview: "A holistic deep model for speaker-independent visual speech recognition that generalizes across speakers without per-speaker tuning.",
+  links: {
+    paper: "https://ieeexplore.ieee.org/"
+  }
 }];
 
 // Groups for the segregated Publications view (order matters).
@@ -196,35 +226,6 @@ const PUB_GROUPS = [{
 }, {
   kind: "submitted",
   label: "Under Review"
-}];
-
-// ===== CV (rendered inline on the home page) =====
-const EDUCATION = [{
-  date: "2024 — present",
-  role: "PhD, Artificial Intelligence",
-  org: "University of Georgia",
-  desc: "Multi-robot systems, embodied reasoning, and spatial intelligence at the Heterogeneous Robotics Lab (HeRoLab) with Dr. Ramviyas Parasuraman."
-}, {
-  date: "2019 — 2023",
-  role: "B.Tech, Computer Science & Engineering",
-  org: "IIIT Naya Raipur",
-  desc: "Graduated with research in computer vision, semantic SLAM, and deep learning for speech and sensing."
-}];
-const EXPERIENCE = [{
-  date: "2024 — present",
-  role: "Graduate Research Assistant",
-  org: "HeRoLab, University of Georgia",
-  desc: "Building SPACE and MGPRL — cooperative mapping and Wi-Fi relative localization for GPS-denied multi-robot teams."
-}, {
-  date: "2023",
-  role: "Software Engineer Intern",
-  org: "Samsung R&D Institute",
-  desc: "On-device ML and systems engineering for consumer devices."
-}, {
-  date: "2021 — 2023",
-  role: "AI / ML Researcher",
-  org: "IIIT Naya Raipur",
-  desc: "Semantic SLAM, visual speech recognition, and explainable vision transformers for fault diagnosis."
 }];
 const BLOG_POSTS = [{
   id: "smart-home-robots",
@@ -353,6 +354,12 @@ const UPDATES = [{
   tag: "Paper",
   text: "Holistic visual speech recognition published in IEEE Transactions on Artificial Intelligence."
 }];
+
+// A short, original line to keep me pointed at the goal — shown at the end of Milestones.
+const CREDO = {
+  quote: "Curiosity got me here; discipline is what turns it into science. Keep measuring, keep doubting, keep building — the scientist is made on the ordinary days.",
+  by: "— Sai, note to self"
+};
 Object.assign(window, {
   PROFILE,
   HOME_GALLERY,
@@ -360,10 +367,9 @@ Object.assign(window, {
   THRUSTS,
   PUBLICATIONS,
   PUB_GROUPS,
-  EDUCATION,
-  EXPERIENCE,
   BLOG_POSTS,
-  UPDATES
+  UPDATES,
+  CREDO
 });
 
 /* ===== src/robots.jsx ===== */
@@ -1493,6 +1499,9 @@ function JourneyWorld() {
         });
         disposables.forEach(d => d.dispose && d.dispose());
         renderer.dispose();
+        try {
+          renderer.forceContextLoss();
+        } catch (e2) {/* older three */}
         while (el.firstChild) el.removeChild(el.firstChild);
       };
     } catch (e) {
@@ -1664,6 +1673,9 @@ function fixedWorldHost(buildFn) {
             if (o.material && o.material.dispose) o.material.dispose();
           });
           renderer.dispose();
+          try {
+            renderer.forceContextLoss();
+          } catch (e2) {/* older three */}
           while (el.firstChild) el.removeChild(el.firstChild);
         };
       } catch (e) {
@@ -1922,12 +1934,13 @@ function makeProceduralEarth() {
     x.fill();
   };
   LAND.forEach(pts => drawBlob(pts, "#5a9e5e"));
-  // relief speckle for a hint of terrain
+  // relief speckle for a hint of terrain — read the field once (per-pixel getImageData is slow)
+  const fld = x.getImageData(0, 0, W, H).data;
   for (let i = 0; i < 2600; i++) {
-    const px = Math.random() * W,
-      py = Math.random() * H;
-    const d = x.getImageData(px, py, 1, 1).data;
-    if (d[1] > d[2]) {
+    const px = Math.random() * W | 0,
+      py = Math.random() * H | 0;
+    const o = (py * W + px) * 4;
+    if (fld[o + 1] > fld[o + 2]) {
       // only over land (green > blue)
       x.fillStyle = Math.random() > 0.5 ? "rgba(80,130,70,0.5)" : "rgba(170,150,110,0.4)";
       x.fillRect(px, py, 2, 2);
@@ -2258,6 +2271,12 @@ function ThreeScene({
         el.removeEventListener("pointermove", onMove);
         api.dispose && api.dispose();
         renderer.dispose();
+        // Actually release the GPU context — Safari caps simultaneous WebGL
+        // contexts low, and dispose() alone leaves them allocated across navigation,
+        // which makes later scenes (the globe, the hero drone) silently fail to show.
+        try {
+          renderer.forceContextLoss();
+        } catch (e) {/* older three */}
         while (el.firstChild) el.removeChild(el.firstChild);
       };
     } catch (e) {
@@ -2390,28 +2409,54 @@ function HeroGallery() {
   })))));
 }
 
-// ===== CV row =====
-function CVRow({
-  r
+// ===== Publication link buttons =====
+const PUB_LINK_DEFS = [["paper", "Paper"], ["preprint", "Preprint"], ["github", "Code"], ["video", "Video"], ["blog", "Blog"], ["scholar", "Scholar"]];
+function PubLinks({
+  links
 }) {
+  const present = PUB_LINK_DEFS.filter(([k]) => links && links[k]);
+  if (!present.length) return null;
   return /*#__PURE__*/React.createElement("div", {
-    className: "cv-row"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cv-date"
-  }, r.date), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
-    className: "cv-role"
-  }, r.role), /*#__PURE__*/React.createElement("div", {
-    className: "cv-org"
-  }, r.org), /*#__PURE__*/React.createElement("p", {
-    className: "cv-desc"
-  }, r.desc)));
+    className: "pub-links"
+  }, present.map(([k, label]) => {
+    const href = links[k];
+    const internal = href.charAt(0) === "#";
+    return /*#__PURE__*/React.createElement("a", _extends({
+      key: k,
+      className: `pub-linkbtn ${k}`,
+      href: href
+    }, internal ? {} : {
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }), /*#__PURE__*/React.createElement("span", {
+      className: "dot"
+    }), label);
+  }));
 }
 
-// ===== Publication row =====
+// ===== Publication card =====
 function PubRow({
   p
 }) {
-  const inner = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h4", null, p.title), /*#__PURE__*/React.createElement("p", {
+  return /*#__PURE__*/React.createElement("article", {
+    className: "pub-card"
+  }, p.image && /*#__PURE__*/React.createElement("div", {
+    className: "pub-thumb"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: p.image,
+    alt: "",
+    loading: "lazy"
+  }), p.featured && /*#__PURE__*/React.createElement("span", {
+    className: "pub-feat"
+  }, "Featured")), /*#__PURE__*/React.createElement("div", {
+    className: "pub-main"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pub-meta-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "pub-year"
+  }, p.year), /*#__PURE__*/React.createElement("span", {
+    className: "pub-kind"
+  }, p.kind)), /*#__PURE__*/React.createElement("h4", null, p.title), /*#__PURE__*/React.createElement("p", {
     className: "pub-authors"
   }, p.authors.map((a, idx) => /*#__PURE__*/React.createElement(React.Fragment, {
     key: idx
@@ -2419,23 +2464,11 @@ function PubRow({
     className: a.toLowerCase().includes("sai krishna") ? "me" : ""
   }, a)))), /*#__PURE__*/React.createElement("div", {
     className: "pub-venue"
-  }, p.venue), p.link && /*#__PURE__*/React.createElement("span", {
-    className: "pub-link"
-  }, "View paper ", /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
+  }, p.venue), p.overview && /*#__PURE__*/React.createElement("p", {
+    className: "pub-overview"
+  }, p.overview), /*#__PURE__*/React.createElement(PubLinks, {
+    links: p.links
   })));
-  return /*#__PURE__*/React.createElement("div", {
-    className: `pub ${p.link ? "linked" : ""}`,
-    onClick: p.link ? () => window.open(p.link, "_blank", "noopener") : undefined
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "pub-year"
-  }, p.year), /*#__PURE__*/React.createElement("div", null, inner), /*#__PURE__*/React.createElement("div", {
-    className: "pub-actions"
-  }, p.featured && /*#__PURE__*/React.createElement("span", {
-    className: "pub-chip featured"
-  }, "Featured"), /*#__PURE__*/React.createElement("span", {
-    className: "pub-chip"
-  }, p.kind)));
 }
 
 // ===== Pages =====
@@ -2455,9 +2488,17 @@ function HomePage({
     className: "pulse"
   }), /*#__PURE__*/React.createElement("span", null, "Athens \xB7 Georgia")), /*#__PURE__*/React.createElement("h1", {
     className: "hero-name"
-  }, "Sai Krishna", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+  }, "Sai Krishna ", /*#__PURE__*/React.createElement("span", {
     className: "italic"
   }, "Ghanta")), /*#__PURE__*/React.createElement("p", {
+    className: "hero-pronounce"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "hp-say"
+  }, "say ", /*#__PURE__*/React.createElement("em", null, "\u201Csigh \xB7 krish-na \xB7 gun-ta\u201D")), /*#__PURE__*/React.createElement("span", {
+    className: "hp-dot"
+  }, "\xB7"), /*#__PURE__*/React.createElement("span", {
+    className: "hp-call"
+  }, "just call me ", /*#__PURE__*/React.createElement("strong", null, "Sai"))), /*#__PURE__*/React.createElement("p", {
     className: "hero-role"
   }, "PhD Student in AI ", /*#__PURE__*/React.createElement("span", {
     className: "at"
@@ -2488,6 +2529,11 @@ function HomePage({
     rel: "noopener noreferrer",
     className: "btn-link"
   }, "LinkedIn"), /*#__PURE__*/React.createElement("a", {
+    href: PROFILE.cv,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "btn-link"
+  }, "CV / R\xE9sum\xE9 \u2193"), /*#__PURE__*/React.createElement("a", {
     href: `mailto:${PROFILE.email}`,
     className: "btn-link solid"
   }, "Email")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
@@ -2517,63 +2563,7 @@ function HomePage({
   }, int.topics.map(t => /*#__PURE__*/React.createElement("span", {
     key: t,
     className: "topic"
-  }, t))))))))), /*#__PURE__*/React.createElement("section", {
-    className: "section home-cv",
-    id: "cv",
-    "data-screen-label": "CV"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
-    className: "page-eyebrow"
-  }, "Background"), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      marginBottom: 6
-    }
-  }, "Curriculum ", /*#__PURE__*/React.createElement("span", {
-    className: "ital"
-  }, "Vitae")), /*#__PURE__*/React.createElement("p", {
-    className: "page-lede",
-    style: {
-      marginBottom: 8
-    }
-  }, "Education, research, and the path that led here."), /*#__PURE__*/React.createElement("div", {
-    className: "cv-columns",
-    style: {
-      marginTop: 40
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cv-col"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "cv-col-title"
-  }, "Education"), EDUCATION.map(r => /*#__PURE__*/React.createElement(CVRow, {
-    key: r.role,
-    r: r
-  }))), /*#__PURE__*/React.createElement("div", {
-    className: "cv-col"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "cv-col-title"
-  }, "Experience"), EXPERIENCE.map(r => /*#__PURE__*/React.createElement(CVRow, {
-    key: r.role + r.org,
-    r: r
-  })))), /*#__PURE__*/React.createElement("div", {
-    className: "cv-actions"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.cv,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "btn-link solid"
-  }, "Download full CV (PDF)"), /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.scholar,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "Google Scholar"), /*#__PURE__*/React.createElement("span", {
-    className: "btn-link",
-    onClick: () => go("publications"),
-    style: {
-      cursor: "pointer"
-    }
-  }, "Publications"))))));
+  }, t))))))))));
 }
 function ResearchPage() {
   return /*#__PURE__*/React.createElement("section", {
@@ -2714,18 +2704,18 @@ function UpdatesPage() {
     className: "j-cue"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
-  }), "Scroll to travel")), /*#__PURE__*/React.createElement("section", {
-    className: "j-section",
-    "data-screen-label": "Timeline"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "j-card wide"
-  }, years.map(y => /*#__PURE__*/React.createElement("div", {
+  }), "Scroll to travel")), years.map((y, yi) => /*#__PURE__*/React.createElement("section", {
     key: y,
-    className: "timeline-year"
+    className: "j-section",
+    "data-screen-label": String(y)
   }, /*#__PURE__*/React.createElement("div", {
-    className: "ty-label"
-  }, y), /*#__PURE__*/React.createElement("div", {
-    className: "ty-items"
+    className: "j-zone"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "j-zone-num"
+  }, String(yi + 1).padStart(2, "0")), /*#__PURE__*/React.createElement("span", {
+    className: "j-zone-word"
+  }, y)), /*#__PURE__*/React.createElement("div", {
+    className: "j-card year-card"
   }, UPDATES.filter(u => u.year === y).map((u, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     className: "ms-item"
@@ -2737,11 +2727,15 @@ function UpdatesPage() {
     className: "ms-tag"
   }, u.tag)), /*#__PURE__*/React.createElement("p", {
     className: "ms-text"
-  }, u.text)))))))), /*#__PURE__*/React.createElement("footer", {
+  }, u.text)))))), /*#__PURE__*/React.createElement("footer", {
     className: "j-outro"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "j-outro-word"
-  }, "onward."), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("blockquote", {
+    className: "credo"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "credo-quote"
+  }, CREDO.quote), /*#__PURE__*/React.createElement("cite", {
+    className: "credo-by"
+  }, CREDO.by)), /*#__PURE__*/React.createElement("button", {
     className: "btn",
     onClick: () => window.scrollTo({
       top: 0,
@@ -2842,11 +2836,16 @@ function BlogList({
     className: "page-lede"
   }, "Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.")), /*#__PURE__*/React.createElement("div", {
     className: "blog-grid"
-  }, BLOG_POSTS.map(p => /*#__PURE__*/React.createElement("div", {
+  }, BLOG_POSTS.map((p, i) => /*#__PURE__*/React.createElement(Reveal, {
     key: p.id,
+    delay: i * 70
+  }, /*#__PURE__*/React.createElement("div", {
     className: "blog-card",
     onClick: () => openPost(p.id)
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "blog-aurora",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("div", {
     className: "meta"
   }, /*#__PURE__*/React.createElement("span", null, p.category), /*#__PURE__*/React.createElement("span", {
     className: "dot"
@@ -2856,7 +2855,7 @@ function BlogList({
     className: "arrow"
   }, "Read ", /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  })))))));
+  }))))))));
 }
 function BlogReader({
   postId,

@@ -96,11 +96,12 @@ function makeProceduralEarth() {
     x.fill();
   };
   LAND.forEach((pts) => drawBlob(pts, "#5a9e5e"));
-  // relief speckle for a hint of terrain
+  // relief speckle for a hint of terrain — read the field once (per-pixel getImageData is slow)
+  const fld = x.getImageData(0, 0, W, H).data;
   for (let i = 0; i < 2600; i++) {
-    const px = Math.random() * W, py = Math.random() * H;
-    const d = x.getImageData(px, py, 1, 1).data;
-    if (d[1] > d[2]) { // only over land (green > blue)
+    const px = (Math.random() * W) | 0, py = (Math.random() * H) | 0;
+    const o = (py * W + px) * 4;
+    if (fld[o + 1] > fld[o + 2]) { // only over land (green > blue)
       x.fillStyle = Math.random() > 0.5 ? "rgba(80,130,70,0.5)" : "rgba(170,150,110,0.4)";
       x.fillRect(px, py, 2, 2);
     }

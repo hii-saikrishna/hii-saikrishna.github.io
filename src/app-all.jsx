@@ -99,6 +99,10 @@ function ThreeScene({ build, className, style }) {
         el.removeEventListener("pointermove", onMove);
         api.dispose && api.dispose();
         renderer.dispose();
+        // Actually release the GPU context — Safari caps simultaneous WebGL
+        // contexts low, and dispose() alone leaves them allocated across navigation,
+        // which makes later scenes (the globe, the hero drone) silently fail to show.
+        try { renderer.forceContextLoss(); } catch (e) { /* older three */ }
         while (el.firstChild) el.removeChild(el.firstChild);
       };
     } catch (e) {
@@ -188,47 +192,63 @@ function HeroGallery() {
   );
 }
 
-// ===== CV row =====
-function CVRow({ r }) {
+// ===== Publication link buttons =====
+const PUB_LINK_DEFS = [
+  ["paper", "Paper"],
+  ["preprint", "Preprint"],
+  ["github", "Code"],
+  ["video", "Video"],
+  ["blog", "Blog"],
+  ["scholar", "Scholar"],
+];
+function PubLinks({ links }) {
+  const present = PUB_LINK_DEFS.filter(([k]) => links && links[k]);
+  if (!present.length) return null;
   return (
-    <div className="cv-row">
-      <div className="cv-date">{r.date}</div>
-      <div>
-        <h4 className="cv-role">{r.role}</h4>
-        <div className="cv-org">{r.org}</div>
-        <p className="cv-desc">{r.desc}</p>
-      </div>
+    <div className="pub-links">
+      {present.map(([k, label]) => {
+        const href = links[k];
+        const internal = href.charAt(0) === "#";
+        return (
+          <a key={k} className={`pub-linkbtn ${k}`} href={href}
+            {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+            <span className="dot"></span>{label}
+          </a>
+        );
+      })}
     </div>
   );
 }
 
-// ===== Publication row =====
+// ===== Publication card =====
 function PubRow({ p }) {
-  const inner = (
-    <>
-      <h4>{p.title}</h4>
-      <p className="pub-authors">
-        {p.authors.map((a, idx) => (
-          <React.Fragment key={idx}>
-            {idx > 0 && ", "}
-            <span className={a.toLowerCase().includes("sai krishna") ? "me" : ""}>{a}</span>
-          </React.Fragment>
-        ))}
-      </p>
-      <div className="pub-venue">{p.venue}</div>
-      {p.link && <span className="pub-link">View paper <Arrow dir="right" /></span>}
-    </>
-  );
   return (
-    <div className={`pub ${p.link ? "linked" : ""}`}
-      onClick={p.link ? () => window.open(p.link, "_blank", "noopener") : undefined}>
-      <div className="pub-year">{p.year}</div>
-      <div>{inner}</div>
-      <div className="pub-actions">
-        {p.featured && <span className="pub-chip featured">Featured</span>}
-        <span className="pub-chip">{p.kind}</span>
+    <article className="pub-card">
+      {p.image && (
+        <div className="pub-thumb">
+          <img src={p.image} alt="" loading="lazy" />
+          {p.featured && <span className="pub-feat">Featured</span>}
+        </div>
+      )}
+      <div className="pub-main">
+        <div className="pub-meta-row">
+          <span className="pub-year">{p.year}</span>
+          <span className="pub-kind">{p.kind}</span>
+        </div>
+        <h4>{p.title}</h4>
+        <p className="pub-authors">
+          {p.authors.map((a, idx) => (
+            <React.Fragment key={idx}>
+              {idx > 0 && ", "}
+              <span className={a.toLowerCase().includes("sai krishna") ? "me" : ""}>{a}</span>
+            </React.Fragment>
+          ))}
+        </p>
+        <div className="pub-venue">{p.venue}</div>
+        {p.overview && <p className="pub-overview">{p.overview}</p>}
+        <PubLinks links={p.links} />
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -246,9 +266,13 @@ function HomePage({ go }) {
                   <span>Athens · Georgia</span>
                 </div>
                 <h1 className="hero-name">
-                  Sai Krishna<br />
-                  <span className="italic">Ghanta</span>
+                  Sai Krishna <span className="italic">Ghanta</span>
                 </h1>
+                <p className="hero-pronounce">
+                  <span className="hp-say">say <em>“sigh · krish-na · gun-ta”</em></span>
+                  <span className="hp-dot">·</span>
+                  <span className="hp-call">just call me <strong>Sai</strong></span>
+                </p>
                 <p className="hero-role">
                   PhD Student in AI <span className="at">at</span> the University of Georgia
                 </p>
@@ -262,6 +286,7 @@ function HomePage({ go }) {
                   <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link">Scholar</a>
                   <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn-link">GitHub</a>
                   <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="btn-link">LinkedIn</a>
+                  <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn-link">CV / Résumé ↓</a>
                   <a href={`mailto:${PROFILE.email}`} className="btn-link solid">Email</a>
                 </div>
               </Reveal>
@@ -291,30 +316,6 @@ function HomePage({ go }) {
         </div>
       </section>
 
-      <section className="section home-cv" id="cv" data-screen-label="CV">
-        <div className="container">
-          <Reveal>
-            <div className="page-eyebrow">Background</div>
-            <h2 style={{ marginBottom: 6 }}>Curriculum <span className="ital">Vitae</span></h2>
-            <p className="page-lede" style={{ marginBottom: 8 }}>Education, research, and the path that led here.</p>
-            <div className="cv-columns" style={{ marginTop: 40 }}>
-              <div className="cv-col">
-                <h3 className="cv-col-title">Education</h3>
-                {EDUCATION.map((r) => <CVRow key={r.role} r={r} />)}
-              </div>
-              <div className="cv-col">
-                <h3 className="cv-col-title">Experience</h3>
-                {EXPERIENCE.map((r) => <CVRow key={r.role + r.org} r={r} />)}
-              </div>
-            </div>
-            <div className="cv-actions">
-              <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn-link solid">Download full CV (PDF)</a>
-              <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link">Google Scholar</a>
-              <span className="btn-link" onClick={() => go("publications")} style={{ cursor: "pointer" }}>Publications</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
     </>
   );
 }
@@ -414,28 +415,30 @@ function UpdatesPage() {
           <p className="j-lede">A scrolling trail through the work — papers shipped, field trials run, and the moves that got me here.</p>
           <div className="j-cue"><span className="j-cue-line"></span>Scroll to travel</div>
         </header>
-        <section className="j-section" data-screen-label="Timeline">
-          <div className="j-card wide">
-            {years.map((y) => (
-              <div key={y} className="timeline-year">
-                <div className="ty-label">{y}</div>
-                <div className="ty-items">
-                  {UPDATES.filter((u) => u.year === y).map((u, i) => (
-                    <div key={i} className="ms-item">
-                      <div className="ms-head">
-                        <span className="ms-date">{u.date}</span>
-                        <span className="ms-tag">{u.tag}</span>
-                      </div>
-                      <p className="ms-text">{u.text}</p>
-                    </div>
-                  ))}
+        {years.map((y, yi) => (
+          <section key={y} className="j-section" data-screen-label={String(y)}>
+            <div className="j-zone">
+              <span className="j-zone-num">{String(yi + 1).padStart(2, "0")}</span>
+              <span className="j-zone-word">{y}</span>
+            </div>
+            <div className="j-card year-card">
+              {UPDATES.filter((u) => u.year === y).map((u, i) => (
+                <div key={i} className="ms-item">
+                  <div className="ms-head">
+                    <span className="ms-date">{u.date}</span>
+                    <span className="ms-tag">{u.tag}</span>
+                  </div>
+                  <p className="ms-text">{u.text}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        ))}
         <footer className="j-outro">
-          <div className="j-outro-word">onward.</div>
+          <blockquote className="credo">
+            <p className="credo-quote">{CREDO.quote}</p>
+            <cite className="credo-by">{CREDO.by}</cite>
+          </blockquote>
           <button className="btn" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Back to the trailhead ↑</button>
         </footer>
       </div>
@@ -495,17 +498,20 @@ function BlogList({ openPost }) {
           <p className="page-lede">Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.</p>
         </div>
         <div className="blog-grid">
-          {BLOG_POSTS.map((p) => (
-            <div key={p.id} className="blog-card" onClick={() => openPost(p.id)}>
-              <div className="meta">
-                <span>{p.category}</span><span className="dot"></span>
-                <span>{p.date}</span><span className="dot"></span>
-                <span>{p.readTime}</span>
+          {BLOG_POSTS.map((p, i) => (
+            <Reveal key={p.id} delay={i * 70}>
+              <div className="blog-card" onClick={() => openPost(p.id)}>
+                <span className="blog-aurora" aria-hidden="true"></span>
+                <div className="meta">
+                  <span>{p.category}</span><span className="dot"></span>
+                  <span>{p.date}</span><span className="dot"></span>
+                  <span>{p.readTime}</span>
+                </div>
+                <h3>{p.title}</h3>
+                <p>{p.excerpt}</p>
+                <span className="arrow">Read <Arrow dir="right" /></span>
               </div>
-              <h3>{p.title}</h3>
-              <p>{p.excerpt}</p>
-              <span className="arrow">Read <Arrow dir="right" /></span>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

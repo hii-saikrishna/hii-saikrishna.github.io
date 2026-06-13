@@ -13,13 +13,10 @@ const PROFILE = {
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf",
 };
 
-// Hero gallery — first frame is the portrait, the rest give a sense of the work.
+// Hero gallery — just photos of me (portrait first). Both are 4:5-ish.
 const HOME_GALLERY = [
-  { src: "attached_assets/Profile_Pic.png",        label: "Athens, GA · 2026",          caption: "Sai Krishna Ghanta" },
-  { src: "attached_assets/Multi_Robot_Systems.png", label: "Multi-Robot Systems",        caption: "Cooperative mapping with the HeRoLab fleet" },
-  { src: "attached_assets/Robot_Learning.png",      label: "Robot Learning",             caption: "Embodied reasoning over invisible fields" },
-  { src: "attached_assets/Computer_Vision.png",     label: "Computer Vision",            caption: "Semantic SLAM in dynamic indoor scenes" },
-  { src: "attached_assets/Machine_Learning.png",    label: "Spatial Intelligence",       caption: "Gaussian-process belief over space" },
+  { src: "profile_picture.jpeg",            label: "Athens, GA · 2026" },
+  { src: "attached_assets/Profile_Pic.png", label: "In the lab" },
 ];
 
 const INTERESTS = [
@@ -76,56 +73,80 @@ const THRUSTS = [
   },
 ];
 
+// Each paper carries a thumbnail, a one-line overview, and a links object.
+// Only links that exist are rendered — add paper / preprint / github / video / blog as available.
 const PUBLICATIONS = [
   {
     year: 2025, kind: "conference", featured: true,
     title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
     authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
     venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025",
-    link: "https://arxiv.org/abs/2411.02524",
+    image: "attached_assets/Multi_Robot_Systems.png",
+    overview: "A 3D spatial cooperation and exploration framework that mitigates the ghosting-trail effect in fused multi-robot reconstructions and stays robust to communication dropouts — cutting boundary artifacts by 34% in a GPS-denied warehouse.",
+    links: { preprint: "https://arxiv.org/abs/2411.02524", github: "https://github.com/herolab-uga", blog: "#/blog/slam-odyssey" },
   },
   {
     year: 2025, kind: "conference", featured: true,
     title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
     authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
     venue: "submitted to IEEE IROS 2025",
+    image: "attached_assets/Machine_Learning.png",
+    overview: "Distributed multi-Gaussian-process fields recover relative poses from Wi-Fi RSSI where GPS can't reach, giving uncertainty-aware localization across large indoor multi-robot teams.",
+    links: { blog: "#/blog/gp-fields", scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao" },
   },
   {
     year: 2025, kind: "submitted",
     title: "Thermographic Fault Diagnosis: An eXplainable Compact Vision in Transformer Approach for Electrical Machines",
     authors: ["Sai Krishna Ghanta", "Anmol Agarwal", "Aparna Sinha", "Debanjan Das"],
     venue: "submitted to IEEE Sensors Journal",
+    image: "attached_assets/Machine_Learning.png",
+    overview: "A compact, explainable vision-transformer that diagnoses electrical-machine faults directly from thermographic images — accurate yet light enough for edge deployment.",
+    links: {},
   },
   {
     year: 2023, kind: "conference",
     title: "3DS-SLAM: A 3D Object Detection-based Semantic SLAM towards Dynamic Indoor Environments",
     authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
     venue: "arXiv:2310.06385",
-    link: "https://arxiv.org/abs/2310.06385",
+    image: "attached_assets/Computer_Vision.png",
+    overview: "Semantic SLAM that tracks 3D-detected objects instead of discarding them as noise, reducing drift by 26% and improving loop closure in crowded, dynamic indoor scenes.",
+    links: { preprint: "https://arxiv.org/abs/2310.06385", github: "https://github.com/sai-krishna-ghanta", blog: "#/blog/vision-3d" },
   },
   {
     year: 2023, kind: "conference",
     title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
     authors: ["Sai Krishna Ghanta", "Kundrapu Supriya", "Sabur Baidya"],
     venue: "IEEE CSNet 2023",
+    image: "attached_assets/Robot_Learning.png",
+    overview: "Studies adversarial robustness and differential privacy for deep mmWave beam prediction, hardening 6G physical-layer models against poisoning and leakage.",
+    links: { paper: "https://ieeexplore.ieee.org/" },
   },
   {
     year: 2023, kind: "journal",
     title: "Speaker-Independent Visual Speech Recognition: A Systematic Review and Futuristic Applications",
     authors: ["P. Nemani", "Sai Krishna Ghanta", "K. Supriya", "Santosh Kumar"],
     venue: "Elsevier — Image and Vision Computing, vol. 123",
+    image: "attached_assets/Computer_Vision.png",
+    overview: "A systematic review of speaker-independent lip-reading, surveying datasets, architectures, and open problems, with a roadmap for real-world applications.",
+    links: { paper: "https://doi.org/10.1016/j.imavis.2022.104477" },
   },
   {
     year: 2023, kind: "journal",
     title: "Data Preprocessing Techniques: Emergence and Selection Towards Machine Learning Models — A Practical Review Using the HPA Dataset",
     authors: ["K. Mallikharjuna Rao", "Sai Krishna Ghanta", "Kundrapu Supriya"],
     venue: "Multimedia Tools and Applications, 2023",
+    image: "attached_assets/Machine_Learning.png",
+    overview: "A practical guide to choosing preprocessing pipelines, benchmarked on the Human Protein Atlas dataset to show how preprocessing choices move model performance.",
+    links: { paper: "https://link.springer.com/" },
   },
   {
     year: 2022, kind: "journal",
     title: "Deep Learning-based Holistic Speaker-Independent Visual Speech Recognition",
     authors: ["P. Nemani", "Sai Krishna Ghanta", "N. Ramisetty", "B. D. S. Sai", "S. Kumar"],
     venue: "IEEE Transactions on Artificial Intelligence, 2022",
+    image: "attached_assets/Computer_Vision.png",
+    overview: "A holistic deep model for speaker-independent visual speech recognition that generalizes across speakers without per-speaker tuning.",
+    links: { paper: "https://ieeexplore.ieee.org/" },
   },
 ];
 
@@ -134,43 +155,6 @@ const PUB_GROUPS = [
   { kind: "conference", label: "Conference Papers" },
   { kind: "journal",    label: "Journal Articles" },
   { kind: "submitted",  label: "Under Review" },
-];
-
-// ===== CV (rendered inline on the home page) =====
-const EDUCATION = [
-  {
-    date: "2024 — present",
-    role: "PhD, Artificial Intelligence",
-    org: "University of Georgia",
-    desc: "Multi-robot systems, embodied reasoning, and spatial intelligence at the Heterogeneous Robotics Lab (HeRoLab) with Dr. Ramviyas Parasuraman.",
-  },
-  {
-    date: "2019 — 2023",
-    role: "B.Tech, Computer Science & Engineering",
-    org: "IIIT Naya Raipur",
-    desc: "Graduated with research in computer vision, semantic SLAM, and deep learning for speech and sensing.",
-  },
-];
-
-const EXPERIENCE = [
-  {
-    date: "2024 — present",
-    role: "Graduate Research Assistant",
-    org: "HeRoLab, University of Georgia",
-    desc: "Building SPACE and MGPRL — cooperative mapping and Wi-Fi relative localization for GPS-denied multi-robot teams.",
-  },
-  {
-    date: "2023",
-    role: "Software Engineer Intern",
-    org: "Samsung R&D Institute",
-    desc: "On-device ML and systems engineering for consumer devices.",
-  },
-  {
-    date: "2021 — 2023",
-    role: "AI / ML Researcher",
-    org: "IIIT Naya Raipur",
-    desc: "Semantic SLAM, visual speech recognition, and explainable vision transformers for fault diagnosis.",
-  },
 ];
 
 const BLOG_POSTS = [
@@ -302,7 +286,13 @@ const UPDATES = [
   { date: "2022",     year: 2022, tag: "Paper",      text: "Holistic visual speech recognition published in IEEE Transactions on Artificial Intelligence." },
 ];
 
+// A short, original line to keep me pointed at the goal — shown at the end of Milestones.
+const CREDO = {
+  quote: "Curiosity got me here; discipline is what turns it into science. Keep measuring, keep doubting, keep building — the scientist is made on the ordinary days.",
+  by: "— Sai, note to self",
+};
+
 Object.assign(window, {
   PROFILE, HOME_GALLERY, INTERESTS, THRUSTS, PUBLICATIONS, PUB_GROUPS,
-  EDUCATION, EXPERIENCE, BLOG_POSTS, UPDATES,
+  BLOG_POSTS, UPDATES, CREDO,
 });

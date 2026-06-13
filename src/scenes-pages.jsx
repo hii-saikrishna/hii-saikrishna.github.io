@@ -63,6 +63,7 @@ function fixedWorldHost(buildFn) {
             if (o.material && o.material.dispose) o.material.dispose();
           });
           renderer.dispose();
+          try { renderer.forceContextLoss(); } catch (e2) { /* older three */ }
           while (el.firstChild) el.removeChild(el.firstChild);
         };
       } catch (e) {

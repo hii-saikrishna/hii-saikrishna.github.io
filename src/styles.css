@@ -236,17 +236,38 @@ em { font-style: italic; }
 }
 h1.hero-name {
   font-family: var(--serif);
-  font-size: clamp(48px, 6.2vw, 84px);
-  line-height: 0.98;
+  font-size: clamp(38px, 4.4vw, 58px);
+  line-height: 1.02;
   letter-spacing: -0.02em;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-weight: 400;
 }
 h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
-.hero-role {
-  font-size: 17px;
+/* pronunciation + nickname line — sits right under the name */
+.hero-pronounce {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 14px;
   color: var(--ink-3);
-  margin: 0 0 28px;
+  margin: 0 0 18px;
+}
+.hero-pronounce em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-2);
+  font-size: 1.08em;
+}
+.hero-pronounce .hp-dot { color: var(--ink-4); }
+.hero-pronounce .hp-call strong {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.hero-role {
+  font-size: 18px;
+  color: var(--ink-2);
+  margin: 0 0 22px;
   font-weight: 500;
   letter-spacing: -0.005em;
 }
@@ -1550,17 +1571,17 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .hero-gallery {
   position: relative;
   width: 100%;
-  max-width: 480px;
+  max-width: 340px;
   margin-left: auto;
 }
 .hg-stage {
   position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: 22px;
+  aspect-ratio: 4 / 5;   /* matches the portrait photos — no awkward cropping */
+  border-radius: 20px;
   overflow: hidden;
   border: 1px solid var(--line);
   background: linear-gradient(160deg, var(--accent-soft), #fff 65%);
-  box-shadow: 0 40px 80px -40px color-mix(in oklch, var(--accent) 30%, transparent);
+  box-shadow: 0 30px 64px -38px color-mix(in oklch, var(--accent) 30%, transparent);
 }
 .hg-frame {
   position: absolute;
@@ -1634,15 +1655,21 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .hg-nav.prev { left: 12px; }
 .hg-nav.next { right: 12px; }
 .hg-nav svg { width: 18px; height: 18px; }
-/* the 3D robot scroller sits in the lower-right corner */
+/* the 3D robot scroller sits in the lower-right corner — on a light disc so it always reads */
 .hg-bot {
   position: absolute;
-  right: 8px; bottom: 8px;
-  width: 88px; height: 88px;
+  right: 10px; bottom: 10px;
+  width: 84px; height: 84px;
   z-index: 5;
   cursor: pointer;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.18));
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #f3f7f3 70%, #eef3ee 100%);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 22px -8px rgba(20,40,25,0.35);
+  transition: transform .18s ease, box-shadow .18s ease;
+  overflow: hidden;
 }
+.hg-bot:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 14px 26px -8px rgba(20,40,25,0.45); }
 .hg-bot > div { width: 100%; height: 100%; }
 .hg-bot-hint {
   position: absolute;
@@ -1824,6 +1851,62 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   gap: 5px;
 }
 
+/* rich publication cards (image + overview + links) */
+.pub-card {
+  display: grid;
+  grid-template-columns: 156px 1fr;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line-2);
+  align-items: start;
+}
+.pub-card:last-child { border-bottom: none; }
+.pub-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+}
+.pub-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.pub-card:hover .pub-thumb img { transform: scale(1.05); }
+.pub-feat {
+  position: absolute; top: 8px; left: 8px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--accent-ink); background: rgba(255,255,255,0.92);
+  border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent);
+  padding: 3px 7px; border-radius: 999px;
+}
+.pub-main { min-width: 0; }
+.pub-meta-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.pub-meta-row .pub-year { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding: 0; letter-spacing: 0.04em; }
+.pub-meta-row .pub-kind {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-4); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px;
+}
+.pub-card h4 { font-family: var(--serif); font-weight: 400; font-size: 20px; line-height: 1.22; margin: 0 0 8px; transition: color .15s ease; }
+.pub-card:hover h4 { color: var(--accent-ink); }
+.pub-overview { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin: 10px 0 12px; max-width: 62ch; }
+.pub-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.pub-linkbtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em;
+  color: var(--ink-2); background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px;
+  transition: border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.pub-linkbtn .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--ink-4); }
+.pub-linkbtn:hover { border-color: var(--accent); color: var(--accent-ink); transform: translateY(-1px); }
+.pub-linkbtn.paper .dot, .pub-linkbtn.preprint .dot { background: #2f6df0; }
+.pub-linkbtn.github .dot { background: #6e5494; }
+.pub-linkbtn.video .dot { background: #e0832c; }
+.pub-linkbtn.blog .dot { background: var(--accent); }
+.pub-linkbtn.scholar .dot { background: #1d7547; }
+@media (max-width: 640px) {
+  .pub-card { grid-template-columns: 1fr; gap: 14px; }
+  .pub-thumb { max-width: 220px; }
+}
+
 /* ============ Milestones grouped by year ============ */
 .timeline-year {
   display: grid;
@@ -1885,9 +1968,55 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .ms-text { font-size: 15px; line-height: 1.55; color: var(--ink-2); margin: 0; }
 
-/* ============ Blog (clean, non-immersive) ============ */
+/* ============ Milestones: per-year card + closing credo ============ */
+.year-card { max-width: 700px; }
+.year-card .ms-item:first-child { padding-top: 4px; }
+.credo {
+  max-width: 700px;
+  text-align: center;
+  margin: 0;
+  border: none;
+}
+.credo-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.32;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.credo-by {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--accent-ink);
+  font-style: normal;
+}
+
+/* ============ Blog (clean, non-immersive) + minimal motion ============ */
 .blog-page { padding: 80px 0 96px; }
 .blog-page .blog-grid { margin-top: 44px; }
+.blog-aurora {
+  position: absolute;
+  top: -42%; right: -32%;
+  width: 72%; height: 72%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklch, var(--accent) 28%, transparent), transparent 70%);
+  filter: blur(26px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  animation: auroraFloat 9s ease-in-out infinite;
+}
+.blog-card:hover .blog-aurora { opacity: 0.95; }
+.blog-card > .meta, .blog-card > h3, .blog-card > p, .blog-card > .arrow { position: relative; z-index: 1; }
+@keyframes auroraFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-14px, 12px) scale(1.14); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .blog-aurora { animation: none; }
+}
 
 @media (max-width: 900px) {
   .cv-columns { grid-template-columns: 1fr; gap: 36px; }
