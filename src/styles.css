@@ -2218,10 +2218,8 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .mountain-3d canvas { display: block; width: 100% !important; height: 100% !important; }
 .about-nature-page .mountain-3d { margin-top: clamp(20px, 3vw, 44px); }
-/* Footer band illustration runs flush to the bottom — drop the page's tail padding
-   and let the copyright bar tuck right beneath the range (no white gap, no hard line). */
+/* The mountain band is the page's own footer here — run it flush to the bottom. */
 .blog-nature-page { padding-bottom: 0; }
-.footer-flush { border-top: 0; margin-top: 0; padding: 16px 0 28px; }
 
 /* ============ Blog (clean, non-immersive) + minimal motion ============ */
 .blog-page { padding: 80px 0 96px; }

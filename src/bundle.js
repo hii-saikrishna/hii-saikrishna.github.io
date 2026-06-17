@@ -3129,21 +3129,22 @@ function buildMountainFooter({
       d = hash(xi + 1, yi + 1);
     return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
   };
-  const ridged = (x, y) => {
+  const ridged = (x, y, p) => {
     let val = 0,
       amp = 0.5,
       f = 1;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       let n = vnoise(x * f + i * 7.3, y * f - i * 3.1);
       n = 1 - Math.abs(2 * n - 1);
-      val += amp * n * n;
+      val += amp * Math.pow(n, p);
       amp *= 0.5;
-      f *= 2.05;
+      f *= 2.07;
     }
     return val;
   };
-  const ampZ = z => 1.8 + 15 * Math.exp(-Math.pow((z + 15) / 18, 2)); // tall range mid-scene, low valley + far
-  const heightAt = (x, z) => ridged(x * 0.032 + 10, z * 0.05 + 5) * ampZ(z) + ridged(x * 0.11 + 2, z * 0.12 - 4) * 1.7 + vnoise(x * 0.02 - 3, z * 0.02 + 8) * 1.2;
+  const ampZ = z => 1.6 + 20 * Math.exp(-Math.pow((z + 15) / 18, 2)); // tall range mid-scene, low valley + far
+  const heightAt = (x, z) => ridged(x * 0.03 + 10, z * 0.05 + 5, 2.4) * ampZ(z) + ridged(x * 0.10 + 2, z * 0.12 - 4, 3.0) * 2.4 // crisp mid-frequency ridges → definition
+  + vnoise(x * 0.02 - 3, z * 0.02 + 8) * 0.8;
 
   // ---- sky + atmospheric fog ----
   const skyC = document.createElement("canvas");
@@ -3163,14 +3164,14 @@ function buildMountainFooter({
   camera.position.set(0, 6.6, 20);
   camera.updateProjectionMatrix();
   camera.lookAt(0, 6.1, -16);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb39a, 0.95));
-  const sunLight = new THREE.DirectionalLight(0xfff0d2, 1.75);
-  sunLight.position.set(-14, 16, 7);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb39a, 0.8));
+  const sunLight = new THREE.DirectionalLight(0xfff0d2, 2.2); // strong key light → crisp relief
+  sunLight.position.set(-16, 14, 7);
   scene.add(sunLight);
-  scene.add(new THREE.AmbientLight(0xdfeef0, 0.35));
+  scene.add(new THREE.AmbientLight(0xdfeef0, 0.22));
 
   // ---- displaced terrain, elevation-coloured ----
-  const geo = track(new THREE.PlaneGeometry(160, 130, 200, 170));
+  const geo = track(new THREE.PlaneGeometry(160, 130, 260, 200));
   geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position;
   const col = new Float32Array(pos.count * 3);
@@ -3190,10 +3191,10 @@ function buildMountainFooter({
       hx = heightAt(x + dd, z) - heightAt(x - dd, z),
       hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
-    if (h < 3.5) baseC.copy(cMeadow).lerp(cForest, h / 3.5);else if (h < 7) baseC.copy(cForest).lerp(cHigh, (h - 3.5) / 3.5);else if (h < 9.5) baseC.copy(cHigh).lerp(cRock, (h - 7) / 2.5);else baseC.copy(cRock).lerp(cSnow, Math.min(1, (h - 9.5) / 2.6));
+    if (h < 5) baseC.copy(cMeadow).lerp(cForest, h / 5);else if (h < 10) baseC.copy(cForest).lerp(cHigh, (h - 5) / 5);else if (h < 13) baseC.copy(cHigh).lerp(cRock, (h - 10) / 3);else baseC.copy(cRock).lerp(cSnow, Math.min(1, (h - 13) / 2.5));
     outC.copy(baseC);
-    outC.lerp(cRock, Math.min(0.45, Math.max(0, slope - 1.0) * 0.45)); // steep faces → rock
-    if (h > 9 && slope < 0.85) outC.lerp(cSnow, 0.7); // flat high → snow
+    outC.lerp(cRock, Math.min(0.4, Math.max(0, slope - 1.15) * 0.4)); // steep faces → rock
+    if (h > 12 && slope < 0.8) outC.lerp(cSnow, 0.6); // flat high → snow
     col[i * 3] = outC.r;
     col[i * 3 + 1] = outC.g;
     col[i * 3 + 2] = outC.b;
@@ -3446,11 +3447,9 @@ function Nav({
     d: open ? "M6 6l12 12M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"
   })))));
 }
-function Footer({
-  flush
-}) {
+function Footer() {
   return /*#__PURE__*/React.createElement("footer", {
-    className: "footer" + (flush ? " footer-flush" : "")
+    className: "footer"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container",
     style: {
@@ -3527,15 +3526,13 @@ function App() {
     });
   }
 
-  // Pages that end in the full-bleed mountain band want the copyright bar tucked flush.
-  const rangeFooter = route.page === "about" || route.page === "contact" || route.page === "blog" && !route.post;
+  // Pages that end in the full-bleed mountain band are their own footer — hide the copyright bar there.
+  const hasRange = route.page === "about" || route.page === "contact" || route.page === "blog" && !route.post;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Nav, {
     page: route.page,
     go: go,
     blogPostOpen: !!route.post
-  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(ErrorBoundary, null, content)), /*#__PURE__*/React.createElement(Footer, {
-    flush: rangeFooter
-  }));
+  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(ErrorBoundary, null, content)), !hasRange && /*#__PURE__*/React.createElement(Footer, null));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 
