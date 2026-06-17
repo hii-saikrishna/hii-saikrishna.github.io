@@ -285,8 +285,8 @@ function HomePage({ go }) {
                   <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn-link">GitHub</a>
                   <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="btn-link">LinkedIn</a>
                   <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn-link">CV / Résumé ↓</a>
-                  <a href={`mailto:${PROFILE.email}`} className="btn-link solid">Email</a>
                 </div>
+                <a href={`mailto:${PROFILE.email}`} className="hero-email">{PROFILE.email}</a>
               </Reveal>
             </div>
             <HeroGallery />
@@ -473,42 +473,128 @@ function ContactGlobe() {
   );
 }
 
-function ContactPage() {
+// ===== Trip gallery — masonry of mixed aspect ratios + lightbox =====
+function TripGallery() {
+  const items = window.TRIP_GALLERY || [];
+  const [active, setActive] = React.useState(null);
+  React.useEffect(() => {
+    if (active === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setActive(null);
+      else if (e.key === "ArrowRight") setActive((i) => (i + 1) % items.length);
+      else if (e.key === "ArrowLeft") setActive((i) => (i - 1 + items.length) % items.length);
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [active, items.length]);
+
+  if (!items.length) return null;
+  const cur = active !== null ? items[active] : null;
+
   return (
-    <section className="contact page" data-screen-label="Contact">
+    <section className="section trips" data-screen-label="Trips">
       <div className="container">
-        <div className="page-head">
-          <div className="page-eyebrow">Say hello</div>
-          <h1 className="page-title">Get in <span className="ital">touch</span></h1>
-        </div>
-        <div className="contact-grid">
-          <div>
-            <p className="hero-bio">
-              I'm always interested in collaborations, research discussions, or just talking robots. Feel free to reach out.
-            </p>
-            <div className="contact-links">
-              <a href={`mailto:${PROFILE.email}`} className="contact-link">
-                <span><span className="label">Email</span>{PROFILE.email}</span>
-                <span className="arrow"><Arrow dir="right" /></span>
-              </a>
-              <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-                <span><span className="label">GitHub</span>sai-krishna-ghanta</span>
-                <span className="arrow"><Arrow dir="right" /></span>
-              </a>
-              <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="contact-link">
-                <span><span className="label">Scholar</span>Google Scholar profile</span>
-                <span className="arrow"><Arrow dir="right" /></span>
-              </a>
-              <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-                <span><span className="label">LinkedIn</span>sai-krishna-ghanta</span>
-                <span className="arrow"><Arrow dir="right" /></span>
-              </a>
-            </div>
-          </div>
-          <ContactGlobe />
+        <div className="page-eyebrow">Out in the world</div>
+        <h2 className="trips-title">Trips &amp; <span className="ital">field notes</span></h2>
+        <p className="trips-lede">Conferences, fieldwork, and the places in between. Tap any photo to open it.</p>
+        <div className="trips-masonry">
+          {items.map((g, i) => (
+            <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
+              aria-label={`${g.place} — ${g.title}`}
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(i); } }}>
+              <div className="trip-media">
+                <img src={g.src} alt={g.title} loading="lazy" draggable="false" />
+                {g.kind && <span className={`trip-tag ${g.kind}`}>{g.kind}</span>}
+                <span className="trip-zoom" aria-hidden="true"><Arrow dir="right" /></span>
+              </div>
+              <figcaption>
+                {g.place && <span className="trip-place">{g.place}</span>}
+                {g.title && <span className="trip-name">{g.title}</span>}
+                {g.desc && <span className="trip-desc">{g.desc}</span>}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </div>
+
+      {cur && (
+        <div className="trip-lightbox" onClick={() => setActive(null)} role="dialog" aria-modal="true">
+          <button className="tl-close" onClick={() => setActive(null)} aria-label="Close">×</button>
+          {items.length > 1 && (
+            <button className="tl-nav prev" aria-label="Previous"
+              onClick={(e) => { e.stopPropagation(); setActive((i) => (i - 1 + items.length) % items.length); }}>
+              <Arrow dir="left" />
+            </button>
+          )}
+          <figure className="tl-figure" onClick={(e) => e.stopPropagation()}>
+            <img src={cur.src} alt={cur.title} />
+            <figcaption>
+              <div className="tl-head">
+                {cur.kind && <span className={`trip-tag ${cur.kind} static`}>{cur.kind}</span>}
+                {cur.place && <span className="tl-place">{cur.place}</span>}
+              </div>
+              {cur.title && <div className="tl-title">{cur.title}</div>}
+              {cur.desc && <p className="tl-desc">{cur.desc}</p>}
+            </figcaption>
+          </figure>
+          {items.length > 1 && (
+            <button className="tl-nav next" aria-label="Next"
+              onClick={(e) => { e.stopPropagation(); setActive((i) => (i + 1) % items.length); }}>
+              <Arrow dir="right" />
+            </button>
+          )}
+        </div>
+      )}
     </section>
+  );
+}
+
+function AboutPage() {
+  return (
+    <>
+      <section className="about page" data-screen-label="About">
+        <div className="container">
+          <div className="page-head">
+            <div className="page-eyebrow">About</div>
+            <h1 className="page-title">A bit about <span className="ital">me</span></h1>
+          </div>
+          <div className="contact-grid">
+            <div className="about-copy">
+              <p className="hero-bio">
+                I'm a PhD student in Artificial Intelligence at the University of Georgia, where I
+                work with <em>Dr. Ramviyas Parasuraman</em> in the HeRoLab. Most of my time goes into
+                getting groups of robots to map and navigate messy real environments together, in
+                places where GPS drops out and reliable communication can't be assumed.
+              </p>
+              <p className="hero-bio">
+                Before Athens I spent time at Samsung R&amp;D, and did my undergrad at IIIT Naya Raipur.
+                I grew up in Guntur, in southern India, and much of my path since has been a slow move
+                across the map. The globe marks the places I've lived, studied, and traveled — give it a spin.
+              </p>
+              <p className="hero-bio">
+                What keeps me in this field is the distance between a sentence and an action. A robot can
+                be told to "tidy the living room," but turning that into real movement in a space that keeps
+                changing is a hard, open problem. I'm drawn to the questions that sit between perception,
+                language, and control.
+              </p>
+              <p className="hero-bio">
+                Outside of research I travel whenever I get the chance, and I'm always happy to talk about
+                robots and computer vision. The easiest way to reach me is by email, which is on the home
+                page along with my other links.
+              </p>
+            </div>
+            <ContactGlobe />
+          </div>
+        </div>
+      </section>
+      <TripGallery />
+    </>
   );
 }
 
@@ -579,7 +665,7 @@ function Nav({ page, go, blogPostOpen }) {
     { id: "publications", label: "Publications" },
     { id: "blog", label: "Blog" },
     { id: "updates", label: "Milestones" },
-    { id: "contact", label: "Contact" },
+    { id: "about", label: "About" },
   ];
   const activeId = blogPostOpen ? "blog" : page;
   return (
@@ -651,7 +737,7 @@ function App() {
   if (route.page === "research") content = <ResearchPage />;
   else if (route.page === "publications") content = <PublicationsPage />;
   else if (route.page === "updates") content = <UpdatesPage />;
-  else if (route.page === "contact") content = <ContactPage />;
+  else if (route.page === "about" || route.page === "contact") content = <AboutPage />;
   else if (route.page === "blog") {
     content = route.post
       ? <BlogReader postId={route.post} back={backToBlog} />

@@ -9,7 +9,7 @@ const PROFILE = {
   org: "University of Georgia · HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",
-  email: "sai.krishna.ghanta@uga.edu",
+  email: "sai.krishna@uga.edu",
   scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao",
   github: "https://github.com/sai-krishna-ghanta",
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
@@ -23,6 +23,31 @@ const HOME_GALLERY = [{
 }, {
   src: "attached_assets/profile_picture.jpeg"
 }];
+
+// About-page trip gallery. Mixed aspect ratios are fine — the masonry keeps
+// each image's natural shape (portrait, landscape, square all work).
+// To add a photo: drop the file into attached_assets/ and add an entry here.
+//   kind:  "academic" (conferences, labs, fieldwork) | "personal" (travel)
+//   place: short location line   title: short caption   desc: optional sentence
+const TRIP_GALLERY = [{
+  src: "attached_assets/profile_picture.jpeg",
+  kind: "academic",
+  place: "Athens, GA",
+  title: "University of Georgia",
+  desc: "Home base for the PhD — research with the HeRoLab."
+}, {
+  src: "attached_assets/Profile_Pic.png",
+  kind: "academic",
+  place: "HeRoLab",
+  title: "In the lab",
+  desc: "Where most of the multi-robot systems work happens."
+}
+// —— Add your academic & personal trip photos below (any aspect ratio) ——
+// { src: "attached_assets/manali-2024.jpg", kind: "personal", place: "Manali, India",
+//   title: "Himalayan road trip", desc: "A few days off the grid in the mountains." },
+// { src: "attached_assets/icra-2025.jpg", kind: "academic", place: "Conference",
+//   title: "ICRA 2025", desc: "Presenting our cooperative SLAM work." },
+];
 const INTERESTS = [{
   id: "robot",
   title: "Robot Learning",
@@ -362,6 +387,7 @@ const CREDO = {
 Object.assign(window, {
   PROFILE,
   HOME_GALLERY,
+  TRIP_GALLERY,
   INTERESTS,
   THRUSTS,
   PUBLICATIONS,
@@ -2582,10 +2608,10 @@ function HomePage({
     target: "_blank",
     rel: "noopener noreferrer",
     className: "btn-link"
-  }, "CV / R\xE9sum\xE9 \u2193"), /*#__PURE__*/React.createElement("a", {
+  }, "CV / R\xE9sum\xE9 \u2193")), /*#__PURE__*/React.createElement("a", {
     href: `mailto:${PROFILE.email}`,
-    className: "btn-link solid"
-  }, "Email")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
+    className: "hero-email"
+  }, PROFILE.email))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
     className: "section interests",
     "data-screen-label": "Interests"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2828,69 +2854,146 @@ function ContactGlobe() {
     className: "contact-globe-cap mono"
   }, "Places I've lived, studied & traveled \xB7 drag to spin"));
 }
-function ContactPage() {
+
+// ===== Trip gallery — masonry of mixed aspect ratios + lightbox =====
+function TripGallery() {
+  const items = window.TRIP_GALLERY || [];
+  const [active, setActive] = React.useState(null);
+  React.useEffect(() => {
+    if (active === null) return;
+    const onKey = e => {
+      if (e.key === "Escape") setActive(null);else if (e.key === "ArrowRight") setActive(i => (i + 1) % items.length);else if (e.key === "ArrowLeft") setActive(i => (i - 1 + items.length) % items.length);
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [active, items.length]);
+  if (!items.length) return null;
+  const cur = active !== null ? items[active] : null;
   return /*#__PURE__*/React.createElement("section", {
-    className: "contact page",
-    "data-screen-label": "Contact"
+    className: "section trips",
+    "data-screen-label": "Trips"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "page-eyebrow"
+  }, "Out in the world"), /*#__PURE__*/React.createElement("h2", {
+    className: "trips-title"
+  }, "Trips & ", /*#__PURE__*/React.createElement("span", {
+    className: "ital"
+  }, "field notes")), /*#__PURE__*/React.createElement("p", {
+    className: "trips-lede"
+  }, "Conferences, fieldwork, and the places in between. Tap any photo to open it."), /*#__PURE__*/React.createElement("div", {
+    className: "trips-masonry"
+  }, items.map((g, i) => /*#__PURE__*/React.createElement("figure", {
+    key: g.src + i,
+    className: "trip-card",
+    tabIndex: 0,
+    role: "button",
+    "aria-label": `${g.place} — ${g.title}`,
+    onClick: () => setActive(i),
+    onKeyDown: e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setActive(i);
+      }
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "trip-media"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: g.src,
+    alt: g.title,
+    loading: "lazy",
+    draggable: "false"
+  }), g.kind && /*#__PURE__*/React.createElement("span", {
+    className: `trip-tag ${g.kind}`
+  }, g.kind), /*#__PURE__*/React.createElement("span", {
+    className: "trip-zoom",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))), /*#__PURE__*/React.createElement("figcaption", null, g.place && /*#__PURE__*/React.createElement("span", {
+    className: "trip-place"
+  }, g.place), g.title && /*#__PURE__*/React.createElement("span", {
+    className: "trip-name"
+  }, g.title), g.desc && /*#__PURE__*/React.createElement("span", {
+    className: "trip-desc"
+  }, g.desc)))))), cur && /*#__PURE__*/React.createElement("div", {
+    className: "trip-lightbox",
+    onClick: () => setActive(null),
+    role: "dialog",
+    "aria-modal": "true"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "tl-close",
+    onClick: () => setActive(null),
+    "aria-label": "Close"
+  }, "\xD7"), items.length > 1 && /*#__PURE__*/React.createElement("button", {
+    className: "tl-nav prev",
+    "aria-label": "Previous",
+    onClick: e => {
+      e.stopPropagation();
+      setActive(i => (i - 1 + items.length) % items.length);
+    }
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "left"
+  })), /*#__PURE__*/React.createElement("figure", {
+    className: "tl-figure",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("img", {
+    src: cur.src,
+    alt: cur.title
+  }), /*#__PURE__*/React.createElement("figcaption", null, /*#__PURE__*/React.createElement("div", {
+    className: "tl-head"
+  }, cur.kind && /*#__PURE__*/React.createElement("span", {
+    className: `trip-tag ${cur.kind} static`
+  }, cur.kind), cur.place && /*#__PURE__*/React.createElement("span", {
+    className: "tl-place"
+  }, cur.place)), cur.title && /*#__PURE__*/React.createElement("div", {
+    className: "tl-title"
+  }, cur.title), cur.desc && /*#__PURE__*/React.createElement("p", {
+    className: "tl-desc"
+  }, cur.desc))), items.length > 1 && /*#__PURE__*/React.createElement("button", {
+    className: "tl-nav next",
+    "aria-label": "Next",
+    onClick: e => {
+      e.stopPropagation();
+      setActive(i => (i + 1) % items.length);
+    }
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  }))));
+}
+function AboutPage() {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("section", {
+    className: "about page",
+    "data-screen-label": "About"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container"
   }, /*#__PURE__*/React.createElement("div", {
     className: "page-head"
   }, /*#__PURE__*/React.createElement("div", {
     className: "page-eyebrow"
-  }, "Say hello"), /*#__PURE__*/React.createElement("h1", {
+  }, "About"), /*#__PURE__*/React.createElement("h1", {
     className: "page-title"
-  }, "Get in ", /*#__PURE__*/React.createElement("span", {
+  }, "A bit about ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
-  }, "touch"))), /*#__PURE__*/React.createElement("div", {
+  }, "me"))), /*#__PURE__*/React.createElement("div", {
     className: "contact-grid"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "about-copy"
+  }, /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
-  }, "I'm always interested in collaborations, research discussions, or just talking robots. Feel free to reach out."), /*#__PURE__*/React.createElement("div", {
-    className: "contact-links"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: `mailto:${PROFILE.email}`,
-    className: "contact-link"
-  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-    className: "label"
-  }, "Email"), PROFILE.email), /*#__PURE__*/React.createElement("span", {
-    className: "arrow"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  }))), /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.github,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "contact-link"
-  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-    className: "label"
-  }, "GitHub"), "sai-krishna-ghanta"), /*#__PURE__*/React.createElement("span", {
-    className: "arrow"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  }))), /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.scholar,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "contact-link"
-  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-    className: "label"
-  }, "Scholar"), "Google Scholar profile"), /*#__PURE__*/React.createElement("span", {
-    className: "arrow"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  }))), /*#__PURE__*/React.createElement("a", {
-    href: PROFILE.linkedin,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "contact-link"
-  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-    className: "label"
-  }, "LinkedIn"), "sai-krishna-ghanta"), /*#__PURE__*/React.createElement("span", {
-    className: "arrow"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  }))))), /*#__PURE__*/React.createElement(ContactGlobe, null))));
+  }, "I'm a PhD student in Artificial Intelligence at the University of Georgia, where I work with ", /*#__PURE__*/React.createElement("em", null, "Dr. Ramviyas Parasuraman"), " in the HeRoLab. Most of my time goes into getting groups of robots to map and navigate messy real environments together, in places where GPS drops out and reliable communication can't be assumed."), /*#__PURE__*/React.createElement("p", {
+    className: "hero-bio"
+  }, "Before Athens I spent time at Samsung R&D, and did my undergrad at IIIT Naya Raipur. I grew up in Guntur, in southern India, and much of my path since has been a slow move across the map. The globe marks the places I've lived, studied, and traveled \u2014 give it a spin."), /*#__PURE__*/React.createElement("p", {
+    className: "hero-bio"
+  }, "What keeps me in this field is the distance between a sentence and an action. A robot can be told to \"tidy the living room,\" but turning that into real movement in a space that keeps changing is a hard, open problem. I'm drawn to the questions that sit between perception, language, and control."), /*#__PURE__*/React.createElement("p", {
+    className: "hero-bio"
+  }, "Outside of research I travel whenever I get the chance, and I'm always happy to talk about robots and computer vision. The easiest way to reach me is by email, which is on the home page along with my other links.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
 }
 function BlogList({
   openPost
@@ -3001,8 +3104,8 @@ function Nav({
     id: "updates",
     label: "Milestones"
   }, {
-    id: "contact",
-    label: "Contact"
+    id: "about",
+    label: "About"
   }];
   const activeId = blogPostOpen ? "blog" : page;
   return /*#__PURE__*/React.createElement("nav", {
@@ -3105,7 +3208,7 @@ function App() {
     window.location.hash = "#/blog";
   };
   let content;
-  if (route.page === "research") content = /*#__PURE__*/React.createElement(ResearchPage, null);else if (route.page === "publications") content = /*#__PURE__*/React.createElement(PublicationsPage, null);else if (route.page === "updates") content = /*#__PURE__*/React.createElement(UpdatesPage, null);else if (route.page === "contact") content = /*#__PURE__*/React.createElement(ContactPage, null);else if (route.page === "blog") {
+  if (route.page === "research") content = /*#__PURE__*/React.createElement(ResearchPage, null);else if (route.page === "publications") content = /*#__PURE__*/React.createElement(PublicationsPage, null);else if (route.page === "updates") content = /*#__PURE__*/React.createElement(UpdatesPage, null);else if (route.page === "about" || route.page === "contact") content = /*#__PURE__*/React.createElement(AboutPage, null);else if (route.page === "blog") {
     content = route.post ? /*#__PURE__*/React.createElement(BlogReader, {
       postId: route.post,
       back: backToBlog

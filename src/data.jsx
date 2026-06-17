@@ -6,7 +6,7 @@ const PROFILE = {
   org: "University of Georgia · HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",
-  email: "sai.krishna.ghanta@uga.edu",
+  email: "sai.krishna@uga.edu",
   scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao",
   github: "https://github.com/sai-krishna-ghanta",
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
@@ -18,6 +18,23 @@ const PROFILE = {
 const HOME_GALLERY = [
   { src: "attached_assets/Profile_Pic.png" },
   { src: "attached_assets/profile_picture.jpeg" },
+];
+
+// About-page trip gallery. Mixed aspect ratios are fine — the masonry keeps
+// each image's natural shape (portrait, landscape, square all work).
+// To add a photo: drop the file into attached_assets/ and add an entry here.
+//   kind:  "academic" (conferences, labs, fieldwork) | "personal" (travel)
+//   place: short location line   title: short caption   desc: optional sentence
+const TRIP_GALLERY = [
+  { src: "attached_assets/profile_picture.jpeg", kind: "academic", place: "Athens, GA",
+    title: "University of Georgia", desc: "Home base for the PhD — research with the HeRoLab." },
+  { src: "attached_assets/Profile_Pic.png", kind: "academic", place: "HeRoLab",
+    title: "In the lab", desc: "Where most of the multi-robot systems work happens." },
+  // —— Add your academic & personal trip photos below (any aspect ratio) ——
+  // { src: "attached_assets/manali-2024.jpg", kind: "personal", place: "Manali, India",
+  //   title: "Himalayan road trip", desc: "A few days off the grid in the mountains." },
+  // { src: "attached_assets/icra-2025.jpg", kind: "academic", place: "Conference",
+  //   title: "ICRA 2025", desc: "Presenting our cooperative SLAM work." },
 ];
 
 const INTERESTS = [
@@ -294,6 +311,6 @@ const CREDO = {
 };
 
 Object.assign(window, {
-  PROFILE, HOME_GALLERY, INTERESTS, THRUSTS, PUBLICATIONS, PUB_GROUPS,
+  PROFILE, HOME_GALLERY, TRIP_GALLERY, INTERESTS, THRUSTS, PUBLICATIONS, PUB_GROUPS,
   BLOG_POSTS, UPDATES, CREDO,
 });
