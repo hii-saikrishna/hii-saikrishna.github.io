@@ -300,6 +300,20 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   max-width: 56ch;
 }
 .hero-bio em { font-family: var(--serif); font-style: italic; color: var(--accent-ink); font-size: 1.05em; }
+.hero-bio a {
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.hero-bio-highlight {
+  color: #b42318;
+  font-weight: 600;
+}
+.hero-bio-highlight a {
+  color: #b42318;
+}
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 
 .btn {

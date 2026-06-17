@@ -272,13 +272,27 @@ function HomePage({ go }) {
                   <span className="hp-call">just call me <strong>Sai</strong></span>
                 </p>
                 <p className="hero-role">
-                  PhD Student in AI <span className="at">at</span> the University of Georgia
+                  Ph.D. Candidate in AI <span className="at">at</span> the University of Georgia
                 </p>
                 <p className="hero-bio">
-                  I work on <em>multi-robot systems</em>, computer vision, and autonomous navigation — frameworks where many robots map, localize, and reason about complex environments together, even when GPS and clean communication fail.
+                  I am a third-year Ph.D. candidate in Artificial Intelligence at the{" "}
+                  <a href="https://www.uga.edu" target="_blank" rel="noopener noreferrer">University of Georgia</a>,
+                  working under the supervision of{" "}
+                  <a href="https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman" target="_blank" rel="noopener noreferrer">Dr. Ramviyas Parasuraman</a>.
+                  My research lies at the intersection of <em>multi-robot systems</em>, spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments.
                 </p>
                 <p className="hero-bio">
-                  Currently with <em>Dr. Ramviyas Parasuraman</em> at the HeRoLab. Previously: Samsung R&amp;D, IIIT Naya Raipur.
+                  I am particularly interested in leveraging foundation models, world models, and reinforcement learning to build scalable, adaptive, and intelligent robotic systems. Previously, I was a research intern at the{" "}
+                  <a href="https://engineering.louisville.edu/research/centersinstitutes/larri/" target="_blank" rel="noopener noreferrer">Louisville Automation &amp; Robotics Research Institute</a>,
+                  where I worked with{" "}
+                  <a href="https://engineering.louisville.edu/faculty/sabur-h-baidya/" target="_blank" rel="noopener noreferrer">Dr. Sabur Baidya</a>,
+                  and an AI research intern at Samsung R&amp;D Institute through the PRISM program.
+                </p>
+                <p className="hero-bio hero-bio-highlight">
+                  I was selected as a recipient of the{" "}
+                  <a href="https://www.chishiki-ai.org/awardees/" target="_blank" rel="noopener noreferrer">2026 NSF Chishiki AI Fellowship</a>{" "}
+                  at the University of Texas at Austin, and will be working with{" "}
+                  <a href="https://oden.utexas.edu/people/directory/Krishna-Kumar/" target="_blank" rel="noopener noreferrer">Dr. Krishna Kumar</a>.
                 </p>
                 <div style={{ display: "flex", gap: 10, marginTop: 24, flexWrap: "wrap" }}>
                   <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link">Scholar</a>

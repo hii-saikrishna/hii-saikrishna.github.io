@@ -71,12 +71,11 @@ const Home = () => {
                   {personalInfo.bio.map((paragraph, index) => (
                     <p
                       key={index}
-                      className={`text-slate-600 mb-6 ${
+                      className={`text-slate-600 mb-6 prose-a:text-blue-primary prose-a:font-medium prose-a:underline prose-a:underline-offset-2 ${
                         index === 0 ? "text-lg" : "text-base"
                       }`}
-                    >
-                      {paragraph}
-                    </p>
+                      dangerouslySetInnerHTML={{ __html: paragraph }}
+                    />
                   ))}
                 </div>
 

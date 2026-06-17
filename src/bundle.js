@@ -5,7 +5,7 @@
 
 const PROFILE = {
   name: "Sai Krishna Ghanta",
-  role: "PhD Student, Artificial Intelligence",
+  role: "Ph.D. Candidate, Artificial Intelligence",
   org: "University of Georgia · HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",
@@ -2555,13 +2555,39 @@ function HomePage({
     className: "hp-call"
   }, "just call me ", /*#__PURE__*/React.createElement("strong", null, "Sai"))), /*#__PURE__*/React.createElement("p", {
     className: "hero-role"
-  }, "PhD Student in AI ", /*#__PURE__*/React.createElement("span", {
+  }, "Ph.D. Candidate in AI ", /*#__PURE__*/React.createElement("span", {
     className: "at"
   }, "at"), " the University of Georgia"), /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
-  }, "I work on ", /*#__PURE__*/React.createElement("em", null, "multi-robot systems"), ", computer vision, and autonomous navigation \u2014 frameworks where many robots map, localize, and reason about complex environments together, even when GPS and clean communication fail."), /*#__PURE__*/React.createElement("p", {
+  }, "I am a third-year Ph.D. candidate in Artificial Intelligence at the", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://www.uga.edu",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "University of Georgia"), ", working under the supervision of", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Dr. Ramviyas Parasuraman"), ". My research lies at the intersection of ", /*#__PURE__*/React.createElement("em", null, "multi-robot systems"), ", spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments."), /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
-  }, "Currently with ", /*#__PURE__*/React.createElement("em", null, "Dr. Ramviyas Parasuraman"), " at the HeRoLab. Previously: Samsung R&D, IIIT Naya Raipur."), /*#__PURE__*/React.createElement("div", {
+  }, "I am particularly interested in leveraging foundation models, world models, and reinforcement learning to build scalable, adaptive, and intelligent robotic systems. Previously, I was a research intern at the", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://engineering.louisville.edu/research/centersinstitutes/larri/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Louisville Automation & Robotics Research Institute"), ", where I worked with", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://engineering.louisville.edu/faculty/sabur-h-baidya/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Dr. Sabur Baidya"), ", and an AI research intern at Samsung R&D Institute through the PRISM program."), /*#__PURE__*/React.createElement("p", {
+    className: "hero-bio hero-bio-highlight"
+  }, "I was selected as a recipient of the", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://www.chishiki-ai.org/awardees/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "2026 NSF Chishiki AI Fellowship"), " ", "at the University of Texas at Austin, and will be working with", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://oden.utexas.edu/people/directory/Krishna-Kumar/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Dr. Krishna Kumar"), "."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 10,

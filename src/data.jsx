@@ -2,7 +2,7 @@
 
 const PROFILE = {
   name: "Sai Krishna Ghanta",
-  role: "PhD Student, Artificial Intelligence",
+  role: "Ph.D. Candidate, Artificial Intelligence",
   org: "University of Georgia · HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",

@@ -1,6 +1,6 @@
 export const personalInfo = {
   name: "Sai Krishna Ghanta",
-  title: "PhD Student in Artificial Intelligence",
+  title: "Ph.D. Candidate in Artificial Intelligence",
   affiliation: "University of Georgia",
   lab: "HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
