@@ -971,11 +971,18 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .blog-reader article li { margin-bottom: 8px; }
 
 /* ============ Contact ============ */
+.contact.page {
+  min-height: calc(100vh - 65px);
+  padding: clamp(36px, 6vh, 64px) 0 clamp(44px, 7vh, 78px);
+}
+.contact .page-head {
+  margin-bottom: clamp(24px, 4vh, 38px);
+}
 .contact-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 60px;
-  align-items: start;
+  gap: clamp(32px, 5vw, 56px);
+  align-items: center;
 }
 .contact-links { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; }
 .contact-link {
@@ -1549,8 +1556,9 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .thrust-img > div { width: 100%; height: 100%; min-height: 340px; }
 
 .contact-globe {
+  --contact-globe-h: clamp(320px, 46vh, 420px);
   position: relative;
-  min-height: 460px;
+  min-height: var(--contact-globe-h);
   overflow: hidden;
 }
 .contact-globe > div {
@@ -1558,7 +1566,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   z-index: 2;
   width: 100%;
   height: 100%;
-  min-height: 460px;
+  min-height: var(--contact-globe-h);
   cursor: grab;
 }
 .contact-globe-fallback {
@@ -1572,7 +1580,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .contact-globe-earth {
   position: relative;
   display: block;
-  width: min(78%, 380px);
+  width: min(76%, calc(var(--contact-globe-h) - 22px), 380px);
   aspect-ratio: 1;
   border-radius: 50%;
   background-image: url("../attached_assets/earth-atmos-2048.jpg");
@@ -1623,11 +1631,26 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   to { background-position: -160% center; }
 }
 
+@media (min-width: 821px) and (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+    gap: 28px;
+  }
+  .contact-globe { --contact-globe-h: clamp(300px, 42vh, 360px); }
+  .contact-globe-earth { width: min(82%, calc(var(--contact-globe-h) - 18px), 320px); }
+  .contact-link .label {
+    min-width: 60px;
+    margin-right: 12px;
+  }
+}
+
 @media (max-width: 760px) {
   .hero-scene, .hero-scene > div { min-height: 340px; }
   .thrust-img, .thrust-img > div { min-height: 280px; }
-  .contact-globe, .contact-globe > div { min-height: 360px; }
-  .contact-globe-earth { width: min(86%, 320px); }
+  .contact.page { padding-top: 34px; }
+  .contact .page-head { margin-bottom: 22px; }
+  .contact-globe { --contact-globe-h: clamp(300px, 42vh, 360px); }
+  .contact-globe-earth { width: min(84%, calc(var(--contact-globe-h) - 18px), 320px); }
 }
 
 /* ============ Hero photo gallery (with 3D robot scroller) ============ */

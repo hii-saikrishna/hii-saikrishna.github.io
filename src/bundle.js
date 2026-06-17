@@ -2881,7 +2881,7 @@ function ContactPage() {
     style: {
       width: "100%",
       height: "100%",
-      minHeight: 460
+      minHeight: "var(--contact-globe-h)"
     }
   }), /*#__PURE__*/React.createElement("p", {
     className: "contact-globe-cap mono"
