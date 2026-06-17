@@ -164,6 +164,13 @@ em { font-style: italic; }
   border-color: #bfdbfe;
   background: #f8fbff;
 }
+.email-inline {
+  font-family: var(--mono);
+  font-size: 0.95em;
+  letter-spacing: -0.01em;
+  color: inherit;
+  white-space: nowrap;
+}
 
 .chip {
   font-family: var(--mono);
@@ -257,7 +264,7 @@ em { font-style: italic; }
 .hero {
   position: relative;
   overflow: visible;
-  padding: 42px 0 100px;
+  padding: 24px 0 100px;
   background:
     radial-gradient(ellipse 55% 60% at 78% 18%, oklch(0.97 0.025 150) 0%, transparent 70%),
     radial-gradient(ellipse 40% 40% at 8% 80%, oklch(0.975 0.02 150) 0%, transparent 70%);

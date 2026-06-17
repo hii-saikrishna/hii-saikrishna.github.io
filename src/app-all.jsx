@@ -311,7 +311,7 @@ function HomePage({ go }) {
                 </div>
                 <a href={`mailto:${PROFILE.email}`} className="hero-email hero-email-card" aria-label="Email Sai Krishna Ghanta">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6.5h15v11h-15v-11Zm1.4 1.4 6.1 4.2 6.1-4.2H5.9Zm12.2 8.2V9.6L12 13.8 5.9 9.6v6.5h12.2Z" fill="currentColor" /></svg>
-                  <span>I’ll be happy to hear from you about research, collaboration, ideas, or anything else — feel free to reach out.</span>
+                  <span>I’ll be happy to hear from you about research, collaboration, ideas, or anything else — feel free to reach out to <span className="email-inline">{PROFILE.email}</span>.</span>
                 </a>
               </Reveal>
             </div>

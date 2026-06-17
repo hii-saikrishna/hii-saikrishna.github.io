@@ -2644,7 +2644,9 @@ function HomePage({
   }, /*#__PURE__*/React.createElement("path", {
     d: "M4.5 6.5h15v11h-15v-11Zm1.4 1.4 6.1 4.2 6.1-4.2H5.9Zm12.2 8.2V9.6L12 13.8 5.9 9.6v6.5h12.2Z",
     fill: "currentColor"
-  })), /*#__PURE__*/React.createElement("span", null, "I\u2019ll be happy to hear from you about research, collaboration, ideas, or anything else \u2014 feel free to reach out.")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
+  })), /*#__PURE__*/React.createElement("span", null, "I\u2019ll be happy to hear from you about research, collaboration, ideas, or anything else \u2014 feel free to reach out to ", /*#__PURE__*/React.createElement("span", {
+    className: "email-inline"
+  }, PROFILE.email), ".")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
     className: "section interests",
     "data-screen-label": "Interests"
   }, /*#__PURE__*/React.createElement("div", {

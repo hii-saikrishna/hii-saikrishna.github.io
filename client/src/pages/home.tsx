@@ -98,7 +98,7 @@ const Home = () => {
                   <a href="mailto:sai.krishna@uga.edu" className="inline-flex items-center gap-2 hover:text-blue-700 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 6.5L12 13L2 6.5"/></svg>
                     <span>
-                      Email me — I’ll be happy to hear from you about anything, feel free to reach out!
+                      I’ll be happy to hear from you about research, collaboration, ideas, or anything else — feel free to reach out to <span className="font-mono text-[0.95em]">sai.krishna@uga.edu</span>.
                     </span>
                   </a>
                 </div>
