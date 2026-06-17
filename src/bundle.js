@@ -794,7 +794,7 @@ function robotCardScene(kind, opts = {}) {
 }
 
 // ---------- Research-thrust dioramas ----------
-function dioramaScene(kind) {
+function dioramaScene(kind, zoom = 1) {
   return ctx => {
     const {
       scene,
@@ -804,14 +804,12 @@ function dioramaScene(kind) {
     const stage = new THREE.Group();
     scene.add(stage);
     let update = () => {};
-    if (kind === "learning") {
-      camera.position.set(2.6, 1.9, 3.3);
-      camera.lookAt(0, 0.95, 0);
-      addMeadow(stage, 1.7);
-      const h = buildHumanoidModel();
-      stage.add(h.group);
-      // holographic task panel the robot is "reading"
-      const holoCanvas = document.createElement("canvas");
+    if (kind === "embodied") {
+      // open dollhouse room — robots living and working in a real home
+      const cam = zoom < 1 ? [3.0, 2.2, 3.1] : [4.4, 3.6, 4.6];
+      const look = zoom < 1 ? 0.6 : 0.35;
+      camera.position.set(...cam);
+      camera.lookAt(0, look, 0);
       holoCanvas.width = 256;
       holoCanvas.height = 160;
       const hx = holoCanvas.getContext("2d");
@@ -2668,7 +2666,7 @@ function HomePage({
   }, /*#__PURE__*/React.createElement("div", {
     className: "glyph-wrap"
   }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: dioramaScene(int.scene)
+    build: dioramaScene(int.scene, 0.8)
   })), /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc))))))));
 }
 function ResearchPage() {

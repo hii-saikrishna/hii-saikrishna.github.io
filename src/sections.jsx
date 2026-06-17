@@ -128,7 +128,7 @@ function HomePage({ go }) {
               <Reveal key={it.id} delay={i * 80}>
                 <div className="interest-card">
                   <div className="glyph-wrap">
-                    <ThreeScene build={dioramaScene(it.scene)} />
+                    <ThreeScene build={dioramaScene(it.scene, 0.8)} />
                   </div>
                   <h3>{it.title}</h3>
                   <p>{it.desc}</p>
