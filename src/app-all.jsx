@@ -635,8 +635,10 @@ function TripGallery() {
 }
 
 function AboutPage() {
+  const nature = <NatureBackdrop />;
   return (
-    <>
+    <div className="nature-page about-nature-page">
+      {nature}
       <section className="about page" data-screen-label="About">
         <div className="container">
           <div className="page-head">
@@ -662,14 +664,36 @@ function AboutPage() {
         </div>
       </section>
       <TripGallery />
-    </>
+      <MountainLandscape />
+    </div>
+  );
+}
+
+function NatureBackdrop() {
+  return (
+    <div className="nature-backdrop" aria-hidden="true">
+      {Array.from({ length: 14 }).map((_, i) => <span key={i} className={`maple-leaf leaf-${i + 1}`}></span>)}
+    </div>
+  );
+}
+
+function MountainLandscape() {
+  return (
+    <div className="mountain-landscape" aria-hidden="true">
+      <span className="mountain sun"></span>
+      <span className="mountain ridge ridge-back"></span>
+      <span className="mountain ridge ridge-mid"></span>
+      <span className="mountain ridge ridge-front"></span>
+      <span className="mountain ground"></span>
+    </div>
   );
 }
 
 function BlogList({ openPost }) {
   return (
-    <section className="blog-page" data-screen-label="Blog">
-      <div className="container">
+    <section className="blog-page nature-page blog-nature-page" data-screen-label="Blog">
+      <NatureBackdrop />
+      <div className="container nature-content">
         <div className="page-head">
           <div className="page-eyebrow">Writing</div>
           <h1 className="page-title">Blog</h1>
@@ -693,6 +717,7 @@ function BlogList({ openPost }) {
           ))}
         </div>
       </div>
+      <MountainLandscape />
     </section>
   );
 }

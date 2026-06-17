@@ -3085,7 +3085,10 @@ function TripGallery() {
   }))));
 }
 function AboutPage() {
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("section", {
+  const nature = /*#__PURE__*/React.createElement(NatureBackdrop, null);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "nature-page about-nature-page"
+  }, nature, /*#__PURE__*/React.createElement("section", {
     className: "about page",
     "data-screen-label": "About"
   }, /*#__PURE__*/React.createElement("div", {
@@ -3104,16 +3107,43 @@ function AboutPage() {
     className: "about-intro"
   }, /*#__PURE__*/React.createElement("p", null, "I'm happiest outdoors \u2014 a quiet trail, a good viewpoint, somewhere to slow down and just look. I'm also a creature of habit. I'll run the exact same routine, every single day, and be perfectly content about it. ", /*#__PURE__*/React.createElement("span", {
     className: "about-wink"
-  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
+  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null), /*#__PURE__*/React.createElement(MountainLandscape, null));
+}
+function NatureBackdrop() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "nature-backdrop",
+    "aria-hidden": "true"
+  }, Array.from({
+    length: 14
+  }).map((_, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: `maple-leaf leaf-${i + 1}`
+  })));
+}
+function MountainLandscape() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "mountain-landscape",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "mountain sun"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "mountain ridge ridge-back"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "mountain ridge ridge-mid"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "mountain ridge ridge-front"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "mountain ground"
+  }));
 }
 function BlogList({
   openPost
 }) {
   return /*#__PURE__*/React.createElement("section", {
-    className: "blog-page",
+    className: "blog-page nature-page blog-nature-page",
     "data-screen-label": "Blog"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "container"
+  }, /*#__PURE__*/React.createElement(NatureBackdrop, null), /*#__PURE__*/React.createElement("div", {
+    className: "container nature-content"
   }, /*#__PURE__*/React.createElement("div", {
     className: "page-head"
   }, /*#__PURE__*/React.createElement("div", {
@@ -3143,7 +3173,7 @@ function BlogList({
     className: "arrow"
   }, "Read ", /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  }))))))));
+  }))))))), /*#__PURE__*/React.createElement(MountainLandscape, null));
 }
 function BlogReader({
   postId,
