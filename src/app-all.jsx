@@ -474,6 +474,8 @@ function ContactGlobe() {
 }
 
 // ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
+const isVideo = (s) => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
+
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
@@ -541,8 +543,13 @@ function TripGallery() {
               <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
                 aria-label={`${g.place} — ${g.title}`}
                 onClick={() => open(i)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}>
-                <img src={g.src} alt={g.title} loading="lazy" draggable="false" />
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}
+                onMouseEnter={(e) => { const v = e.currentTarget.querySelector("video"); if (v) v.play().catch(() => {}); }}
+                onMouseLeave={(e) => { const v = e.currentTarget.querySelector("video"); if (v) v.pause(); }}>
+                {isVideo(g.src)
+                  ? <video src={g.src + "#t=0.1"} muted loop playsInline preload="metadata" draggable="false" />
+                  : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
+                {isVideo(g.src) && <span className="trip-play" aria-hidden="true">▶</span>}
                 {g.kind && <span className={`trip-tag ${g.kind}`}>{g.kind}</span>}
                 <span className="trip-zoom" aria-hidden="true"><Arrow dir="right" /></span>
                 {(g.place || g.title) && (
@@ -568,7 +575,9 @@ function TripGallery() {
             </button>
           )}
           <figure className="tl-figure" onClick={(e) => e.stopPropagation()}>
-            <img src={cur.src} alt={cur.title} />
+            {isVideo(cur.src)
+              ? <video src={cur.src} controls autoPlay playsInline />
+              : <img src={cur.src} alt={cur.title} />}
             <figcaption>
               <div className="tl-head">
                 {cur.kind && <span className={`trip-tag ${cur.kind} static`}>{cur.kind}</span>}
@@ -599,9 +608,8 @@ function AboutPage() {
             <div className="page-eyebrow">About</div>
             <h1 className="page-title">A bit about <span className="ital">me</span></h1>
           </div>
-          <div className="about-stage">
-            <ContactGlobe />
-            <div className="about-overlay">
+          <div className="about-combined">
+            <div className="about-intro">
               <p>
                 I'm happiest outdoors — a quiet trail, a good viewpoint, somewhere to slow down and
                 just look. I'm also a creature of habit. I'll run the exact same routine, every single
@@ -614,6 +622,7 @@ function AboutPage() {
                 I've actually stood, and I'm nowhere near done filling it in.
               </p>
             </div>
+            <ContactGlobe />
           </div>
         </div>
       </section>

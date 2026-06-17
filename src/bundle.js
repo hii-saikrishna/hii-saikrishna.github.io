@@ -29,24 +29,36 @@ const HOME_GALLERY = [{
 // To add a photo: drop the file into attached_assets/ and add an entry here.
 //   kind:  "academic" (conferences, labs, fieldwork) | "personal" (travel)
 //   place: short location line   title: short caption   desc: optional sentence
+// Images & video live in attached_assets/Gallery/ (web-safe filenames).
+// A .mp4 src is detected automatically and shown as a playable clip.
 const TRIP_GALLERY = [{
-  src: "attached_assets/profile_picture.jpeg",
+  src: "attached_assets/Gallery/icra-2025-demos.mp4",
   kind: "academic",
-  place: "Athens, GA",
-  title: "University of Georgia",
-  desc: "Home base for the PhD — research with the HeRoLab."
+  place: "ICRA 2025",
+  title: "Robots, live",
+  desc: "My first time watching live demonstrations of all kinds of robots."
 }, {
-  src: "attached_assets/Profile_Pic.png",
+  src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg",
   kind: "academic",
+  place: "Hangzhou, China",
+  title: "IROS 2025",
+  desc: "Fall 2025, at the IROS conference in Hangzhou."
+}, {
+  src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg",
+  kind: "personal",
   place: "HeRoLab",
-  title: "In the lab",
-  desc: "Where most of the multi-robot systems work happens."
+  title: "Thanksgiving with the lab",
+  desc: "Thanksgiving lunch, 2025."
+}, {
+  src: "attached_assets/Gallery/aimans-farewell-2025.jpeg",
+  kind: "personal",
+  place: "HeRoLab",
+  title: "Aiman's farewell",
+  desc: "Sending off a labmate, summer 2025."
 }
-// —— Add your academic & personal trip photos below (any aspect ratio) ——
-// { src: "attached_assets/manali-2024.jpg", kind: "personal", place: "Manali, India",
+// —— Add more photos/videos: drop the file in attached_assets/Gallery/ and add a line ——
+// { src: "attached_assets/Gallery/manali-2024.jpg", kind: "personal", place: "Manali, India",
 //   title: "Himalayan road trip", desc: "A few days off the grid in the mountains." },
-// { src: "attached_assets/icra-2025.jpg", kind: "academic", place: "Conference",
-//   title: "ICRA 2025", desc: "Presenting our cooperative SLAM work." },
 ];
 const INTERESTS = [{
   id: "robot",
@@ -2001,8 +2013,8 @@ function buildGlobeScene(ctx) {
     renderer,
     el
   } = ctx;
-  // Larger globe in frame so it works as a backdrop behind the About text.
-  camera.position.set(0, 0.15, 3.0);
+  // Globe framed for the About panel (text column on the left, globe to the right).
+  camera.position.set(0, 0.3, 4.0);
   camera.lookAt(0, 0, 0);
   scene.add(new THREE.HemisphereLight(0xffffff, 0xbcd0e8, 1.1));
   const dir = new THREE.DirectionalLight(0xffffff, 0.85);
@@ -2856,6 +2868,7 @@ function ContactGlobe() {
 }
 
 // ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
+const isVideo = s => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
@@ -2958,13 +2971,31 @@ function TripGallery() {
         e.preventDefault();
         setActive(i);
       }
+    },
+    onMouseEnter: e => {
+      const v = e.currentTarget.querySelector("video");
+      if (v) v.play().catch(() => {});
+    },
+    onMouseLeave: e => {
+      const v = e.currentTarget.querySelector("video");
+      if (v) v.pause();
     }
-  }, /*#__PURE__*/React.createElement("img", {
+  }, isVideo(g.src) ? /*#__PURE__*/React.createElement("video", {
+    src: g.src + "#t=0.1",
+    muted: true,
+    loop: true,
+    playsInline: true,
+    preload: "metadata",
+    draggable: "false"
+  }) : /*#__PURE__*/React.createElement("img", {
     src: g.src,
     alt: g.title,
     loading: "lazy",
     draggable: "false"
-  }), g.kind && /*#__PURE__*/React.createElement("span", {
+  }), isVideo(g.src) && /*#__PURE__*/React.createElement("span", {
+    className: "trip-play",
+    "aria-hidden": "true"
+  }, "\u25B6"), g.kind && /*#__PURE__*/React.createElement("span", {
     className: `trip-tag ${g.kind}`
   }, g.kind), /*#__PURE__*/React.createElement("span", {
     className: "trip-zoom",
@@ -3004,7 +3035,12 @@ function TripGallery() {
   })), /*#__PURE__*/React.createElement("figure", {
     className: "tl-figure",
     onClick: e => e.stopPropagation()
-  }, /*#__PURE__*/React.createElement("img", {
+  }, isVideo(cur.src) ? /*#__PURE__*/React.createElement("video", {
+    src: cur.src,
+    controls: true,
+    autoPlay: true,
+    playsInline: true
+  }) : /*#__PURE__*/React.createElement("img", {
     src: cur.src,
     alt: cur.title
   }), /*#__PURE__*/React.createElement("figcaption", null, /*#__PURE__*/React.createElement("div", {
@@ -3043,12 +3079,12 @@ function AboutPage() {
   }, "A bit about ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
   }, "me"))), /*#__PURE__*/React.createElement("div", {
-    className: "about-stage"
-  }, /*#__PURE__*/React.createElement(ContactGlobe, null), /*#__PURE__*/React.createElement("div", {
-    className: "about-overlay"
+    className: "about-combined"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "about-intro"
   }, /*#__PURE__*/React.createElement("p", null, "I'm happiest outdoors \u2014 a quiet trail, a good viewpoint, somewhere to slow down and just look. I'm also a creature of habit. I'll run the exact same routine, every single day, and be perfectly content about it. ", /*#__PURE__*/React.createElement("span", {
     className: "about-wink"
-  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in."))))), /*#__PURE__*/React.createElement(TripGallery, null));
+  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
 }
 function BlogList({
   openPost

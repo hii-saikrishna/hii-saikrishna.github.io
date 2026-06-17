@@ -2085,57 +2085,38 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   .ty-label { position: static; }
 }
 
-/* ===== About — text layered ON TOP of the globe (one shared space) ===== */
-.about-stage {
-  position: relative;
-  margin: clamp(8px, 2vh, 22px) auto 0;
-  min-height: clamp(440px, 64vh, 600px);
+/* ===== About — single text column with the globe to its right ===== */
+.about-combined {
   display: grid;
-  place-items: center;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 430px);
+  gap: clamp(24px, 4vw, 52px);
+  align-items: center;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: clamp(24px, 4vw, 52px);
 }
-/* the globe is the backdrop layer, filling the stage */
-.about-stage .contact-globe {
-  position: absolute;
-  inset: 0;
+.about-intro { max-width: 56ch; }
+.about-intro p {
+  font-size: clamp(16px, 1.7vw, 18px);
+  line-height: 1.72;
+  color: var(--ink-2);
+  margin-bottom: 16px;
+}
+.about-intro p:last-child { margin-bottom: 0; }
+.about-intro em { font-style: italic; color: var(--accent-ink); }
+.about-wink { color: var(--accent-ink); font-weight: 600; }
+.about-combined .contact-globe {
   width: 100%;
   max-width: none;
   margin: 0;
-  z-index: 1;
 }
-/* the text sits over it; pointer-events pass through so the globe stays draggable */
-.about-overlay {
-  position: relative;
-  z-index: 2;
-  max-width: 38ch;
-  text-align: center;
-  pointer-events: none;
-  padding: 0 6px;
-}
-/* soft white halo behind the words so they read over the spinning globe */
-.about-overlay::before {
-  content: "";
-  position: absolute;
-  inset: -36px -40px;
-  z-index: -1;
-  background: radial-gradient(ellipse at center,
-    rgba(255, 255, 255, 0.96) 26%,
-    rgba(255, 255, 255, 0.82) 50%,
-    rgba(255, 255, 255, 0) 75%);
-}
-.about-overlay p {
-  font-size: clamp(15.5px, 1.65vw, 18px);
-  line-height: 1.66;
-  color: var(--ink);
-  margin-bottom: 14px;
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.75);
-}
-.about-overlay p:last-child { margin-bottom: 0; }
-.about-overlay em { font-style: italic; color: var(--accent-ink); }
-.about-wink { color: var(--accent-ink); font-weight: 600; }
-@media (max-width: 620px) {
-  .about-stage { min-height: clamp(400px, 72vh, 520px); }
-  .about-overlay { max-width: 30ch; }
-  .about-overlay::before { inset: -24px -22px; }
+@media (max-width: 820px) {
+  .about-combined {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: clamp(20px, 5vw, 32px);
+  }
 }
 
 /* ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox ===== */
@@ -2204,15 +2185,34 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   outline: none;
 }
 /* fixed height + auto width => each photo keeps its own aspect ratio (mixed sizes) */
-.trip-card img {
+.trip-card img,
+.trip-card video {
   height: 100%;
   width: auto;
   max-width: 78vw;
   display: block;
   object-fit: cover;
+  background: #0b0e12;
   user-select: none;
   -webkit-user-drag: none;
 }
+.trip-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  padding-left: 3px;
+  border-radius: 999px;
+  background: rgba(8, 12, 16, 0.55);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 14px;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+.trip-card:hover .trip-play { opacity: 0; }
 .trip-tag {
   position: absolute;
   top: 10px; left: 10px;
@@ -2316,8 +2316,9 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   overflow: hidden;
   box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
 }
-/* image is capped so it + the caption always stay within the screen height */
-.tl-figure img {
+/* image/video capped so it + the caption always stay within the screen height */
+.tl-figure img,
+.tl-figure video {
   display: block;
   width: auto;
   height: auto;
@@ -2325,6 +2326,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   max-height: 74vh;
   margin: 0 auto;
   object-fit: contain;
+  background: #000;
 }
 .tl-figure figcaption {
   flex: 0 0 auto;

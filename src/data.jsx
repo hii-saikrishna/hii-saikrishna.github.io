@@ -25,16 +25,20 @@ const HOME_GALLERY = [
 // To add a photo: drop the file into attached_assets/ and add an entry here.
 //   kind:  "academic" (conferences, labs, fieldwork) | "personal" (travel)
 //   place: short location line   title: short caption   desc: optional sentence
+// Images & video live in attached_assets/Gallery/ (web-safe filenames).
+// A .mp4 src is detected automatically and shown as a playable clip.
 const TRIP_GALLERY = [
-  { src: "attached_assets/profile_picture.jpeg", kind: "academic", place: "Athens, GA",
-    title: "University of Georgia", desc: "Home base for the PhD — research with the HeRoLab." },
-  { src: "attached_assets/Profile_Pic.png", kind: "academic", place: "HeRoLab",
-    title: "In the lab", desc: "Where most of the multi-robot systems work happens." },
-  // —— Add your academic & personal trip photos below (any aspect ratio) ——
-  // { src: "attached_assets/manali-2024.jpg", kind: "personal", place: "Manali, India",
+  { src: "attached_assets/Gallery/icra-2025-demos.mp4", kind: "academic", place: "ICRA 2025",
+    title: "Robots, live", desc: "My first time watching live demonstrations of all kinds of robots." },
+  { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", kind: "academic", place: "Hangzhou, China",
+    title: "IROS 2025", desc: "Fall 2025, at the IROS conference in Hangzhou." },
+  { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", kind: "personal", place: "HeRoLab",
+    title: "Thanksgiving with the lab", desc: "Thanksgiving lunch, 2025." },
+  { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", kind: "personal", place: "HeRoLab",
+    title: "Aiman's farewell", desc: "Sending off a labmate, summer 2025." },
+  // —— Add more photos/videos: drop the file in attached_assets/Gallery/ and add a line ——
+  // { src: "attached_assets/Gallery/manali-2024.jpg", kind: "personal", place: "Manali, India",
   //   title: "Himalayan road trip", desc: "A few days off the grid in the mountains." },
-  // { src: "attached_assets/icra-2025.jpg", kind: "academic", place: "Conference",
-  //   title: "ICRA 2025", desc: "Presenting our cooperative SLAM work." },
 ];
 
 const INTERESTS = [
