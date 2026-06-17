@@ -302,11 +302,11 @@ function HomePage({ go }) {
             <div className="interest-grid">
               {INTERESTS.map((int) => (
                 <div key={int.id} className="interest-card">
+                  <div className="glyph-wrap">
+                    <ThreeScene build={robotCardScene(int.scene)} />
+                  </div>
                   <h3>{int.title}</h3>
                   <p>{int.desc}</p>
-                  <div className="topics">
-                    {int.topics.map((t) => <span key={t} className="topic">{t}</span>)}
-                  </div>
                 </div>
               ))}
             </div>
@@ -324,14 +324,14 @@ function ResearchPage() {
       <div className="container">
         <div className="page-head">
           <div className="page-eyebrow">What I work on</div>
-          <h1 className="page-title">Research <span className="ital">Thrusts</span></h1>
+          <h1 className="page-title">Research <span className="ital">Interests</span></h1>
           <p className="page-lede">Three intertwined directions — embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.</p>
         </div>
         {THRUSTS.map((t, i) => (
           <Reveal key={t.id} delay={i * 80}>
             <div className="thrust" style={{ "--t-accent": t.accent, "--t-tint": t.tint }}>
               <div className="thrust-body">
-                <span className="thrust-badge"><span className="b-dot"></span>Thrust {String(i + 1).padStart(2, "0")}</span>
+                <span className="thrust-badge"><span className="b-dot"></span>Interest {String(i + 1).padStart(2, "0")}</span>
                 <h3>{t.title}</h3>
                 <p className="thrust-tagline">{t.tagline}</p>
                 <p>{t.body}</p>

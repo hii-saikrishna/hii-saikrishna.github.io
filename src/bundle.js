@@ -83,26 +83,23 @@ const TRIP_GALLERY = [{
 // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
 // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
+
+// Home highlights — the same three directions as the Research page, each with a small 3D scene.
 const INTERESTS = [{
-  id: "robot",
-  title: "Robot Learning",
-  desc: "Foundation models & reasoning frameworks for embodied agents.",
-  topics: ["LLM Planning", "Neuro-Symbolic", "VLMs"]
+  id: "embodied",
+  scene: "humanoid",
+  title: "Robot Learning & Embodied Intelligence",
+  desc: "Robots that reason about the world they live in."
 }, {
-  id: "multi",
-  title: "Multi-Robot Systems",
-  desc: "Distributed mapping, cooperative SLAM and exploration.",
-  topics: ["Cooperative SLAM", "Task Allocation", "Exploration"]
+  id: "multirobot",
+  scene: "drone",
+  title: "Mapping & Localization for Multi-Robot Systems",
+  desc: "Many robots, one shared map — even when comms drop."
 }, {
-  id: "vision",
-  title: "Computer Vision",
-  desc: "Scene graphs, SLAM in dynamic worlds, semantic 3D.",
-  topics: ["Semantic SLAM", "Scene Graphs", "3D Vision"]
-}, {
-  id: "ml",
-  title: "Machine Learning",
-  desc: "Gaussian processes, uncertainty, continuous-thought models.",
-  topics: ["GPs", "RL", "Cognitive ML"]
+  id: "spatial",
+  scene: "rover",
+  title: "Spatial Intelligence",
+  desc: "Learning a belief over space itself."
 }];
 
 // Research thrusts — colorful, resourceful, no "T#" index.
@@ -2668,12 +2665,11 @@ function HomePage({
   }, INTERESTS.map(int => /*#__PURE__*/React.createElement("div", {
     key: int.id,
     className: "interest-card"
-  }, /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc), /*#__PURE__*/React.createElement("div", {
-    className: "topics"
-  }, int.topics.map(t => /*#__PURE__*/React.createElement("span", {
-    key: t,
-    className: "topic"
-  }, t))))))))));
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "glyph-wrap"
+  }, /*#__PURE__*/React.createElement(ThreeScene, {
+    build: robotCardScene(int.scene)
+  })), /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc))))))));
 }
 function ResearchPage() {
   return /*#__PURE__*/React.createElement("section", {
@@ -2689,7 +2685,7 @@ function ResearchPage() {
     className: "page-title"
   }, "Research ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
-  }, "Thrusts")), /*#__PURE__*/React.createElement("p", {
+  }, "Interests")), /*#__PURE__*/React.createElement("p", {
     className: "page-lede"
   }, "Three intertwined directions \u2014 embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.")), THRUSTS.map((t, i) => /*#__PURE__*/React.createElement(Reveal, {
     key: t.id,
@@ -2706,7 +2702,7 @@ function ResearchPage() {
     className: "thrust-badge"
   }, /*#__PURE__*/React.createElement("span", {
     className: "b-dot"
-  }), "Thrust ", String(i + 1).padStart(2, "0")), /*#__PURE__*/React.createElement("h3", null, t.title), /*#__PURE__*/React.createElement("p", {
+  }), "Interest ", String(i + 1).padStart(2, "0")), /*#__PURE__*/React.createElement("h3", null, t.title), /*#__PURE__*/React.createElement("p", {
     className: "thrust-tagline"
   }, t.tagline), /*#__PURE__*/React.createElement("p", null, t.body), /*#__PURE__*/React.createElement("div", {
     className: "thrust-stats"

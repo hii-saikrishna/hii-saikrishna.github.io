@@ -49,11 +49,14 @@ const TRIP_GALLERY = [
   // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
 
+// Home highlights — the same three directions as the Research page, each with a small 3D scene.
 const INTERESTS = [
-  { id: "robot",  title: "Robot Learning",        desc: "Foundation models & reasoning frameworks for embodied agents.", topics: ["LLM Planning", "Neuro-Symbolic", "VLMs"] },
-  { id: "multi",  title: "Multi-Robot Systems",   desc: "Distributed mapping, cooperative SLAM and exploration.",       topics: ["Cooperative SLAM", "Task Allocation", "Exploration"] },
-  { id: "vision", title: "Computer Vision",       desc: "Scene graphs, SLAM in dynamic worlds, semantic 3D.",            topics: ["Semantic SLAM", "Scene Graphs", "3D Vision"] },
-  { id: "ml",     title: "Machine Learning",      desc: "Gaussian processes, uncertainty, continuous-thought models.",   topics: ["GPs", "RL", "Cognitive ML"] },
+  { id: "embodied",   scene: "humanoid", title: "Robot Learning & Embodied Intelligence",
+    desc: "Robots that reason about the world they live in." },
+  { id: "multirobot", scene: "drone",    title: "Mapping & Localization for Multi-Robot Systems",
+    desc: "Many robots, one shared map — even when comms drop." },
+  { id: "spatial",    scene: "rover",    title: "Spatial Intelligence",
+    desc: "Learning a belief over space itself." },
 ];
 
 // Research thrusts — colorful, resourceful, no "T#" index.

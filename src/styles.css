@@ -436,8 +436,8 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 /* ============ Research interest grid ============ */
 .interest-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
 }
 .interest-card {
   position: relative;
@@ -499,14 +499,14 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 /* ============ Research thrust deep cards ============ */
 .thrust {
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 48px;
+  grid-template-columns: 1.45fr 0.8fr;
+  gap: 44px;
   align-items: center;
-  padding: 56px 0;
+  padding: 52px 0;
   border-bottom: 1px solid var(--line-2);
 }
 .thrust:last-child { border-bottom: none; }
-.thrust:nth-child(even) { grid-template-columns: 1.25fr 1fr; }
+.thrust:nth-child(even) { grid-template-columns: 0.8fr 1.45fr; }
 .thrust:nth-child(even) .thrust-media { order: 2; }
 .thrust-media {
   position: relative;
@@ -514,6 +514,9 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   overflow: hidden;
   border: 1px solid var(--line);
   aspect-ratio: 4/3;
+  max-width: 360px;
+  width: 100%;
+  justify-self: center;
   background: var(--bg-soft);
 }
 .thrust-media img {
