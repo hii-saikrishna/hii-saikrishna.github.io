@@ -13,7 +13,7 @@ const PROFILE = {
   scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao",
   github: "https://github.com/sai-krishna-ghanta",
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
-  cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf"
+  cv: "attached_assets/Resume.pdf"
 };
 
 // Hero gallery — just photos of me (Profile_Pic.png is the main/first). Both are 4:5-ish.
