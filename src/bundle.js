@@ -2001,8 +2001,8 @@ function buildGlobeScene(ctx) {
     renderer,
     el
   } = ctx;
-  // smaller globe in frame — pulled back + reduced radius
-  camera.position.set(0, 0.35, 4.2);
+  // Larger globe in frame so it works as a backdrop behind the About text.
+  camera.position.set(0, 0.15, 3.0);
   camera.lookAt(0, 0, 0);
   scene.add(new THREE.HemisphereLight(0xffffff, 0xbcd0e8, 1.1));
   const dir = new THREE.DirectionalLight(0xffffff, 0.85);
@@ -3043,12 +3043,12 @@ function AboutPage() {
   }, "A bit about ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
   }, "me"))), /*#__PURE__*/React.createElement("div", {
-    className: "about-combined"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "about-intro"
+    className: "about-stage"
+  }, /*#__PURE__*/React.createElement(ContactGlobe, null), /*#__PURE__*/React.createElement("div", {
+    className: "about-overlay"
   }, /*#__PURE__*/React.createElement("p", null, "I'm happiest outdoors \u2014 a quiet trail, a good viewpoint, somewhere to slow down and just look. I'm also a creature of habit. I'll run the exact same routine, every single day, and be perfectly content about it. ", /*#__PURE__*/React.createElement("span", {
     className: "about-wink"
-  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
+  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in."))))), /*#__PURE__*/React.createElement(TripGallery, null));
 }
 function BlogList({
   openPost

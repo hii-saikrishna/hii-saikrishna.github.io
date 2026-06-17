@@ -599,8 +599,9 @@ function AboutPage() {
             <div className="page-eyebrow">About</div>
             <h1 className="page-title">A bit about <span className="ital">me</span></h1>
           </div>
-          <div className="about-combined">
-            <div className="about-intro">
+          <div className="about-stage">
+            <ContactGlobe />
+            <div className="about-overlay">
               <p>
                 I'm happiest outdoors — a quiet trail, a good viewpoint, somewhere to slow down and
                 just look. I'm also a creature of habit. I'll run the exact same routine, every single
@@ -613,7 +614,6 @@ function AboutPage() {
                 I've actually stood, and I'm nowhere near done filling it in.
               </p>
             </div>
-            <ContactGlobe />
           </div>
         </div>
       </section>

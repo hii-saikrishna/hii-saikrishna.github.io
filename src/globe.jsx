@@ -135,8 +135,8 @@ function configureGlobeTexture(tex, renderer, colorManaged) {
 
 function buildGlobeScene(ctx) {
   const { scene, camera, renderer, el } = ctx;
-  // smaller globe in frame — pulled back + reduced radius
-  camera.position.set(0, 0.35, 4.2);
+  // Larger globe in frame so it works as a backdrop behind the About text.
+  camera.position.set(0, 0.15, 3.0);
   camera.lookAt(0, 0, 0);
 
   scene.add(new THREE.HemisphereLight(0xffffff, 0xbcd0e8, 1.1));

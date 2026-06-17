@@ -2085,28 +2085,57 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   .ty-label { position: static; }
 }
 
-/* ===== About — globe + text combined into one centered block ===== */
-.about-combined {
-  max-width: 720px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+/* ===== About — text layered ON TOP of the globe (one shared space) ===== */
+.about-stage {
+  position: relative;
+  margin: clamp(8px, 2vh, 22px) auto 0;
+  min-height: clamp(440px, 64vh, 600px);
+  display: grid;
+  place-items: center;
 }
-.about-intro { max-width: 54ch; }
-.about-intro p {
-  font-size: clamp(16px, 1.7vw, 18.5px);
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin-bottom: 16px;
-}
-.about-intro em { font-style: italic; color: var(--accent-ink); }
-.about-wink { color: var(--accent-ink); font-weight: 600; }
-.about-combined .contact-globe {
+/* the globe is the backdrop layer, filling the stage */
+.about-stage .contact-globe {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  max-width: 540px;
-  margin-top: 4px;
+  max-width: none;
+  margin: 0;
+  z-index: 1;
+}
+/* the text sits over it; pointer-events pass through so the globe stays draggable */
+.about-overlay {
+  position: relative;
+  z-index: 2;
+  max-width: 38ch;
+  text-align: center;
+  pointer-events: none;
+  padding: 0 6px;
+}
+/* soft white halo behind the words so they read over the spinning globe */
+.about-overlay::before {
+  content: "";
+  position: absolute;
+  inset: -36px -40px;
+  z-index: -1;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 255, 255, 0.96) 26%,
+    rgba(255, 255, 255, 0.82) 50%,
+    rgba(255, 255, 255, 0) 75%);
+}
+.about-overlay p {
+  font-size: clamp(15.5px, 1.65vw, 18px);
+  line-height: 1.66;
+  color: var(--ink);
+  margin-bottom: 14px;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.75);
+}
+.about-overlay p:last-child { margin-bottom: 0; }
+.about-overlay em { font-style: italic; color: var(--accent-ink); }
+.about-wink { color: var(--accent-ink); font-weight: 600; }
+@media (max-width: 620px) {
+  .about-stage { min-height: clamp(400px, 72vh, 520px); }
+  .about-overlay { max-width: 30ch; }
+  .about-overlay::before { inset: -24px -22px; }
 }
 
 /* ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox ===== */
