@@ -2792,6 +2792,42 @@ function UpdatesPage() {
     })
   }, "Back to the trailhead \u2191"))));
 }
+
+// The CSS earth disc is a *fallback* for when WebGL can't run. The WebGL canvas
+// is transparent, so if we always render the fallback it shows through behind the
+// real 3D globe — you'd see two globes. Render it only when no canvas mounted.
+function ContactGlobe() {
+  const hostRef = React.useRef(null);
+  const [showFallback, setShowFallback] = React.useState(false);
+  React.useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    // Child (ThreeScene) effects run before this one, so the canvas — if WebGL
+    // succeeded — already exists. Re-check shortly after in case THREE loaded late.
+    const check = () => setShowFallback(!host.querySelector("canvas"));
+    check();
+    const t = setTimeout(check, 400);
+    return () => clearTimeout(t);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "contact-globe",
+    ref: hostRef
+  }, showFallback && /*#__PURE__*/React.createElement("span", {
+    className: "contact-globe-fallback",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "contact-globe-earth"
+  })), /*#__PURE__*/React.createElement(ThreeScene, {
+    build: buildGlobeScene,
+    style: {
+      width: "100%",
+      height: "100%",
+      minHeight: "var(--contact-globe-h)"
+    }
+  }), /*#__PURE__*/React.createElement("p", {
+    className: "contact-globe-cap mono"
+  }, "Places I've lived, studied & traveled \xB7 drag to spin"));
+}
 function ContactPage() {
   return /*#__PURE__*/React.createElement("section", {
     className: "contact page",
@@ -2854,23 +2890,7 @@ function ContactPage() {
     className: "arrow"
   }, /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  }))))), /*#__PURE__*/React.createElement("div", {
-    className: "contact-globe"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "contact-globe-fallback",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "contact-globe-earth"
-  })), /*#__PURE__*/React.createElement(ThreeScene, {
-    build: buildGlobeScene,
-    style: {
-      width: "100%",
-      height: "100%",
-      minHeight: "var(--contact-globe-h)"
-    }
-  }), /*#__PURE__*/React.createElement("p", {
-    className: "contact-globe-cap mono"
-  }, "Places I've lived, studied & traveled \xB7 drag to spin")))));
+  }))))), /*#__PURE__*/React.createElement(ContactGlobe, null))));
 }
 function BlogList({
   openPost

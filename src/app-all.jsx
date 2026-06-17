@@ -444,6 +444,35 @@ function UpdatesPage() {
   );
 }
 
+// The CSS earth disc is a *fallback* for when WebGL can't run. The WebGL canvas
+// is transparent, so if we always render the fallback it shows through behind the
+// real 3D globe — you'd see two globes. Render it only when no canvas mounted.
+function ContactGlobe() {
+  const hostRef = React.useRef(null);
+  const [showFallback, setShowFallback] = React.useState(false);
+  React.useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    // Child (ThreeScene) effects run before this one, so the canvas — if WebGL
+    // succeeded — already exists. Re-check shortly after in case THREE loaded late.
+    const check = () => setShowFallback(!host.querySelector("canvas"));
+    check();
+    const t = setTimeout(check, 400);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <div className="contact-globe" ref={hostRef}>
+      {showFallback && (
+        <span className="contact-globe-fallback" aria-hidden="true">
+          <span className="contact-globe-earth"></span>
+        </span>
+      )}
+      <ThreeScene build={buildGlobeScene} style={{ width: "100%", height: "100%", minHeight: "var(--contact-globe-h)" }} />
+      <p className="contact-globe-cap mono">Places I've lived, studied &amp; traveled · drag to spin</p>
+    </div>
+  );
+}
+
 function ContactPage() {
   return (
     <section className="contact page" data-screen-label="Contact">
@@ -476,13 +505,7 @@ function ContactPage() {
               </a>
             </div>
           </div>
-          <div className="contact-globe">
-            <span className="contact-globe-fallback" aria-hidden="true">
-              <span className="contact-globe-earth"></span>
-            </span>
-            <ThreeScene build={buildGlobeScene} style={{ width: "100%", height: "100%", minHeight: "var(--contact-globe-h)" }} />
-            <p className="contact-globe-cap mono">Places I've lived, studied & traveled · drag to spin</p>
-          </div>
+          <ContactGlobe />
         </div>
       </div>
     </section>
