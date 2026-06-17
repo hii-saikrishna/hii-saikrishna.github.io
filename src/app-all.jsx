@@ -685,114 +685,120 @@ function NatureBackdrop() {
   );
 }
 
-// Low-poly 3D mountain range footer — soft sky, shining sun, snow-capped sage peaks.
+// Realistic 3D mountain footer — procedural displaced terrain (elevation-coloured
+// green slopes → rock → snow), atmospheric haze, a sky and a sun rising behind the range.
 function buildMountainFooter({ scene, camera, renderer }) {
   renderer.setClearColor(0x000000, 0);
-
   const disposables = [];
   const track = (o) => { disposables.push(o); return o; };
-  let seed = 20240617;
-  const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
 
-  // ---- sky backdrop (soft vertical gradient) ----
-  const skyCanvas = document.createElement("canvas");
-  skyCanvas.width = 8; skyCanvas.height = 256;
-  const skyCtx = skyCanvas.getContext("2d");
-  const skyGrad = skyCtx.createLinearGradient(0, 0, 0, 256);
-  skyGrad.addColorStop(0.0, "#a6d2ef");
-  skyGrad.addColorStop(0.42, "#c7e4f2");
-  skyGrad.addColorStop(0.72, "#e4f1ec");
-  skyGrad.addColorStop(1.0, "#eef7ef");
-  skyCtx.fillStyle = skyGrad; skyCtx.fillRect(0, 0, 8, 256);
-  scene.background = track(new THREE.CanvasTexture(skyCanvas));
-  scene.fog = new THREE.Fog(0xe4f1ec, 20, 46);
-
-  camera.fov = 42;
-  camera.position.set(0, 3, 16);
-  camera.updateProjectionMatrix();
-  camera.lookAt(0, 1.6, 0);
-
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xcfe6d6, 1.35));
-  const sunLight = new THREE.DirectionalLight(0xfff2d6, 1.6);
-  sunLight.position.set(-10, 9, 5);
-  scene.add(sunLight);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
-
-  // ---- snow-capped sage peaks, three depth rows ----
-  const coneGeo = track(new THREE.ConeGeometry(1, 1, 7));
-  const matFar = track(new THREE.MeshStandardMaterial({ color: 0x9fc6a6, flatShading: true, roughness: 1 }));
-  const matMid = track(new THREE.MeshStandardMaterial({ color: 0x6fae82, flatShading: true, roughness: 1 }));
-  const matFront = track(new THREE.MeshStandardMaterial({ color: 0x549468, flatShading: true, roughness: 1 }));
-  const matSnow = track(new THREE.MeshStandardMaterial({ color: 0xf6fbf7, flatShading: true, roughness: 0.85 }));
-
-  const range = new THREE.Group();
-  scene.add(range);
-  const K = 5;
-  const addPeak = (x, z, r, hgt, mat, snow) => {
-    const m = new THREE.Mesh(coneGeo, mat);
-    m.scale.set(r, hgt, r);
-    m.position.set(x, hgt / 2 - K, z);
-    m.rotation.y = rand() * Math.PI;
-    range.add(m);
-    if (snow) {
-      const f = 0.30 + rand() * 0.06;
-      const cap = new THREE.Mesh(coneGeo, matSnow);
-      cap.scale.set(r * f * 1.06, hgt * f, r * f * 1.06); // a touch proud of the face — no z-fight
-      cap.position.set(x, (hgt - K) - (hgt * f) / 2, z);
-      cap.rotation.y = m.rotation.y;
-      range.add(cap);
-    }
+  // ---- value-noise + ridged fractal for the heightfield ----
+  const hash = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
+  const vnoise = (x, y) => {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
   };
-  for (let i = 0; i < 5; i++) addPeak(-48 + i * 24 + (rand() - 0.5) * 4, -6 - rand() * 2, 5.5 + rand() * 2, 7.5 + rand() * 2.2, matFar, rand() > 0.4);
-  for (let i = 0; i < 4; i++) addPeak(-36 + i * 24 + (rand() - 0.5) * 4, -1.8 - rand(), 5 + rand() * 1.8, 6.2 + rand() * 1.8, matMid, rand() > 0.3);
-  for (let i = 0; i < 3; i++) addPeak(-30 + i * 30 + (rand() - 0.5) * 4, 2.6 + rand() * 0.8, 4.6 + rand() * 1.6, 5.4 + rand() * 1.6, matFront, rand() > 0.4);
+  const ridged = (x, y) => { let val = 0, amp = 0.5, f = 1; for (let i = 0; i < 5; i++) { let n = vnoise(x * f + i * 7.3, y * f - i * 3.1); n = 1 - Math.abs(2 * n - 1); val += amp * n * n; amp *= 0.5; f *= 2.05; } return val; };
+  const ampZ = (z) => 1.8 + 15 * Math.exp(-Math.pow((z + 15) / 18, 2)); // tall range mid-scene, low valley + far
+  const heightAt = (x, z) => ridged(x * 0.032 + 10, z * 0.05 + 5) * ampZ(z)
+    + ridged(x * 0.11 + 2, z * 0.12 - 4) * 1.7
+    + vnoise(x * 0.02 - 3, z * 0.02 + 8) * 1.2;
 
-  // ---- shining sun: golden disc + warm halo (depth-tested so the range can clip it) ----
-  const sunPos = new THREE.Vector3(-10, 5.9, -13);
+  // ---- sky + atmospheric fog ----
+  const skyC = document.createElement("canvas"); skyC.width = 8; skyC.height = 256;
+  const sc = skyC.getContext("2d");
+  const sg = sc.createLinearGradient(0, 0, 0, 256);
+  sg.addColorStop(0, "#9ec9ec"); sg.addColorStop(0.5, "#c2e0ee"); sg.addColorStop(0.8, "#dcefe9"); sg.addColorStop(1, "#e9f4ea");
+  sc.fillStyle = sg; sc.fillRect(0, 0, 8, 256);
+  scene.background = track(new THREE.CanvasTexture(skyC));
+  scene.fog = new THREE.Fog(0xdcece4, 28, 96);
+
+  camera.fov = 40;
+  camera.position.set(0, 6.6, 20);
+  camera.updateProjectionMatrix();
+  camera.lookAt(0, 6.1, -16);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb39a, 0.95));
+  const sunLight = new THREE.DirectionalLight(0xfff0d2, 1.75);
+  sunLight.position.set(-14, 16, 7);
+  scene.add(sunLight);
+  scene.add(new THREE.AmbientLight(0xdfeef0, 0.35));
+
+  // ---- displaced terrain, elevation-coloured ----
+  const geo = track(new THREE.PlaneGeometry(160, 130, 200, 170));
+  geo.rotateX(-Math.PI / 2);
+  const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
+  const cMeadow = new THREE.Color(0x8aac63), cForest = new THREE.Color(0x4f8a4c),
+    cHigh = new THREE.Color(0x3a6b40), cRock = new THREE.Color(0x8c9081), cSnow = new THREE.Color(0xf4f9f4);
+  const outC = new THREE.Color(), baseC = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    const h = heightAt(x, z); pos.setY(i, h);
+    const dd = 0.7, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
+    const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
+    if (h < 3.5) baseC.copy(cMeadow).lerp(cForest, h / 3.5);
+    else if (h < 7) baseC.copy(cForest).lerp(cHigh, (h - 3.5) / 3.5);
+    else if (h < 9.5) baseC.copy(cHigh).lerp(cRock, (h - 7) / 2.5);
+    else baseC.copy(cRock).lerp(cSnow, Math.min(1, (h - 9.5) / 2.6));
+    outC.copy(baseC);
+    outC.lerp(cRock, Math.min(0.45, Math.max(0, (slope - 1.0)) * 0.45)); // steep faces → rock
+    if (h > 9 && slope < 0.85) outC.lerp(cSnow, 0.7);                     // flat high → snow
+    col[i * 3] = outC.r; col[i * 3 + 1] = outC.g; col[i * 3 + 2] = outC.b;
+  }
+  geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97, metalness: 0 }))));
+
+  // ---- shining sun: golden disc + warm halo, rising behind the range ----
+  const sunPos = new THREE.Vector3(-12, 20.5, -30);
   const makeGlow = (c0, c1, scale, op) => {
     const c = document.createElement("canvas"); c.width = c.height = 128;
     const g = c.getContext("2d");
     const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    rg.addColorStop(0, c0); rg.addColorStop(0.42, c1); rg.addColorStop(1, "rgba(255,236,185,0)");
+    rg.addColorStop(0, c0); rg.addColorStop(0.42, c1); rg.addColorStop(1, "rgba(255,238,190,0)");
     g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
     const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(c)), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, opacity: op })));
     sp.scale.set(scale, scale, 1); sp.position.copy(sunPos);
     return sp;
   };
-  const glowOuter = makeGlow("rgba(255,238,198,0.8)", "rgba(255,210,130,0.3)", 17, 0.85);
-  const glowInner = makeGlow("rgba(255,252,240,1)", "rgba(255,228,165,0.7)", 6.5, 1);
+  const glowOuter = makeGlow("rgba(255,240,200,0.8)", "rgba(255,212,135,0.3)", 26, 0.85);
+  const glowInner = makeGlow("rgba(255,252,242,1)", "rgba(255,230,170,0.7)", 10, 1);
   scene.add(glowOuter); scene.add(glowInner);
   const disc = new THREE.Mesh(
-    track(new THREE.CircleGeometry(1.4, 40)),
-    track(new THREE.MeshBasicMaterial({ color: 0xffe7a0, fog: false, transparent: true }))
+    track(new THREE.CircleGeometry(2.0, 40)),
+    track(new THREE.MeshBasicMaterial({ color: 0xffe9a6, fog: false, transparent: true }))
   );
   disc.position.copy(sunPos); disc.renderOrder = 1;
   scene.add(disc);
 
-  // ---- puffy low-poly clouds drifting through the sky ----
-  const cloudGeo = track(new THREE.SphereGeometry(1, 8, 7));
-  const cloudMat = track(new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: 0.9 }));
+  // ---- soft billboard clouds ----
+  const cloudTex = (() => {
+    const c = document.createElement("canvas"); c.width = 256; c.height = 128;
+    const g = c.getContext("2d");
+    for (let k = 0; k < 7; k++) {
+      const cx = 40 + Math.random() * 176, cy = 54 + Math.random() * 30, r = 26 + Math.random() * 30;
+      const rg = g.createRadialGradient(cx, cy, 0, cx, cy, r);
+      rg.addColorStop(0, "rgba(255,255,255,0.95)"); rg.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = rg; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+    }
+    return track(new THREE.CanvasTexture(c));
+  })();
   const clouds = [];
   for (let i = 0; i < 3; i++) {
-    const c = new THREE.Group();
-    for (let j = 0; j < 4; j++) {
-      const s = new THREE.Mesh(cloudGeo, cloudMat);
-      s.position.set(j * 1.3 - 2, (j % 2) * 0.5, 0);
-      s.scale.set(1.5 + rand() * 0.6, 0.8, 1);
-      c.add(s);
-    }
-    c.position.set(-18 + i * 15, 5.6 + rand() * 1.4, -7 - rand() * 2);
-    c.userData = { sp: 0.016 + rand() * 0.014 };
-    scene.add(c);
-    clouds.push(c);
+    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: cloudTex, transparent: true, depthWrite: false, opacity: 0.82, fog: false })));
+    sp.scale.set(20, 10, 1);
+    sp.position.set(-22 + i * 20, 12 + Math.random() * 3, -22 - Math.random() * 6);
+    clouds.push(sp); scene.add(sp);
   }
 
   return {
     update(t) {
-      range.rotation.y = Math.sin(t * 0.07) * 0.014;
       const b = 1 + Math.sin(t * 0.8) * 0.05;
-      glowOuter.scale.set(17 * b, 17 * b, 1);
-      clouds.forEach((c) => { c.position.x += c.userData.sp; if (c.position.x > 32) c.position.x = -32; });
+      glowOuter.scale.set(26 * b, 26 * b, 1);
+      clouds.forEach((c, i) => { c.position.x += 0.01 + i * 0.004; if (c.position.x > 40) c.position.x = -40; });
     },
     dispose() {
       scene.background = null;
