@@ -2554,10 +2554,6 @@ function HomePage({
   }, "\xB7"), /*#__PURE__*/React.createElement("span", {
     className: "hp-call"
   }, "just call me ", /*#__PURE__*/React.createElement("strong", null, "Sai"))), /*#__PURE__*/React.createElement("p", {
-    className: "hero-role"
-  }, "Ph.D. Candidate in AI ", /*#__PURE__*/React.createElement("span", {
-    className: "at"
-  }, "at"), " the University of Georgia"), /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
   }, "I am a third-year Ph.D. candidate in Artificial Intelligence at the", " ", /*#__PURE__*/React.createElement("a", {
     href: "https://www.uga.edu",
@@ -2567,7 +2563,7 @@ function HomePage({
     href: "https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman",
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "Dr. Ramviyas Parasuraman"), ". My research lies at the intersection of ", /*#__PURE__*/React.createElement("em", null, "multi-robot systems"), ", spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments."), /*#__PURE__*/React.createElement("p", {
+  }, "Dr. Ramviyas Parasuraman"), ". My research lies at the intersection of multi-robot systems, spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments."), /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
   }, "I am particularly interested in leveraging foundation models, world models, and reinforcement learning to build scalable, adaptive, and intelligent robotic systems. Previously, I was a research intern at the", " ", /*#__PURE__*/React.createElement("a", {
     href: "https://engineering.louisville.edu/research/centersinstitutes/larri/",
@@ -2583,7 +2579,7 @@ function HomePage({
     href: "https://www.chishiki-ai.org/awardees/",
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "2026 NSF Chishiki AI Fellowship"), " ", "at the University of Texas at Austin, and will be working with", " ", /*#__PURE__*/React.createElement("a", {
+  }, "2026 NSF Chishiki AI Fellowship"), " ", "at the University of Texas at Austin, and will also be working with", " ", /*#__PURE__*/React.createElement("a", {
     href: "https://oden.utexas.edu/people/directory/Krishna-Kumar/",
     target: "_blank",
     rel: "noopener noreferrer"

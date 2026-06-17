@@ -271,15 +271,12 @@ function HomePage({ go }) {
                   <span className="hp-dot">·</span>
                   <span className="hp-call">just call me <strong>Sai</strong></span>
                 </p>
-                <p className="hero-role">
-                  Ph.D. Candidate in AI <span className="at">at</span> the University of Georgia
-                </p>
                 <p className="hero-bio">
                   I am a third-year Ph.D. candidate in Artificial Intelligence at the{" "}
                   <a href="https://www.uga.edu" target="_blank" rel="noopener noreferrer">University of Georgia</a>,
                   working under the supervision of{" "}
                   <a href="https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman" target="_blank" rel="noopener noreferrer">Dr. Ramviyas Parasuraman</a>.
-                  My research lies at the intersection of <em>multi-robot systems</em>, spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments.
+                  My research lies at the intersection of multi-robot systems, spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments.
                 </p>
                 <p className="hero-bio">
                   I am particularly interested in leveraging foundation models, world models, and reinforcement learning to build scalable, adaptive, and intelligent robotic systems. Previously, I was a research intern at the{" "}
@@ -291,7 +288,7 @@ function HomePage({ go }) {
                 <p className="hero-bio hero-bio-highlight">
                   I was selected as a recipient of the{" "}
                   <a href="https://www.chishiki-ai.org/awardees/" target="_blank" rel="noopener noreferrer">2026 NSF Chishiki AI Fellowship</a>{" "}
-                  at the University of Texas at Austin, and will be working with{" "}
+                  at the University of Texas at Austin, and will also be working with{" "}
                   <a href="https://oden.utexas.edu/people/directory/Krishna-Kumar/" target="_blank" rel="noopener noreferrer">Dr. Krishna Kumar</a>.
                 </p>
                 <div style={{ display: "flex", gap: 10, marginTop: 24, flexWrap: "wrap" }}>

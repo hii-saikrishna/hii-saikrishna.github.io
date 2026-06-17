@@ -63,16 +63,14 @@ const Home = () => {
                 <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-6">
                   <TypingAnimation text={personalInfo.name} speed={80} />
                 </h1>
-                <h2 className="text-xl text-blue-primary font-medium mb-8">
-                  {personalInfo.title}
-                </h2>
-
                 <div className="prose prose-slate max-w-none">
                   {personalInfo.bio.map((paragraph, index) => (
                     <p
                       key={index}
                       className={`text-slate-600 mb-6 prose-a:text-blue-primary prose-a:font-medium prose-a:underline prose-a:underline-offset-2 ${
                         index === 0 ? "text-lg" : "text-base"
+                      } ${
+                        index === 2 ? "bg-amber-50 border-l-4 border-amber-300 rounded-r-md px-4 py-3 font-medium text-slate-700" : ""
                       }`}
                       dangerouslySetInnerHTML={{ __html: paragraph }}
                     />
