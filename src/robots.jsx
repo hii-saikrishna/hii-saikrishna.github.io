@@ -292,7 +292,7 @@ function robotCardScene(kind, opts = {}) {
 }
 
 // ---------- Research-thrust dioramas ----------
-function dioramaScene(kind) {
+function dioramaScene(kind, zoom = 1) {
   return (ctx) => {
     const { scene, camera } = ctx;
     addRobotLights(scene);
@@ -300,12 +300,11 @@ function dioramaScene(kind) {
     scene.add(stage);
     let update = () => {};
 
-    if (kind === "learning") {
-      camera.position.set(2.6, 1.9, 3.3); camera.lookAt(0, 0.95, 0);
-      addMeadow(stage, 1.7);
-      const h = buildHumanoidModel(); stage.add(h.group);
-      // holographic task panel the robot is "reading"
-      const holoCanvas = document.createElement("canvas");
+    if (kind === "embodied") {
+      // open dollhouse room — robots living and working in a real home
+      const cam = zoom < 1 ? [3.0, 2.2, 3.1] : [4.4, 3.6, 4.6];
+      const look = zoom < 1 ? 0.6 : 0.35;
+      camera.position.set(...cam); camera.lookAt(0, look, 0);
       holoCanvas.width = 256; holoCanvas.height = 160;
       const hx = holoCanvas.getContext("2d");
       hx.fillStyle = "rgba(46,143,91,0.12)"; hx.fillRect(0, 0, 256, 160);
@@ -417,7 +416,9 @@ function dioramaScene(kind) {
     }
 
     if (kind === "swarm") {
-      camera.position.set(2.9, 2.1, 3.4); camera.lookAt(0, 0.5, 0);
+      const cam = zoom < 1 ? [1.9, 1.2, 2.2] : [2.9, 2.1, 3.4];
+      const look = zoom < 1 ? 0.6 : 0.5;
+      camera.position.set(...cam); camera.lookAt(0, look, 0);
       addMeadow(stage, 1.9);
       const q1 = buildQuadrupedModel(); q1.group.position.set(-0.55, 0, 0.3); q1.group.rotation.y = 0.5; q1.group.scale.setScalar(0.85); stage.add(q1.group);
       const q2 = buildQuadrupedModel(); q2.group.position.set(0.6, 0, -0.4); q2.group.rotation.y = -0.7; q2.group.scale.setScalar(0.85); stage.add(q2.group);
@@ -459,7 +460,9 @@ function dioramaScene(kind) {
 
     if (kind === "gp") {
       // Spatial Intelligence: GP belief surface floating above the real world
-      camera.position.set(2.7, 2.3, 3.4); camera.lookAt(0, 0.9, 0);
+      const cam = zoom < 1 ? [1.7, 1.4, 2.0] : [2.7, 2.3, 3.4];
+      const look = zoom < 1 ? 1.35 : 0.9;
+      camera.position.set(...cam); camera.lookAt(0, look, 0);
       addMeadow(stage, 1.9);
       addTree(stage, -1.3, -0.6, 0.7);
       addTree(stage, 1.1, -1.0, 0.55);

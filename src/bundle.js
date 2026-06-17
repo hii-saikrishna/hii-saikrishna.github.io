@@ -966,8 +966,10 @@ function dioramaScene(kind, zoom = 1) {
       };
     }
     if (kind === "swarm") {
-      camera.position.set(2.9, 2.1, 3.4);
-      camera.lookAt(0, 0.5, 0);
+      const cam = zoom < 1 ? [1.9, 1.2, 2.2] : [2.9, 2.1, 3.4];
+      const look = zoom < 1 ? 0.6 : 0.5;
+      camera.position.set(...cam);
+      camera.lookAt(0, look, 0);
       addMeadow(stage, 1.9);
       const q1 = buildQuadrupedModel();
       q1.group.position.set(-0.55, 0, 0.3);
@@ -1029,8 +1031,10 @@ function dioramaScene(kind, zoom = 1) {
     }
     if (kind === "gp") {
       // Spatial Intelligence: GP belief surface floating above the real world
-      camera.position.set(2.7, 2.3, 3.4);
-      camera.lookAt(0, 0.9, 0);
+      const cam = zoom < 1 ? [1.7, 1.4, 2.0] : [2.7, 2.3, 3.4];
+      const look = zoom < 1 ? 1.35 : 0.9;
+      camera.position.set(...cam);
+      camera.lookAt(0, look, 0);
       addMeadow(stage, 1.9);
       addTree(stage, -1.3, -0.6, 0.7);
       addTree(stage, 1.1, -1.0, 0.55);
