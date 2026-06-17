@@ -303,7 +303,7 @@ function dioramaScene(kind, zoom = 1) {
 
     if (kind === "embodied") {
       // open dollhouse room — robots living and working in a real home
-      if (zoom < 1) { camera.position.set(5.2, 4.5, 5.8); camera.lookAt(0, 0.3, 0); }
+      if (zoom < 1) { camera.position.set(10.4, 9, 11.6); camera.lookAt(0, 0.3, 0); }
       else { camera.position.set(4.4, 3.6, 4.6); camera.lookAt(0, 0.35, 0); }
       const home = new THREE.Group();
       stage.add(home);
@@ -371,7 +371,7 @@ function dioramaScene(kind, zoom = 1) {
     }
 
     if (kind === "swarm") {
-      if (zoom < 1) { camera.position.set(4, 2.85, 4.4); camera.lookAt(0, 0.38, 0); }
+      if (zoom < 1) { camera.position.set(8, 5.7, 8.8); camera.lookAt(0, 0.38, 0); }
       else { camera.position.set(2.9, 2.1, 3.4); camera.lookAt(0, 0.5, 0); }
       addMeadow(stage, 1.9);
       const q1 = buildQuadrupedModel(); q1.group.position.set(-0.55, 0, 0.3); q1.group.rotation.y = 0.5; q1.group.scale.setScalar(0.85); stage.add(q1.group);
@@ -414,7 +414,7 @@ function dioramaScene(kind, zoom = 1) {
 
     if (kind === "gp") {
       // Spatial Intelligence: GP belief surface floating above the real world
-      if (zoom < 1) { camera.position.set(3.3, 2.8, 4.1); camera.lookAt(0, 1.0, 0); }
+      if (zoom < 1) { camera.position.set(6.6, 5.6, 8.2); camera.lookAt(0, 1.0, 0); }
       else { camera.position.set(2.7, 2.3, 3.4); camera.lookAt(0, 0.9, 0); }
       addMeadow(stage, 1.9);
       addTree(stage, -1.3, -0.6, 0.7);
