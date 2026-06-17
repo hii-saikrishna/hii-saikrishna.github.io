@@ -807,7 +807,7 @@ function dioramaScene(kind, zoom = 1) {
     if (kind === "embodied") {
       // open dollhouse room — robots living and working in a real home
       if (zoom < 1) {
-        camera.position.set(7.956, 6.885, 8.874);
+        camera.position.set(6.3648, 5.508, 7.0992);
         camera.lookAt(0, -1.45, 0);
       } else {
         camera.position.set(4.4, 3.6, 4.6);
@@ -907,7 +907,7 @@ function dioramaScene(kind, zoom = 1) {
     }
     if (kind === "swarm") {
       if (zoom < 1) {
-        camera.position.set(6.12, 4.3605, 6.732);
+        camera.position.set(4.896, 3.4884, 5.3856);
         camera.lookAt(0, -0.7, 0);
       } else {
         camera.position.set(2.9, 2.1, 3.4);
