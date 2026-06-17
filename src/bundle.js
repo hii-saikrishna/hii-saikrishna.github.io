@@ -18,7 +18,7 @@ const PROFILE = {
 
 // Hero gallery — just photos of me (portrait first). Both are 4:5-ish.
 const HOME_GALLERY = [{
-  src: "profile_picture.jpeg",
+  src: "attached_assets/profile_picture.jpeg",
   label: "Athens, GA · 2026"
 }, {
   src: "attached_assets/Profile_Pic.png",
