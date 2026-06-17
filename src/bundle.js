@@ -73,6 +73,12 @@ const TRIP_GALLERY = [{
   title: "IEEE TENCON 2023",
   when: "Fall 2023",
   desc: "The IEEE Region 10 (TENCON) conference."
+}, {
+  src: "attached_assets/Gallery/iiitnr-aiml-club-2021.jpeg",
+  place: "IIIT Naya Raipur",
+  title: "Teaching AI/ML",
+  when: "Fall 2021",
+  desc: "Running hands-on AI/ML sessions as the AIML Club in-charge."
 }
 // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
 // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
@@ -2889,6 +2895,7 @@ const isVideo = s => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
+  const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);
   const dragged = React.useRef(false);
 
@@ -2942,15 +2949,10 @@ function TripGallery() {
   }, []);
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
-  const open = i => {
-    if (!dragged.current) setActive(i);
-  };
-  const nudge = dir => {
-    const el = stripRef.current;
-    if (el) el.scrollBy({
-      left: dir * el.clientWidth * 0.82,
-      behavior: "smooth"
-    });
+  const safeFeatured = Math.min(featured, items.length - 1);
+  const feat = items[safeFeatured];
+  const selectThumb = i => {
+    if (!dragged.current) setFeatured(i);
   };
   return /*#__PURE__*/React.createElement("section", {
     className: "section trips",
@@ -2965,35 +2967,24 @@ function TripGallery() {
     className: "ital"
   }, "wandered")), /*#__PURE__*/React.createElement("p", {
     className: "trips-lede"
-  }, "Conferences, labs, and the people along the way \u2014 newest first. Drag sideways or use the arrows, and tap to open."), /*#__PURE__*/React.createElement("div", {
-    className: "trips-strip-wrap"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "strip-arrow prev",
-    "aria-label": "Scroll left",
-    onClick: () => nudge(-1)
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "left"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "trips-strip",
-    ref: stripRef
-  }, items.map((g, i) => /*#__PURE__*/React.createElement("figure", {
-    key: g.src + i,
-    className: "trip-card",
-    tabIndex: 0,
+  }, "Conferences, labs, and the people along the way \u2014 newest first. Pick a moment below; tap the big one to open it full screen."), /*#__PURE__*/React.createElement("figure", {
+    className: "trips-featured",
     role: "button",
-    "aria-label": `${g.place} — ${g.title}`,
-    onClick: () => open(i),
+    tabIndex: 0,
+    "aria-label": `Open ${feat.title}`,
+    onClick: () => setActive(safeFeatured),
     onKeyDown: e => {
       if (e.key === "Enter") {
         e.preventDefault();
-        setActive(i);
+        setActive(safeFeatured);
       }
     }
-  }, isVideo(g.src) ? /*#__PURE__*/React.createElement("video", {
+  }, isVideo(feat.src) ? /*#__PURE__*/React.createElement("video", {
+    key: feat.src,
     ref: el => {
       if (el) el.muted = true;
     },
-    src: g.src,
+    src: feat.src,
     muted: true,
     loop: true,
     autoPlay: true,
@@ -3001,34 +2992,50 @@ function TripGallery() {
     preload: "auto",
     draggable: "false"
   }) : /*#__PURE__*/React.createElement("img", {
-    src: g.src,
-    alt: g.title,
-    loading: "lazy",
+    key: feat.src,
+    src: feat.src,
+    alt: feat.title,
     draggable: "false"
   }), /*#__PURE__*/React.createElement("span", {
-    className: "trip-zoom",
+    className: "tf-zoom",
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
   })), /*#__PURE__*/React.createElement("figcaption", {
-    className: "trip-cap"
-  }, g.title && /*#__PURE__*/React.createElement("span", {
-    className: "trip-name"
-  }, g.title), (g.place || g.when) && /*#__PURE__*/React.createElement("span", {
-    className: "trip-sub"
-  }, g.place && /*#__PURE__*/React.createElement("span", {
-    className: "trip-place"
-  }, g.place), g.place && g.when && /*#__PURE__*/React.createElement("span", {
+    className: "tf-cap"
+  }, (feat.place || feat.when) && /*#__PURE__*/React.createElement("span", {
+    className: "tf-sub"
+  }, feat.place && /*#__PURE__*/React.createElement("span", null, feat.place), feat.place && feat.when && /*#__PURE__*/React.createElement("span", {
     className: "trip-dot"
-  }, "\xB7"), g.when && /*#__PURE__*/React.createElement("span", {
-    className: "trip-when"
-  }, g.when)))))), /*#__PURE__*/React.createElement("button", {
-    className: "strip-arrow next",
-    "aria-label": "Scroll right",
-    onClick: () => nudge(1)
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  })))), cur && /*#__PURE__*/React.createElement("div", {
+  }, "\xB7"), feat.when && /*#__PURE__*/React.createElement("span", null, feat.when)), feat.title && /*#__PURE__*/React.createElement("span", {
+    className: "tf-title"
+  }, feat.title), feat.desc && /*#__PURE__*/React.createElement("span", {
+    className: "tf-desc"
+  }, feat.desc))), /*#__PURE__*/React.createElement("div", {
+    className: "trips-rail",
+    ref: stripRef
+  }, items.map((g, i) => /*#__PURE__*/React.createElement("button", {
+    key: g.src + i,
+    type: "button",
+    className: `trip-thumb ${i === safeFeatured ? "active" : ""}`,
+    "aria-label": `${g.place || ""} ${g.title || ""}`.trim(),
+    onClick: () => selectThumb(i)
+  }, isVideo(g.src) ? /*#__PURE__*/React.createElement("video", {
+    src: g.src + "#t=0.1",
+    muted: true,
+    playsInline: true,
+    preload: "metadata"
+  }) : /*#__PURE__*/React.createElement("img", {
+    src: g.src,
+    alt: g.title,
+    loading: "lazy",
+    draggable: "false"
+  }), isVideo(g.src) && /*#__PURE__*/React.createElement("span", {
+    className: "tt-vid",
+    "aria-hidden": "true"
+  }, "\u25B6"), g.when && /*#__PURE__*/React.createElement("span", {
+    className: "tt-when"
+  }, g.when))))), cur && /*#__PURE__*/React.createElement("div", {
     className: "trip-lightbox",
     onClick: () => setActive(null),
     role: "dialog",

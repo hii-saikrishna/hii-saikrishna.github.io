@@ -43,6 +43,8 @@ const TRIP_GALLERY = [
     title: "AIMSLab", when: "2023–24", desc: "A great learning stretch with Dr. Sabur at the University of Louisville." },
   { src: "attached_assets/Gallery/tencon-2023.png", title: "IEEE TENCON 2023", when: "Fall 2023",
     desc: "The IEEE Region 10 (TENCON) conference." },
+  { src: "attached_assets/Gallery/iiitnr-aiml-club-2021.jpeg", place: "IIIT Naya Raipur",
+    title: "Teaching AI/ML", when: "Fall 2021", desc: "Running hands-on AI/ML sessions as the AIML Club in-charge." },
   // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
   // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];

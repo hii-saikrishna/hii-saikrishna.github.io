@@ -2134,170 +2134,125 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   margin-top: 10px;
 }
 
-.trips-strip-wrap { position: relative; margin-top: 26px; }
-/* soft fades at the two edges so the strip reads as "more to scroll" */
-.trips-strip-wrap::before,
-.trips-strip-wrap::after {
-  content: "";
-  position: absolute;
-  top: 0; bottom: 14px;
-  width: 46px;
-  pointer-events: none;
-  z-index: 3;
-}
-.trips-strip-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg) 12%, transparent); }
-.trips-strip-wrap::after { right: 0; background: linear-gradient(270deg, var(--bg) 12%, transparent); }
-
-.trips-strip {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x proximity;
-  padding: 4px 2px 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-  -webkit-overflow-scrolling: touch;
-  cursor: grab;
-}
-.trips-strip.dragging { cursor: grabbing; scroll-snap-type: none; }
-.trips-strip::-webkit-scrollbar { height: 8px; }
-.trips-strip::-webkit-scrollbar-track { background: transparent; }
-.trips-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
-
-.trip-card {
-  flex: 0 0 auto;
+/* ----- Featured (big, newest by default) ----- */
+.trips-featured {
   position: relative;
-  height: clamp(220px, 36vh, 330px);
-  scroll-snap-align: start;
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  height: clamp(300px, 56vh, 560px);
+  margin-top: 24px;
+  border-radius: 18px;
   overflow: hidden;
-  background: var(--bg-soft);
-  cursor: pointer;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.trip-card:hover,
-.trip-card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 40px -22px rgba(20, 40, 25, 0.5);
-  border-color: color-mix(in oklch, var(--accent) 40%, var(--line));
-  outline: none;
-}
-/* fixed height + auto width => each photo keeps its own aspect ratio (mixed sizes) */
-.trip-card img,
-.trip-card video {
-  height: 100%;
-  width: auto;
-  max-width: 78vw;
-  display: block;
-  object-fit: cover;
+  border: 1px solid var(--line);
   background: #0b0e12;
-  user-select: none;
-  -webkit-user-drag: none;
+  cursor: pointer;
 }
-.trip-play {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 46px; height: 46px;
-  display: grid; place-items: center;
-  padding-left: 3px;
-  border-radius: 999px;
-  background: rgba(8, 12, 16, 0.55);
-  backdrop-filter: blur(4px);
-  color: #fff;
-  font-size: 14px;
-  z-index: 2;
-  pointer-events: none;
-  transition: opacity .18s ease;
+.trips-featured img,
+.trips-featured video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* full media, any aspect ratio, no crop */
+  display: block;
 }
-.trip-card:hover .trip-play { opacity: 0; }
-.trip-tag {
+.tf-zoom {
   position: absolute;
-  top: 10px; left: 10px;
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #fff;
-  background: rgba(8, 12, 16, 0.5);
-  backdrop-filter: blur(6px);
-  border-radius: 999px;
-  padding: 4px 9px;
-  z-index: 2;
-}
-.trip-tag.academic { background: color-mix(in oklch, var(--accent) 82%, black 4%); }
-.trip-tag.personal { background: rgba(8, 12, 16, 0.55); }
-.trip-zoom {
-  position: absolute;
-  top: 9px; right: 9px;
-  width: 28px; height: 28px;
+  top: 14px; right: 14px;
+  width: 34px; height: 34px;
   display: grid; place-items: center;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
   color: var(--ink);
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.85);
   transition: opacity .18s ease, transform .18s ease;
   z-index: 2;
 }
-.trip-zoom svg { width: 14px; height: 14px; }
-.trip-card:hover .trip-zoom,
-.trip-card:focus-visible .trip-zoom { opacity: 1; transform: scale(1); }
-.trip-cap {
+.tf-zoom svg { width: 16px; height: 16px; }
+.trips-featured:hover .tf-zoom,
+.trips-featured:focus-visible .tf-zoom { opacity: 1; transform: scale(1); }
+.trips-featured:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tf-cap {
   position: absolute;
   left: 0; right: 0; bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  padding: 26px 14px 11px;
-  background: linear-gradient(transparent, rgba(8, 12, 16, 0.78));
+  gap: 4px;
+  padding: 50px 24px 20px;
+  background: linear-gradient(transparent, rgba(8, 12, 16, 0.86));
   color: #fff;
+  pointer-events: none;
 }
-.trip-cap .trip-place {
+.tf-sub {
+  display: flex; align-items: center; gap: 8px;
   font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
 }
-.trip-cap .trip-name {
-  font-family: var(--serif);
-  font-size: 16.5px;
-  line-height: 1.2;
-}
-.trip-sub { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
 .trip-dot { color: rgba(255, 255, 255, 0.5); font-size: 9px; }
-.trip-when {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-}
+.tf-title { font-family: var(--serif); font-size: clamp(20px, 3vw, 30px); line-height: 1.1; }
+.tf-desc { font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.9); max-width: 64ch; }
 
-/* strip scroll buttons */
-.strip-arrow {
-  position: absolute;
-  top: calc(50% - 8px);
-  transform: translateY(-50%);
-  width: 40px; height: 40px;
-  display: grid; place-items: center;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid var(--line);
-  color: var(--ink);
-  cursor: pointer;
-  z-index: 4;
-  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.28);
-  transition: background .15s ease, transform .15s ease;
+/* ----- Thumbnail rail ----- */
+.trips-rail {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: 14px;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
 }
-.strip-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
-.strip-arrow.prev { left: 4px; }
-.strip-arrow.next { right: 4px; }
-.strip-arrow svg { width: 18px; height: 18px; }
-@media (hover: none) { .strip-arrow { display: none; } }
+.trips-rail.dragging { cursor: grabbing; }
+.trips-rail::-webkit-scrollbar { height: 7px; }
+.trips-rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.trip-thumb {
+  flex: 0 0 auto;
+  position: relative;
+  width: 132px;
+  height: 86px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 11px;
+  overflow: hidden;
+  background: var(--bg-soft);
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity .15s ease, border-color .15s ease, transform .15s ease;
+}
+.trip-thumb img,
+.trip-thumb video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.trip-thumb:hover { opacity: 0.9; transform: translateY(-2px); }
+.trip-thumb.active { opacity: 1; border-color: var(--accent); }
+.tt-when {
+  position: absolute;
+  left: 7px; bottom: 5px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+.tt-vid {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 18px; height: 18px;
+  display: grid; place-items: center;
+  padding-left: 1px;
+  border-radius: 999px;
+  background: rgba(8, 12, 16, 0.6);
+  color: #fff;
+  font-size: 8px;
+}
+@media (max-width: 540px) {
+  .trip-thumb { width: 116px; height: 76px; }
+}
 
 /* lightbox — always fits the viewport, never scrolls */
 .trip-lightbox {

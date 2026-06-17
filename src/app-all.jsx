@@ -479,6 +479,7 @@ const isVideo = (s) => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
+  const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);
   const dragged = React.useRef(false);
 
@@ -524,45 +525,52 @@ function TripGallery() {
 
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
-  const open = (i) => { if (!dragged.current) setActive(i); };
-  const nudge = (dir) => {
-    const el = stripRef.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.82, behavior: "smooth" });
-  };
+  const safeFeatured = Math.min(featured, items.length - 1);
+  const feat = items[safeFeatured];
+  const selectThumb = (i) => { if (!dragged.current) setFeatured(i); };
 
   return (
     <section className="section trips" data-screen-label="Trips">
       <div className="container">
         <div className="page-eyebrow">Out in the world</div>
         <h2 className="trips-title">Places I've <span className="ital">wandered</span></h2>
-        <p className="trips-lede">Conferences, labs, and the people along the way — newest first. Drag sideways or use the arrows, and tap to open.</p>
-        <div className="trips-strip-wrap">
-          <button className="strip-arrow prev" aria-label="Scroll left" onClick={() => nudge(-1)}><Arrow dir="left" /></button>
-          <div className="trips-strip" ref={stripRef}>
-            {items.map((g, i) => (
-              <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
-                aria-label={`${g.place} — ${g.title}`}
-                onClick={() => open(i)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}>
-                {isVideo(g.src)
-                  ? <video ref={(el) => { if (el) el.muted = true; }} src={g.src}
-                      muted loop autoPlay playsInline preload="auto" draggable="false" />
-                  : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
-                <span className="trip-zoom" aria-hidden="true"><Arrow dir="right" /></span>
-                <figcaption className="trip-cap">
-                  {g.title && <span className="trip-name">{g.title}</span>}
-                  {(g.place || g.when) && (
-                    <span className="trip-sub">
-                      {g.place && <span className="trip-place">{g.place}</span>}
-                      {g.place && g.when && <span className="trip-dot">·</span>}
-                      {g.when && <span className="trip-when">{g.when}</span>}
-                    </span>
-                  )}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-          <button className="strip-arrow next" aria-label="Scroll right" onClick={() => nudge(1)}><Arrow dir="right" /></button>
+        <p className="trips-lede">Conferences, labs, and the people along the way — newest first. Pick a moment below; tap the big one to open it full screen.</p>
+
+        <figure className="trips-featured" role="button" tabIndex={0}
+          aria-label={`Open ${feat.title}`}
+          onClick={() => setActive(safeFeatured)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(safeFeatured); } }}>
+          {isVideo(feat.src)
+            ? <video key={feat.src} ref={(el) => { if (el) el.muted = true; }} src={feat.src}
+                muted loop autoPlay playsInline preload="auto" draggable="false" />
+            : <img key={feat.src} src={feat.src} alt={feat.title} draggable="false" />}
+          <span className="tf-zoom" aria-hidden="true"><Arrow dir="right" /></span>
+          <figcaption className="tf-cap">
+            {(feat.place || feat.when) && (
+              <span className="tf-sub">
+                {feat.place && <span>{feat.place}</span>}
+                {feat.place && feat.when && <span className="trip-dot">·</span>}
+                {feat.when && <span>{feat.when}</span>}
+              </span>
+            )}
+            {feat.title && <span className="tf-title">{feat.title}</span>}
+            {feat.desc && <span className="tf-desc">{feat.desc}</span>}
+          </figcaption>
+        </figure>
+
+        <div className="trips-rail" ref={stripRef}>
+          {items.map((g, i) => (
+            <button key={g.src + i} type="button"
+              className={`trip-thumb ${i === safeFeatured ? "active" : ""}`}
+              aria-label={`${g.place || ""} ${g.title || ""}`.trim()}
+              onClick={() => selectThumb(i)}>
+              {isVideo(g.src)
+                ? <video src={g.src + "#t=0.1"} muted playsInline preload="metadata" />
+                : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
+              {isVideo(g.src) && <span className="tt-vid" aria-hidden="true">▶</span>}
+              {g.when && <span className="tt-when">{g.when}</span>}
+            </button>
+          ))}
         </div>
       </div>
 
