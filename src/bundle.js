@@ -16,13 +16,12 @@ const PROFILE = {
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf"
 };
 
-// Hero gallery — just photos of me (portrait first). Both are 4:5-ish.
+// Hero gallery — just photos of me (Profile_Pic.png is the main/first). Both are 4:5-ish.
+// No location/caption overlays — clean images.
 const HOME_GALLERY = [{
-  src: "attached_assets/profile_picture.jpeg",
-  label: "Athens, GA · 2026"
+  src: "attached_assets/Profile_Pic.png"
 }, {
-  src: "attached_assets/Profile_Pic.png",
-  label: "In the lab"
+  src: "attached_assets/profile_picture.jpeg"
 }];
 const INTERESTS = [{
   id: "robot",
@@ -2423,20 +2422,16 @@ function HeroGallery() {
   }, items.map((g, i) => /*#__PURE__*/React.createElement("img", {
     key: g.src,
     src: g.src,
-    alt: g.caption,
+    alt: PROFILE.name,
     className: `hg-img ${i === idx ? "active" : ""}`,
     draggable: "false"
   })), /*#__PURE__*/React.createElement("div", {
     className: "hg-grad"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "hg-tag"
-  }, cur.label), /*#__PURE__*/React.createElement("div", {
+  }), n > 1 && /*#__PURE__*/React.createElement("div", {
     className: "hg-caption"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "hg-cap-title"
-  }, cur.caption), /*#__PURE__*/React.createElement("div", {
     className: "hg-cap-idx"
-  }, String(idx + 1).padStart(2, "0"), " / ", String(n).padStart(2, "0"))), /*#__PURE__*/React.createElement("button", {
+  }, String(idx + 1).padStart(2, "0"), " / ", String(n).padStart(2, "0"))), n > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "hg-nav prev",
     onClick: () => go(-1),
     "aria-label": "Previous image"
@@ -2448,24 +2443,14 @@ function HeroGallery() {
     "aria-label": "Next image"
   }, /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "hg-bot-hint"
-  }, "tap me \u2192"), /*#__PURE__*/React.createElement("div", {
-    className: "hg-bot",
-    onClick: () => go(1),
-    title: "Next image",
-    role: "button",
-    "aria-label": "Next image"
-  }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: heroDroneScene
-  }))), /*#__PURE__*/React.createElement("div", {
+  })))), /*#__PURE__*/React.createElement("div", {
     className: "hg-rail"
   }, items.map((g, i) => /*#__PURE__*/React.createElement("div", {
     key: g.src,
     className: `hg-thumb ${i === idx ? "active" : ""}`,
     onClick: () => setIdx(i),
     role: "button",
-    "aria-label": g.caption
+    "aria-label": `Photo ${i + 1}`
   }, /*#__PURE__*/React.createElement("img", {
     src: g.src,
     alt: "",

@@ -1700,31 +1700,11 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   background: linear-gradient(180deg, transparent 52%, rgba(8,12,16,0.62) 100%);
   pointer-events: none;
 }
-.hg-tag {
-  position: absolute;
-  top: 14px; left: 14px;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #fff;
-  background: rgba(8,12,16,0.42);
-  backdrop-filter: blur(6px);
-  border-radius: 999px;
-  padding: 5px 11px;
-  z-index: 3;
-}
 .hg-caption {
   position: absolute;
-  left: 18px; right: 96px; bottom: 18px;
+  left: 18px; right: 18px; bottom: 18px;
   color: #fff;
   z-index: 3;
-}
-.hg-caption .hg-cap-title {
-  font-family: var(--serif);
-  font-size: 19px;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
 }
 .hg-caption .hg-cap-idx {
   font-family: var(--mono);
@@ -1751,37 +1731,6 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .hg-nav.prev { left: 12px; }
 .hg-nav.next { right: 12px; }
 .hg-nav svg { width: 18px; height: 18px; }
-/* the 3D robot scroller sits in the lower-right corner — on a light disc so it always reads */
-.hg-bot {
-  position: absolute;
-  right: 10px; bottom: 10px;
-  width: 84px; height: 84px;
-  z-index: 5;
-  cursor: pointer;
-  border-radius: 999px;
-  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #f3f7f3 70%, #eef3ee 100%);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 22px -8px rgba(20,40,25,0.35);
-  transition: transform .18s ease, box-shadow .18s ease;
-  overflow: hidden;
-}
-.hg-bot:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 14px 26px -8px rgba(20,40,25,0.45); }
-.hg-bot > div { width: 100%; height: 100%; }
-.hg-bot-hint {
-  position: absolute;
-  right: 100px; bottom: 26px;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #fff;
-  background: rgba(8,12,16,0.4);
-  padding: 4px 9px;
-  border-radius: 999px;
-  z-index: 5;
-  pointer-events: none;
-  white-space: nowrap;
-}
 /* thumbnail rail */
 .hg-rail {
   display: flex;
@@ -2121,6 +2070,4 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 @media (max-width: 640px) {
   .timeline-year { grid-template-columns: 1fr; gap: 6px; }
   .ty-label { position: static; }
-  .hg-bot { width: 70px; height: 70px; }
-  .hg-bot-hint { display: none; }
 }

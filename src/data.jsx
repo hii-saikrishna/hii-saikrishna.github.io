@@ -13,10 +13,11 @@ const PROFILE = {
   cv: "https://github.com/sai-krishna-ghanta/portfolio/raw/main/attached_assets/Resume.pdf",
 };
 
-// Hero gallery — just photos of me (portrait first). Both are 4:5-ish.
+// Hero gallery — just photos of me (Profile_Pic.png is the main/first). Both are 4:5-ish.
+// No location/caption overlays — clean images.
 const HOME_GALLERY = [
-  { src: "attached_assets/profile_picture.jpeg", label: "Athens, GA · 2026" },
-  { src: "attached_assets/Profile_Pic.png", label: "In the lab" },
+  { src: "attached_assets/Profile_Pic.png" },
+  { src: "attached_assets/profile_picture.jpeg" },
 ];
 
 const INTERESTS = [

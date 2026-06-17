@@ -164,26 +164,24 @@ function HeroGallery() {
       onMouseLeave={() => setPaused(false)}>
       <div className="hg-stage">
         {items.map((g, i) => (
-          <img key={g.src} src={g.src} alt={g.caption}
+          <img key={g.src} src={g.src} alt={PROFILE.name}
             className={`hg-img ${i === idx ? "active" : ""}`} draggable="false" />
         ))}
         <div className="hg-grad"></div>
-        <div className="hg-tag">{cur.label}</div>
-        <div className="hg-caption">
-          <div className="hg-cap-title">{cur.caption}</div>
-          <div className="hg-cap-idx">{String(idx + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</div>
-        </div>
-        <button className="hg-nav prev" onClick={() => go(-1)} aria-label="Previous image"><Arrow dir="left" /></button>
-        <button className="hg-nav next" onClick={() => go(1)} aria-label="Next image"><Arrow dir="right" /></button>
-        <div className="hg-bot-hint">tap me →</div>
-        <div className="hg-bot" onClick={() => go(1)} title="Next image" role="button" aria-label="Next image">
-          <ThreeScene build={heroDroneScene} />
-        </div>
+        {n > 1 && (
+          <div className="hg-caption">
+            <div className="hg-cap-idx">{String(idx + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</div>
+          </div>
+        )}
+        {n > 1 && <>
+          <button className="hg-nav prev" onClick={() => go(-1)} aria-label="Previous image"><Arrow dir="left" /></button>
+          <button className="hg-nav next" onClick={() => go(1)} aria-label="Next image"><Arrow dir="right" /></button>
+        </>}
       </div>
       <div className="hg-rail">
         {items.map((g, i) => (
           <div key={g.src} className={`hg-thumb ${i === idx ? "active" : ""}`}
-            onClick={() => setIdx(i)} role="button" aria-label={g.caption}>
+            onClick={() => setIdx(i)} role="button" aria-label={`Photo ${i + 1}`}>
             <img src={g.src} alt="" draggable="false" />
           </div>
         ))}
