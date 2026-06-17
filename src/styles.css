@@ -2223,6 +2223,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 
 /* ============ Blog (clean, non-immersive) + minimal motion ============ */
 .blog-page { padding: 80px 0 96px; }
+.blog-page.blog-nature-page { padding-bottom: 0; }
 .blog-page .blog-grid { margin-top: 44px; }
 .blog-aurora {
   position: absolute;
