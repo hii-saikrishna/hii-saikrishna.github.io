@@ -808,7 +808,7 @@ function dioramaScene(kind, zoom = 1) {
       // open dollhouse room — robots living and working in a real home
       if (zoom < 1) {
         camera.position.set(10.4, 9, 11.6);
-        camera.lookAt(0, 0.65, 0);
+        camera.lookAt(0, 0.0, 0);
       } else {
         camera.position.set(4.4, 3.6, 4.6);
         camera.lookAt(0, 0.35, 0);
@@ -908,7 +908,7 @@ function dioramaScene(kind, zoom = 1) {
     if (kind === "swarm") {
       if (zoom < 1) {
         camera.position.set(8, 5.7, 8.8);
-        camera.lookAt(0, 1.0, 0);
+        camera.lookAt(0, 0.4, 0);
       } else {
         camera.position.set(2.9, 2.1, 3.4);
         camera.lookAt(0, 0.5, 0);
@@ -976,7 +976,7 @@ function dioramaScene(kind, zoom = 1) {
       // Spatial Intelligence: GP belief surface floating above the real world
       if (zoom < 1) {
         camera.position.set(6.6, 5.6, 8.2);
-        camera.lookAt(0, 1.4, 0);
+        camera.lookAt(0, 0.5, 0);
       } else {
         camera.position.set(2.7, 2.3, 3.4);
         camera.lookAt(0, 0.9, 0);
