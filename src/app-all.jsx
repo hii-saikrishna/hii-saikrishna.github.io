@@ -685,99 +685,106 @@ function NatureBackdrop() {
   );
 }
 
-function MountainLandscape() {
-  return (
-    <div className="mountain-landscape" aria-hidden="true">
-      <svg className="mountain-svg" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" focusable="false">
-        <defs>
-          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#cfe8fa" />
-            <stop offset="52%" stopColor="#e2f1ea" />
-            <stop offset="100%" stopColor="#f1fbf1" />
-          </linearGradient>
-          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#fff6df" stopOpacity="0.95" />
-            <stop offset="34%" stopColor="#fff0c6" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#ffeec0" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="sunCore" cx="50%" cy="44%" r="58%">
-            <stop offset="0%" stopColor="#fff8e6" />
-            <stop offset="60%" stopColor="#fff0c4" />
-            <stop offset="100%" stopColor="#ffe39f" />
-          </radialGradient>
-          <linearGradient id="farRidge" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#bcdbcc" />
-            <stop offset="100%" stopColor="#d9ece2" />
-          </linearGradient>
-          <linearGradient id="midRidge" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#83bb9f" />
-            <stop offset="50%" stopColor="#5fa07f" />
-            <stop offset="100%" stopColor="#4a8b6a" />
-          </linearGradient>
-          <linearGradient id="frontRidge" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#578f72" />
-            <stop offset="54%" stopColor="#3f7457" />
-            <stop offset="100%" stopColor="#2f5b44" />
-          </linearGradient>
-          <linearGradient id="facetLight" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#ecfff5" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#a6cdb6" stopOpacity="0.22" />
-          </linearGradient>
-          <linearGradient id="facetShadow" x1="1" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#1f4e3b" stopOpacity="0.42" />
-            <stop offset="100%" stopColor="#3f7457" stopOpacity="0.07" />
-          </linearGradient>
-          <filter id="mountainShadow" x="-5%" y="-10%" width="110%" height="130%">
-            <feDropShadow dx="0" dy="16" stdDeviation="16" floodColor="#1f4e3b" floodOpacity="0.16" />
-          </filter>
-          <linearGradient id="pageFade" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-            <stop offset="76%" stopColor="#ffffff" stopOpacity="0" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0.96" />
-          </linearGradient>
-        </defs>
-        <rect width="1440" height="420" fill="url(#skyGrad)" opacity="0.5" />
-        <g className="sun">
-          <circle cx="1148" cy="146" r="178" fill="url(#sunGlow)" />
-          <circle className="sun-disc" cx="1148" cy="146" r="46" fill="url(#sunCore)" />
-        </g>
-        <path className="mist mist-back" d="M0 248C170 224 260 280 420 254s260-64 420-27 276 7 600-17v210H0Z" />
-        <path className="ridge far" d="M0 286 90 214 168 258 260 176 382 276 486 204 602 282 720 168 850 276 968 198 1090 274 1218 172 1348 254 1440 196V420H0Z" fill="url(#farRidge)" />
-        <g className="ridge mid" filter="url(#mountainShadow)">
-          <path d="M0 350 122 236 224 288 340 132 468 334 590 214 718 340 846 122 972 330 1080 224 1192 344 1322 180 1440 292V420H0Z" fill="url(#midRidge)" />
-          <polygon points="340,132 468,334 382,274" fill="url(#facetShadow)" />
-          <polygon points="340,132 255,288 382,274" fill="url(#facetLight)" />
-          <polygon points="846,122 972,330 890,276" fill="url(#facetShadow)" />
-          <polygon points="846,122 742,340 890,276" fill="url(#facetLight)" />
-          <polygon points="1322,180 1440,292 1360,260" fill="url(#facetShadow)" />
-          <polygon points="1322,180 1192,344 1360,260" fill="url(#facetLight)" />
-          <path className="snow" d="M306 184 340 132 376 188 357 176 340 159 322 178Z" />
-          <path className="snow" d="M811 176 846 122 884 178 863 165 846 150 827 172Z" />
-          <path className="snow" d="M1289 222 1322 180 1357 226 1338 213 1322 200 1304 218Z" />
-        </g>
-        <path className="mist mist-front" d="M0 326C164 296 284 344 442 322s271-50 448-18 314 7 550-30v146H0Z" />
-        <g className="ridge front" filter="url(#mountainShadow)">
-          <path d="M0 378 108 304 214 342 332 240 460 368 600 268 742 376 892 250 1024 372 1158 282 1286 374 1440 284V420H0Z" fill="url(#frontRidge)" />
-          <polygon points="332,240 460,368 379,326" fill="url(#facetShadow)" />
-          <polygon points="332,240 214,342 379,326" fill="url(#facetLight)" />
-          <polygon points="892,250 1024,372 938,330" fill="url(#facetShadow)" />
-          <polygon points="892,250 742,376 938,330" fill="url(#facetLight)" />
-          <polygon points="1286,374 1440,284 1384,366" fill="url(#facetShadow)" />
-          <path className="snow snow-front" d="M299 286 332 240 365 288 346 276 332 262 315 282Z" />
-          <path className="snow snow-front" d="M859 296 892 250 926 298 906 285 892 271 874 292Z" />
-        </g>
-        <g className="forest">
-          {Array.from({ length: 28 }).map((_, i) => {
-            const x = 22 + i * 53;
-            const h = 24 + (i % 5) * 7;
-            return <path key={i} d={`M${x} 405l${h * 0.35} -${h} ${h * 0.35} ${h}h-${h * 0.7}Z`} />;
-          })}
-        </g>
-        <rect y="392" width="1440" height="28" fill="#f1fbf1" opacity="0.72" />
-        <rect width="1440" height="420" fill="url(#pageFade)" />
-      </svg>
-    </div>
+// Low-poly 3D mountain range footer — same flat-shaded palette as the Milestones world.
+function buildMountainFooter({ scene, camera, renderer }) {
+  renderer.setClearColor(0x000000, 0);
+  scene.fog = new THREE.Fog(0xe9f3ea, 18, 44);
+
+  camera.fov = 40;
+  camera.position.set(0, 3.5, 15);
+  camera.updateProjectionMatrix();
+  camera.lookAt(0, 2.4, 0);
+
+  scene.add(new THREE.HemisphereLight(0xfdfffa, 0xc4ddc8, 1.15));
+  const sunLight = new THREE.DirectionalLight(0xfff4dd, 1.45);
+  sunLight.position.set(8, 10, 6);
+  scene.add(sunLight);
+
+  const disposables = [];
+  const track = (o) => { disposables.push(o); return o; };
+  let seed = 20240617;
+  const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+
+  const coneGeo = track(new THREE.ConeGeometry(1, 1, 6));
+  const matFar = track(new THREE.MeshStandardMaterial({ color: 0xb4d0c2, flatShading: true, roughness: 1 }));
+  const matMid = track(new THREE.MeshStandardMaterial({ color: 0x93b8a6, flatShading: true, roughness: 1 }));
+  const matFront = track(new THREE.MeshStandardMaterial({ color: 0x6f9f86, flatShading: true, roughness: 1 }));
+  const matSnow = track(new THREE.MeshStandardMaterial({ color: 0xf4f9f4, flatShading: true, roughness: 0.9 }));
+
+  const range = new THREE.Group();
+  scene.add(range);
+  const addPeak = (x, z, r, hgt, mat, snow) => {
+    const m = new THREE.Mesh(coneGeo, mat);
+    m.scale.set(r, hgt, r);
+    m.position.set(x, hgt / 2 - 3.6, z);
+    m.rotation.y = rand() * Math.PI;
+    range.add(m);
+    if (snow) {
+      const cap = new THREE.Mesh(coneGeo, matSnow);
+      cap.scale.set(r * 0.42, hgt * 0.34, r * 0.42);
+      cap.position.set(x, hgt - hgt * 0.17 - 3.6, z);
+      cap.rotation.y = m.rotation.y;
+      range.add(cap);
+    }
+  };
+  for (let i = 0; i < 15; i++) addPeak(-42 + i * 6 + (rand() - 0.5) * 2, -5 - rand() * 1.5, 3.4 + rand() * 1.4, 7 + rand() * 2, matFar, rand() > 0.5);
+  for (let i = 0; i < 13; i++) addPeak(-39 + i * 6.4 + (rand() - 0.5) * 2, -1 - rand(), 3 + rand() * 1.3, 6 + rand() * 1.8, matMid, rand() > 0.35);
+  for (let i = 0; i < 11; i++) addPeak(-36 + i * 7 + (rand() - 0.5) * 2, 2.5 + rand() * 0.8, 2.6 + rand() * 1.2, 5 + rand() * 1.6, matFront, rand() > 0.7);
+
+  // ---- warm sun: disc + soft glow, rising behind the range ----
+  const sunGroup = new THREE.Group();
+  sunGroup.position.set(9, 5.6, -11);
+  scene.add(sunGroup);
+  const disc = new THREE.Mesh(
+    track(new THREE.CircleGeometry(1.5, 36)),
+    track(new THREE.MeshBasicMaterial({ color: 0xfff3d2, transparent: true, opacity: 0.96, depthWrite: false, fog: false }))
   );
+  sunGroup.add(disc);
+  const glowCanvas = document.createElement("canvas");
+  glowCanvas.width = glowCanvas.height = 128;
+  const gx = glowCanvas.getContext("2d");
+  const grad = gx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, "rgba(255,246,222,0.92)");
+  grad.addColorStop(0.34, "rgba(255,232,176,0.42)");
+  grad.addColorStop(1, "rgba(255,232,176,0)");
+  gx.fillStyle = grad; gx.fillRect(0, 0, 128, 128);
+  const glowMat = track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(glowCanvas)), transparent: true, depthWrite: false, fog: false }));
+  const glow = new THREE.Sprite(glowMat);
+  glow.scale.set(13, 13, 1);
+  glow.position.z = -0.2;
+  sunGroup.add(glow);
+
+  // ---- a few low-poly clouds drifting through the sky ----
+  const cloudGeo = track(new THREE.SphereGeometry(1, 7, 6));
+  const cloudMat = track(new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: 0.78 }));
+  const clouds = [];
+  for (let i = 0; i < 3; i++) {
+    const c = new THREE.Group();
+    for (let j = 0; j < 3; j++) {
+      const s = new THREE.Mesh(cloudGeo, cloudMat);
+      s.position.set(j * 1.5 - 1.5, rand() * 0.4, 0);
+      s.scale.set(1.5 + rand(), 0.55, 1);
+      c.add(s);
+    }
+    c.position.set(-16 + i * 14, 6 + rand() * 1.2, -7 - rand() * 2);
+    c.userData = { sp: 0.018 + rand() * 0.014 };
+    scene.add(c);
+    clouds.push(c);
+  }
+
+  return {
+    update(t) {
+      range.rotation.y = Math.sin(t * 0.07) * 0.016;
+      const b = 1 + Math.sin(t * 0.8) * 0.05;
+      glow.scale.set(13 * b, 13 * b, 1);
+      clouds.forEach((c) => { c.position.x += c.userData.sp; if (c.position.x > 30) c.position.x = -30; });
+    },
+    dispose() { disposables.forEach((d) => d.dispose && d.dispose()); },
+  };
+}
+
+function MountainLandscape() {
+  return <ThreeScene className="mountain-3d" build={buildMountainFooter} />;
 }
 
 function BlogList({ openPost }) {
