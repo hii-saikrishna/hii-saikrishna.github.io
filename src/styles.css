@@ -105,7 +105,33 @@ em { font-style: italic; }
 }
 .btn-link.solid:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
 
-/* Email shown as plain monospace text (not a button) */
+/* Homepage social/contact links use neutral icons instead of the green palette. */
+.hero-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hero-socials .social-link {
+  color: var(--ink-2);
+  background: #fff;
+  border-color: #dfe5ec;
+  box-shadow: 0 10px 26px -22px rgba(15, 23, 42, 0.45);
+}
+.hero-socials .social-link:hover {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  background: #f8fbff;
+}
+.hero-socials .social-link svg,
+.hero-email-card svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+/* Email shown as an inviting contact line. */
 .hero-email {
   display: inline-block;
   margin-top: 16px;
@@ -118,6 +144,26 @@ em { font-style: italic; }
   transition: color .15s ease, border-color .15s ease;
 }
 .hero-email:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+.hero-email-card {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 9px;
+  max-width: 620px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  background: #fff;
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+  padding: 11px 14px;
+  box-shadow: 0 16px 34px -30px rgba(15, 23, 42, 0.52);
+}
+.hero-email-card:hover {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  background: #f8fbff;
+}
 
 .chip {
   font-family: var(--mono);

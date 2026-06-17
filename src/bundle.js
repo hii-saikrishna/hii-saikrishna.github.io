@@ -2584,36 +2584,67 @@ function HomePage({
     target: "_blank",
     rel: "noopener noreferrer"
   }, "Dr. Krishna Kumar"), "."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10,
-      marginTop: 24,
-      flexWrap: "wrap"
-    }
+    className: "hero-socials",
+    "aria-label": "Academic and social links"
   }, /*#__PURE__*/React.createElement("a", {
     href: PROFILE.scholar,
     target: "_blank",
     rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "Scholar"), /*#__PURE__*/React.createElement("a", {
+    className: "btn-link social-link",
+    "aria-label": "Google Scholar profile"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 3 2.8 8.1 12 13.2l9.2-5.1L12 3Zm-6.6 7.5v4.2c0 2.3 3 4.3 6.6 4.3s6.6-2 6.6-4.3v-4.2L12 14.2l-6.6-3.7Z",
+    fill: "currentColor"
+  })), /*#__PURE__*/React.createElement("span", null, "Scholar")), /*#__PURE__*/React.createElement("a", {
     href: PROFILE.github,
     target: "_blank",
     rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "GitHub"), /*#__PURE__*/React.createElement("a", {
+    className: "btn-link social-link",
+    "aria-label": "GitHub profile"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 2.4a9.6 9.6 0 0 0-3 18.7c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.2-4.5-1.1-4.5-4.8 0-1.1.4-1.9 1-2.6-.1-.2-.4-1.2.1-2.5 0 0 .8-.3 2.7 1a9.5 9.5 0 0 1 4.8 0c1.8-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.5 1 2.6 0 3.7-2.3 4.6-4.5 4.8.4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A9.6 9.6 0 0 0 12 2.4Z",
+    fill: "currentColor"
+  })), /*#__PURE__*/React.createElement("span", null, "GitHub")), /*#__PURE__*/React.createElement("a", {
     href: PROFILE.linkedin,
     target: "_blank",
     rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "LinkedIn"), /*#__PURE__*/React.createElement("a", {
+    className: "btn-link social-link",
+    "aria-label": "LinkedIn profile"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5.1 8.8H2.4v12.1h2.7V8.8ZM3.8 3.1a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Zm17.8 10.9c0-3.4-1.8-5-4.3-5-2 0-2.9 1.1-3.4 1.9h-.1V8.8h-2.6v12.1h2.7v-6c0-1.6.3-3.1 2.2-3.1s1.9 1.8 1.9 3.2v5.9h2.7l-.1-6.9Z",
+    fill: "currentColor"
+  })), /*#__PURE__*/React.createElement("span", null, "LinkedIn")), /*#__PURE__*/React.createElement("a", {
     href: PROFILE.cv,
     target: "_blank",
     rel: "noopener noreferrer",
-    className: "btn-link"
-  }, "CV / R\xE9sum\xE9 \u2193")), /*#__PURE__*/React.createElement("a", {
+    className: "btn-link social-link",
+    "aria-label": "Download CV or r\xE9sum\xE9"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M6.4 2.8h7.8L19 7.6v13.6H6.4V2.8Zm7 1.7v4h4l-4-4ZM8.7 12.4h6.6v-1.5H8.7v1.5Zm0 3.1h6.6V14H8.7v1.5Zm0 3.1h4.8v-1.5H8.7v1.5Z",
+    fill: "currentColor"
+  })), /*#__PURE__*/React.createElement("span", null, "CV / R\xE9sum\xE9"))), /*#__PURE__*/React.createElement("a", {
     href: `mailto:${PROFILE.email}`,
-    className: "hero-email"
-  }, PROFILE.email))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
+    className: "hero-email hero-email-card",
+    "aria-label": "Email Sai Krishna Ghanta"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M4.5 6.5h15v11h-15v-11Zm1.4 1.4 6.1 4.2 6.1-4.2H5.9Zm12.2 8.2V9.6L12 13.8 5.9 9.6v6.5h12.2Z",
+    fill: "currentColor"
+  })), /*#__PURE__*/React.createElement("span", null, "I\u2019ll be happy to hear from you about research, collaboration, ideas, or anything else \u2014 feel free to reach out.")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
     className: "section interests",
     "data-screen-label": "Interests"
   }, /*#__PURE__*/React.createElement("div", {
