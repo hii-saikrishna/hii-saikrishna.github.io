@@ -51,11 +51,11 @@ const TRIP_GALLERY = [
 
 // Home highlights — the same three directions as the Research page, each with a small 3D scene.
 const INTERESTS = [
-  { id: "embodied",   scene: "humanoid", title: "Robot Learning & Embodied Intelligence",
+  { id: "embodied",   scene: "embodied", title: "Robot Learning & Embodied Intelligence",
     desc: "Robots that reason about the world they live in." },
-  { id: "multirobot", scene: "drone",    title: "Mapping & Localization for Multi-Robot Systems",
+  { id: "multirobot", scene: "swarm",    title: "Mapping & Localization for Multi-Robot Systems",
     desc: "Many robots, one shared map — even when comms drop." },
-  { id: "spatial",    scene: "rover",    title: "Spatial Intelligence",
+  { id: "spatial",    scene: "gp",       title: "Spatial Intelligence",
     desc: "Learning a belief over space itself." },
 ];
 

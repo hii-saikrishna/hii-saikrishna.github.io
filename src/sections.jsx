@@ -48,12 +48,6 @@ function PubRow({ p }) {
 
 // ----- Home -----
 function HomePage({ go }) {
-  const robotKinds = [
-    { kind: "humanoid", opts: { cam: [2.5, 1.9, 3.1], look: 0.85 } },
-    { kind: "quadruped", opts: { cam: [2.1, 1.4, 2.6], look: 0.45 } },
-    { kind: "rover", opts: { cam: [2.1, 1.4, 2.6], look: 0.4 } },
-    { kind: "drone", opts: { cam: [2.1, 1.6, 2.7], look: 0.9, hover: 0.95 } },
-  ];
   return (
     <>
       {/* HERO */}
@@ -134,7 +128,7 @@ function HomePage({ go }) {
               <Reveal key={it.id} delay={i * 80}>
                 <div className="interest-card">
                   <div className="glyph-wrap">
-                    <ThreeScene build={robotCardScene(robotKinds[i].kind, robotKinds[i].opts)} />
+                    <ThreeScene build={dioramaScene(it.scene)} />
                   </div>
                   <h3>{it.title}</h3>
                   <p>{it.desc}</p>

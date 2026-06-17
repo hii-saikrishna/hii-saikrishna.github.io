@@ -303,7 +303,7 @@ function HomePage({ go }) {
               {INTERESTS.map((int) => (
                 <div key={int.id} className="interest-card">
                   <div className="glyph-wrap">
-                    <ThreeScene build={robotCardScene(int.scene)} />
+                    <ThreeScene build={dioramaScene(int.scene)} />
                   </div>
                   <h3>{int.title}</h3>
                   <p>{int.desc}</p>
