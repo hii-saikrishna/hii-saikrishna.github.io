@@ -2368,24 +2368,19 @@ const Arrow = ({
   d: "M9 18l6-6-6-6"
 }));
 
-// ===== Hero photo gallery — scroll through images, with a 3D robot "scroller" =====
+// ===== Hero photo gallery — passive auto-rotating portraits =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
   const [idx, setIdx] = React.useState(0);
-  const [paused, setPaused] = React.useState(false);
-  const go = d => setIdx(i => (i + d + n) % n);
   React.useEffect(() => {
-    if (paused || n < 2) return;
-    const id = setInterval(() => setIdx(i => (i + 1) % n), 6000);
+    if (n < 2) return;
+    const id = setInterval(() => setIdx(i => (i + 1) % n), 10000);
     return () => clearInterval(id);
-  }, [paused, n]);
+  }, [n]);
   if (!n) return null;
-  const cur = items[idx];
   return /*#__PURE__*/React.createElement("div", {
-    className: "hero-gallery",
-    onMouseEnter: () => setPaused(true),
-    onMouseLeave: () => setPaused(false)
+    className: "hero-gallery"
   }, /*#__PURE__*/React.createElement("div", {
     className: "hg-stage"
   }, items.map((g, i) => /*#__PURE__*/React.createElement("img", {
@@ -2394,37 +2389,7 @@ function HeroGallery() {
     alt: PROFILE.name,
     className: `hg-img ${i === idx ? "active" : ""}`,
     draggable: "false"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "hg-grad"
-  }), n > 1 && /*#__PURE__*/React.createElement("div", {
-    className: "hg-caption"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "hg-cap-idx"
-  }, String(idx + 1).padStart(2, "0"), " / ", String(n).padStart(2, "0"))), n > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    className: "hg-nav prev",
-    onClick: () => go(-1),
-    "aria-label": "Previous image"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "left"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "hg-nav next",
-    onClick: () => go(1),
-    "aria-label": "Next image"
-  }, /*#__PURE__*/React.createElement(Arrow, {
-    dir: "right"
-  })))), /*#__PURE__*/React.createElement("div", {
-    className: "hg-rail"
-  }, items.map((g, i) => /*#__PURE__*/React.createElement("div", {
-    key: g.src,
-    className: `hg-thumb ${i === idx ? "active" : ""}`,
-    onClick: () => setIdx(i),
-    role: "button",
-    "aria-label": `Photo ${i + 1}`
-  }, /*#__PURE__*/React.createElement("img", {
-    src: g.src,
-    alt: "",
-    draggable: "false"
-  })))));
+  }))));
 }
 
 // ===== Publication link buttons =====

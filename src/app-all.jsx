@@ -142,48 +142,25 @@ const Arrow = ({ dir = "right" }) => (
   </svg>
 );
 
-// ===== Hero photo gallery — scroll through images, with a 3D robot "scroller" =====
+// ===== Hero photo gallery — passive auto-rotating portraits =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
   const [idx, setIdx] = React.useState(0);
-  const [paused, setPaused] = React.useState(false);
-  const go = (d) => setIdx((i) => (i + d + n) % n);
 
   React.useEffect(() => {
-    if (paused || n < 2) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % n), 6000);
+    if (n < 2) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % n), 10000);
     return () => clearInterval(id);
-  }, [paused, n]);
+  }, [n]);
 
   if (!n) return null;
-  const cur = items[idx];
   return (
-    <div className="hero-gallery"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}>
+    <div className="hero-gallery">
       <div className="hg-stage">
         {items.map((g, i) => (
           <img key={g.src} src={g.src} alt={PROFILE.name}
             className={`hg-img ${i === idx ? "active" : ""}`} draggable="false" />
-        ))}
-        <div className="hg-grad"></div>
-        {n > 1 && (
-          <div className="hg-caption">
-            <div className="hg-cap-idx">{String(idx + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</div>
-          </div>
-        )}
-        {n > 1 && <>
-          <button className="hg-nav prev" onClick={() => go(-1)} aria-label="Previous image"><Arrow dir="left" /></button>
-          <button className="hg-nav next" onClick={() => go(1)} aria-label="Next image"><Arrow dir="right" /></button>
-        </>}
-      </div>
-      <div className="hg-rail">
-        {items.map((g, i) => (
-          <div key={g.src} className={`hg-thumb ${i === idx ? "active" : ""}`}
-            onClick={() => setIdx(i)} role="button" aria-label={`Photo ${i + 1}`}>
-            <img src={g.src} alt="" draggable="false" />
-          </div>
         ))}
       </div>
     </div>
