@@ -3142,17 +3142,17 @@ function buildMountainFooter({
   // ---- snow-capped sage peaks, three depth rows ----
   const coneGeo = track(new THREE.ConeGeometry(1, 1, 7));
   const matFar = track(new THREE.MeshStandardMaterial({
-    color: 0xbcd6da,
+    color: 0x9fc6a6,
     flatShading: true,
     roughness: 1
   }));
   const matMid = track(new THREE.MeshStandardMaterial({
-    color: 0x9ec3ac,
+    color: 0x6fae82,
     flatShading: true,
     roughness: 1
   }));
   const matFront = track(new THREE.MeshStandardMaterial({
-    color: 0x83b298,
+    color: 0x549468,
     flatShading: true,
     roughness: 1
   }));
@@ -3179,9 +3179,9 @@ function buildMountainFooter({
       range.add(cap);
     }
   };
-  for (let i = 0; i < 12; i++) addPeak(-46 + i * 8.4 + (rand() - 0.5) * 3, -5.5 - rand() * 2, 4.6 + rand() * 1.8, 7 + rand() * 2.2, matFar, rand() > 0.4);
-  for (let i = 0; i < 11; i++) addPeak(-44 + i * 8.6 + (rand() - 0.5) * 3, -1.5 - rand(), 4.2 + rand() * 1.6, 6 + rand() * 1.8, matMid, rand() > 0.3);
-  for (let i = 0; i < 9; i++) addPeak(-40 + i * 9.2 + (rand() - 0.5) * 3, 2.4 + rand() * 0.8, 3.8 + rand() * 1.4, 5 + rand() * 1.6, matFront, rand() > 0.55);
+  for (let i = 0; i < 5; i++) addPeak(-48 + i * 24 + (rand() - 0.5) * 4, -6 - rand() * 2, 5.5 + rand() * 2, 7.5 + rand() * 2.2, matFar, rand() > 0.4);
+  for (let i = 0; i < 4; i++) addPeak(-36 + i * 24 + (rand() - 0.5) * 4, -1.8 - rand(), 5 + rand() * 1.8, 6.2 + rand() * 1.8, matMid, rand() > 0.3);
+  for (let i = 0; i < 3; i++) addPeak(-30 + i * 30 + (rand() - 0.5) * 4, 2.6 + rand() * 0.8, 4.6 + rand() * 1.6, 5.4 + rand() * 1.6, matFront, rand() > 0.4);
 
   // ---- shining sun: golden disc + warm halo (depth-tested so the range can clip it) ----
   const sunPos = new THREE.Vector3(-10, 5.9, -13);
@@ -3415,9 +3415,11 @@ function Nav({
     d: open ? "M6 6l12 12M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"
   })))));
 }
-function Footer() {
+function Footer({
+  flush
+}) {
   return /*#__PURE__*/React.createElement("footer", {
-    className: "footer"
+    className: "footer" + (flush ? " footer-flush" : "")
   }, /*#__PURE__*/React.createElement("div", {
     className: "container",
     style: {
@@ -3493,11 +3495,16 @@ function App() {
       go: go
     });
   }
+
+  // Pages that end in the full-bleed mountain band want the copyright bar tucked flush.
+  const rangeFooter = route.page === "about" || route.page === "contact" || route.page === "blog" && !route.post;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Nav, {
     page: route.page,
     go: go,
     blogPostOpen: !!route.post
-  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(ErrorBoundary, null, content)), /*#__PURE__*/React.createElement(Footer, null));
+  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(ErrorBoundary, null, content)), /*#__PURE__*/React.createElement(Footer, {
+    flush: rangeFooter
+  }));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 
