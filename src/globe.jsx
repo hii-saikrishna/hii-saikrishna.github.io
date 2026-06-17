@@ -1,4 +1,4 @@
-// ===== 3D Globe — local procedural continents + visit heatmap =====
+// ===== 3D Globe — local high-resolution earth texture + visit heatmap =====
 
 const VISITED_PLACES = [
   { name: "Athens, GA", lat: 33.95, lon: -83.38, w: 1.0, current: true },
@@ -41,8 +41,8 @@ function makeHeatTexture(color) {
   c.width = c.height = 128;
   const x = c.getContext("2d");
   const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
-  g.addColorStop(0, color + "cc");
-  g.addColorStop(0.4, color + "55");
+  g.addColorStop(0, color + "aa");
+  g.addColorStop(0.38, color + "3c");
   g.addColorStop(1, color + "00");
   x.fillStyle = g;
   x.fillRect(0, 0, 128, 128);
@@ -116,8 +116,25 @@ function makeProceduralEarth() {
   return tex;
 }
 
+const EARTH_TEXTURES = {
+  day: "attached_assets/earth-atmos-2048.jpg",
+  clouds: "attached_assets/earth-clouds-1024.png",
+  normal: "attached_assets/earth-normal-2048.jpg",
+  specular: "attached_assets/earth-specular-2048.jpg",
+};
+
+function configureGlobeTexture(tex, renderer, colorManaged) {
+  if (!tex) return tex;
+  if (colorManaged && THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+  if (renderer && renderer.capabilities && renderer.capabilities.getMaxAnisotropy) {
+    tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  }
+  tex.needsUpdate = true;
+  return tex;
+}
+
 function buildGlobeScene(ctx) {
-  const { scene, camera, el } = ctx;
+  const { scene, camera, renderer, el } = ctx;
   // smaller globe in frame — pulled back + reduced radius
   camera.position.set(0, 0.35, 4.2);
   camera.lookAt(0, 0, 0);
@@ -131,11 +148,69 @@ function buildGlobeScene(ctx) {
   const globe = new THREE.Group();
   scene.add(globe);
 
-  const earthTexture = makeProceduralEarth();
-  const sphereMat = new THREE.MeshStandardMaterial({
-    map: earthTexture, roughness: 0.92, metalness: 0.0,
+  let alive = true;
+  const loader = new THREE.TextureLoader();
+  const ownedTextures = [];
+  const trackTexture = (tex, colorManaged) => {
+    configureGlobeTexture(tex, renderer, colorManaged);
+    ownedTextures.push(tex);
+    return tex;
+  };
+  const loadTexture = (url, colorManaged, onReady) => {
+    const tex = trackTexture(loader.load(
+      url,
+      (loaded) => {
+        configureGlobeTexture(loaded, renderer, colorManaged);
+        if (!alive) {
+          loaded.dispose();
+          return;
+        }
+        onReady(loaded);
+      },
+      undefined,
+      () => { /* keep the local procedural fallback */ }
+    ), colorManaged);
+    return tex;
+  };
+
+  const earthTexture = trackTexture(makeProceduralEarth(), true);
+  const sphereGeo = new THREE.SphereGeometry(R, 96, 96);
+  const sphereMat = new THREE.MeshPhongMaterial({
+    map: earthTexture,
+    color: 0xffffff,
+    shininess: 18,
+    specular: 0x26384f,
   });
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 48, 48), sphereMat));
+  globe.add(new THREE.Mesh(sphereGeo, sphereMat));
+
+  const cloudMat = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    shininess: 2,
+  });
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 96), cloudMat);
+  globe.add(clouds);
+
+  loadTexture(EARTH_TEXTURES.day, true, (tex) => {
+    sphereMat.map = tex;
+    sphereMat.needsUpdate = true;
+  });
+  loadTexture(EARTH_TEXTURES.normal, false, (tex) => {
+    sphereMat.normalMap = tex;
+    sphereMat.normalScale = new THREE.Vector2(0.16, 0.16);
+    sphereMat.needsUpdate = true;
+  });
+  loadTexture(EARTH_TEXTURES.specular, false, (tex) => {
+    sphereMat.specularMap = tex;
+    sphereMat.needsUpdate = true;
+  });
+  loadTexture(EARTH_TEXTURES.clouds, true, (tex) => {
+    cloudMat.map = tex;
+    cloudMat.opacity = 0.36;
+    cloudMat.needsUpdate = true;
+  });
 
   // soft atmospheric halo (cool blue)
   const halo = new THREE.Mesh(
@@ -145,7 +220,7 @@ function buildGlobeScene(ctx) {
   scene.add(halo);
 
   // subtle graticule
-  const gratMat = new THREE.LineBasicMaterial({ color: 0xbfd6ea, transparent: true, opacity: 0.22 });
+  const gratMat = new THREE.LineBasicMaterial({ color: 0xbfd6ea, transparent: true, opacity: 0.12 });
   const gratPts = [];
   for (let lat = -60; lat <= 60; lat += 30) {
     const r2 = R * Math.cos(lat * Math.PI / 180), y = R * Math.sin(lat * Math.PI / 180);
@@ -169,9 +244,9 @@ function buildGlobeScene(ctx) {
     const pos = latLonToV3(p.lat, p.lon, R);
     byName[p.name] = pos;
     const spr = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: p.w > 0.6 ? heatAmber : heatGreen, transparent: true, depthWrite: false,
+      map: p.w > 0.6 ? heatAmber : heatGreen, transparent: true, opacity: 0.72, depthWrite: false,
     }));
-    const s = 0.16 + p.w * 0.38;
+    const s = 0.11 + p.w * 0.24;
     spr.scale.set(s, s, 1);
     spr.position.copy(latLonToV3(p.lat, p.lon, R * 1.01));
     globe.add(spr);
@@ -227,6 +302,7 @@ function buildGlobeScene(ctx) {
       globe.rotation.y += velY + (dragging ? 0 : 0.0018);
       rotX += (targetRotX - rotX) * 0.08;
       globe.rotation.x = rotX;
+      clouds.rotation.y += 0.00045;
       halo.rotation.copy(globe.rotation);
       rings.forEach((r, i) => {
         const ph = (t * 0.7 + i * 0.5) % 1;
@@ -235,6 +311,7 @@ function buildGlobeScene(ctx) {
       });
     },
     dispose() {
+      alive = false;
       el.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       el.removeEventListener("pointermove", onDrag);
@@ -254,7 +331,7 @@ function buildGlobeScene(ctx) {
           disposeOnce(mat);
         });
       });
-      disposeOnce(earthTexture);
+      ownedTextures.forEach(disposeOnce);
       disposeOnce(heatGreen);
       disposeOnce(heatAmber);
     },
