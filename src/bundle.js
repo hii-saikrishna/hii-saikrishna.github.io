@@ -1315,39 +1315,6 @@ function JourneyWorld() {
         scene.add(tree);
       }
 
-      // ---- Floating islands ----
-      const islands = [];
-      for (let i = 0; i < 4; i++) {
-        const isl = new THREE.Group();
-        const top = new THREE.Mesh(track(new THREE.CylinderGeometry(2.2, 1.6, 0.7, 9)), track(new THREE.MeshStandardMaterial({
-          color: 0x6db36a,
-          flatShading: true,
-          roughness: 1
-        })));
-        isl.add(top);
-        const rock = new THREE.Mesh(track(new THREE.ConeGeometry(1.7, 2.4, 8)), track(new THREE.MeshStandardMaterial({
-          color: 0x8e9a90,
-          flatShading: true,
-          roughness: 1
-        })));
-        rock.rotation.x = Math.PI;
-        rock.position.y = -1.4;
-        isl.add(rock);
-        const tr = new THREE.Mesh(folGeo, folMats[i % 3]);
-        tr.position.y = 1.0;
-        tr.scale.setScalar(1.1);
-        isl.add(tr);
-        const z = -30 - i * 65;
-        isl.position.set(jPathX(z) + (i % 2 ? 1 : -1) * (10 + Math.random() * 8), 11 + Math.random() * 5, z);
-        isl.scale.setScalar(0.8 + Math.random() * 0.8);
-        isl.userData = {
-          baseY: isl.position.y,
-          ph: Math.random() * 6
-        };
-        scene.add(isl);
-        islands.push(isl);
-      }
-
       // ---- Clouds ----
       const cloudGeo = track(new THREE.SphereGeometry(1, 7, 7));
       const cloudMat = track(new THREE.MeshStandardMaterial({
@@ -1357,7 +1324,7 @@ function JourneyWorld() {
         transparent: true,
         opacity: 0.85
       }));
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 9; i++) {
         const c = new THREE.Group();
         for (let j = 0; j < 3; j++) {
           const s = new THREE.Mesh(cloudGeo, cloudMat);
@@ -1365,8 +1332,8 @@ function JourneyWorld() {
           s.scale.set(1.6 + Math.random(), 0.55, 1);
           c.add(s);
         }
-        const z = 8 - i * 55;
-        c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 17 + Math.random() * 6, z);
+        const z = 8 - i * 37;
+        c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 16 + Math.random() * 7, z);
         scene.add(c);
       }
 
@@ -1454,10 +1421,6 @@ function JourneyWorld() {
         scene.fog.color.lerpColors(fogGreen, fogBlue, skyAmt);
         const skyEl = document.getElementById("j-sky");
         if (skyEl) skyEl.style.opacity = skyAmt;
-        islands.forEach(isl => {
-          isl.position.y = isl.userData.baseY + Math.sin(t * 0.5 + isl.userData.ph) * 0.5;
-          isl.rotation.y = t * 0.04;
-        });
         worldRobots.forEach(r => {
           r.built.update(t + r.ph);
           if (r.kind === "drone") r.built.group.position.y = r.baseY + Math.sin(t + r.ph) * 0.3;
@@ -2805,7 +2768,7 @@ function UpdatesPage() {
     className: "j-eyebrow"
   }, "The road so far"), /*#__PURE__*/React.createElement("h1", {
     className: "j-title"
-  }, "Mile", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+  }, "Mile", /*#__PURE__*/React.createElement("span", {
     className: "outline"
   }, "stones")), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
@@ -3119,18 +3082,18 @@ function NatureBackdrop() {
     key: i,
     className: `maple-leaf leaf-${i + 1}`
   }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 96 112",
+    viewBox: "0 0 100 124",
     focusable: "false",
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement("path", {
-    className: "leaf-blade",
-    d: "M48 3c5.8 13.8 7.6 24.5 14.6 33.4 9.8-8.8 19.6-13.2 31.4-17.6-4.7 12.8-9.8 22.6-7 33.8 10.4 1.2 18.4 4.4 25 9.5-10.4 4.6-18.3 10.7-22.7 20.8 5.7 8.8 8.3 17.1 9.4 27.2-10.6-4.8-21.2-8.4-34.3-6.2-3.6 8.3-9.4 14.6-16.4 21.1-7-6.5-12.8-12.8-16.4-21.1-13.1-2.2-23.7 1.4-34.3 6.2 1.1-10.1 3.7-18.4 9.4-27.2C2.3 72.8-5.6 66.7-16 62.1c6.6-5.1 14.6-8.3 25-9.5 2.8-11.2-2.3-21-7-33.8 11.8 4.4 21.6 8.8 31.4 17.6C40.4 27.5 42.2 16.8 48 3Z"
-  }), /*#__PURE__*/React.createElement("path", {
-    className: "leaf-lobe",
-    d: "M48 12c-1.8 18.4-1.2 37.4 0 62M48 48C38.5 39.2 27.8 31.8 15.2 26M48 48c9.5-8.8 20.2-16.2 32.8-22M48 61.5C34 63.2 20.8 70.8 7.5 84M48 61.5c14 1.7 27.2 9.3 40.5 22.5M48 72c-6.2 10.8-10.5 22-12.8 34M48 72c6.2 10.8 10.5 22 12.8 34"
-  }), /*#__PURE__*/React.createElement("path", {
     className: "leaf-stem",
-    d: "M48 80c-1.2 11.6-6.4 20.2-16.5 28"
+    d: "M47 87 53 87 51 121 49 121Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "leaf-blade",
+    d: "M50 6 58 28 67 22 61 41 90 33 68 55 85 75 60 77 57 90 43 90 40 77 15 75 32 55 10 33 39 41 33 22 42 28Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "leaf-veins",
+    d: "M50 86V12 M50 70 86 36 M50 78 80 72 M50 70 14 36 M50 78 20 72"
   })))));
 }
 function MountainLandscape() {
@@ -3150,13 +3113,44 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#d9f0ff"
+    stopColor: "#cfe8fa"
   }), /*#__PURE__*/React.createElement("stop", {
-    offset: "58%",
-    stopColor: "#eef9ff"
+    offset: "52%",
+    stopColor: "#e2f1ea"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#f5fff6"
+    stopColor: "#f1fbf1"
+  })), /*#__PURE__*/React.createElement("radialGradient", {
+    id: "sunGlow",
+    cx: "50%",
+    cy: "50%",
+    r: "50%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#fff6df",
+    stopOpacity: "0.95"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "34%",
+    stopColor: "#fff0c6",
+    stopOpacity: "0.5"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#ffeec0",
+    stopOpacity: "0"
+  })), /*#__PURE__*/React.createElement("radialGradient", {
+    id: "sunCore",
+    cx: "50%",
+    cy: "44%",
+    r: "58%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#fff8e6"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "60%",
+    stopColor: "#fff0c4"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#ffe39f"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "farRidge",
     x1: "0",
@@ -3165,10 +3159,10 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#a8d7cb"
+    stopColor: "#bcdbcc"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#d9efe4"
+    stopColor: "#d9ece2"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "midRidge",
     x1: "0",
@@ -3177,13 +3171,13 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#62ad88"
+    stopColor: "#83bb9f"
   }), /*#__PURE__*/React.createElement("stop", {
-    offset: "48%",
-    stopColor: "#2f8a62"
+    offset: "50%",
+    stopColor: "#5fa07f"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#176344"
+    stopColor: "#4a8b6a"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "frontRidge",
     x1: "0",
@@ -3192,13 +3186,13 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#2f7d55"
+    stopColor: "#578f72"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "54%",
-    stopColor: "#145c3f"
+    stopColor: "#3f7457"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#0d3f2e"
+    stopColor: "#2f5b44"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "facetLight",
     x1: "0",
@@ -3207,12 +3201,12 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#e6fff0",
-    stopOpacity: "0.78"
+    stopColor: "#ecfff5",
+    stopOpacity: "0.8"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#77bd98",
-    stopOpacity: "0.24"
+    stopColor: "#a6cdb6",
+    stopOpacity: "0.22"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "facetShadow",
     x1: "1",
@@ -3221,12 +3215,12 @@ function MountainLandscape() {
     y2: "1"
   }, /*#__PURE__*/React.createElement("stop", {
     offset: "0%",
-    stopColor: "#082f24",
-    stopOpacity: "0.46"
+    stopColor: "#1f4e3b",
+    stopOpacity: "0.42"
   }), /*#__PURE__*/React.createElement("stop", {
     offset: "100%",
-    stopColor: "#145c3f",
-    stopOpacity: "0.08"
+    stopColor: "#3f7457",
+    stopOpacity: "0.07"
   })), /*#__PURE__*/React.createElement("filter", {
     id: "mountainShadow",
     x: "-5%",
@@ -3237,8 +3231,8 @@ function MountainLandscape() {
     dx: "0",
     dy: "16",
     stdDeviation: "16",
-    floodColor: "#0f3d2d",
-    floodOpacity: "0.18"
+    floodColor: "#1f4e3b",
+    floodOpacity: "0.16"
   })), /*#__PURE__*/React.createElement("linearGradient", {
     id: "pageFade",
     x1: "0",
@@ -3260,14 +3254,22 @@ function MountainLandscape() {
   }))), /*#__PURE__*/React.createElement("rect", {
     width: "1440",
     height: "420",
-    fill: "transparent"
+    fill: "url(#skyGrad)",
+    opacity: "0.5"
+  }), /*#__PURE__*/React.createElement("g", {
+    className: "sun"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "1148",
+    cy: "146",
+    r: "178",
+    fill: "url(#sunGlow)"
   }), /*#__PURE__*/React.createElement("circle", {
-    cx: "1180",
-    cy: "92",
+    className: "sun-disc",
+    cx: "1148",
+    cy: "146",
     r: "46",
-    fill: "#fff7b8",
-    opacity: "0.32"
-  }), /*#__PURE__*/React.createElement("path", {
+    fill: "url(#sunCore)"
+  })), /*#__PURE__*/React.createElement("path", {
     className: "mist mist-back",
     d: "M0 248C170 224 260 280 420 254s260-64 420-27 276 7 600-17v210H0Z"
   }), /*#__PURE__*/React.createElement("path", {
@@ -3299,13 +3301,14 @@ function MountainLandscape() {
     points: "1322,180 1192,344 1360,260",
     fill: "url(#facetLight)"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M307 182 340 132 377 188 351 177 332 202Z",
-    fill: "#f4fff7",
-    opacity: "0.9"
+    className: "snow",
+    d: "M306 184 340 132 376 188 357 176 340 159 322 178Z"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M811 174 846 122 885 176 858 168 836 194Z",
-    fill: "#f4fff7",
-    opacity: "0.88"
+    className: "snow",
+    d: "M811 176 846 122 884 178 863 165 846 150 827 172Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "snow",
+    d: "M1289 222 1322 180 1357 226 1338 213 1322 200 1304 218Z"
   })), /*#__PURE__*/React.createElement("path", {
     className: "mist mist-front",
     d: "M0 326C164 296 284 344 442 322s271-50 448-18 314 7 550-30v146H0Z"
@@ -3331,13 +3334,11 @@ function MountainLandscape() {
     points: "1286,374 1440,284 1384,366",
     fill: "url(#facetShadow)"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M298 270 332 240 365 278 342 271 325 292Z",
-    fill: "#effff3",
-    opacity: "0.72"
+    className: "snow snow-front",
+    d: "M299 286 332 240 365 288 346 276 332 262 315 282Z"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M856 280 892 250 927 283 905 279 884 302Z",
-    fill: "#effff3",
-    opacity: "0.68"
+    className: "snow snow-front",
+    d: "M859 296 892 250 926 298 906 285 892 271 874 292Z"
   })), /*#__PURE__*/React.createElement("g", {
     className: "forest"
   }, Array.from({
@@ -3353,8 +3354,8 @@ function MountainLandscape() {
     y: "392",
     width: "1440",
     height: "28",
-    fill: "#f3fbf5",
-    opacity: "0.76"
+    fill: "#f1fbf1",
+    opacity: "0.72"
   }), /*#__PURE__*/React.createElement("rect", {
     width: "1440",
     height: "420",

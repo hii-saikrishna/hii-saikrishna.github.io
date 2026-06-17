@@ -2161,43 +2161,44 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .maple-leaf {
   --leaf-size: 30px;
-  --leaf-color: #15803d;
+  --leaf-color: #5fa763;
   color: var(--leaf-color);
   position: absolute;
   top: -12%;
   left: var(--x, 50%);
   width: var(--leaf-size);
-  height: calc(var(--leaf-size) * 1.18);
+  height: calc(var(--leaf-size) * 1.24);
   background: none;
   filter: drop-shadow(0 12px 14px rgba(20, 83, 45, 0.18));
-  transform-origin: 50% 42%;
+  transform-origin: 50% 40%;
   animation: leafFall var(--dur, 18s) linear infinite;
   animation-delay: var(--delay, 0s);
 }
 .maple-leaf svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.leaf-blade { fill: currentColor; opacity: 0.92; }
-.leaf-lobe, .leaf-stem {
+.leaf-blade { fill: currentColor; opacity: 0.94; }
+.leaf-veins {
   fill: none;
-  stroke: color-mix(in oklch, currentColor 42%, #ecfdf5);
-  stroke-width: 3.4;
+  stroke: color-mix(in oklch, currentColor 38%, #ecfdf5);
+  stroke-width: 2.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.72;
+  opacity: 0.55;
 }
-.leaf-1 { --x: 6%; --dur: 19s; --delay: -2s; --leaf-size: 25px; }
-.leaf-2 { --x: 14%; --dur: 23s; --delay: -12s; --leaf-size: 34px; --leaf-color: #16a34a; }
-.leaf-3 { --x: 22%; --dur: 17s; --delay: -5s; --leaf-size: 23px; }
-.leaf-4 { --x: 31%; --dur: 25s; --delay: -18s; --leaf-size: 32px; --leaf-color: #0f766e; }
-.leaf-5 { --x: 40%; --dur: 20s; --delay: -9s; --leaf-size: 27px; }
-.leaf-6 { --x: 49%; --dur: 27s; --delay: -16s; --leaf-size: 38px; --leaf-color: #22c55e; }
-.leaf-7 { --x: 57%; --dur: 18s; --delay: -7s; --leaf-size: 24px; }
-.leaf-8 { --x: 66%; --dur: 26s; --delay: -21s; --leaf-size: 34px; --leaf-color: #047857; }
-.leaf-9 { --x: 74%; --dur: 21s; --delay: -3s; --leaf-size: 28px; }
-.leaf-10 { --x: 82%; --dur: 24s; --delay: -14s; --leaf-size: 25px; --leaf-color: #65a30d; }
-.leaf-11 { --x: 90%; --dur: 19s; --delay: -10s; --leaf-size: 31px; }
-.leaf-12 { --x: 96%; --dur: 28s; --delay: -23s; --leaf-size: 23px; --leaf-color: #15803d; }
-.leaf-13 { --x: 35%; --dur: 30s; --delay: -26s; --leaf-size: 22px; --leaf-color: #0ea5a3; }
-.leaf-14 { --x: 69%; --dur: 31s; --delay: -28s; --leaf-size: 29px; --leaf-color: #14532d; }
+.leaf-stem { fill: #7a5b3e; opacity: 0.82; }
+.leaf-1 { --x: 6%; --dur: 19s; --delay: -2s; --leaf-size: 25px; --leaf-color: #5fa763; }
+.leaf-2 { --x: 14%; --dur: 23s; --delay: -12s; --leaf-size: 34px; --leaf-color: #66ab5e; }
+.leaf-3 { --x: 22%; --dur: 17s; --delay: -5s; --leaf-size: 23px; --leaf-color: #47885c; }
+.leaf-4 { --x: 31%; --dur: 25s; --delay: -18s; --leaf-size: 32px; --leaf-color: #4e9e5f; }
+.leaf-5 { --x: 40%; --dur: 20s; --delay: -9s; --leaf-size: 27px; --leaf-color: #5fa763; }
+.leaf-6 { --x: 49%; --dur: 27s; --delay: -16s; --leaf-size: 38px; --leaf-color: #66ab5e; }
+.leaf-7 { --x: 57%; --dur: 18s; --delay: -7s; --leaf-size: 24px; --leaf-color: #3f8f58; }
+.leaf-8 { --x: 66%; --dur: 26s; --delay: -21s; --leaf-size: 34px; --leaf-color: #47885c; }
+.leaf-9 { --x: 74%; --dur: 21s; --delay: -3s; --leaf-size: 28px; --leaf-color: #5fa763; }
+.leaf-10 { --x: 82%; --dur: 24s; --delay: -14s; --leaf-size: 25px; --leaf-color: #8fc177; }
+.leaf-11 { --x: 90%; --dur: 19s; --delay: -10s; --leaf-size: 31px; --leaf-color: #4e9e5f; }
+.leaf-12 { --x: 96%; --dur: 28s; --delay: -23s; --leaf-size: 23px; --leaf-color: #5fa763; }
+.leaf-13 { --x: 35%; --dur: 30s; --delay: -26s; --leaf-size: 22px; --leaf-color: #66ab5e; }
+.leaf-14 { --x: 69%; --dur: 31s; --delay: -28s; --leaf-size: 29px; --leaf-color: #3f8f58; }
 @keyframes leafFall {
   0% { transform: translate3d(0, -15vh, 0) rotate(0deg); opacity: 0; }
   8% { opacity: 0.82; }
@@ -2239,10 +2240,14 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .mist-front { opacity: 0.72; }
 .mist-back { opacity: 0.58; }
 .forest path {
-  fill: #0f5138;
-  opacity: 0.34;
+  fill: #2f5b44;
+  opacity: 0.32;
   filter: drop-shadow(0 -3px 0 rgba(255,255,255,0.08));
 }
+.mountain-svg .snow { fill: #f4f9f4; opacity: 0.92; }
+.mountain-svg .snow-front { opacity: 0.8; }
+.mountain-svg .sun { animation: sunBreathe 8s ease-in-out infinite; transform-origin: center; }
+@keyframes sunBreathe { 0%, 100% { opacity: 0.82; } 50% { opacity: 1; } }
 .about-nature-page .mountain-landscape { margin-top: 0; }
 
 /* ============ Blog (clean, non-immersive) + minimal motion ============ */
@@ -2267,7 +2272,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   50% { transform: translate(-14px, 12px) scale(1.14); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .blog-aurora, .maple-leaf { animation: none; }
+  .blog-aurora, .maple-leaf, .mountain-svg .sun { animation: none; }
   .maple-leaf { display: none; }
 }
 

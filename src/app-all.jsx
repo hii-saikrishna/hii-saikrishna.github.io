@@ -435,7 +435,7 @@ function UpdatesPage() {
       <div className="j-content">
         <header className="j-hero" data-screen-label="Milestones">
           <div className="j-eyebrow">The road so far</div>
-          <h1 className="j-title">Mile<br /><span className="outline">stones</span></h1>
+          <h1 className="j-title">Mile<span className="outline">stones</span></h1>
           <p className="j-lede">A scrolling trail through the work — papers shipped, field trials run, and the moves that got me here.</p>
           <div className="j-cue"><span className="j-cue-line"></span>Scroll to travel</div>
         </header>
@@ -674,10 +674,10 @@ function NatureBackdrop() {
     <div className="nature-backdrop" aria-hidden="true">
       {Array.from({ length: 14 }).map((_, i) => (
         <span key={i} className={`maple-leaf leaf-${i + 1}`}>
-          <svg viewBox="0 0 96 112" focusable="false" aria-hidden="true">
-            <path className="leaf-blade" d="M48 3c5.8 13.8 7.6 24.5 14.6 33.4 9.8-8.8 19.6-13.2 31.4-17.6-4.7 12.8-9.8 22.6-7 33.8 10.4 1.2 18.4 4.4 25 9.5-10.4 4.6-18.3 10.7-22.7 20.8 5.7 8.8 8.3 17.1 9.4 27.2-10.6-4.8-21.2-8.4-34.3-6.2-3.6 8.3-9.4 14.6-16.4 21.1-7-6.5-12.8-12.8-16.4-21.1-13.1-2.2-23.7 1.4-34.3 6.2 1.1-10.1 3.7-18.4 9.4-27.2C2.3 72.8-5.6 66.7-16 62.1c6.6-5.1 14.6-8.3 25-9.5 2.8-11.2-2.3-21-7-33.8 11.8 4.4 21.6 8.8 31.4 17.6C40.4 27.5 42.2 16.8 48 3Z" />
-            <path className="leaf-lobe" d="M48 12c-1.8 18.4-1.2 37.4 0 62M48 48C38.5 39.2 27.8 31.8 15.2 26M48 48c9.5-8.8 20.2-16.2 32.8-22M48 61.5C34 63.2 20.8 70.8 7.5 84M48 61.5c14 1.7 27.2 9.3 40.5 22.5M48 72c-6.2 10.8-10.5 22-12.8 34M48 72c6.2 10.8 10.5 22 12.8 34" />
-            <path className="leaf-stem" d="M48 80c-1.2 11.6-6.4 20.2-16.5 28" />
+          <svg viewBox="0 0 100 124" focusable="false" aria-hidden="true">
+            <path className="leaf-stem" d="M47 87 53 87 51 121 49 121Z" />
+            <path className="leaf-blade" d="M50 6 58 28 67 22 61 41 90 33 68 55 85 75 60 77 57 90 43 90 40 77 15 75 32 55 10 33 39 41 33 22 42 28Z" />
+            <path className="leaf-veins" d="M50 86V12 M50 70 86 36 M50 78 80 72 M50 70 14 36 M50 78 20 72" />
           </svg>
         </span>
       ))}
@@ -691,34 +691,44 @@ function MountainLandscape() {
       <svg className="mountain-svg" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" focusable="false">
         <defs>
           <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#d9f0ff" />
-            <stop offset="58%" stopColor="#eef9ff" />
-            <stop offset="100%" stopColor="#f5fff6" />
+            <stop offset="0%" stopColor="#cfe8fa" />
+            <stop offset="52%" stopColor="#e2f1ea" />
+            <stop offset="100%" stopColor="#f1fbf1" />
           </linearGradient>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#fff6df" stopOpacity="0.95" />
+            <stop offset="34%" stopColor="#fff0c6" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#ffeec0" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="sunCore" cx="50%" cy="44%" r="58%">
+            <stop offset="0%" stopColor="#fff8e6" />
+            <stop offset="60%" stopColor="#fff0c4" />
+            <stop offset="100%" stopColor="#ffe39f" />
+          </radialGradient>
           <linearGradient id="farRidge" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#a8d7cb" />
-            <stop offset="100%" stopColor="#d9efe4" />
+            <stop offset="0%" stopColor="#bcdbcc" />
+            <stop offset="100%" stopColor="#d9ece2" />
           </linearGradient>
           <linearGradient id="midRidge" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#62ad88" />
-            <stop offset="48%" stopColor="#2f8a62" />
-            <stop offset="100%" stopColor="#176344" />
+            <stop offset="0%" stopColor="#83bb9f" />
+            <stop offset="50%" stopColor="#5fa07f" />
+            <stop offset="100%" stopColor="#4a8b6a" />
           </linearGradient>
           <linearGradient id="frontRidge" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#2f7d55" />
-            <stop offset="54%" stopColor="#145c3f" />
-            <stop offset="100%" stopColor="#0d3f2e" />
+            <stop offset="0%" stopColor="#578f72" />
+            <stop offset="54%" stopColor="#3f7457" />
+            <stop offset="100%" stopColor="#2f5b44" />
           </linearGradient>
           <linearGradient id="facetLight" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#e6fff0" stopOpacity="0.78" />
-            <stop offset="100%" stopColor="#77bd98" stopOpacity="0.24" />
+            <stop offset="0%" stopColor="#ecfff5" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#a6cdb6" stopOpacity="0.22" />
           </linearGradient>
           <linearGradient id="facetShadow" x1="1" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#082f24" stopOpacity="0.46" />
-            <stop offset="100%" stopColor="#145c3f" stopOpacity="0.08" />
+            <stop offset="0%" stopColor="#1f4e3b" stopOpacity="0.42" />
+            <stop offset="100%" stopColor="#3f7457" stopOpacity="0.07" />
           </linearGradient>
           <filter id="mountainShadow" x="-5%" y="-10%" width="110%" height="130%">
-            <feDropShadow dx="0" dy="16" stdDeviation="16" floodColor="#0f3d2d" floodOpacity="0.18" />
+            <feDropShadow dx="0" dy="16" stdDeviation="16" floodColor="#1f4e3b" floodOpacity="0.16" />
           </filter>
           <linearGradient id="pageFade" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
@@ -726,8 +736,11 @@ function MountainLandscape() {
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0.96" />
           </linearGradient>
         </defs>
-        <rect width="1440" height="420" fill="transparent" />
-        <circle cx="1180" cy="92" r="46" fill="#fff7b8" opacity="0.32" />
+        <rect width="1440" height="420" fill="url(#skyGrad)" opacity="0.5" />
+        <g className="sun">
+          <circle cx="1148" cy="146" r="178" fill="url(#sunGlow)" />
+          <circle className="sun-disc" cx="1148" cy="146" r="46" fill="url(#sunCore)" />
+        </g>
         <path className="mist mist-back" d="M0 248C170 224 260 280 420 254s260-64 420-27 276 7 600-17v210H0Z" />
         <path className="ridge far" d="M0 286 90 214 168 258 260 176 382 276 486 204 602 282 720 168 850 276 968 198 1090 274 1218 172 1348 254 1440 196V420H0Z" fill="url(#farRidge)" />
         <g className="ridge mid" filter="url(#mountainShadow)">
@@ -738,8 +751,9 @@ function MountainLandscape() {
           <polygon points="846,122 742,340 890,276" fill="url(#facetLight)" />
           <polygon points="1322,180 1440,292 1360,260" fill="url(#facetShadow)" />
           <polygon points="1322,180 1192,344 1360,260" fill="url(#facetLight)" />
-          <path d="M307 182 340 132 377 188 351 177 332 202Z" fill="#f4fff7" opacity="0.9" />
-          <path d="M811 174 846 122 885 176 858 168 836 194Z" fill="#f4fff7" opacity="0.88" />
+          <path className="snow" d="M306 184 340 132 376 188 357 176 340 159 322 178Z" />
+          <path className="snow" d="M811 176 846 122 884 178 863 165 846 150 827 172Z" />
+          <path className="snow" d="M1289 222 1322 180 1357 226 1338 213 1322 200 1304 218Z" />
         </g>
         <path className="mist mist-front" d="M0 326C164 296 284 344 442 322s271-50 448-18 314 7 550-30v146H0Z" />
         <g className="ridge front" filter="url(#mountainShadow)">
@@ -749,8 +763,8 @@ function MountainLandscape() {
           <polygon points="892,250 1024,372 938,330" fill="url(#facetShadow)" />
           <polygon points="892,250 742,376 938,330" fill="url(#facetLight)" />
           <polygon points="1286,374 1440,284 1384,366" fill="url(#facetShadow)" />
-          <path d="M298 270 332 240 365 278 342 271 325 292Z" fill="#effff3" opacity="0.72" />
-          <path d="M856 280 892 250 927 283 905 279 884 302Z" fill="#effff3" opacity="0.68" />
+          <path className="snow snow-front" d="M299 286 332 240 365 288 346 276 332 262 315 282Z" />
+          <path className="snow snow-front" d="M859 296 892 250 926 298 906 285 892 271 874 292Z" />
         </g>
         <g className="forest">
           {Array.from({ length: 28 }).map((_, i) => {
@@ -759,7 +773,7 @@ function MountainLandscape() {
             return <path key={i} d={`M${x} 405l${h * 0.35} -${h} ${h * 0.35} ${h}h-${h * 0.7}Z`} />;
           })}
         </g>
-        <rect y="392" width="1440" height="28" fill="#f3fbf5" opacity="0.76" />
+        <rect y="392" width="1440" height="28" fill="#f1fbf1" opacity="0.72" />
         <rect width="1440" height="420" fill="url(#pageFade)" />
       </svg>
     </div>

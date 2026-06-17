@@ -114,28 +114,10 @@ function JourneyWorld() {
       scene.add(tree);
     }
 
-    // ---- Floating islands ----
-    const islands = [];
-    for (let i = 0; i < 4; i++) {
-      const isl = new THREE.Group();
-      const top = new THREE.Mesh(track(new THREE.CylinderGeometry(2.2, 1.6, 0.7, 9)), track(new THREE.MeshStandardMaterial({ color: 0x6db36a, flatShading: true, roughness: 1 })));
-      isl.add(top);
-      const rock = new THREE.Mesh(track(new THREE.ConeGeometry(1.7, 2.4, 8)), track(new THREE.MeshStandardMaterial({ color: 0x8e9a90, flatShading: true, roughness: 1 })));
-      rock.rotation.x = Math.PI; rock.position.y = -1.4;
-      isl.add(rock);
-      const tr = new THREE.Mesh(folGeo, folMats[i % 3]); tr.position.y = 1.0; tr.scale.setScalar(1.1); isl.add(tr);
-      const z = -30 - i * 65;
-      isl.position.set(jPathX(z) + (i % 2 ? 1 : -1) * (10 + Math.random() * 8), 11 + Math.random() * 5, z);
-      isl.scale.setScalar(0.8 + Math.random() * 0.8);
-      isl.userData = { baseY: isl.position.y, ph: Math.random() * 6 };
-      scene.add(isl);
-      islands.push(isl);
-    }
-
     // ---- Clouds ----
     const cloudGeo = track(new THREE.SphereGeometry(1, 7, 7));
     const cloudMat = track(new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: 0.85 }));
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 9; i++) {
       const c = new THREE.Group();
       for (let j = 0; j < 3; j++) {
         const s = new THREE.Mesh(cloudGeo, cloudMat);
@@ -143,8 +125,8 @@ function JourneyWorld() {
         s.scale.set(1.6 + Math.random(), 0.55, 1);
         c.add(s);
       }
-      const z = 8 - i * 55;
-      c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 17 + Math.random() * 6, z);
+      const z = 8 - i * 37;
+      c.position.set(jPathX(z) + (i % 2 ? -1 : 1) * (12 + Math.random() * 14), 16 + Math.random() * 7, z);
       scene.add(c);
     }
 
@@ -215,10 +197,6 @@ function JourneyWorld() {
       const skyEl = document.getElementById("j-sky");
       if (skyEl) skyEl.style.opacity = skyAmt;
 
-      islands.forEach((isl) => {
-        isl.position.y = isl.userData.baseY + Math.sin(t * 0.5 + isl.userData.ph) * 0.5;
-        isl.rotation.y = t * 0.04;
-      });
       worldRobots.forEach((r) => {
         r.built.update(t + r.ph);
         if (r.kind === "drone") r.built.group.position.y = r.baseY + Math.sin(t + r.ph) * 0.3;
