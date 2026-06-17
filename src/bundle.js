@@ -2852,13 +2852,17 @@ function ContactGlobe() {
     }
   }), /*#__PURE__*/React.createElement("p", {
     className: "contact-globe-cap mono"
-  }, "Places I've lived, studied & traveled \xB7 drag to spin"));
+  }, "every dot is a place I've been \xB7 drag to spin"));
 }
 
-// ===== Trip gallery — masonry of mixed aspect ratios + lightbox =====
+// ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
+  const stripRef = React.useRef(null);
+  const dragged = React.useRef(false);
+
+  // Lightbox: keyboard nav + lock the page so it can't scroll behind the photo.
   React.useEffect(() => {
     if (active === null) return;
     const onKey = e => {
@@ -2872,8 +2876,52 @@ function TripGallery() {
       document.body.style.overflow = prevOverflow;
     };
   }, [active, items.length]);
+
+  // Drag-to-scroll the strip (so a plain mouse can pan it, not just a trackpad).
+  React.useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    let down = false,
+      startX = 0,
+      startScroll = 0;
+    const onDown = e => {
+      down = true;
+      dragged.current = false;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+      el.classList.add("dragging");
+    };
+    const onMove = e => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 5) dragged.current = true;
+      el.scrollLeft = startScroll - dx;
+    };
+    const onUp = () => {
+      down = false;
+      el.classList.remove("dragging");
+    };
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, []);
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
+  const open = i => {
+    if (!dragged.current) setActive(i);
+  };
+  const nudge = dir => {
+    const el = stripRef.current;
+    if (el) el.scrollBy({
+      left: dir * el.clientWidth * 0.82,
+      behavior: "smooth"
+    });
+  };
   return /*#__PURE__*/React.createElement("section", {
     className: "section trips",
     "data-screen-label": "Trips"
@@ -2883,27 +2931,34 @@ function TripGallery() {
     className: "page-eyebrow"
   }, "Out in the world"), /*#__PURE__*/React.createElement("h2", {
     className: "trips-title"
-  }, "Trips & ", /*#__PURE__*/React.createElement("span", {
+  }, "Places I've ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
-  }, "field notes")), /*#__PURE__*/React.createElement("p", {
+  }, "wandered")), /*#__PURE__*/React.createElement("p", {
     className: "trips-lede"
-  }, "Conferences, fieldwork, and the places in between. Tap any photo to open it."), /*#__PURE__*/React.createElement("div", {
-    className: "trips-masonry"
+  }, "Trails, viewpoints, and the odd long flight. Drag sideways or use the arrows \u2014 tap a photo to open it."), /*#__PURE__*/React.createElement("div", {
+    className: "trips-strip-wrap"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "strip-arrow prev",
+    "aria-label": "Scroll left",
+    onClick: () => nudge(-1)
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "left"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "trips-strip",
+    ref: stripRef
   }, items.map((g, i) => /*#__PURE__*/React.createElement("figure", {
     key: g.src + i,
     className: "trip-card",
     tabIndex: 0,
     role: "button",
     "aria-label": `${g.place} — ${g.title}`,
-    onClick: () => setActive(i),
+    onClick: () => open(i),
     onKeyDown: e => {
-      if (e.key === "Enter" || e.key === " ") {
+      if (e.key === "Enter") {
         e.preventDefault();
         setActive(i);
       }
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "trip-media"
   }, /*#__PURE__*/React.createElement("img", {
     src: g.src,
     alt: g.title,
@@ -2916,13 +2971,19 @@ function TripGallery() {
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  }))), /*#__PURE__*/React.createElement("figcaption", null, g.place && /*#__PURE__*/React.createElement("span", {
+  })), (g.place || g.title) && /*#__PURE__*/React.createElement("figcaption", {
+    className: "trip-cap"
+  }, g.place && /*#__PURE__*/React.createElement("span", {
     className: "trip-place"
   }, g.place), g.title && /*#__PURE__*/React.createElement("span", {
     className: "trip-name"
-  }, g.title), g.desc && /*#__PURE__*/React.createElement("span", {
-    className: "trip-desc"
-  }, g.desc)))))), cur && /*#__PURE__*/React.createElement("div", {
+  }, g.title))))), /*#__PURE__*/React.createElement("button", {
+    className: "strip-arrow next",
+    "aria-label": "Scroll right",
+    onClick: () => nudge(1)
+  }, /*#__PURE__*/React.createElement(Arrow, {
+    dir: "right"
+  })))), cur && /*#__PURE__*/React.createElement("div", {
     className: "trip-lightbox",
     onClick: () => setActive(null),
     role: "dialog",
@@ -2982,18 +3043,12 @@ function AboutPage() {
   }, "A bit about ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
   }, "me"))), /*#__PURE__*/React.createElement("div", {
-    className: "contact-grid"
+    className: "about-combined"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "about-copy"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "hero-bio"
-  }, "I'm a PhD student in Artificial Intelligence at the University of Georgia, where I work with ", /*#__PURE__*/React.createElement("em", null, "Dr. Ramviyas Parasuraman"), " in the HeRoLab. Most of my time goes into getting groups of robots to map and navigate messy real environments together, in places where GPS drops out and reliable communication can't be assumed."), /*#__PURE__*/React.createElement("p", {
-    className: "hero-bio"
-  }, "Before Athens I spent time at Samsung R&D, and did my undergrad at IIIT Naya Raipur. I grew up in Guntur, in southern India, and much of my path since has been a slow move across the map. The globe marks the places I've lived, studied, and traveled \u2014 give it a spin."), /*#__PURE__*/React.createElement("p", {
-    className: "hero-bio"
-  }, "What keeps me in this field is the distance between a sentence and an action. A robot can be told to \"tidy the living room,\" but turning that into real movement in a space that keeps changing is a hard, open problem. I'm drawn to the questions that sit between perception, language, and control."), /*#__PURE__*/React.createElement("p", {
-    className: "hero-bio"
-  }, "Outside of research I travel whenever I get the chance, and I'm always happy to talk about robots and computer vision. The easiest way to reach me is by email, which is on the home page along with my other links.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
+    className: "about-intro"
+  }, /*#__PURE__*/React.createElement("p", null, "I'm happiest outdoors \u2014 a quiet trail, a good viewpoint, somewhere to slow down and just look. I'm also a creature of habit. I'll run the exact same routine, every single day, and be perfectly content about it. ", /*#__PURE__*/React.createElement("span", {
+    className: "about-wink"
+  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null));
 }
 function BlogList({
   openPost

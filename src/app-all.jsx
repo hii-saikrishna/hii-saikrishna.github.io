@@ -468,15 +468,19 @@ function ContactGlobe() {
         </span>
       )}
       <ThreeScene build={buildGlobeScene} style={{ width: "100%", height: "100%", minHeight: "var(--contact-globe-h)" }} />
-      <p className="contact-globe-cap mono">Places I've lived, studied &amp; traveled · drag to spin</p>
+      <p className="contact-globe-cap mono">every dot is a place I've been · drag to spin</p>
     </div>
   );
 }
 
-// ===== Trip gallery — masonry of mixed aspect ratios + lightbox =====
+// ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
 function TripGallery() {
   const items = window.TRIP_GALLERY || [];
   const [active, setActive] = React.useState(null);
+  const stripRef = React.useRef(null);
+  const dragged = React.useRef(false);
+
+  // Lightbox: keyboard nav + lock the page so it can't scroll behind the photo.
   React.useEffect(() => {
     if (active === null) return;
     const onKey = (e) => {
@@ -493,33 +497,64 @@ function TripGallery() {
     };
   }, [active, items.length]);
 
+  // Drag-to-scroll the strip (so a plain mouse can pan it, not just a trackpad).
+  React.useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    let down = false, startX = 0, startScroll = 0;
+    const onDown = (e) => { down = true; dragged.current = false; startX = e.clientX; startScroll = el.scrollLeft; el.classList.add("dragging"); };
+    const onMove = (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 5) dragged.current = true;
+      el.scrollLeft = startScroll - dx;
+    };
+    const onUp = () => { down = false; el.classList.remove("dragging"); };
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, []);
+
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
+  const open = (i) => { if (!dragged.current) setActive(i); };
+  const nudge = (dir) => {
+    const el = stripRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.82, behavior: "smooth" });
+  };
 
   return (
     <section className="section trips" data-screen-label="Trips">
       <div className="container">
         <div className="page-eyebrow">Out in the world</div>
-        <h2 className="trips-title">Trips &amp; <span className="ital">field notes</span></h2>
-        <p className="trips-lede">Conferences, fieldwork, and the places in between. Tap any photo to open it.</p>
-        <div className="trips-masonry">
-          {items.map((g, i) => (
-            <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
-              aria-label={`${g.place} — ${g.title}`}
-              onClick={() => setActive(i)}
-              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(i); } }}>
-              <div className="trip-media">
+        <h2 className="trips-title">Places I've <span className="ital">wandered</span></h2>
+        <p className="trips-lede">Trails, viewpoints, and the odd long flight. Drag sideways or use the arrows — tap a photo to open it.</p>
+        <div className="trips-strip-wrap">
+          <button className="strip-arrow prev" aria-label="Scroll left" onClick={() => nudge(-1)}><Arrow dir="left" /></button>
+          <div className="trips-strip" ref={stripRef}>
+            {items.map((g, i) => (
+              <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
+                aria-label={`${g.place} — ${g.title}`}
+                onClick={() => open(i)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}>
                 <img src={g.src} alt={g.title} loading="lazy" draggable="false" />
                 {g.kind && <span className={`trip-tag ${g.kind}`}>{g.kind}</span>}
                 <span className="trip-zoom" aria-hidden="true"><Arrow dir="right" /></span>
-              </div>
-              <figcaption>
-                {g.place && <span className="trip-place">{g.place}</span>}
-                {g.title && <span className="trip-name">{g.title}</span>}
-                {g.desc && <span className="trip-desc">{g.desc}</span>}
-              </figcaption>
-            </figure>
-          ))}
+                {(g.place || g.title) && (
+                  <figcaption className="trip-cap">
+                    {g.place && <span className="trip-place">{g.place}</span>}
+                    {g.title && <span className="trip-name">{g.title}</span>}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+          <button className="strip-arrow next" aria-label="Scroll right" onClick={() => nudge(1)}><Arrow dir="right" /></button>
         </div>
       </div>
 
@@ -564,29 +599,18 @@ function AboutPage() {
             <div className="page-eyebrow">About</div>
             <h1 className="page-title">A bit about <span className="ital">me</span></h1>
           </div>
-          <div className="contact-grid">
-            <div className="about-copy">
-              <p className="hero-bio">
-                I'm a PhD student in Artificial Intelligence at the University of Georgia, where I
-                work with <em>Dr. Ramviyas Parasuraman</em> in the HeRoLab. Most of my time goes into
-                getting groups of robots to map and navigate messy real environments together, in
-                places where GPS drops out and reliable communication can't be assumed.
+          <div className="about-combined">
+            <div className="about-intro">
+              <p>
+                I'm happiest outdoors — a quiet trail, a good viewpoint, somewhere to slow down and
+                just look. I'm also a creature of habit. I'll run the exact same routine, every single
+                day, and be perfectly content about it. <span className="about-wink">:)</span>
               </p>
-              <p className="hero-bio">
-                Before Athens I spent time at Samsung R&amp;D, and did my undergrad at IIIT Naya Raipur.
-                I grew up in Guntur, in southern India, and much of my path since has been a slow move
-                across the map. The globe marks the places I've lived, studied, and traveled — give it a spin.
-              </p>
-              <p className="hero-bio">
-                What keeps me in this field is the distance between a sentence and an action. A robot can
-                be told to "tidy the living room," but turning that into real movement in a space that keeps
-                changing is a hard, open problem. I'm drawn to the questions that sit between perception,
-                language, and control.
-              </p>
-              <p className="hero-bio">
-                Outside of research I travel whenever I get the chance, and I'm always happy to talk about
-                robots and computer vision. The easiest way to reach me is by email, which is on the home
-                page along with my other links.
+              <p>
+                The one thing that breaks the routine is travel. I want to see as much of this planet
+                as I possibly can. In robotics we have a word for it, <em>exploration</em> — pushing an
+                agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place
+                I've actually stood, and I'm nowhere near done filling it in.
               </p>
             </div>
             <ContactGlobe />
