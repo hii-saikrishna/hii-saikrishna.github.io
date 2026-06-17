@@ -87,17 +87,17 @@ const TRIP_GALLERY = [{
 // Home highlights — the same three directions as the Research page, each with a small 3D scene.
 const INTERESTS = [{
   id: "embodied",
-  scene: "humanoid",
+  scene: "embodied",
   title: "Robot Learning & Embodied Intelligence",
   desc: "Robots that reason about the world they live in."
 }, {
   id: "multirobot",
-  scene: "drone",
+  scene: "swarm",
   title: "Mapping & Localization for Multi-Robot Systems",
   desc: "Many robots, one shared map — even when comms drop."
 }, {
   id: "spatial",
-  scene: "rover",
+  scene: "gp",
   title: "Spatial Intelligence",
   desc: "Learning a belief over space itself."
 }];
@@ -2668,7 +2668,7 @@ function HomePage({
   }, /*#__PURE__*/React.createElement("div", {
     className: "glyph-wrap"
   }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: robotCardScene(int.scene)
+    build: dioramaScene(int.scene)
   })), /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc))))))));
 }
 function ResearchPage() {
