@@ -150,7 +150,7 @@ function HeroGallery() {
 
   React.useEffect(() => {
     if (n < 2) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % n), 10000);
+    const id = setInterval(() => setIdx((i) => (i + 1) % n), 5000);
     return () => clearInterval(id);
   }, [n]);
 
