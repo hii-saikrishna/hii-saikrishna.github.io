@@ -1569,6 +1569,16 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   min-height: var(--contact-globe-h);
   cursor: grab;
 }
+/* The WebGL renderer calls setSize(w, h, false), which sets the canvas pixel
+   buffer but NOT its CSS box. Without this rule the canvas displays at its
+   intrinsic size (container × devicePixelRatio), so on HiDPI screens it renders
+   ~2× too large and overflow:hidden crops it to a blank-looking corner. Force it
+   to fill the host, exactly like every other 3D scene host does. */
+.contact-globe canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
 .contact-globe-fallback {
   position: absolute;
   inset: 0 0 34px;
