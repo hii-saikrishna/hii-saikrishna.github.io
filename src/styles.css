@@ -264,7 +264,7 @@ em { font-style: italic; }
 .hero {
   position: relative;
   overflow: visible;
-  padding: 24px 0 100px;
+  padding: 24px 0 52px;
   background:
     radial-gradient(ellipse 55% 60% at 78% 18%, oklch(0.97 0.025 150) 0%, transparent 70%),
     radial-gradient(ellipse 40% 40% at 8% 80%, oklch(0.975 0.02 150) 0%, transparent 70%);
@@ -469,6 +469,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   padding: 80px 0;
   border-top: 1px solid var(--line-2);
 }
+.section.interests { padding-top: 44px; }
 .section.no-border { border-top: none; }
 .section.alt { background: var(--bg-soft); }
 .section-head {
