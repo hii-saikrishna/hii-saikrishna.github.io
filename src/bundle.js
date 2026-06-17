@@ -2563,7 +2563,7 @@ function HomePage({
     href: "https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman",
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "Dr. Ramviyas Parasuraman"), ". My research combines multi-robot systems, spatial intelligence, embodied AI, foundation models, world models, and reinforcement learning to help robots map, localize, plan, and act in complex real-world environments."), /*#__PURE__*/React.createElement("p", {
+  }, "Dr. Ramviyas Parasuraman"), ". My research combines multi-robot systems, spatial intelligence, embodied AI to help robots map, localize, plan, and act in complex real-world environments."), /*#__PURE__*/React.createElement("p", {
     className: "hero-bio"
   }, "Previously, I was a research intern at the", " ", /*#__PURE__*/React.createElement("a", {
     href: "https://engineering.louisville.edu/research/centersinstitutes/larri/",
