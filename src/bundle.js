@@ -3118,23 +3118,248 @@ function NatureBackdrop() {
   }).map((_, i) => /*#__PURE__*/React.createElement("span", {
     key: i,
     className: `maple-leaf leaf-${i + 1}`
-  })));
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 96 112",
+    focusable: "false",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    className: "leaf-blade",
+    d: "M48 3c5.8 13.8 7.6 24.5 14.6 33.4 9.8-8.8 19.6-13.2 31.4-17.6-4.7 12.8-9.8 22.6-7 33.8 10.4 1.2 18.4 4.4 25 9.5-10.4 4.6-18.3 10.7-22.7 20.8 5.7 8.8 8.3 17.1 9.4 27.2-10.6-4.8-21.2-8.4-34.3-6.2-3.6 8.3-9.4 14.6-16.4 21.1-7-6.5-12.8-12.8-16.4-21.1-13.1-2.2-23.7 1.4-34.3 6.2 1.1-10.1 3.7-18.4 9.4-27.2C2.3 72.8-5.6 66.7-16 62.1c6.6-5.1 14.6-8.3 25-9.5 2.8-11.2-2.3-21-7-33.8 11.8 4.4 21.6 8.8 31.4 17.6C40.4 27.5 42.2 16.8 48 3Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "leaf-lobe",
+    d: "M48 12c-1.8 18.4-1.2 37.4 0 62M48 48C38.5 39.2 27.8 31.8 15.2 26M48 48c9.5-8.8 20.2-16.2 32.8-22M48 61.5C34 63.2 20.8 70.8 7.5 84M48 61.5c14 1.7 27.2 9.3 40.5 22.5M48 72c-6.2 10.8-10.5 22-12.8 34M48 72c6.2 10.8 10.5 22 12.8 34"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "leaf-stem",
+    d: "M48 80c-1.2 11.6-6.4 20.2-16.5 28"
+  })))));
 }
 function MountainLandscape() {
   return /*#__PURE__*/React.createElement("div", {
     className: "mountain-landscape",
     "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "mountain sun"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "mountain ridge ridge-back"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "mountain ridge ridge-mid"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "mountain ridge ridge-front"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "mountain ground"
-  }));
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "mountain-svg",
+    viewBox: "0 0 1440 420",
+    preserveAspectRatio: "xMidYMax slice",
+    focusable: "false"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "skyGrad",
+    x1: "0",
+    x2: "0",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#d9f0ff"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "58%",
+    stopColor: "#eef9ff"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#f5fff6"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "farRidge",
+    x1: "0",
+    x2: "0",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#a8d7cb"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#d9efe4"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "midRidge",
+    x1: "0",
+    x2: "1",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#62ad88"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "48%",
+    stopColor: "#2f8a62"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#176344"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "frontRidge",
+    x1: "0",
+    x2: "1",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#2f7d55"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "54%",
+    stopColor: "#145c3f"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#0d3f2e"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "facetLight",
+    x1: "0",
+    x2: "1",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#e6fff0",
+    stopOpacity: "0.78"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#77bd98",
+    stopOpacity: "0.24"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "facetShadow",
+    x1: "1",
+    x2: "0",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#082f24",
+    stopOpacity: "0.46"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#145c3f",
+    stopOpacity: "0.08"
+  })), /*#__PURE__*/React.createElement("filter", {
+    id: "mountainShadow",
+    x: "-5%",
+    y: "-10%",
+    width: "110%",
+    height: "130%"
+  }, /*#__PURE__*/React.createElement("feDropShadow", {
+    dx: "0",
+    dy: "16",
+    stdDeviation: "16",
+    floodColor: "#0f3d2d",
+    floodOpacity: "0.18"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "pageFade",
+    x1: "0",
+    x2: "0",
+    y1: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#ffffff",
+    stopOpacity: "0"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "76%",
+    stopColor: "#ffffff",
+    stopOpacity: "0"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#ffffff",
+    stopOpacity: "0.96"
+  }))), /*#__PURE__*/React.createElement("rect", {
+    width: "1440",
+    height: "420",
+    fill: "transparent"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "1180",
+    cy: "92",
+    r: "46",
+    fill: "#fff7b8",
+    opacity: "0.32"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "mist mist-back",
+    d: "M0 248C170 224 260 280 420 254s260-64 420-27 276 7 600-17v210H0Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "ridge far",
+    d: "M0 286 90 214 168 258 260 176 382 276 486 204 602 282 720 168 850 276 968 198 1090 274 1218 172 1348 254 1440 196V420H0Z",
+    fill: "url(#farRidge)"
+  }), /*#__PURE__*/React.createElement("g", {
+    className: "ridge mid",
+    filter: "url(#mountainShadow)"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M0 350 122 236 224 288 340 132 468 334 590 214 718 340 846 122 972 330 1080 224 1192 344 1322 180 1440 292V420H0Z",
+    fill: "url(#midRidge)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "340,132 468,334 382,274",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "340,132 255,288 382,274",
+    fill: "url(#facetLight)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "846,122 972,330 890,276",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "846,122 742,340 890,276",
+    fill: "url(#facetLight)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "1322,180 1440,292 1360,260",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "1322,180 1192,344 1360,260",
+    fill: "url(#facetLight)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M307 182 340 132 377 188 351 177 332 202Z",
+    fill: "#f4fff7",
+    opacity: "0.9"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M811 174 846 122 885 176 858 168 836 194Z",
+    fill: "#f4fff7",
+    opacity: "0.88"
+  })), /*#__PURE__*/React.createElement("path", {
+    className: "mist mist-front",
+    d: "M0 326C164 296 284 344 442 322s271-50 448-18 314 7 550-30v146H0Z"
+  }), /*#__PURE__*/React.createElement("g", {
+    className: "ridge front",
+    filter: "url(#mountainShadow)"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M0 378 108 304 214 342 332 240 460 368 600 268 742 376 892 250 1024 372 1158 282 1286 374 1440 284V420H0Z",
+    fill: "url(#frontRidge)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "332,240 460,368 379,326",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "332,240 214,342 379,326",
+    fill: "url(#facetLight)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "892,250 1024,372 938,330",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "892,250 742,376 938,330",
+    fill: "url(#facetLight)"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "1286,374 1440,284 1384,366",
+    fill: "url(#facetShadow)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M298 270 332 240 365 278 342 271 325 292Z",
+    fill: "#effff3",
+    opacity: "0.72"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M856 280 892 250 927 283 905 279 884 302Z",
+    fill: "#effff3",
+    opacity: "0.68"
+  })), /*#__PURE__*/React.createElement("g", {
+    className: "forest"
+  }, Array.from({
+    length: 28
+  }).map((_, i) => {
+    const x = 22 + i * 53;
+    const h = 24 + i % 5 * 7;
+    return /*#__PURE__*/React.createElement("path", {
+      key: i,
+      d: `M${x} 405l${h * 0.35} -${h} ${h * 0.35} ${h}h-${h * 0.7}Z`
+    });
+  })), /*#__PURE__*/React.createElement("rect", {
+    y: "392",
+    width: "1440",
+    height: "28",
+    fill: "#f3fbf5",
+    opacity: "0.76"
+  }), /*#__PURE__*/React.createElement("rect", {
+    width: "1440",
+    height: "420",
+    fill: "url(#pageFade)"
+  })));
 }
 function BlogList({
   openPost
