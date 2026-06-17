@@ -2264,8 +2264,17 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .trip-cap .trip-name {
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 16.5px;
   line-height: 1.2;
+}
+.trip-sub { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.trip-dot { color: rgba(255, 255, 255, 0.5); font-size: 9px; }
+.trip-when {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 /* strip scroll buttons */
@@ -2341,6 +2350,13 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--accent-ink);
+}
+.tl-when {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-4);
 }
 .tl-title { font-family: var(--serif); font-size: 21px; line-height: 1.15; margin-top: 8px; }
 .tl-desc { color: var(--ink-3); font-size: 14px; line-height: 1.5; margin-top: 6px; }

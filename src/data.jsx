@@ -27,18 +27,20 @@ const HOME_GALLERY = [
 //   place: short location line   title: short caption   desc: optional sentence
 // Images & video live in attached_assets/Gallery/ (web-safe filenames).
 // A .mp4 src is detected automatically and shown as a playable clip.
+// Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [
-  { src: "attached_assets/Gallery/icra-2025-demos.mp4", kind: "academic", place: "ICRA 2025",
-    title: "Robots, live", desc: "My first time watching live demonstrations of all kinds of robots." },
-  { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", kind: "academic", place: "Hangzhou, China",
-    title: "IROS 2025", desc: "Fall 2025, at the IROS conference in Hangzhou." },
   { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", kind: "personal", place: "HeRoLab",
-    title: "Thanksgiving with the lab", desc: "Thanksgiving lunch, 2025." },
+    title: "Thanksgiving with the lab", when: "Nov 2025", desc: "Thanksgiving lunch with the lab." },
+  { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", kind: "academic", place: "Hangzhou, China",
+    title: "IROS 2025", when: "Fall 2025", desc: "At the IROS conference in Hangzhou." },
   { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", kind: "personal", place: "HeRoLab",
-    title: "Aiman's farewell", desc: "Sending off a labmate, summer 2025." },
-  // —— Add more photos/videos: drop the file in attached_assets/Gallery/ and add a line ——
-  // { src: "attached_assets/Gallery/manali-2024.jpg", kind: "personal", place: "Manali, India",
-  //   title: "Himalayan road trip", desc: "A few days off the grid in the mountains." },
+    title: "Aiman's farewell", when: "Summer 2025", desc: "Sending off a labmate." },
+  { src: "attached_assets/Gallery/icra-2025-demos.mp4", kind: "academic", place: "ICRA 2025",
+    title: "Robots, live", when: "May 2025", desc: "My first time watching live demonstrations of all kinds of robots." },
+  { src: "attached_assets/Gallery/aimslab-louisville-2023.jpeg", kind: "academic", place: "Louisville, KY",
+    title: "AIMSLab", when: "2023–24", desc: "A great learning stretch with Dr. Sabur at the University of Louisville." },
+  // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
+  // { src: "attached_assets/Gallery/manali.jpg", kind: "personal", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
 
 const INTERESTS = [

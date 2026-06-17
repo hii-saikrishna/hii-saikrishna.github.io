@@ -535,7 +535,7 @@ function TripGallery() {
       <div className="container">
         <div className="page-eyebrow">Out in the world</div>
         <h2 className="trips-title">Places I've <span className="ital">wandered</span></h2>
-        <p className="trips-lede">Trails, viewpoints, and the odd long flight. Drag sideways or use the arrows — tap a photo to open it.</p>
+        <p className="trips-lede">Conferences, labs, and the people along the way — newest first. Drag sideways or use the arrows, and tap to open.</p>
         <div className="trips-strip-wrap">
           <button className="strip-arrow prev" aria-label="Scroll left" onClick={() => nudge(-1)}><Arrow dir="left" /></button>
           <div className="trips-strip" ref={stripRef}>
@@ -543,21 +543,22 @@ function TripGallery() {
               <figure key={g.src + i} className="trip-card" tabIndex={0} role="button"
                 aria-label={`${g.place} — ${g.title}`}
                 onClick={() => open(i)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}
-                onMouseEnter={(e) => { const v = e.currentTarget.querySelector("video"); if (v) v.play().catch(() => {}); }}
-                onMouseLeave={(e) => { const v = e.currentTarget.querySelector("video"); if (v) v.pause(); }}>
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(i); } }}>
                 {isVideo(g.src)
-                  ? <video src={g.src + "#t=0.1"} muted loop playsInline preload="metadata" draggable="false" />
+                  ? <video ref={(el) => { if (el) el.muted = true; }} src={g.src}
+                      muted loop autoPlay playsInline preload="auto" draggable="false" />
                   : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
-                {isVideo(g.src) && <span className="trip-play" aria-hidden="true">▶</span>}
-                {g.kind && <span className={`trip-tag ${g.kind}`}>{g.kind}</span>}
                 <span className="trip-zoom" aria-hidden="true"><Arrow dir="right" /></span>
-                {(g.place || g.title) && (
-                  <figcaption className="trip-cap">
-                    {g.place && <span className="trip-place">{g.place}</span>}
-                    {g.title && <span className="trip-name">{g.title}</span>}
-                  </figcaption>
-                )}
+                <figcaption className="trip-cap">
+                  {g.title && <span className="trip-name">{g.title}</span>}
+                  {(g.place || g.when) && (
+                    <span className="trip-sub">
+                      {g.place && <span className="trip-place">{g.place}</span>}
+                      {g.place && g.when && <span className="trip-dot">·</span>}
+                      {g.when && <span className="trip-when">{g.when}</span>}
+                    </span>
+                  )}
+                </figcaption>
               </figure>
             ))}
           </div>
@@ -580,8 +581,8 @@ function TripGallery() {
               : <img src={cur.src} alt={cur.title} />}
             <figcaption>
               <div className="tl-head">
-                {cur.kind && <span className={`trip-tag ${cur.kind} static`}>{cur.kind}</span>}
                 {cur.place && <span className="tl-place">{cur.place}</span>}
+                {cur.when && <span className="tl-when">{cur.when}</span>}
               </div>
               {cur.title && <div className="tl-title">{cur.title}</div>}
               {cur.desc && <p className="tl-desc">{cur.desc}</p>}
