@@ -1551,9 +1551,62 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .contact-globe {
   position: relative;
   min-height: 460px;
+  overflow: hidden;
 }
-.contact-globe > div { width: 100%; height: 100%; min-height: 460px; cursor: grab; }
+.contact-globe > div {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  cursor: grab;
+}
+.contact-globe-fallback {
+  position: absolute;
+  inset: 0 0 34px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.contact-globe-earth {
+  position: relative;
+  display: block;
+  width: min(78%, 380px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-image: url("../attached_assets/earth-atmos-2048.jpg");
+  background-size: 210% 100%;
+  background-position: 58% center;
+  box-shadow:
+    inset -44px -18px 70px rgba(0, 22, 42, 0.45),
+    inset 18px 8px 34px rgba(255, 255, 255, 0.2),
+    0 30px 70px rgba(30, 88, 124, 0.22);
+  animation: globeFallbackPan 42s linear infinite;
+}
+.contact-globe-earth::before,
+.contact-globe-earth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.contact-globe-earth::before {
+  background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,0.34), transparent 24%),
+    radial-gradient(circle at 70% 74%, rgba(0,0,0,0.22), transparent 42%);
+  mix-blend-mode: soft-light;
+}
+.contact-globe-earth::after {
+  background-image: url("../attached_assets/earth-clouds-1024.png");
+  background-size: 210% 100%;
+  background-position: 50% center;
+  opacity: 0.34;
+  animation: globeFallbackClouds 58s linear infinite;
+}
 .contact-globe-cap {
+  position: relative;
+  z-index: 3;
   text-align: center;
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -1561,10 +1614,20 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   margin-top: 8px;
 }
 
+@keyframes globeFallbackPan {
+  from { background-position: 58% center; }
+  to { background-position: -152% center; }
+}
+@keyframes globeFallbackClouds {
+  from { background-position: 50% center; }
+  to { background-position: -160% center; }
+}
+
 @media (max-width: 760px) {
   .hero-scene, .hero-scene > div { min-height: 340px; }
   .thrust-img, .thrust-img > div { min-height: 280px; }
   .contact-globe, .contact-globe > div { min-height: 360px; }
+  .contact-globe-earth { width: min(86%, 320px); }
 }
 
 /* ============ Hero photo gallery (with 3D robot scroller) ============ */

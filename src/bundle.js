@@ -2871,7 +2871,12 @@ function ContactPage() {
     dir: "right"
   }))))), /*#__PURE__*/React.createElement("div", {
     className: "contact-globe"
-  }, /*#__PURE__*/React.createElement(ThreeScene, {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "contact-globe-fallback",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "contact-globe-earth"
+  })), /*#__PURE__*/React.createElement(ThreeScene, {
     build: buildGlobeScene,
     style: {
       width: "100%",

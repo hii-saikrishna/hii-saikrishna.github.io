@@ -479,6 +479,9 @@ function ContactPage() {
             </div>
           </div>
           <div className="contact-globe">
+            <span className="contact-globe-fallback" aria-hidden="true">
+              <span className="contact-globe-earth"></span>
+            </span>
             <ThreeScene build={buildGlobeScene} style={{ width: "100%", height: "100%", minHeight: 460 }} />
             <p className="contact-globe-cap mono">Places I've lived, studied & traveled · drag to spin</p>
           </div>
