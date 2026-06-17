@@ -276,10 +276,10 @@ function HomePage({ go }) {
                   <a href="https://www.uga.edu" target="_blank" rel="noopener noreferrer">University of Georgia</a>,
                   working under the supervision of{" "}
                   <a href="https://computing.uga.edu/directory/people/ramviyas-nattanmai-parasuraman" target="_blank" rel="noopener noreferrer">Dr. Ramviyas Parasuraman</a>.
-                  My research lies at the intersection of multi-robot systems, spatial intelligence, and embodied AI, focusing on enabling robots to collaboratively map, localize, plan, and execute tasks in complex real-world environments.
+                  My research combines multi-robot systems, spatial intelligence, embodied AI, foundation models, world models, and reinforcement learning to help robots map, localize, plan, and act in complex real-world environments.
                 </p>
                 <p className="hero-bio">
-                  I am particularly interested in leveraging foundation models, world models, and reinforcement learning to build scalable, adaptive, and intelligent robotic systems. Previously, I was a research intern at the{" "}
+                  Previously, I was a research intern at the{" "}
                   <a href="https://engineering.louisville.edu/research/centersinstitutes/larri/" target="_blank" rel="noopener noreferrer">Louisville Automation &amp; Robotics Research Institute</a>,
                   where I worked with{" "}
                   <a href="https://engineering.louisville.edu/faculty/sabur-h-baidya/" target="_blank" rel="noopener noreferrer">Dr. Sabur Baidya</a>,
