@@ -1779,7 +1779,7 @@ Object.assign(window, {
 });
 
 /* ===== src/globe.jsx ===== */
-// ===== 3D Globe — real continents (recolored earth texture) + visit heatmap =====
+// ===== 3D Globe — local procedural continents + visit heatmap =====
 
 const VISITED_PLACES = [{
   name: "Athens, GA",
@@ -1886,8 +1886,8 @@ function makeHeatTexture(color) {
 // Procedural earth — always available, no network. Ocean + clearly-readable land
 // masses with a touch of relief, so the globe never renders as a flat single color.
 function makeProceduralEarth() {
-  const W = 1024,
-    H = 512;
+  const W = 768,
+    H = 384;
   const c = document.createElement("canvas");
   c.width = W;
   c.height = H;
@@ -1954,19 +1954,6 @@ function makeProceduralEarth() {
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }
-
-// Upgrade to the photoreal NASA earth-day texture if it loads (kept full-color:
-// blue oceans, green/tan land, polar ice — water & relief clearly visible).
-function loadRealEarth(onReady) {
-  try {
-    const loader = new THREE.TextureLoader();
-    loader.setCrossOrigin("anonymous");
-    loader.load("https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg", tex => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      onReady(tex);
-    }, undefined, () => {/* keep procedural fallback */});
-  } catch (e) {/* keep procedural fallback */}
-}
 function buildGlobeScene(ctx) {
   const {
     scene,
@@ -1983,16 +1970,13 @@ function buildGlobeScene(ctx) {
   const R = 1.0;
   const globe = new THREE.Group();
   scene.add(globe);
+  const earthTexture = makeProceduralEarth();
   const sphereMat = new THREE.MeshStandardMaterial({
-    map: makeProceduralEarth(),
+    map: earthTexture,
     roughness: 0.92,
     metalness: 0.0
   });
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 64, 64), sphereMat));
-  loadRealEarth(tex => {
-    sphereMat.map = tex;
-    sphereMat.needsUpdate = true;
-  });
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(R, 48, 48), sphereMat));
 
   // soft atmospheric halo (cool blue)
   const halo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.07, 32, 32), new THREE.MeshBasicMaterial({
@@ -2121,12 +2105,25 @@ function buildGlobeScene(ctx) {
       el.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       el.removeEventListener("pointermove", onDrag);
+      const disposed = new Set();
+      const disposeOnce = obj => {
+        if (obj && obj.dispose && !disposed.has(obj)) {
+          disposed.add(obj);
+          obj.dispose();
+        }
+      };
       scene.traverse(o => {
-        if (o.geometry) o.geometry.dispose();
-        if (o.material && o.material.dispose) o.material.dispose();
+        disposeOnce(o.geometry);
+        const materials = Array.isArray(o.material) ? o.material : [o.material];
+        materials.forEach(mat => {
+          if (!mat) return;
+          disposeOnce(mat.map);
+          disposeOnce(mat);
+        });
       });
-      heatGreen.dispose();
-      heatAmber.dispose();
+      disposeOnce(earthTexture);
+      disposeOnce(heatGreen);
+      disposeOnce(heatAmber);
     }
   };
 }
