@@ -29,18 +29,22 @@ const HOME_GALLERY = [
 // A .mp4 src is detected automatically and shown as a playable clip.
 // Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [
-  { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", kind: "personal", place: "HeRoLab",
+  { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", place: "HeRoLab",
     title: "Thanksgiving with the lab", when: "Nov 2025", desc: "Thanksgiving lunch with the lab." },
-  { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", kind: "academic", place: "Hangzhou, China",
+  { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", place: "Hangzhou, China",
     title: "IROS 2025", when: "Fall 2025", desc: "At the IROS conference in Hangzhou." },
-  { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", kind: "personal", place: "HeRoLab",
+  { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", place: "HeRoLab",
     title: "Aiman's farewell", when: "Summer 2025", desc: "Sending off a labmate." },
-  { src: "attached_assets/Gallery/icra-2025-demos.mp4", kind: "academic", place: "ICRA 2025",
-    title: "Robots, live", when: "May 2025", desc: "My first time watching live demonstrations of all kinds of robots." },
-  { src: "attached_assets/Gallery/aimslab-louisville-2023.jpeg", kind: "academic", place: "Louisville, KY",
+  { src: "attached_assets/Gallery/icra-2025-atlanta.mp4", place: "Atlanta, GA",
+    title: "ICRA 2025", when: "May 2025", desc: "My first time watching live demonstrations of all kinds of robots." },
+  { src: "attached_assets/Gallery/nsf-supercollider-2024-lexington.jpeg", place: "Lexington, KY",
+    title: "NSF EPSCoR SuperCollider", when: "2024", desc: "The NSF EPSCoR SuperCollider convening." },
+  { src: "attached_assets/Gallery/aimslab-louisville-2023.jpeg", place: "Louisville, KY",
     title: "AIMSLab", when: "2023–24", desc: "A great learning stretch with Dr. Sabur at the University of Louisville." },
+  { src: "attached_assets/Gallery/tencon-2023.png", title: "IEEE TENCON 2023", when: "Fall 2023",
+    desc: "The IEEE Region 10 (TENCON) conference." },
   // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
-  // { src: "attached_assets/Gallery/manali.jpg", kind: "personal", place: "Manali, India", title: "Road trip", when: "2024" },
+  // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
 
 const INTERESTS = [
