@@ -685,101 +685,119 @@ function NatureBackdrop() {
   );
 }
 
-// Low-poly 3D mountain range footer — same flat-shaded palette as the Milestones world.
+// Low-poly 3D mountain range footer — soft sky, shining sun, snow-capped sage peaks.
 function buildMountainFooter({ scene, camera, renderer }) {
   renderer.setClearColor(0x000000, 0);
-  scene.fog = new THREE.Fog(0xe9f3ea, 18, 44);
-
-  camera.fov = 40;
-  camera.position.set(0, 3.5, 15);
-  camera.updateProjectionMatrix();
-  camera.lookAt(0, 2.4, 0);
-
-  scene.add(new THREE.HemisphereLight(0xfdfffa, 0xc4ddc8, 1.15));
-  const sunLight = new THREE.DirectionalLight(0xfff4dd, 1.45);
-  sunLight.position.set(8, 10, 6);
-  scene.add(sunLight);
 
   const disposables = [];
   const track = (o) => { disposables.push(o); return o; };
   let seed = 20240617;
   const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
 
-  const coneGeo = track(new THREE.ConeGeometry(1, 1, 6));
-  const matFar = track(new THREE.MeshStandardMaterial({ color: 0xb4d0c2, flatShading: true, roughness: 1 }));
-  const matMid = track(new THREE.MeshStandardMaterial({ color: 0x93b8a6, flatShading: true, roughness: 1 }));
-  const matFront = track(new THREE.MeshStandardMaterial({ color: 0x6f9f86, flatShading: true, roughness: 1 }));
-  const matSnow = track(new THREE.MeshStandardMaterial({ color: 0xf4f9f4, flatShading: true, roughness: 0.9 }));
+  // ---- sky backdrop (soft vertical gradient) ----
+  const skyCanvas = document.createElement("canvas");
+  skyCanvas.width = 8; skyCanvas.height = 256;
+  const skyCtx = skyCanvas.getContext("2d");
+  const skyGrad = skyCtx.createLinearGradient(0, 0, 0, 256);
+  skyGrad.addColorStop(0.0, "#a6d2ef");
+  skyGrad.addColorStop(0.42, "#c7e4f2");
+  skyGrad.addColorStop(0.72, "#e4f1ec");
+  skyGrad.addColorStop(1.0, "#eef7ef");
+  skyCtx.fillStyle = skyGrad; skyCtx.fillRect(0, 0, 8, 256);
+  scene.background = track(new THREE.CanvasTexture(skyCanvas));
+  scene.fog = new THREE.Fog(0xe4f1ec, 20, 46);
+
+  camera.fov = 42;
+  camera.position.set(0, 3, 16);
+  camera.updateProjectionMatrix();
+  camera.lookAt(0, 1.6, 0);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcfe6d6, 1.35));
+  const sunLight = new THREE.DirectionalLight(0xfff2d6, 1.6);
+  sunLight.position.set(-10, 9, 5);
+  scene.add(sunLight);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+
+  // ---- snow-capped sage peaks, three depth rows ----
+  const coneGeo = track(new THREE.ConeGeometry(1, 1, 7));
+  const matFar = track(new THREE.MeshStandardMaterial({ color: 0xbcd6da, flatShading: true, roughness: 1 }));
+  const matMid = track(new THREE.MeshStandardMaterial({ color: 0x9ec3ac, flatShading: true, roughness: 1 }));
+  const matFront = track(new THREE.MeshStandardMaterial({ color: 0x83b298, flatShading: true, roughness: 1 }));
+  const matSnow = track(new THREE.MeshStandardMaterial({ color: 0xf6fbf7, flatShading: true, roughness: 0.85 }));
 
   const range = new THREE.Group();
   scene.add(range);
+  const K = 5;
   const addPeak = (x, z, r, hgt, mat, snow) => {
     const m = new THREE.Mesh(coneGeo, mat);
     m.scale.set(r, hgt, r);
-    m.position.set(x, hgt / 2 - 3.6, z);
+    m.position.set(x, hgt / 2 - K, z);
     m.rotation.y = rand() * Math.PI;
     range.add(m);
     if (snow) {
+      const f = 0.30 + rand() * 0.06;
       const cap = new THREE.Mesh(coneGeo, matSnow);
-      cap.scale.set(r * 0.42, hgt * 0.34, r * 0.42);
-      cap.position.set(x, hgt - hgt * 0.17 - 3.6, z);
+      cap.scale.set(r * f * 1.06, hgt * f, r * f * 1.06); // a touch proud of the face — no z-fight
+      cap.position.set(x, (hgt - K) - (hgt * f) / 2, z);
       cap.rotation.y = m.rotation.y;
       range.add(cap);
     }
   };
-  for (let i = 0; i < 15; i++) addPeak(-42 + i * 6 + (rand() - 0.5) * 2, -5 - rand() * 1.5, 3.4 + rand() * 1.4, 7 + rand() * 2, matFar, rand() > 0.5);
-  for (let i = 0; i < 13; i++) addPeak(-39 + i * 6.4 + (rand() - 0.5) * 2, -1 - rand(), 3 + rand() * 1.3, 6 + rand() * 1.8, matMid, rand() > 0.35);
-  for (let i = 0; i < 11; i++) addPeak(-36 + i * 7 + (rand() - 0.5) * 2, 2.5 + rand() * 0.8, 2.6 + rand() * 1.2, 5 + rand() * 1.6, matFront, rand() > 0.7);
+  for (let i = 0; i < 12; i++) addPeak(-46 + i * 8.4 + (rand() - 0.5) * 3, -5.5 - rand() * 2, 4.6 + rand() * 1.8, 7 + rand() * 2.2, matFar, rand() > 0.4);
+  for (let i = 0; i < 11; i++) addPeak(-44 + i * 8.6 + (rand() - 0.5) * 3, -1.5 - rand(), 4.2 + rand() * 1.6, 6 + rand() * 1.8, matMid, rand() > 0.3);
+  for (let i = 0; i < 9; i++) addPeak(-40 + i * 9.2 + (rand() - 0.5) * 3, 2.4 + rand() * 0.8, 3.8 + rand() * 1.4, 5 + rand() * 1.6, matFront, rand() > 0.55);
 
-  // ---- warm sun: disc + soft glow, rising behind the range ----
-  const sunGroup = new THREE.Group();
-  sunGroup.position.set(9, 5.6, -11);
-  scene.add(sunGroup);
+  // ---- shining sun: golden disc + warm halo (depth-tested so the range can clip it) ----
+  const sunPos = new THREE.Vector3(-10, 5.9, -13);
+  const makeGlow = (c0, c1, scale, op) => {
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const g = c.getContext("2d");
+    const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    rg.addColorStop(0, c0); rg.addColorStop(0.42, c1); rg.addColorStop(1, "rgba(255,236,185,0)");
+    g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
+    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(c)), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, opacity: op })));
+    sp.scale.set(scale, scale, 1); sp.position.copy(sunPos);
+    return sp;
+  };
+  const glowOuter = makeGlow("rgba(255,238,198,0.8)", "rgba(255,210,130,0.3)", 17, 0.85);
+  const glowInner = makeGlow("rgba(255,252,240,1)", "rgba(255,228,165,0.7)", 6.5, 1);
+  scene.add(glowOuter); scene.add(glowInner);
   const disc = new THREE.Mesh(
-    track(new THREE.CircleGeometry(1.5, 36)),
-    track(new THREE.MeshBasicMaterial({ color: 0xfff3d2, transparent: true, opacity: 0.96, depthWrite: false, fog: false }))
+    track(new THREE.CircleGeometry(1.4, 40)),
+    track(new THREE.MeshBasicMaterial({ color: 0xffe7a0, fog: false, transparent: true }))
   );
-  sunGroup.add(disc);
-  const glowCanvas = document.createElement("canvas");
-  glowCanvas.width = glowCanvas.height = 128;
-  const gx = glowCanvas.getContext("2d");
-  const grad = gx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  grad.addColorStop(0, "rgba(255,246,222,0.92)");
-  grad.addColorStop(0.34, "rgba(255,232,176,0.42)");
-  grad.addColorStop(1, "rgba(255,232,176,0)");
-  gx.fillStyle = grad; gx.fillRect(0, 0, 128, 128);
-  const glowMat = track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(glowCanvas)), transparent: true, depthWrite: false, fog: false }));
-  const glow = new THREE.Sprite(glowMat);
-  glow.scale.set(13, 13, 1);
-  glow.position.z = -0.2;
-  sunGroup.add(glow);
+  disc.position.copy(sunPos); disc.renderOrder = 1;
+  scene.add(disc);
 
-  // ---- a few low-poly clouds drifting through the sky ----
-  const cloudGeo = track(new THREE.SphereGeometry(1, 7, 6));
-  const cloudMat = track(new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: 0.78 }));
+  // ---- puffy low-poly clouds drifting through the sky ----
+  const cloudGeo = track(new THREE.SphereGeometry(1, 8, 7));
+  const cloudMat = track(new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: 0.9 }));
   const clouds = [];
   for (let i = 0; i < 3; i++) {
     const c = new THREE.Group();
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < 4; j++) {
       const s = new THREE.Mesh(cloudGeo, cloudMat);
-      s.position.set(j * 1.5 - 1.5, rand() * 0.4, 0);
-      s.scale.set(1.5 + rand(), 0.55, 1);
+      s.position.set(j * 1.3 - 2, (j % 2) * 0.5, 0);
+      s.scale.set(1.5 + rand() * 0.6, 0.8, 1);
       c.add(s);
     }
-    c.position.set(-16 + i * 14, 6 + rand() * 1.2, -7 - rand() * 2);
-    c.userData = { sp: 0.018 + rand() * 0.014 };
+    c.position.set(-18 + i * 15, 5.6 + rand() * 1.4, -7 - rand() * 2);
+    c.userData = { sp: 0.016 + rand() * 0.014 };
     scene.add(c);
     clouds.push(c);
   }
 
   return {
     update(t) {
-      range.rotation.y = Math.sin(t * 0.07) * 0.016;
+      range.rotation.y = Math.sin(t * 0.07) * 0.014;
       const b = 1 + Math.sin(t * 0.8) * 0.05;
-      glow.scale.set(13 * b, 13 * b, 1);
-      clouds.forEach((c) => { c.position.x += c.userData.sp; if (c.position.x > 30) c.position.x = -30; });
+      glowOuter.scale.set(17 * b, 17 * b, 1);
+      clouds.forEach((c) => { c.position.x += c.userData.sp; if (c.position.x > 32) c.position.x = -32; });
     },
-    dispose() { disposables.forEach((d) => d.dispose && d.dispose()); },
+    dispose() {
+      scene.background = null;
+      disposables.forEach((d) => d.dispose && d.dispose());
+    },
   };
 }
 
