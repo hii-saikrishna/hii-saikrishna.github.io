@@ -111,79 +111,301 @@ const THRUSTS = [
 // Each paper carries a thumbnail, a one-line overview, and a links object.
 // Only links that exist are rendered — add paper / preprint / github / video / blog as available.
 const PUBLICATIONS = [
-  {
-    year: 2025, kind: "conference", featured: true,
-    title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
-    authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-    venue: "arXiv:2411.02524 — submitted to IEEE IROS 2025",
-    image: "attached_assets/Multi_Robot_Systems.png",
-    overview: "A 3D spatial cooperation and exploration framework that mitigates the ghosting-trail effect in fused multi-robot reconstructions and stays robust to communication dropouts — cutting boundary artifacts by 34% in a GPS-denied warehouse.",
-    links: { preprint: "https://arxiv.org/abs/2411.02524", github: "https://github.com/herolab-uga", blog: "#/blog/slam-odyssey" },
-  },
-  {
-    year: 2025, kind: "conference", featured: true,
-    title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
-    authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-    venue: "submitted to IEEE IROS 2025",
-    image: "attached_assets/Machine_Learning.png",
-    overview: "Distributed multi-Gaussian-process fields recover relative poses from Wi-Fi RSSI where GPS can't reach, giving uncertainty-aware localization across large indoor multi-robot teams.",
-    links: { blog: "#/blog/gp-fields", scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao" },
-  },
-  {
-    year: 2025, kind: "submitted",
-    title: "Thermographic Fault Diagnosis: An eXplainable Compact Vision in Transformer Approach for Electrical Machines",
-    authors: ["Sai Krishna Ghanta", "Anmol Agarwal", "Aparna Sinha", "Debanjan Das"],
-    venue: "submitted to IEEE Sensors Journal",
-    image: "attached_assets/Machine_Learning.png",
-    overview: "A compact, explainable vision-transformer that diagnoses electrical-machine faults directly from thermographic images — accurate yet light enough for edge deployment.",
-    links: {},
-  },
-  {
-    year: 2023, kind: "conference",
-    title: "3DS-SLAM: A 3D Object Detection-based Semantic SLAM towards Dynamic Indoor Environments",
-    authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
-    venue: "arXiv:2310.06385",
-    image: "attached_assets/Computer_Vision.png",
-    overview: "Semantic SLAM that tracks 3D-detected objects instead of discarding them as noise, reducing drift by 26% and improving loop closure in crowded, dynamic indoor scenes.",
-    links: { preprint: "https://arxiv.org/abs/2310.06385", github: "https://github.com/sai-krishna-ghanta", blog: "#/blog/vision-3d" },
-  },
-  {
-    year: 2023, kind: "conference",
-    title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
-    authors: ["Sai Krishna Ghanta", "Kundrapu Supriya", "Sabur Baidya"],
-    venue: "IEEE CSNet 2023",
-    image: "attached_assets/Robot_Learning.png",
-    overview: "Studies adversarial robustness and differential privacy for deep mmWave beam prediction, hardening 6G physical-layer models against poisoning and leakage.",
-    links: { paper: "https://ieeexplore.ieee.org/" },
-  },
-  {
-    year: 2023, kind: "journal",
-    title: "Speaker-Independent Visual Speech Recognition: A Systematic Review and Futuristic Applications",
-    authors: ["P. Nemani", "Sai Krishna Ghanta", "K. Supriya", "Santosh Kumar"],
-    venue: "Elsevier — Image and Vision Computing, vol. 123",
-    image: "attached_assets/Computer_Vision.png",
-    overview: "A systematic review of speaker-independent lip-reading, surveying datasets, architectures, and open problems, with a roadmap for real-world applications.",
-    links: { paper: "https://doi.org/10.1016/j.imavis.2022.104477" },
-  },
-  {
-    year: 2023, kind: "journal",
-    title: "Data Preprocessing Techniques: Emergence and Selection Towards Machine Learning Models — A Practical Review Using the HPA Dataset",
-    authors: ["K. Mallikharjuna Rao", "Sai Krishna Ghanta", "Kundrapu Supriya"],
-    venue: "Multimedia Tools and Applications, 2023",
-    image: "attached_assets/Machine_Learning.png",
-    overview: "A practical guide to choosing preprocessing pipelines, benchmarked on the Human Protein Atlas dataset to show how preprocessing choices move model performance.",
-    links: { paper: "https://link.springer.com/" },
-  },
-  {
-    year: 2022, kind: "journal",
-    title: "Deep Learning-based Holistic Speaker-Independent Visual Speech Recognition",
-    authors: ["P. Nemani", "Sai Krishna Ghanta", "N. Ramisetty", "B. D. S. Sai", "S. Kumar"],
-    venue: "IEEE Transactions on Artificial Intelligence, 2022",
-    image: "attached_assets/Computer_Vision.png",
-    overview: "A holistic deep model for speaker-independent visual speech recognition that generalizes across speakers without per-speaker tuning.",
-    links: { paper: "https://ieeexplore.ieee.org/" },
-  },
-];
+    {
+      year: 2023,
+      kind: "journal",
+      featured: false,
+      title: "A Practical Review of Data Preprocessing Techniques for Machine Learning",
+      authors: [ "K. Mallikharjuna Rao", "Sai Krishna Ghanta", "Kundrapu Supriya" ],
+      venue: "Multimedia Tools and Applications (2023)",
+      image: null,
+      overview: "Reviews practical preprocessing choices for ML workflows, including missing values, encoding, discretization, outliers, and scaling.",
+      links: {
+        paper: "https://link.springer.com/article/10.1007/s11042-023-15087-5"
+      }
+    },
+    {
+      year: 2022,
+      kind: "submitted",
+      featured: false,
+      title: "Vision Transformers and YOLOv5 based Driver Drowsiness Detection Framework",
+      authors: [ "Ghanta Sai Krishna", "Kundrapu Supriya", "Jai Vardhan", "Mallikharjuna Rao K" ],
+      venue: "arXiv (no published venue found) (2022)",
+      image: null,
+      overview: "Combines YOLOv5-based region extraction with Vision Transformers to classify driver drowsiness from visual cues.",
+      links: {
+        preprint: "https://arxiv.org/abs/2209.01401"
+      }
+    },
+    {
+      year: 2023,
+      kind: "conference",
+      featured: false,
+      title: "A Novel End-to-End Framework for Occluded Pixel Reconstruction with Spatio-Temporal Features for Improved Person Re-Identification",
+      authors: [ "P. R. Medi", "P. Nemani", "Sai Krishna Ghanta", "S. Vollala" ],
+      venue: "2023 8th International Conference on Business and Industrial Research (ICBIR) (2023)",
+      image: null,
+      overview: "Reconstructs occluded pixels with spatio-temporal modeling and generative refinement to improve person re-identification under occlusion.",
+      links: {
+        paper: "https://doi.org/10.1109/ICBIR57571.2023.10147408",
+        github: "https://github.com/Prathistith/Person-REID-Occlusion-Reconstruction"
+      }
+    },
+    {
+      year: 2022,
+      kind: "conference",
+      featured: false,
+      title: "Epersist: A Two-Wheeled Self Balancing Robot Using PID Controller and Deep Reinforcement Learning",
+      authors: [ "Sai Krishna Ghanta", "Dyavat Sumith", "Garika Akshay" ],
+      venue: "2022 22nd International Conference on Control, Automation and Systems (ICCAS) (2022)",
+      image: null,
+      overview: "Compares PID control and deep reinforcement learning strategies for stabilizing a two-wheeled self-balancing robot.",
+      links: {
+        preprint: "https://arxiv.org/abs/2207.11431"
+      }
+    },
+    {
+      year: 2023,
+      kind: "journal",
+      featured: false,
+      title: "Deep Learning-Based Holistic Speaker Independent Visual Speech Recognition",
+      authors: [
+        "P. Nemani",
+        "Sai Krishna Ghanta",
+        "N. Ramisetty",
+        "B. D. S. Sai",
+        "S. Kumar"
+      ],
+      venue: "IEEE Transactions on Artificial Intelligence (2023)",
+      image: null,
+      overview: "Builds a holistic deep-learning visual speech recognition system that recognizes speech from facial/mouth motion independent of speaker identity.",
+      links: {
+        paper: "https://doi.org/10.1109/TAI.2022.3220190"
+      }
+    },
+    {
+      year: 2023,
+      kind: "journal",
+      featured: false,
+      title: "Speaker Independent Visual Speech Recognition: A Systematic Review and Futuristic Applications",
+      authors: [ "P. Nemani", "Sai Krishna Ghanta", "K. Supriya", "Santosh Kumar" ],
+      venue: "Image and Vision Computing (2023)",
+      image: null,
+      overview: "Surveys speaker-independent visual speech recognition datasets, preprocessing pipelines, model families, applications, and future research directions.",
+      links: {
+        paper: "https://doi.org/10.1016/j.imavis.2023.104787"
+      }
+    },
+    {
+      year: 2025,
+      kind: "conference",
+      featured: true,
+      title: "3DS-SLAM: A 3D Object Detection Based Semantic SLAM Towards Dynamic Indoor Environments",
+      authors: [ "Sai Krishna Ghanta", "Kundrapu Supriya", "Sabur Baidya" ],
+      venue: "2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) (2025)",
+      image: "attached_assets/publication_gallery/3ds-slam_figure_2.jpeg",
+      overview: "Integrates 3D object detection with dynamic feature filtering to improve semantic SLAM robustness in dynamic indoor environments.",
+      links: {
+        preprint: "https://arxiv.org/abs/2310.06385",
+        github: "https://github.com/sai-krishna-ghanta/3DS-SLAM",
+        blog: "#/blog/vision-3d"
+      }
+    },
+    {
+      year: 2025,
+      kind: "journal",
+      featured: true,
+      title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
+      authors: [ "Sai Krishna Ghanta", "Ramviyas Parasuraman" ],
+      venue: "IEEE Robotics and Automation Letters (2025)",
+      image: "attached_assets/publication_gallery/space_figure_1.jpeg",
+      overview: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
+      links: {
+        paper: "https://doi.org/10.1109/LRA.2025.3627118",
+        github: "https://github.com/herolab-uga/SPACE-MAP",
+        video: "https://youtu.be/EE0velFrJgI",
+        blog: "#/blog/slam-odyssey"
+      }
+    },
+    {
+      year: 2025,
+      kind: "conference",
+      featured: true,
+      title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-Based Multi-Robot Relative Localization in Large Indoor Environments",
+      authors: [ "Sai Krishna Ghanta", "Ramviyas Parasuraman" ],
+      venue: "2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) (2025)",
+      image: "attached_assets/publication_gallery/mgprl_figure_3.png",
+      overview: "Uses Wi-Fi RSSI fields and distributed multi-output Gaussian Processes for relative localization among robots in GPS-denied indoor environments.",
+      links: {
+        preprint: "https://arxiv.org/abs/2506.23514",
+        github: "https://github.com/herolab-uga/MGPRL",
+        blog: "#/blog/gp-fields"
+      }
+    },
+    {
+      year: 2023,
+      kind: "conference",
+      featured: false,
+      title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
+      authors: [ "Sai Krishna Ghanta", "Kundrapu Supriya", "Sabur Baidya" ],
+      venue: "IEEE Cyber Security in Networking Conference (CSNet) 2023 (2023)",
+      image: null,
+      overview: "Studies adversarial robustness and differential privacy for machine-learning-based mmWave beam prediction in 6G communication systems.",
+      links: {
+        preprint: "https://arxiv.org/abs/2305.09679"
+      }
+    },
+    {
+      year: 2025,
+      kind: "conference",
+      featured: false,
+      title: "Policies Over Poses: Reinforcement Learning Based Distributed Pose-Graph Optimization for Multi-Robot SLAM",
+      authors: [ "Sai Krishna Ghanta", "Ramviyas Parasuraman" ],
+      venue: "2025 IEEE International Symposium on Multi-Robot and Multi-Agent Systems (MRS) (2025)",
+      image: null,
+      overview: "Uses multi-agent reinforcement learning and graph-based representations to improve distributed pose-graph optimization for multi-robot SLAM.",
+      links: {
+        preprint: "https://arxiv.org/abs/2510.22740",
+        github: "https://github.com/herolab-uga/policies-over-poses",
+        video: "https://www.youtube.com/watch?v=fdKdeQT6cHw"
+      }
+    },
+    {
+      year: 2026,
+      kind: "submitted",
+      featured: false,
+      title: "Planning, Scheduling, and Behavior in EV Charging Systems: A Critical Survey and Trilemma Framework",
+      authors: [
+        "Peiyan Xiao",
+        "Yuheng Li",
+        "Ayan Mukhopadhyay",
+        "Sai Krishna Ghanta",
+        "Sabur Baidya",
+        "Yanhai Xiong"
+      ],
+      venue: "arXiv review article (no journal/conference venue listed) (2026)",
+      image: null,
+      overview: "Frames EV charging research across planning, scheduling, and user behavior while highlighting fidelity-tractability tradeoffs.",
+      links: {
+        preprint: "https://arxiv.org/abs/2605.21665"
+      }
+    },
+    {
+      year: 2025,
+      kind: "conference",
+      featured: false,
+      title: "CAMP-HiVe: Cyclic Pair Merging Based Efficient DNN Pruning with Hessian-Vector Approximation for Resource-Constrained Systems",
+      authors: [ "Mohammad Helal Uddin", "Sai Krishna Ghanta", "Liam Seymour", "Sabur Baidya" ],
+      venue: "2025 International Conference on Machine Learning and Applications (ICMLA) (2025)",
+      image: null,
+      overview: "Proposes Hessian-vector-guided cyclic pair merging to prune deep neural networks efficiently for resource-constrained deployment.",
+      links: {
+        preprint: "https://arxiv.org/abs/2511.06265"
+      }
+    },
+    {
+      year: 2026,
+      kind: "submitted",
+      featured: false,
+      title: "Integrated Survey of EV Charging Planning, Scheduling, and Behavior",
+      authors: [ "Sai Krishna Ghanta", "Ramviyas Parasuraman" ],
+      venue: "SSRN / working paper (no journal/conference venue listed) (2026)",
+      image: null,
+      overview: "An SSRN-listed version or closely related version of the EV charging planning, scheduling, and behavior survey.",
+      links: {
+        preprint: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6697442"
+      }
+    },
+    {
+      year: 2025,
+      kind: "journal",
+      featured: false,
+      title: "LesionAid: Vision Transformers-Based Skin Lesion Generation and Classification - A Practical Review",
+      authors: [ "Sai Krishna Ghanta", "Mallikharjuna Rao", "Kundrapu Supriya" ],
+      venue: "Multimedia Tools and Applications (2025)",
+      image: null,
+      overview: "Combines ViT-based lesion generation/classification ideas to address skin-lesion data imbalance and improve explainable lesion classification workflows.",
+      links: {
+        paper: "https://link.springer.com/article/10.1007/s11042-025-20797-z"
+      }
+    },
+    {
+      year: 2022,
+      kind: "conference",
+      featured: false,
+      title: "dScout: Unmanned Ground Vehicle for Automatic Disease Detection and Pesticide Atomizer",
+      authors: [ "Sai Krishna Ghanta", "Ramviyas Parasuraman" ],
+      venue: "2022 IEEE 7th International Conference for Convergence in Technology (I2CT) (2022)",
+      image: null,
+      overview: "Presents an IoT-enabled unmanned ground vehicle that detects plant disease with computer vision and supports targeted pesticide atomization.",
+      links: {
+        paper: "https://doi.org/10.1109/I2CT54291.2022.9824236",
+        github: "https://github.com/sai-krishna-ghanta/Leaf_disease_Detection"
+      }
+    },
+    {
+      year: 2023,
+      kind: "conference",
+      featured: false,
+      title: "Parkinson's Disease Detection from Speech Signals Using Explainable Artificial Intelligence",
+      authors: [ "Sai Krishna Ghanta", "S. M. K. Chaitanya", "Santosh Kumar" ],
+      venue: "IEEE TENCON 2023 / IEEE Region 10 Conference (2023)",
+      image: null,
+      overview: "Uses explainable machine learning on speech signals to detect Parkinson's disease and provide interpretable evidence for predictions.",
+      links: {
+        paper: "https://conf.papercept.net/images/temp/TENCON/files/0190.pdf"
+      }
+    },
+    {
+      year: 2023,
+      kind: "submitted",
+      featured: false,
+      title: "Breast Cancer Segmentation Using Attention-Based Convolutional Network and Explainable AI",
+      authors: [
+        "Jai Vardhan",
+        "Taraka Satya Krishna Teja Malisetti"
+      ],
+      venue: "arXiv (no published venue found) (2023)",
+      image: null,
+      overview: "Applies an attention-based convolutional segmentation network with explainable-AI visualization to breast cancer screening images.",
+      links: {
+        preprint: "https://arxiv.org/abs/2305.14389"
+      }
+    },
+    {
+      year: 2022,
+      kind: "submitted",
+      featured: false,
+      title: "Video Vision Transformers for Violence Detection",
+      authors: [
+        "Sanskar Singh",
+        "Shivaibhav Dewangan",
+        "Ghanta Sai Krishna",
+        "Vandit Tyagi",
+        "Sainath Reddy",
+        "Prathistith Raj Medi"
+      ],
+      venue: "arXiv (no published venue found) (2022)",
+      image: null,
+      overview: "Uses a Video Vision Transformer architecture with augmentation to detect violent events from video sequences.",
+      links: {
+        preprint: "https://arxiv.org/abs/2209.03561"
+      }
+    },
+    {
+      year: 2024,
+      kind: "conference",
+      featured: false,
+      title: "Estimating Global Horizontal Irradiance of Solar Photovoltaic System from Satellite Data",
+      authors: [ "N. Yericherla", "Sai Krishna Ghanta", "K. P. Dutt", "D. Da" ],
+      venue: "17th International Congress on Image and Signal Processing, BioMedical Engineering and Informatics (CISP-BMEI 2024) (2024)",
+      image: null,
+      overview: "Estimates global horizontal irradiance for solar photovoltaic systems from satellite-derived data to support PV analysis and forecasting.",
+      links: {
+        paper: "https://researchr.org/publication/YericherlaKPD24"
+      }
+    }
+  ];
 
 // Groups for the segregated Publications view (order matters).
 const PUB_GROUPS = [
