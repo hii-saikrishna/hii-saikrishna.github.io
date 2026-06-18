@@ -256,8 +256,12 @@ const THRUSTS = [{
 //   authors  : array of names, in order. Put "*" after a name to mark lead/first
 //              author (the page renders a "* indicates lead / first author" note,
 //              and any name containing "Sai Krishna" is highlighted automatically).
-//   venue    : full venue name WITH the year (e.g. "... (IROS), 2025"). Always
-//              include the year here for conferences.
+//   venue    : full venue name WITH year, and for CONFERENCES the host city +
+//              country, e.g. "... (IROS), 2025, Hangzhou, China". (Journals have no
+//              city — just the journal name + year.) If a paper is accepted but the
+//              camera-ready/preprint is NOT yet available, prefix the venue with
+//              "Accepted at " (or "To be presented at " for already-published work
+//              not yet presented).
 //   image    : path under attached_assets/publication_gallery/, OR null.
 //              • .png/.jpg/.jpeg  → shown as an <img>
 //              • .mp4/.webm/.mov  → shown as an autoplaying, muted, viewport-gated
@@ -278,9 +282,9 @@ const PUBLICATIONS = [{
   year: 2026,
   kind: "conference",
   featured: true,
-  title: "Semantic Kernel",
+  title: "SK: Semantic Kernel for Robotic Information Gathering",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026",
+  venue: "Accepted at IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026, Pittsburgh, USA",
   image: "attached_assets/publication_gallery/Semantic Kernel.mp4",
   overview: "Incorporating semantics directly into spatial modeling preserves spatial heterogeneity, accelerates convergence, and provides reliable uncertainty quantification under both quality and budget constrained regimes, especially in real-world environments where learned kernels often struggle.",
   links: {
@@ -292,7 +296,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "A Practical Review of Data Preprocessing Techniques for Machine Learning",
   authors: ["K. Mallikharjuna Rao", "Sai Krishna Ghanta", "Kundrapu Supriya"],
-  venue: "Multimedia Tools and Applications (2023)",
+  venue: "Multimedia Tools and Applications, 2023",
   image: null,
   overview: "Reviews practical preprocessing choices for ML workflows, including missing values, encoding, discretization, outliers, and scaling.",
   links: {
@@ -316,7 +320,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "A Novel End-to-End Framework for Occluded Pixel Reconstruction with Spatio-Temporal Features for Improved Person Re-Identification",
   authors: ["P. R. Medi", "P. Nemani", "Sai Krishna Ghanta", "S. Vollala"],
-  venue: "2023 8th International Conference on Business and Industrial Research (ICBIR) (2023)",
+  venue: "8th International Conference on Business and Industrial Research (ICBIR), 2023, Bangkok, Thailand",
   image: null,
   overview: "Reconstructs occluded pixels with spatio-temporal modeling and generative refinement to improve person re-identification under occlusion.",
   links: {
@@ -329,7 +333,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Epersist: A Two-Wheeled Self Balancing Robot Using PID Controller and Deep Reinforcement Learning",
   authors: ["Sai Krishna Ghanta", "Dyavat Sumith", "Garika Akshay"],
-  venue: "2022 22nd International Conference on Control, Automation and Systems (ICCAS) (2022)",
+  venue: "22nd International Conference on Control, Automation and Systems (ICCAS), 2022, Busan, Korea",
   image: "attached_assets/publication_gallery/ePersist.png",
   overview: "Compares PID control and deep reinforcement learning strategies for stabilizing a two-wheeled self-balancing robot.",
   links: {
@@ -365,7 +369,7 @@ const PUBLICATIONS = [{
   featured: true,
   title: "3DS-SLAM: A 3D Object Detection Based Semantic SLAM Towards Dynamic Indoor Environments",
   authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
-  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025",
+  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025, Hangzhou, China",
   image: "attached_assets/publication_gallery/3DS-SLAM.mp4",
   overview: "Integrates 3D object detection with dynamic feature filtering to improve semantic SLAM robustness in dynamic indoor environments.",
   links: {
@@ -379,7 +383,7 @@ const PUBLICATIONS = [{
   featured: true,
   title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "IEEE Robotics and Automation Letters (L-RA), 2025",
+  venue: "To be presented at IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026, Pittsburgh, USA; also presented at the Block-by-Block Workshop, ICRA 2025, Atlanta, USA",
   image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4",
   overview: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
   links: {
@@ -394,7 +398,7 @@ const PUBLICATIONS = [{
   featured: true,
   title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025",
+  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025, Hangzhou, China",
   image: "attached_assets/publication_gallery/MGPRL.mp4",
   overview: "Uses Wi-Fi RSSI fields and distributed multi-output Gaussian Processes for relative localization among robots in GPS-denied indoor environments.",
   links: {
@@ -408,7 +412,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
   authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
-  venue: "IEEE Cyber Security in Networking Conference (CSNet), 2023",
+  venue: "IEEE Cyber Security in Networking Conference (CSNet), 2023, Montreal, Canada",
   image: "attached_assets/publication_gallery/Adversarial Security.png",
   overview: "Studies adversarial robustness and differential privacy for machine-learning-based mmWave beam prediction in 6G communication systems.",
   links: {
@@ -420,7 +424,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Policies Over Poses: Reinforcement Learning Based Distributed Pose-Graph Optimization for Multi-Robot SLAM",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "IEEE International Symposium on Multi-Robot and Multi-Agent Systems (MRS), 2025",
+  venue: "IEEE International Symposium on Multi-Robot and Multi-Agent Systems (MRS), 2025, Singapore",
   image: "attached_assets/publication_gallery/Policies Over Poses.png",
   overview: "Uses multi-agent reinforcement learning and graph-based representations to improve distributed pose-graph optimization for multi-robot SLAM.",
   links: {
@@ -434,7 +438,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Planning, Scheduling, and Behavior in EV Charging Systems: A Critical Survey and Trilemma Framework",
   authors: ["Peiyan Xiao", "Yuheng Li", "Ayan Mukhopadhyay", "Sai Krishna Ghanta", "Sabur Baidya", "Yanhai Xiong"],
-  venue: "arXiv review preprint, 2026",
+  venue: "Renewable and Sustainable Energy Reviews (under review), 2026",
   image: "attached_assets/publication_gallery/EV.png",
   overview: "Frames EV charging research across planning, scheduling, and user behavior while highlighting fidelity-tractability tradeoffs.",
   links: {
@@ -446,23 +450,11 @@ const PUBLICATIONS = [{
   featured: false,
   title: "CAMP-HiVe: Cyclic Pair Merging Based Efficient DNN Pruning with Hessian-Vector Approximation for Resource-Constrained Systems",
   authors: ["Mohammad Helal Uddin", "Sai Krishna Ghanta", "Liam Seymour", "Sabur Baidya"],
-  venue: "International Conference on Machine Learning and Applications (ICMLA), 2025",
+  venue: "International Conference on Machine Learning and Applications (ICMLA), 2025, Miami, USA",
   image: "attached_assets/publication_gallery/CampHiVe.png",
   overview: "Proposes Hessian-vector-guided cyclic pair merging to prune deep neural networks efficiently for resource-constrained deployment.",
   links: {
     preprint: "https://arxiv.org/abs/2511.06265"
-  }
-}, {
-  year: 2026,
-  kind: "submitted",
-  featured: false,
-  title: "Integrated Survey of EV Charging Planning, Scheduling, and Behavior",
-  authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "SSRN working preprint, 2026",
-  image: "attached_assets/publication_gallery/EV.png",
-  overview: "An SSRN-listed version or closely related version of the EV charging planning, scheduling, and behavior survey.",
-  links: {
-    preprint: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6697442"
   }
 }, {
   year: 2025,
@@ -482,7 +474,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "dScout: Unmanned Ground Vehicle for Automatic Disease Detection and Pesticide Atomizer",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "IEEE 7th International Conference for Convergence in Technology (I2CT), 2022",
+  venue: "IEEE 7th International Conference for Convergence in Technology (I2CT), 2022, Pune, India",
   image: "attached_assets/publication_gallery/dSCOUT.png",
   overview: "Presents an IoT-enabled unmanned ground vehicle that detects plant disease with computer vision and supports targeted pesticide atomization.",
   links: {
@@ -495,7 +487,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Parkinson's Disease Detection from Speech Signals Using Explainable Artificial Intelligence",
   authors: ["Sai Krishna Ghanta", "S. M. K. Chaitanya", "Santosh Kumar"],
-  venue: "IEEE Region 10 Conference (TENCON), 2023",
+  venue: "IEEE Region 10 Conference (TENCON), 2023, Chiang Mai, Thailand",
   image: null,
   overview: "Uses explainable machine learning on speech signals to detect Parkinson's disease and provide interpretable evidence for predictions.",
   links: {
@@ -531,7 +523,7 @@ const PUBLICATIONS = [{
   featured: false,
   title: "Estimating Global Horizontal Irradiance of Solar Photovoltaic System from Satellite Data",
   authors: ["N. Yericherla", "Sai Krishna Ghanta", "K. P. Dutt", "D. Da"],
-  venue: "17th International Congress on Image and Signal Processing, BioMedical Engineering and Informatics (CISP-BMEI), 2024",
+  venue: "17th International Congress on Image and Signal Processing, BioMedical Engineering and Informatics (CISP-BMEI), 2024, Shanghai, China",
   image: null,
   overview: "Estimates global horizontal irradiance for solar photovoltaic systems from satellite-derived data to support PV analysis and forecasting.",
   links: {
@@ -540,16 +532,16 @@ const PUBLICATIONS = [{
 }];
 
 // Groups for the segregated Publications view (order matters: conferences first,
-// under-review next, journals last).
+// then journals, then preprints/under-review last).
 const PUB_GROUPS = [{
   kind: "conference",
   label: "Conference Papers"
 }, {
-  kind: "submitted",
-  label: "Under Review"
-}, {
   kind: "journal",
   label: "Journal Articles"
+}, {
+  kind: "submitted",
+  label: "Preprints"
 }];
 
 // BLOG_POSTS — the articles on the Blog page and at #/blog/<id>.
@@ -4476,7 +4468,7 @@ function PublicationsPage() {
     style: {
       marginTop: 14
     }
-  }, "Peer-reviewed and in-review work on multi-robot mapping, semantic SLAM, and spatial learning. ", /*#__PURE__*/React.createElement("span", {
+  }, "My work spans a wide range of research applications, but I lean increasingly toward my recent directions and the spin-offs they keep generating. ", /*#__PURE__*/React.createElement("span", {
     style: {
       color: "var(--accent-ink)"
     }
