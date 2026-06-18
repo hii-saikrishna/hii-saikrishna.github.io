@@ -2394,7 +2394,7 @@ const Arrow = ({
   d: "M9 18l6-6-6-6"
 }));
 
-// ===== Hero photo gallery — passive auto-rotating portraits =====
+// ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
@@ -2408,7 +2408,12 @@ function HeroGallery() {
   return /*#__PURE__*/React.createElement("div", {
     className: "hero-gallery"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "hg-stage"
+    className: "hg-stage",
+    onClick: () => setIdx(i => (i + 1) % n),
+    style: {
+      cursor: "pointer"
+    },
+    title: "Click to see next photo"
   }, items.map((g, i) => /*#__PURE__*/React.createElement("img", {
     key: g.src,
     src: g.src,
@@ -2417,6 +2422,17 @@ function HeroGallery() {
     draggable: "false",
     fetchpriority: i === 0 ? "high" : "auto",
     decoding: "async"
+  }))), n > 1 && /*#__PURE__*/React.createElement("div", {
+    className: "hg-dots"
+  }, items.map((_, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    type: "button",
+    className: `hg-dot ${i === idx ? "active" : ""}`,
+    onClick: e => {
+      e.stopPropagation();
+      setIdx(i);
+    },
+    "aria-label": `Go to slide ${i + 1}`
   }))));
 }
 

@@ -1768,7 +1768,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   .contact-globe-earth { width: min(84%, calc(var(--contact-globe-h) - 18px), 320px); }
 }
 
-/* ============ Hero photo gallery (with 3D robot scroller) ============ */
+/* ============ Hero photo gallery (with 3D scroller) ============ */
 .hero-gallery {
   position: relative;
   width: 100%;
@@ -1799,6 +1799,32 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   transition: opacity .6s ease, transform 1.2s ease;
 }
 .hg-img.active { opacity: 1; transform: scale(1); }
+
+/* Hero gallery dot navigation scroller */
+.hg-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.hg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.hg-dot:hover {
+  background: var(--ink-3);
+}
+.hg-dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
 /* ============ Home: merged CV / About section ============ */
 .home-cv { border-top: 1px solid var(--line-2); }
 .cv-columns {

@@ -147,7 +147,7 @@ const Arrow = ({ dir = "right" }) => (
   </svg>
 );
 
-// ===== Hero photo gallery — passive auto-rotating portraits =====
+// ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
@@ -162,13 +162,26 @@ function HeroGallery() {
   if (!n) return null;
   return (
     <div className="hero-gallery">
-      <div className="hg-stage">
+      <div className="hg-stage" onClick={() => setIdx((i) => (i + 1) % n)} style={{ cursor: "pointer" }} title="Click to see next photo">
         {items.map((g, i) => (
           <img key={g.src} src={g.src} alt={PROFILE.name}
             className={`hg-img ${i === idx ? "active" : ""}`} draggable="false"
             fetchpriority={i === 0 ? "high" : "auto"} decoding="async" />
         ))}
       </div>
+      {n > 1 && (
+        <div className="hg-dots">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              className={`hg-dot ${i === idx ? "active" : ""}`}
+              onClick={(e) => { e.stopPropagation(); setIdx(i); }}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
