@@ -110,11 +110,11 @@ const TRIP_GALLERY = [
 //           also adding the scene in robots.jsx.
 const INTERESTS = [
   { id: "embodied",   scene: "embodied", title: "Robot Learning & Embodied Intelligence",
-    desc: "Robots that reason about the world they live in." },
+    desc: "Foundation Models, World Action Models" },
   { id: "multirobot", scene: "swarm",    title: "Multi-Robot Systems",
-    desc: "Many robots, one shared map — even when comms drop." },
+    desc: "Distributed Mapping, Localization and Task Planning" },
   { id: "spatial",    scene: "gp",       title: "Spatial Intelligence",
-    desc: "Learning a belief over space itself." },
+    desc: "Spatial Intelligence Models for Information Gathering" },
 ];
 
 // THRUSTS — the 3 deep-dive sections on the Research page. One per INTERESTS card.
@@ -132,7 +132,7 @@ const THRUSTS = [
     scene: "embodied",
     accent: "#2e8f5b", tint: "#eaf6ee",
     body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them inside real homes and buildings. The goal is agents that reason in language about a physical environment, then plan and move through it.",
-    keywords: ["Embodied AI", "LLM Planning", "Spatial Grounding", "VLM Reasoning"],
+    keywords: ["Foundation Models", "World Action Models"],
     stats: [{ k: "Domains", v: "Homes · Warehouses" }, { k: "Modalities", v: "Vision · Language · RF" }],
     resources: [
       { label: "Embodied reasoning — blog", href: "#/blog/embodied-reasoning" },
@@ -146,7 +146,7 @@ const THRUSTS = [
     scene: "swarm",
     accent: "#2f6df0", tint: "#e8f0ff",
     body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting-trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
-    keywords: ["SPACE", "MGPRL", "3DS-SLAM", "Distributed Mapping"],
+    keywords: ["Distributed Mapping", "Localization", "Task Planning"],
     stats: [{ k: "Boundary artifacts", v: "−34%" }, { k: "Comms dropout", v: "robust to 90s" }],
     resources: [
       { label: "SPACE — arXiv:2411.02524", href: "https://arxiv.org/abs/2411.02524" },
@@ -160,7 +160,7 @@ const THRUSTS = [
     scene: "gp",
     accent: "#c9821f", tint: "#fbf1df",
     body: "Robots that learn a belief over space itself: Gaussian-process fields for Wi-Fi, humidity, and other invisible signals, floating above the real world they describe. MGPRL uses these uncertainty-aware fields for multi-robot relative localization where GPS can't reach.",
-    keywords: ["Gaussian Processes", "MGPRL", "Wi-Fi RSSI", "Uncertainty"],
+    keywords: ["Spatial Intelligence Models", "Information Gathering"],
     stats: [{ k: "Signal", v: "Wi-Fi RSSI" }, { k: "Estimate", v: "Uncertainty-aware" }],
     resources: [
       { label: "Invisible fields — blog", href: "#/blog/gp-fields" },
