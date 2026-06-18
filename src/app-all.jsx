@@ -570,7 +570,7 @@ function UpdatesPage() {
         <header className="j-hero" data-screen-label="Milestones">
           <div className="j-eyebrow">The road so far</div>
           <h1 className="j-title">Mile<span className="outline">stones</span></h1>
-          <p className="j-lede">A scrolling trail through the work — papers shipped, field trials run, and the moves that got me here.</p>
+          <p className="j-lede">Scroll to explore milestones.</p>
           <div className="j-cue"><span className="j-cue-line"></span>Scroll to travel</div>
         </header>
         {years.map((y, yi) => (

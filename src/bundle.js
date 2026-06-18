@@ -4285,7 +4285,7 @@ function UpdatesPage() {
     className: "outline"
   }, "stones")), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
-  }, "A scrolling trail through the work \u2014 papers shipped, field trials run, and the moves that got me here."), /*#__PURE__*/React.createElement("div", {
+  }, "Scroll to explore milestones."), /*#__PURE__*/React.createElement("div", {
     className: "j-cue"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
