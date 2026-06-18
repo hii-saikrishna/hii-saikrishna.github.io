@@ -148,6 +148,7 @@ const Arrow = ({ dir = "right" }) => (
 );
 
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
+// ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
@@ -161,15 +162,6 @@ function HeroGallery() {
 
   if (!n) return null;
 
-  const prev = (e) => {
-    e.stopPropagation();
-    setIdx((i) => (i - 1 + n) % n);
-  };
-  const next = (e) => {
-    e.stopPropagation();
-    setIdx((i) => (i + 1) % n);
-  };
-
   return (
     <div className="hero-gallery">
       <div className="hg-stage" onClick={() => setIdx((i) => (i + 1) % n)} style={{ cursor: "pointer" }} title="Click to see next photo">
@@ -178,28 +170,40 @@ function HeroGallery() {
             className={`hg-img ${i === idx ? "active" : ""}`} draggable="false"
             fetchpriority={i === 0 ? "high" : "auto"} decoding="async" />
         ))}
-        {n > 1 && (
-          <>
-            <button className="hg-nav-btn prev" onClick={prev} aria-label="Previous photo">
-              <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button className="hg-nav-btn next" onClick={next} aria-label="Next photo">
-              <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </>
-        )}
       </div>
       {n > 1 && (
         <div className="hg-dots">
-          {items.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`hg-dot ${i === idx ? "active" : ""}`}
-              onClick={(e) => { e.stopPropagation(); setIdx(i); }}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
+          <svg className="hg-twig-svg" viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hg-twig-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#8a5a36" />
+                <stop offset="60%" stopColor="#5d3b24" />
+                <stop offset="100%" stopColor="#3a2212" />
+              </linearGradient>
+              <filter id="hg-twig-shadow" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="1" stdDeviation="1" floodOpacity="0.25" />
+              </filter>
+            </defs>
+            <path d="M 10,12 C 40,6 80,14 110,10" stroke="url(#hg-twig-grad)" strokeWidth="4.5" strokeLinecap="round" filter="url(#hg-twig-shadow)" />
+          </svg>
+          {items.map((_, i) => {
+            const pct = n > 1 ? i / (n - 1) : 0;
+            const y = Math.sin(pct * Math.PI) * -3; // organic curve offset
+            return (
+              <button
+                key={i}
+                type="button"
+                className={`hg-dot ${i === idx ? "active" : ""}`}
+                style={{
+                  left: `calc(18% + ${pct * 64}%)`,
+                  '--y': `${y}px`,
+                  '--rot': `${i % 2 === 0 ? 15 : -15}deg`
+                }}
+                onClick={(e) => { e.stopPropagation(); setIdx(i); }}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            );
+          })}
         </div>
       )}
     </div>
@@ -600,6 +604,18 @@ function TripGallery() {
   const feat = items[safeFeatured];
   const selectThumb = (i) => { if (!dragged.current) setFeatured(i); };
 
+  const handleLeafClick = (i) => {
+    setFeatured(i);
+    const el = stripRef.current;
+    if (el) {
+      const max = el.scrollWidth - el.clientWidth;
+      if (max > 0) {
+        const targetScroll = (i / (items.length - 1)) * max;
+        el.scrollTo({ left: targetScroll, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <section className="section trips" data-screen-label="Trips">
       <div className="container">
@@ -663,8 +679,41 @@ function TripGallery() {
 
         {items.length > 1 && (
           <div className="trips-scroll-track">
-            <div className="trips-scroll-twig" />
-            <div className="trips-scroll-leaf" style={{ left: `calc(${scrollPct * 100}% - ${scrollPct * 16}px)` }} />
+            <svg className="trips-scroll-twig-svg" viewBox="0 0 320 24" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="trips-twig-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#8a5a36" />
+                  <stop offset="30%" stopColor="#5d3b24" />
+                  <stop offset="70%" stopColor="#7a4f2e" />
+                  <stop offset="100%" stopColor="#3a2212" />
+                </linearGradient>
+                <filter id="twig-shadow" x="-5%" y="-10%" width="110%" height="130%">
+                  <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodOpacity="0.35" />
+                </filter>
+              </defs>
+              <path d="M 5,12 C 40,6 80,18 120,12 C 160,6 200,18 240,12 C 270,7 295,15 315,11" stroke="url(#trips-twig-grad)" strokeWidth="5" strokeLinecap="round" filter="url(#twig-shadow)" />
+            </svg>
+            <div className="trips-scroll-leaves">
+              {items.map((_, i) => {
+                const pct = items.length > 1 ? i / (items.length - 1) : 0;
+                const y = Math.sin(pct * Math.PI * 5.2) * -5.5; // Wave offset matching SVG path
+                const activeLeaf = Math.min(Math.round(scrollPct * (items.length - 1)), items.length - 1);
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`trips-scroll-leaf-dot ${i === activeLeaf ? "active" : ""}`}
+                    style={{
+                      left: `${pct * 100}%`,
+                      '--y': `${y}px`,
+                      '--rot': `${i % 2 === 0 ? 25 : -25}deg`
+                    }}
+                    onClick={() => handleLeafClick(i)}
+                    aria-label={`Go to image ${i + 1}`}
+                  />
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

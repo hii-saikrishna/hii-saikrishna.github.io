@@ -2395,6 +2395,7 @@ const Arrow = ({
 }));
 
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
+// ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
   const n = items.length;
@@ -2405,14 +2406,6 @@ function HeroGallery() {
     return () => clearInterval(id);
   }, [n]);
   if (!n) return null;
-  const prev = e => {
-    e.stopPropagation();
-    setIdx(i => (i - 1 + n) % n);
-  };
-  const next = e => {
-    e.stopPropagation();
-    setIdx(i => (i + 1) % n);
-  };
   return /*#__PURE__*/React.createElement("div", {
     className: "hero-gallery"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2430,44 +2423,64 @@ function HeroGallery() {
     draggable: "false",
     fetchpriority: i === 0 ? "high" : "auto",
     decoding: "async"
-  })), n > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    className: "hg-nav-btn prev",
-    onClick: prev,
-    "aria-label": "Previous photo"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M15 19l-7-7 7-7",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }))), /*#__PURE__*/React.createElement("button", {
-    className: "hg-nav-btn next",
-    onClick: next,
-    "aria-label": "Next photo"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M9 5l7 7-7 7",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }))))), n > 1 && /*#__PURE__*/React.createElement("div", {
+  }))), n > 1 && /*#__PURE__*/React.createElement("div", {
     className: "hg-dots"
-  }, items.map((_, i) => /*#__PURE__*/React.createElement("button", {
-    key: i,
-    type: "button",
-    className: `hg-dot ${i === idx ? "active" : ""}`,
-    onClick: e => {
-      e.stopPropagation();
-      setIdx(i);
-    },
-    "aria-label": `Go to slide ${i + 1}`
-  }))));
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "hg-twig-svg",
+    viewBox: "0 0 120 20",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "hg-twig-grad",
+    x1: "0%",
+    y1: "0%",
+    x2: "0%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#8a5a36"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "60%",
+    stopColor: "#5d3b24"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#3a2212"
+  })), /*#__PURE__*/React.createElement("filter", {
+    id: "hg-twig-shadow",
+    x: "-10%",
+    y: "-10%",
+    width: "120%",
+    height: "130%"
+  }, /*#__PURE__*/React.createElement("feDropShadow", {
+    dx: "0",
+    dy: "1",
+    stdDeviation: "1",
+    floodOpacity: "0.25"
+  }))), /*#__PURE__*/React.createElement("path", {
+    d: "M 10,12 C 40,6 80,14 110,10",
+    stroke: "url(#hg-twig-grad)",
+    strokeWidth: "4.5",
+    strokeLinecap: "round",
+    filter: "url(#hg-twig-shadow)"
+  })), items.map((_, i) => {
+    const pct = n > 1 ? i / (n - 1) : 0;
+    const y = Math.sin(pct * Math.PI) * -3; // organic curve offset
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      type: "button",
+      className: `hg-dot ${i === idx ? "active" : ""}`,
+      style: {
+        left: `calc(18% + ${pct * 64}%)`,
+        '--y': `${y}px`,
+        '--rot': `${i % 2 === 0 ? 15 : -15}deg`
+      },
+      onClick: e => {
+        e.stopPropagation();
+        setIdx(i);
+      },
+      "aria-label": `Go to slide ${i + 1}`
+    });
+  })));
 }
 
 // ===== Publication link buttons =====
@@ -2983,6 +2996,20 @@ function TripGallery() {
   const selectThumb = i => {
     if (!dragged.current) setFeatured(i);
   };
+  const handleLeafClick = i => {
+    setFeatured(i);
+    const el = stripRef.current;
+    if (el) {
+      const max = el.scrollWidth - el.clientWidth;
+      if (max > 0) {
+        const targetScroll = i / (items.length - 1) * max;
+        el.scrollTo({
+          left: targetScroll,
+          behavior: "smooth"
+        });
+      }
+    }
+  };
   return /*#__PURE__*/React.createElement("section", {
     className: "section trips",
     "data-screen-label": "Trips"
@@ -3107,14 +3134,66 @@ function TripGallery() {
     className: "tt-when"
   }, g.when))))), items.length > 1 && /*#__PURE__*/React.createElement("div", {
     className: "trips-scroll-track"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "trips-scroll-twig"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "trips-scroll-leaf",
-    style: {
-      left: `calc(${scrollPct * 100}% - ${scrollPct * 16}px)`
-    }
-  }))), cur && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "trips-scroll-twig-svg",
+    viewBox: "0 0 320 24",
+    preserveAspectRatio: "none",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "trips-twig-grad",
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "0%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#8a5a36"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "30%",
+    stopColor: "#5d3b24"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "70%",
+    stopColor: "#7a4f2e"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#3a2212"
+  })), /*#__PURE__*/React.createElement("filter", {
+    id: "twig-shadow",
+    x: "-5%",
+    y: "-10%",
+    width: "110%",
+    height: "130%"
+  }, /*#__PURE__*/React.createElement("feDropShadow", {
+    dx: "0",
+    dy: "1.5",
+    stdDeviation: "1.5",
+    floodOpacity: "0.35"
+  }))), /*#__PURE__*/React.createElement("path", {
+    d: "M 5,12 C 40,6 80,18 120,12 C 160,6 200,18 240,12 C 270,7 295,15 315,11",
+    stroke: "url(#trips-twig-grad)",
+    strokeWidth: "5",
+    strokeLinecap: "round",
+    filter: "url(#twig-shadow)"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "trips-scroll-leaves"
+  }, items.map((_, i) => {
+    const pct = items.length > 1 ? i / (items.length - 1) : 0;
+    const y = Math.sin(pct * Math.PI * 5.2) * -5.5; // Wave offset matching SVG path
+    const activeLeaf = Math.min(Math.round(scrollPct * (items.length - 1)), items.length - 1);
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      type: "button",
+      className: `trips-scroll-leaf-dot ${i === activeLeaf ? "active" : ""}`,
+      style: {
+        left: `${pct * 100}%`,
+        '--y': `${y}px`,
+        '--rot': `${i % 2 === 0 ? 25 : -25}deg`
+      },
+      onClick: () => handleLeafClick(i),
+      "aria-label": `Go to image ${i + 1}`
+    });
+  })))), cur && /*#__PURE__*/React.createElement("div", {
     className: "trip-lightbox",
     onClick: () => setActive(null),
     role: "dialog",
