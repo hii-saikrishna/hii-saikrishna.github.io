@@ -36,7 +36,7 @@ const TRIP_GALLERY = [{
   src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4",
   place: "Hangzhou, China",
   title: "The Romance of the Song Dynasty",
-  when: "Fall 2025",
+  when: "Oct 2025",
   desc: "A spectacular performance at the Song Dynasty park during IROS 2025."
 }, {
   src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg",
@@ -48,13 +48,13 @@ const TRIP_GALLERY = [{
   src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg",
   place: "Hangzhou, China",
   title: "IROS 2025",
-  when: "Fall 2025",
+  when: "Oct 2025",
   desc: "At the IROS conference in Hangzhou."
 }, {
   src: "attached_assets/Gallery/aimans-farewell-2025.jpeg",
   place: "HeRoLab",
   title: "Aiman's farewell",
-  when: "Summer 2025",
+  when: "Jul 2025",
   desc: "Sending off a labmate."
 }, {
   src: "attached_assets/Gallery/icra-2025-atlanta.mp4",
@@ -66,24 +66,24 @@ const TRIP_GALLERY = [{
   src: "attached_assets/Gallery/nsf-supercollider-2024-lexington.jpeg",
   place: "Lexington, KY",
   title: "NSF EPSCoR SuperCollider",
-  when: "2024",
+  when: "Apr 2024",
   desc: "The NSF EPSCoR SuperCollider convening."
 }, {
   src: "attached_assets/Gallery/aimslab-louisville-2023.jpeg",
   place: "Louisville, KY",
   title: "AIMSLab",
-  when: "2023–24",
+  when: "Jan 2024",
   desc: "A great learning stretch with Dr. Sabur at the University of Louisville."
 }, {
   src: "attached_assets/Gallery/tencon-2023.png",
   title: "IEEE TENCON 2023",
-  when: "Fall 2023",
+  when: "Oct 2023",
   desc: "The IEEE Region 10 (TENCON) conference."
 }, {
   src: "attached_assets/Gallery/iiitnr-aiml-club-2021.jpeg",
   place: "IIIT Naya Raipur",
   title: "Teaching AI/ML",
-  when: "Fall 2021",
+  when: "Sep 2021",
   desc: "Running hands-on AI/ML sessions as the AIML Club in-charge."
 }
 // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
