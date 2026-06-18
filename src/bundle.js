@@ -1103,23 +1103,40 @@ function dioramaScene(kind, zoom = 1) {
         if (isOnFire) {
           const firePositions = [{
             x: 0,
-            y: 0.2,
+            y: 0.15,
             z: 0.06,
-            sc: 0.35
+            sc: 0.45
+          }, {
+            x: 0.06,
+            y: 0.4,
+            z: -0.05,
+            sc: 0.5
+          }, {
+            x: -0.07,
+            y: 0.65,
+            z: 0.03,
+            sc: 0.55
           }, {
             x: 0.05,
-            y: 0.5,
-            z: -0.04,
-            sc: 0.4
-          }, {
-            x: -0.06,
-            y: 0.8,
-            z: 0.02,
-            sc: 0.45
+            y: 0.85,
+            z: 0.05,
+            sc: 0.6
           }, {
             x: 0,
             y: 1.1,
             z: 0,
+            sc: 0.7
+          },
+          // engulfing the crown
+          {
+            x: -0.1,
+            y: 0.9,
+            z: -0.1,
+            sc: 0.5
+          }, {
+            x: 0.1,
+            y: 1.0,
+            z: 0.1,
             sc: 0.5
           }];
           firePositions.forEach(p => {
@@ -1144,10 +1161,18 @@ function dioramaScene(kind, zoom = 1) {
         }
         return tree;
       };
-      addBurntTree(stage, -2.6, -1.8, 0.95, true); // burning tree left-back
-      addBurntTree(stage, 2.8, 2.0, 0.85, false); // charred tree right-back
-      addBurntTree(stage, -1.2, 2.8, 0.7, true); // burning tree center-back
-      addBurntTree(stage, 3.0, -1.4, 0.65, false); // charred tree front-right
+
+      // 10 trees total, 6 on fire = exactly 60% tree fire coverage
+      addBurntTree(stage, -2.6, -1.8, 0.95, true); // 1. burning tree left-back
+      addBurntTree(stage, 2.8, 2.0, 0.85, true); // 2. burning tree right-back
+      addBurntTree(stage, -1.2, 2.8, 0.7, true); // 3. burning tree center-back
+      addBurntTree(stage, 3.0, -1.4, 0.65, false); // 4. charred tree front-right (burnt only)
+      addBurntTree(stage, -3.2, 0.5, 0.8, true); // 5. burning tree left
+      addBurntTree(stage, 0.5, 2.6, 0.75, true); // 6. burning tree back
+      addBurntTree(stage, -1.8, -2.8, 0.9, true); // 7. burning tree front-left
+      addBurntTree(stage, 2.2, -2.6, 0.7, false); // 8. charred tree front-right (burnt only)
+      addBurntTree(stage, -0.4, -2.4, 0.6, false); // 9. charred tree front (burnt only)
+      addBurntTree(stage, 3.2, 0.4, 0.85, false); // 10. charred tree right (burnt only)
 
       // Add charred logs lying on the ground, some burning
       const addCharredLog = (parent, x, z, angleY, length = 0.7, burning = false) => {
@@ -1187,9 +1212,11 @@ function dioramaScene(kind, zoom = 1) {
           }
         }
       };
-      addCharredLog(stage, 0.8, 1.2, Math.PI / 3, 0.9, true); // burning log near center
-      addCharredLog(stage, -1.8, -0.6, -Math.PI / 6, 0.75, true); // burning log left
-      addCharredLog(stage, 1.2, -1.8, Math.PI / 1.5, 0.6, false); // cold burnt log right
+      addCharredLog(stage, 0.8, 1.2, Math.PI / 3, 0.9, true); // 1. burning log near center
+      addCharredLog(stage, -1.8, -0.6, -Math.PI / 6, 0.75, true); // 2. burning log left
+      addCharredLog(stage, 1.2, -1.8, Math.PI / 1.5, 0.6, true); // 3. burning log front-right
+      addCharredLog(stage, -0.5, 2.0, Math.PI / 4, 0.8, true); // 4. burning log back-center
+      addCharredLog(stage, -2.5, 1.8, -Math.PI / 3, 0.7, false); // 5. cold burnt log left-back
 
       const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(0x3d3530));
       r1.position.set(-2.0, 0.07, 1.8);
@@ -1228,7 +1255,7 @@ function dioramaScene(kind, zoom = 1) {
       beacon.position.set(0, 0.5, 0);
       ruins.add(beacon);
 
-      // Wildfire spots spread across the forest floor (using multi-cone clusters)
+      // Wildfire spots spread across the forest floor (using larger multi-cone clusters for 60% fire)
       const spawnWildfire = (x, z, s) => {
         const f = new THREE.Group();
         f.position.set(x, 0.05, z);
@@ -1236,21 +1263,27 @@ function dioramaScene(kind, zoom = 1) {
         const subFlames = [{
           ox: 0,
           oz: 0,
-          scY: 1.0,
-          r: 0.18,
-          h: 0.5
+          scY: 1.2,
+          r: 0.22,
+          h: 0.65
         }, {
-          ox: -0.08,
-          oz: 0.06,
-          scY: 0.75,
+          ox: -0.12,
+          oz: 0.08,
+          scY: 0.95,
+          r: 0.16,
+          h: 0.45
+        }, {
+          ox: 0.13,
+          oz: -0.1,
+          scY: 0.85,
+          r: 0.14,
+          h: 0.4
+        }, {
+          ox: 0.07,
+          oz: 0.11,
+          scY: 0.7,
           r: 0.12,
           h: 0.35
-        }, {
-          ox: 0.09,
-          oz: -0.07,
-          scY: 0.65,
-          r: 0.1,
-          h: 0.3
         }];
         subFlames.forEach((sf, idx) => {
           const outCone = new THREE.Mesh(new THREE.ConeGeometry(sf.r, sf.h, 5), mFlame);
@@ -1271,15 +1304,18 @@ function dioramaScene(kind, zoom = 1) {
         stage.add(f);
       };
 
-      // Spawn 6 wildfire zones (more fire, less green)
-      spawnWildfire(2.0, -2.0, 1.35); // inside ruins
-      spawnWildfire(1.6, -1.5, 0.9);
-      spawnWildfire(-2.2, 1.4, 1.25); // left forest area
-      spawnWildfire(-1.6, -1.8, 1.1); // front-left
-      spawnWildfire(2.4, 1.8, 0.85); // back-right
-      spawnWildfire(-0.8, 0.8, 0.75); // center-left
+      // Spawn 9 wildfire zones (massively covering the scene ~60% fire)
+      spawnWildfire(2.0, -2.0, 1.45); // inside ruins
+      spawnWildfire(1.6, -1.5, 1.1);
+      spawnWildfire(-2.2, 1.4, 1.35); // left forest area
+      spawnWildfire(-1.6, -1.8, 1.25); // front-left
+      spawnWildfire(2.4, 1.8, 1.05); // back-right
+      spawnWildfire(-0.8, 0.8, 1.15); // center-left
+      spawnWildfire(0.2, -1.2, 1.0); // front-center
+      spawnWildfire(-2.8, -0.5, 0.9); // far-left
+      spawnWildfire(1.0, 2.2, 0.95); // back-center
 
-      // Smoke particles rising from fires
+      // Smoke particles rising from fires (increased density)
       const smokeParticles = [];
       const mSmoke = new THREE.MeshBasicMaterial({
         color: 0x3d3533,
@@ -1327,17 +1363,26 @@ function dioramaScene(kind, zoom = 1) {
       }, {
         x: -1.2,
         z: 2.8
+      }, {
+        x: -3.2,
+        z: 0.5
+      }, {
+        x: 0.5,
+        z: 2.6
+      }, {
+        x: -1.8,
+        z: -2.8
       }];
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 55; i++) {
         const src = fireSources[Math.floor(Math.random() * fireSources.length)];
         spawnSmoke(stage, src.x, 0.1 + Math.random() * 1.5, src.z);
       }
 
-      // two flickering wildfire pointlights illuminating the scene
-      const fireLight1 = new THREE.PointLight(0xff5500, 1.8, 6.0);
+      // two flickering wildfire pointlights (increased brightness/range)
+      const fireLight1 = new THREE.PointLight(0xff5500, 2.5, 7.5);
       fireLight1.position.set(2.0, 0.5, -2.0);
       stage.add(fireLight1);
-      const fireLight2 = new THREE.PointLight(0xff4400, 1.4, 5.0);
+      const fireLight2 = new THREE.PointLight(0xff4400, 2.0, 6.5);
       fireLight2.position.set(-1.8, 0.4, 0.5);
       stage.add(fireLight2);
       const q1 = buildQuadrupedModel(0xff3300);
