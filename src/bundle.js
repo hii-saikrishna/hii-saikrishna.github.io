@@ -1036,29 +1036,102 @@ function dioramaScene(kind, zoom = 1) {
     }
     if (kind === "swarm") {
       // Wildfire Search & Rescue themed diorama with cinematic camera orbit
-      // Half-and-half ground: 50% charred wildfire (+x side) + 50% lush green forest (-x side)
-      const matCharred = rMat(0x27201c, {
-        roughness: 0.95
-      });
-      const matLiving = rMat(RB.grass, {
-        roughness: 0.9
-      });
-      const groundFire = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2 * 1.04, 0.1, 28, 1, false, 0, Math.PI), matCharred);
-      groundFire.position.y = -0.05;
-      stage.add(groundFire);
-      const groundGreen = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2 * 1.04, 0.1, 28, 1, false, Math.PI, Math.PI), matLiving);
-      groundGreen.position.y = -0.05;
-      stage.add(groundGreen);
+      // ===== Irregular wildfire spread: ~half the forest burns, with a natural, jagged fire front =====
+      // A randomized scalar field (re-seeded each load) decides burnt vs. living ground per-point.
+      const fireWaves = [];
+      for (let i = 0; i < 5; i++) {
+        fireWaves.push({
+          ax: (Math.random() * 2 - 1) * 1.1,
+          az: (Math.random() * 2 - 1) * 1.1,
+          ph: Math.random() * Math.PI * 2,
+          amp: 0.5 + Math.random() * 0.7
+        });
+      }
+      const biasX = (Math.random() * 2 - 1) * 0.45;
+      const biasZ = (Math.random() * 2 - 1) * 0.45;
+      const fireField = (x, z) => {
+        let s = biasX * x + biasZ * z;
+        for (const w of fireWaves) s += Math.sin(x * w.ax + z * w.az + w.ph) * w.amp;
+        return s;
+      };
+      // Calibrate the threshold to the field's median so ~50% of the ground area burns.
+      const fsamples = [];
+      for (let i = 0; i < 600; i++) {
+        const a = Math.random() * Math.PI * 2,
+          r = Math.sqrt(Math.random()) * 4.2;
+        fsamples.push(fireField(Math.cos(a) * r, Math.sin(a) * r));
+      }
+      fsamples.sort((a, b) => a - b);
+      const burnThreshold = fsamples[Math.floor(fsamples.length * 0.5)];
+      const isBurnt = (x, z) => fireField(x, z) > burnThreshold;
 
-      // Scorch footprint confined to the burning (+x) half
-      const blob = new THREE.Mesh(new THREE.CircleGeometry(2.1, 24, -Math.PI / 2, Math.PI), new THREE.MeshBasicMaterial({
-        color: 0x111111,
-        transparent: true,
-        opacity: 0.35
+      // Pick a random disc point satisfying a predicate (burnt or green region).
+      const pickPoint = (pred, minR = 0.3, maxR = 3.9, tries = 60) => {
+        for (let k = 0; k < tries; k++) {
+          const a = Math.random() * Math.PI * 2;
+          const r = minR + Math.sqrt(Math.random()) * (maxR - minR);
+          const x = Math.cos(a) * r,
+            z = Math.sin(a) * r;
+          if (pred(x, z)) return {
+            x,
+            z
+          };
+        }
+        return {
+          x: 0,
+          z: 0
+        };
+      };
+      const notBurnt = (x, z) => !isBurnt(x, z);
+
+      // Vertex-coloured ground disc: charred ash where burnt, lush grass where alive.
+      const cChar = new THREE.Color(0x27201c);
+      const cGrass = new THREE.Color(RB.grass);
+      const cGrass2 = new THREE.Color(RB.grass2);
+      const RINGS = 18,
+        SEG = 64,
+        GROUND_R = 4.2;
+      const gPos = [],
+        gCol = [],
+        gIdx = [];
+      for (let ri = 0; ri <= RINGS; ri++) {
+        const rad = ri / RINGS * GROUND_R;
+        for (let si = 0; si <= SEG; si++) {
+          const a = si / SEG * Math.PI * 2;
+          const x = Math.cos(a) * rad,
+            z = Math.sin(a) * rad;
+          gPos.push(x, 0, z);
+          const c = isBurnt(x, z) ? cChar : Math.random() < 0.5 ? cGrass : cGrass2;
+          gCol.push(c.r, c.g, c.b);
+        }
+      }
+      const gStride = SEG + 1;
+      for (let ri = 0; ri < RINGS; ri++) {
+        for (let si = 0; si < SEG; si++) {
+          const aI = ri * gStride + si,
+            bI = aI + 1,
+            cI = aI + gStride,
+            dI = cI + 1;
+          gIdx.push(aI, cI, bI, bI, cI, dI);
+        }
+      }
+      const groundGeo = new THREE.BufferGeometry();
+      groundGeo.setAttribute("position", new THREE.Float32BufferAttribute(gPos, 3));
+      groundGeo.setAttribute("color", new THREE.Float32BufferAttribute(gCol, 3));
+      groundGeo.setIndex(gIdx);
+      groundGeo.computeVertexNormals();
+      const ground = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        flatShading: true,
+        roughness: 0.92
       }));
-      blob.rotation.x = -Math.PI / 2;
-      blob.position.y = 0.011;
-      stage.add(blob);
+      stage.add(ground);
+      // Solid body underneath so the disc isn't paper-thin from the side.
+      const groundBody = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2 * 1.04, 0.12, 32), rMat(0x2c2620, {
+        roughness: 0.95
+      }));
+      groundBody.position.y = -0.07;
+      stage.add(groundBody);
 
       // Glow embers/veins on the charred ground
       const emberMat = new THREE.MeshBasicMaterial({
@@ -1067,11 +1140,10 @@ function dioramaScene(kind, zoom = 1) {
         opacity: 0.7
       });
       const embers = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 12; i++) {
         const emb = new THREE.Mesh(new THREE.BoxGeometry(0.12 + Math.random() * 0.25, 0.015, 0.04 + Math.random() * 0.06), emberMat);
-        const angle = -Math.PI / 2 + Math.random() * Math.PI; // embers only on the charred (+x) half
-        const rad = 0.5 + Math.random() * 2.8;
-        emb.position.set(Math.cos(angle) * rad, 0.005, Math.sin(angle) * rad);
+        const p = pickPoint(isBurnt, 0.4, 3.5); // embers only on charred ground
+        emb.position.set(p.x, 0.005, p.z);
         emb.rotation.y = Math.random() * Math.PI;
         stage.add(emb);
         embers.push({
@@ -1194,17 +1266,26 @@ function dioramaScene(kind, zoom = 1) {
         return tree;
       };
 
-      // 10 trees: 5 lush green on the living half, 5 burning on the wildfire half = 50/50
-      addGreenTree(stage, -2.6, -1.8, 0.95); // 1. green forest, left-back
-      addGreenTree(stage, -1.2, 2.8, 0.85); // 2. green forest, center-back
-      addGreenTree(stage, -3.2, 0.5, 0.8); // 3. green forest, left
-      addGreenTree(stage, -1.8, -2.8, 0.9); // 4. green forest, front-left
-      addGreenTree(stage, -2.4, 1.9, 0.75); // 5. green forest, back-left
-      addBurntTree(stage, 2.6, -1.8, 0.95, true); // 6. burning tree, right-back
-      addBurntTree(stage, 1.2, 2.8, 0.7, true); // 7. burning tree, center-back
-      addBurntTree(stage, 3.2, 0.5, 0.8, true); // 8. burning tree, right
-      addBurntTree(stage, 1.8, -2.8, 0.9, true); // 9. burning tree, front-right
-      addBurntTree(stage, 2.4, 1.9, 0.75, true); // 10. burning tree, back-right
+      // Scatter trees across the whole forest; trees in burnt ground burn/char, the rest stay lush.
+      const treeSpots = [];
+      let treeTries = 0;
+      while (treeSpots.length < 13 && treeTries < 500) {
+        treeTries++;
+        const a = Math.random() * Math.PI * 2;
+        const r = 0.8 + Math.sqrt(Math.random()) * 3.1;
+        const x = Math.cos(a) * r,
+          z = Math.sin(a) * r;
+        if (treeSpots.some(s => Math.hypot(s.x - x, s.z - z) < 1.0)) continue;
+        treeSpots.push({
+          x,
+          z
+        });
+      }
+      treeSpots.forEach(s => {
+        const sc = 0.7 + Math.random() * 0.3;
+        if (isBurnt(s.x, s.z)) addBurntTree(stage, s.x, s.z, sc, Math.random() < 0.72); // most burning, some charred
+        else addGreenTree(stage, s.x, s.z, sc);
+      });
 
       // Add charred logs lying on the ground, some burning
       const addCharredLog = (parent, x, z, angleY, length = 0.7, burning = false) => {
@@ -1244,11 +1325,10 @@ function dioramaScene(kind, zoom = 1) {
           }
         }
       };
-      addCharredLog(stage, 1.0, 1.2, Math.PI / 3, 0.9, true); // 1. burning log near center
-      addCharredLog(stage, 1.8, -0.6, -Math.PI / 6, 0.75, true); // 2. burning log right
-      addCharredLog(stage, 1.4, -1.8, Math.PI / 1.5, 0.6, true); // 3. burning log front-right
-      addCharredLog(stage, 2.6, 2.0, Math.PI / 4, 0.8, false); // 4. cold burnt log back-right
-      addCharredLog(stage, 2.8, 1.0, -Math.PI / 3, 0.7, false); // 5. cold burnt log right
+      for (let i = 0; i < 5; i++) {
+        const p = pickPoint(isBurnt, 0.5, 3.3); // charred logs lie within the burn
+        addCharredLog(stage, p.x, p.z, Math.random() * Math.PI, 0.6 + Math.random() * 0.35, Math.random() < 0.7);
+      }
 
       // ---- Lush greenery across the living (-x) half: bushes, grass tufts, wildflowers ----
       const mBush = rMat(RB.grass2, {
@@ -1268,37 +1348,27 @@ function dioramaScene(kind, zoom = 1) {
         });
         stage.add(b);
       };
-      addBush(-1.0, 0.6, 1.1);
-      addBush(-2.0, -0.4, 0.9);
-      addBush(-1.6, 1.6, 1.0);
-      addBush(-2.8, 2.4, 0.85);
-      addBush(-0.6, -1.4, 0.95);
-      addBush(-3.0, -1.0, 0.8);
+      for (let i = 0; i < 7; i++) {
+        const p = pickPoint(notBurnt, 0.6, 3.5);
+        addBush(p.x, p.z, 0.8 + Math.random() * 0.4);
+      }
 
-      // Grass tufts scattered on the green half
+      // Grass tufts scattered across the living ground
       const mTuft = rMat(RB.grass2, {
         roughness: 1
       });
-      for (let i = 0; i < 26; i++) {
-        const a = Math.PI * 0.5 + Math.random() * Math.PI; // -x half
-        const r = 0.6 + Math.random() * 3.2;
-        const gx = Math.cos(a) * r,
-          gz = Math.sin(a) * r;
-        if (gx > -0.2) continue;
+      for (let i = 0; i < 30; i++) {
+        const p = pickPoint(notBurnt, 0.5, 3.8);
         const blade = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.18 + Math.random() * 0.12, 4), mTuft);
-        blade.position.set(gx, 0.09, gz);
+        blade.position.set(p.x, 0.09, p.z);
         blade.rotation.z = (Math.random() - 0.5) * 0.3;
         stage.add(blade);
       }
 
       // A few bright wildflowers for life
       const flowerColors = [0xffd166, 0xff6b9d, 0xf4f1de];
-      for (let i = 0; i < 10; i++) {
-        const a = Math.PI * 0.5 + Math.random() * Math.PI;
-        const r = 0.8 + Math.random() * 3.0;
-        const fx = Math.cos(a) * r,
-          fz = Math.sin(a) * r;
-        if (fx > -0.3) continue;
+      for (let i = 0; i < 12; i++) {
+        const p = pickPoint(notBurnt, 0.6, 3.6);
         const col = flowerColors[i % flowerColors.length];
         const fl = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshStandardMaterial({
           color: col,
@@ -1306,21 +1376,24 @@ function dioramaScene(kind, zoom = 1) {
           emissive: col,
           emissiveIntensity: 0.15
         }));
-        fl.position.set(fx, 0.12, fz);
+        fl.position.set(p.x, 0.12, p.z);
         stage.add(fl);
       }
-      const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(RB.rock)); // natural rock on the green half
-      r1.position.set(-2.0, 0.07, 1.8);
+      const rp1 = pickPoint(notBurnt, 1.0, 3.4);
+      const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(RB.rock)); // natural rock on living ground
+      r1.position.set(rp1.x, 0.07, rp1.z);
       r1.scale.set(1.2, 0.8, 1.4);
       stage.add(r1);
-      const r2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(0x3d3530));
-      r2.position.set(2.2, 0.06, -1.6);
+      const rp2 = pickPoint(isBurnt, 1.0, 3.4);
+      const r2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(0x3d3530)); // soot rock in the burn
+      r2.position.set(rp2.x, 0.06, rp2.z);
       r2.scale.set(1, 0.6, 1.2);
       stage.add(r2);
 
-      // ruins
+      // ruins (burnt-out debris — sits within the fire zone)
+      const ruinsP = pickPoint(isBurnt, 1.2, 3.0);
       const ruins = new THREE.Group();
-      ruins.position.set(2.0, 0, -2.0);
+      ruins.position.set(ruinsP.x, 0, ruinsP.z);
       stage.add(ruins);
       const mDebris = rMat(0x4a423e, {
         roughness: 0.95
@@ -1395,14 +1468,13 @@ function dioramaScene(kind, zoom = 1) {
         stage.add(f);
       };
 
-      // Spawn 7 wildfire zones across the burning (+x) half, denser toward the fire front
-      spawnWildfire(2.0, -2.0, 1.35); // inside ruins
-      spawnWildfire(1.6, -1.5, 1.05);
-      spawnWildfire(2.2, 1.4, 1.25); // right forest area
-      spawnWildfire(1.6, -1.8, 1.15); // front-right
-      spawnWildfire(2.4, 1.8, 0.95); // back-right
-      spawnWildfire(0.6, 0.8, 1.05); // fire front (near boundary)
-      spawnWildfire(0.5, -1.0, 0.9); // fire front (near boundary)
+      // Scatter wildfire zones across the burnt ground; reuse the spots for smoke + lights.
+      const fireSpots = [];
+      for (let i = 0; i < 8; i++) {
+        const p = pickPoint(isBurnt, 0.4, 3.4);
+        fireSpots.push(p);
+        spawnWildfire(p.x, p.z, 0.9 + Math.random() * 0.5);
+      }
 
       // Smoke particles rising from fires (moderate density)
       const smokeParticles = [];
@@ -1428,51 +1500,25 @@ function dioramaScene(kind, zoom = 1) {
           scaleSpeed: 1.0 + Math.random() * 1.5
         });
       };
-      const fireSources = [{
-        x: 2.0,
-        z: -2.0
-      }, {
-        x: 1.6,
-        z: -1.5
-      }, {
-        x: 2.2,
-        z: 1.4
-      }, {
-        x: 1.6,
-        z: -1.8
-      }, {
-        x: 2.4,
-        z: 1.8
-      }, {
-        x: 0.6,
-        z: 0.8
-      }, {
-        x: 2.6,
-        z: -1.8
-      }, {
-        x: 1.2,
-        z: 2.8
-      }, {
-        x: 3.2,
-        z: 0.5
-      }, {
-        x: 1.8,
-        z: -2.8
-      }, {
-        x: 2.4,
-        z: 1.9
-      }];
       for (let i = 0; i < 40; i++) {
-        const src = fireSources[Math.floor(Math.random() * fireSources.length)];
+        const src = fireSpots[Math.floor(Math.random() * fireSpots.length)];
         spawnSmoke(stage, src.x, 0.1 + Math.random() * 1.5, src.z);
       }
 
-      // two flickering wildfire pointlights (moderate brightness/range)
+      // two flickering wildfire pointlights anchored to actual fire spots
+      const fl1 = fireSpots[0] || {
+        x: 1.5,
+        z: -1.5
+      };
       const fireLight1 = new THREE.PointLight(0xff5500, 2.2, 7.0);
-      fireLight1.position.set(2.0, 0.5, -2.0);
+      fireLight1.position.set(fl1.x, 0.5, fl1.z);
       stage.add(fireLight1);
+      const fl2 = fireSpots[Math.min(3, fireSpots.length - 1)] || {
+        x: -1.0,
+        z: 1.0
+      };
       const fireLight2 = new THREE.PointLight(0xff4400, 1.7, 5.8);
-      fireLight2.position.set(1.8, 0.4, 0.5);
+      fireLight2.position.set(fl2.x, 0.4, fl2.z);
       stage.add(fireLight2);
       const q1 = buildQuadrupedModel(0xff3300);
       q1.group.scale.setScalar(0.85);
@@ -1551,7 +1597,7 @@ function dioramaScene(kind, zoom = 1) {
           sp.life += 0.012 * sp.speedY;
           if (sp.life > 1.0) {
             sp.life = 0;
-            const src = fireSources[Math.floor(Math.random() * fireSources.length)];
+            const src = fireSpots[Math.floor(Math.random() * fireSpots.length)];
             sp.mesh.position.set(src.x + (Math.random() - 0.5) * 0.2, 0.15, src.z + (Math.random() - 0.5) * 0.2);
             sp.mesh.scale.setScalar(0.6 + Math.random() * 0.8);
           } else {
