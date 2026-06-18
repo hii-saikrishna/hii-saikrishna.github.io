@@ -3314,9 +3314,9 @@ function buildGlobeScene(ctx) {
     const dot = new THREE.Mesh(new THREE.SphereGeometry(p.current ? 0.035 : 0.022, 10, 10), p.home ? homeMat : markerMat);
     dot.position.copy(latLonToV3(p.lat, p.lon, R * 1.012));
     globe.add(dot);
-    if (p.current || p.home) {
+    if (p.current) {
       const ring = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.058, 32), new THREE.MeshBasicMaterial({
-        color: p.current ? 0x1d7547 : 0xe0832c,
+        color: 0x1d7547,
         transparent: true,
         opacity: 0.9,
         side: THREE.DoubleSide

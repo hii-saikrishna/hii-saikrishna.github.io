@@ -257,10 +257,10 @@ function buildGlobeScene(ctx) {
     );
     dot.position.copy(latLonToV3(p.lat, p.lon, R * 1.012));
     globe.add(dot);
-    if (p.current || p.home) {
+    if (p.current) {
       const ring = new THREE.Mesh(
         new THREE.RingGeometry(0.05, 0.058, 32),
-        new THREE.MeshBasicMaterial({ color: p.current ? 0x1d7547 : 0xe0832c, transparent: true, opacity: 0.9, side: THREE.DoubleSide })
+        new THREE.MeshBasicMaterial({ color: 0x1d7547, transparent: true, opacity: 0.9, side: THREE.DoubleSide })
       );
       ring.position.copy(latLonToV3(p.lat, p.lon, R * 1.015));
       ring.lookAt(0, 0, 0);
