@@ -33,17 +33,17 @@ const HOME_GALLERY = [{
 // A .mp4 src is detected automatically and shown as a playable clip.
 // Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [{
-  src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4",
-  place: "Hangzhou, China",
-  title: "The Romance of the Song Dynasty",
-  when: "Oct 2025",
-  desc: "A spectacular performance at the Song Dynasty park during IROS 2025."
-}, {
   src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg",
   place: "HeRoLab",
   title: "Thanksgiving with the lab",
   when: "Nov 2025",
   desc: "Thanksgiving lunch with the lab."
+}, {
+  src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4",
+  place: "Hangzhou, China",
+  title: "The Romance of the Song Dynasty",
+  when: "Oct 2025",
+  desc: "A spectacular performance at the Song Dynasty park during IROS 2025."
 }, {
   src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg",
   place: "Hangzhou, China",
@@ -3273,7 +3273,34 @@ function ContactGlobe() {
 // ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
 const isVideo = s => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
 function TripGallery() {
-  const items = window.TRIP_GALLERY || [];
+  const items = React.useMemo(() => {
+    return [...(window.TRIP_GALLERY || [])].sort((a, b) => {
+      const parseDate = d => {
+        if (!d) return 0;
+        const parts = d.split(" ");
+        if (parts.length === 2) {
+          const mos = {
+            Jan: 1,
+            Feb: 2,
+            Mar: 3,
+            Apr: 4,
+            May: 5,
+            Jun: 6,
+            Jul: 7,
+            Aug: 8,
+            Sep: 9,
+            Oct: 10,
+            Nov: 11,
+            Dec: 12
+          };
+          return parseInt(parts[1], 10) * 12 + (mos[parts[0]] || 0);
+        }
+        const y = parseInt(d, 10);
+        return isNaN(y) ? 0 : y * 12;
+      };
+      return parseDate(b.when) - parseDate(a.when);
+    });
+  }, []);
   const [active, setActive] = React.useState(null);
   const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);

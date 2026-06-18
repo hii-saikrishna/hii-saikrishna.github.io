@@ -29,10 +29,10 @@ const HOME_GALLERY = [
 // A .mp4 src is detected automatically and shown as a playable clip.
 // Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [
-  { src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4", place: "Hangzhou, China",
-    title: "The Romance of the Song Dynasty", when: "Oct 2025", desc: "A spectacular performance at the Song Dynasty park during IROS 2025." },
   { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", place: "HeRoLab",
     title: "Thanksgiving with the lab", when: "Nov 2025", desc: "Thanksgiving lunch with the lab." },
+  { src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4", place: "Hangzhou, China",
+    title: "The Romance of the Song Dynasty", when: "Oct 2025", desc: "A spectacular performance at the Song Dynasty park during IROS 2025." },
   { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", place: "Hangzhou, China",
     title: "IROS 2025", when: "Oct 2025", desc: "At the IROS conference in Hangzhou." },
   { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", place: "HeRoLab",

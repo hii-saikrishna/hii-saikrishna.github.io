@@ -616,7 +616,21 @@ function ContactGlobe() {
 const isVideo = (s) => /\.(mp4|webm|mov|m4v)$/i.test(s || "");
 
 function TripGallery() {
-  const items = window.TRIP_GALLERY || [];
+  const items = React.useMemo(() => {
+    return [...(window.TRIP_GALLERY || [])].sort((a, b) => {
+      const parseDate = (d) => {
+        if (!d) return 0;
+        const parts = d.split(" ");
+        if (parts.length === 2) {
+          const mos = { Jan:1, Feb:2, Mar:3, Apr:4, May:5, Jun:6, Jul:7, Aug:8, Sep:9, Oct:10, Nov:11, Dec:12 };
+          return (parseInt(parts[1], 10) * 12) + (mos[parts[0]] || 0);
+        }
+        const y = parseInt(d, 10);
+        return isNaN(y) ? 0 : y * 12;
+      };
+      return parseDate(b.when) - parseDate(a.when);
+    });
+  }, []);
   const [active, setActive] = React.useState(null);
   const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);
