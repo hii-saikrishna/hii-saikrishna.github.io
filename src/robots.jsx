@@ -379,22 +379,25 @@ function dioramaScene(kind, zoom = 1) {
       rBox(frame, mWoodDark, 0.72, 0.52, 0.03, 0, 0, 0);
       rBox(frame, rMat(0xbcd8c4), 0.58, 0.38, 0.02, 0, 0, 0.02);
       
-      // ---- KITCHEN (back-left): counter, countertop, cabinets, sink, stove, fridge ----
+      // ---- KITCHEN (back-left): fridge in the corner, then the counter run to its right (no overlap) ----
       const kitchen = new THREE.Group(); home.add(kitchen);
       const counterZ = -RD + 0.3;
-      rBox(kitchen, mWood, 1.9, 0.52, 0.5, -1.3, 0.26, counterZ);                         // base
-      rBox(kitchen, rMat(0xe9e2d4, { roughness: 0.6 }), 1.96, 0.06, 0.56, -1.3, 0.55, counterZ); // countertop
-      [-2.1, -1.6, -1.1, -0.6].forEach(cx => rBox(kitchen, mWoodDark, 0.02, 0.4, 0.02, cx, 0.26, counterZ + 0.24)); // door seams
-      rBox(kitchen, mDark, 0.34, 0.06, 0.26, -1.75, 0.57, counterZ);                       // sink basin
-      rCyl(kitchen, mMetal, 0.018, 0.018, 0.16, -1.75, 0.66, counterZ - 0.06, 8);          // faucet riser
-      rBox(kitchen, mMetal, 0.018, 0.018, 0.12, -1.75, 0.74, counterZ - 0.01);             // faucet spout
-      [[-0.7, 0.1], [-0.7, -0.1], [-0.95, 0.1], [-0.95, -0.1]].forEach(([bx, bz]) => {     // stove burners
+      // fridge stands alone in the corner (x spans -2.45..-1.95)
+      rBox(kitchen, rMat(0xdfe3e6, { roughness: 0.5, metalness: 0.3 }), 0.5, 1.18, 0.5, -RW + 0.3, 0.59, counterZ);
+      rBox(kitchen, mWoodDark, 0.5, 0.02, 0.5, -RW + 0.3, 0.64, counterZ);                 // fridge door split line
+      rBox(kitchen, mMetal, 0.03, 0.46, 0.03, -RW + 0.5, 0.62, counterZ + 0.27);           // fridge handle (front face)
+      // counter run starts to the RIGHT of the fridge (x spans -1.8..-0.3)
+      rBox(kitchen, mWood, 1.5, 0.52, 0.5, -1.05, 0.26, counterZ);                         // base
+      rBox(kitchen, rMat(0xe9e2d4, { roughness: 0.6 }), 1.56, 0.06, 0.56, -1.05, 0.55, counterZ); // countertop
+      [-1.55, -1.05, -0.55].forEach(cx => rBox(kitchen, mWoodDark, 0.02, 0.4, 0.02, cx, 0.26, counterZ + 0.25)); // door seams
+      rBox(kitchen, mDark, 0.32, 0.06, 0.26, -1.4, 0.57, counterZ);                        // sink basin
+      rCyl(kitchen, mMetal, 0.018, 0.018, 0.16, -1.4, 0.66, counterZ - 0.06, 8);           // faucet riser
+      rBox(kitchen, mMetal, 0.018, 0.018, 0.12, -1.4, 0.74, counterZ - 0.01);              // faucet spout
+      [[-0.6, 0.1], [-0.6, -0.1], [-0.85, 0.1], [-0.85, -0.1]].forEach(([bx, bz]) => {     // stove burners
         const burner = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.012, 12), mDark);
         burner.position.set(bx, 0.585, counterZ + bz); kitchen.add(burner);
       });
-      rBox(kitchen, mWood, 1.9, 0.4, 0.28, -1.3, 1.08, -RD + 0.16);                        // upper cabinets
-      rBox(kitchen, rMat(0xdfe3e6, { roughness: 0.5, metalness: 0.3 }), 0.52, 1.18, 0.5, -RW + 0.32, 0.59, counterZ); // fridge
-      rBox(kitchen, mMetal, 0.03, 0.5, 0.03, -RW + 0.56, 0.62, counterZ - 0.22);           // fridge handle
+      rBox(kitchen, mWood, 1.5, 0.4, 0.28, -1.05, 1.08, -RD + 0.18);                       // upper cabinets
 
       // ---- LIVING: sofa, coffee table, TV console ----
       const sofa = new THREE.Group(); sofa.position.set(0.8, 0, 1.7); home.add(sofa); // faces -z (toward TV)
@@ -449,6 +452,57 @@ function dioramaScene(kind, zoom = 1) {
       addPlant(plantPositions[0], 1.05);
       addPlant(plantPositions[1], 0.9);
       addPlant(plantPositions[2], 0.95);
+
+      // ---- Human residents living alongside the robots ----
+      const addHuman = (x, z, { rotY = 0, seated = false, shirt = 0x4a6fa5, pants = 0x33405a, skin = 0xe8b894, hair = 0x3a2a1a, shoes = 0x2a2a2e, scale = 1 } = {}) => {
+        const h = new THREE.Group();
+        const mSkin = rMat(skin, { roughness: 0.7 });
+        const mShirt = rMat(shirt, { roughness: 0.9 });
+        const mPants = rMat(pants, { roughness: 0.9 });
+        const mHair = rMat(hair, { roughness: 0.95 });
+        const mShoe = rMat(shoes, { roughness: 0.8 });
+        if (seated) {
+          rBox(h, mPants, 0.34, 0.2, 0.34, 0, 0.5, 0);                 // hips
+          rBox(h, mPants, 0.3, 0.16, 0.42, 0, 0.48, 0.26);            // thighs (forward)
+          rBox(h, mPants, 0.13, 0.42, 0.14, -0.08, 0.26, 0.46);       // shin L
+          rBox(h, mPants, 0.13, 0.42, 0.14, 0.08, 0.26, 0.46);        // shin R
+          rBox(h, mShoe, 0.13, 0.06, 0.2, -0.08, 0.05, 0.56);         // foot L
+          rBox(h, mShoe, 0.13, 0.06, 0.2, 0.08, 0.05, 0.56);          // foot R
+          rBox(h, mShirt, 0.36, 0.42, 0.26, 0, 0.82, 0);              // torso
+          rBox(h, mShirt, 0.1, 0.36, 0.1, -0.23, 0.8, 0.05);          // arm L
+          rBox(h, mShirt, 0.1, 0.36, 0.1, 0.23, 0.8, 0.05);           // arm R
+          rSph(h, mSkin, 0.055, -0.23, 0.62, 0.1);                    // hand L
+          rSph(h, mSkin, 0.055, 0.23, 0.62, 0.1);                     // hand R
+          rCyl(h, mSkin, 0.05, 0.05, 0.08, 0, 1.07, 0, 8);            // neck
+          rSph(h, mSkin, 0.13, 0, 1.19, 0);                           // head
+          const cap = rSph(h, mHair, 0.135, 0, 1.21, -0.02); cap.scale.set(1, 0.82, 1);
+        } else {
+          rBox(h, mPants, 0.14, 0.6, 0.16, -0.1, 0.3, 0);             // leg L
+          rBox(h, mPants, 0.14, 0.6, 0.16, 0.1, 0.3, 0);              // leg R
+          rBox(h, mShoe, 0.14, 0.06, 0.22, -0.1, 0.03, 0.04);         // foot L
+          rBox(h, mShoe, 0.14, 0.06, 0.22, 0.1, 0.03, 0.04);          // foot R
+          rBox(h, mShirt, 0.38, 0.5, 0.24, 0, 0.86, 0);               // torso
+          rBox(h, mShirt, 0.1, 0.46, 0.12, -0.25, 0.84, 0);          // arm L
+          rBox(h, mShirt, 0.1, 0.46, 0.12, 0.25, 0.84, 0);           // arm R
+          rSph(h, mSkin, 0.055, -0.25, 0.6, 0.02);                    // hand L
+          rSph(h, mSkin, 0.055, 0.25, 0.6, 0.02);                     // hand R
+          rCyl(h, mSkin, 0.05, 0.05, 0.08, 0, 1.16, 0, 8);            // neck
+          rSph(h, mSkin, 0.135, 0, 1.3, 0);                           // head
+          const cap = rSph(h, mHair, 0.14, 0, 1.33, -0.02); cap.scale.set(1, 0.85, 1);
+        }
+        h.position.set(x, 0, z);
+        h.rotation.y = rotY;
+        h.scale.setScalar(scale);
+        home.add(h);
+        return h;
+      };
+      // Two adults relaxing on the sofa (facing the TV)
+      addHuman(0.5, 1.85, { seated: true, rotY: Math.PI, shirt: 0x2f7d6b, pants: 0x394150 });
+      addHuman(1.12, 1.85, { seated: true, rotY: Math.PI, shirt: 0xb5563e, pants: 0x3a3a44, hair: 0x5a3a22 });
+      // An adult standing in the kitchen near the robot chef
+      addHuman(-0.15, -0.85, { rotY: Math.PI, shirt: 0x5d6b3a, pants: 0x40342a, hair: 0x241712 });
+      // A child playing on the rug
+      addHuman(1.55, 0.55, { rotY: -Math.PI * 0.6, scale: 0.72, shirt: 0xe0b341, pants: 0x4763a8, hair: 0x2a1c12 });
 
       // UGV charging dock against the left wall
       const dock = new THREE.Group();
