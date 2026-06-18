@@ -1396,15 +1396,12 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .j-card.wide { max-width: 100%; }
 .j-outro {
-  min-height: 64vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;   /* sit the closing quote low, against the hills */
+  justify-content: center;
   gap: 24px;
-  padding-bottom: clamp(8px, 2vw, 24px);
-  position: relative;
-  z-index: 3;                  /* keep the quote above the overlapping mountain band */
   will-change: opacity, transform;
 }
 .j-outro-word {
@@ -2404,8 +2401,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .mountain-home { margin-top: clamp(32px, 4vw, 64px); height: clamp(135px, 15vw, 210px); }
 .mountain-research { margin-top: clamp(24px, 3vw, 52px); }
 .mountain-publications { margin-top: clamp(20px, 3vw, 48px); }
-/* Pull the rolling-hills band up behind the closing credo so the quote overlaps the animation. */
-.mountain-milestones { position: relative; z-index: 1; margin-top: clamp(-230px, -18vw, -130px); }
+.mountain-milestones { position: relative; z-index: 2; margin-top: clamp(16px, 2vw, 40px); }
 .mountain-blog-reader { margin-top: clamp(36px, 4vw, 64px); }
 .blog-reader + .mountain-3d { margin-top: clamp(36px, 4vw, 64px); }
 .research + .mountain-3d { margin-top: clamp(28px, 3vw, 56px); }

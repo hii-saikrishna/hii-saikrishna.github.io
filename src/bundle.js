@@ -4066,7 +4066,7 @@ function UpdatesPage() {
       top: 0,
       behavior: "smooth"
     })
-  }, "Back to the trailhead \u2191")), /*#__PURE__*/React.createElement(MountainMilestones, null)));
+  }, "Back to the trailhead \u2191"))));
 }
 
 // The CSS earth disc is a *fallback* for when WebGL can't run. The WebGL canvas

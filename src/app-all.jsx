@@ -577,7 +577,6 @@ function UpdatesPage() {
           </blockquote>
           <button className="btn" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Back to the trailhead ↑</button>
         </footer>
-        <MountainMilestones />
       </div>
     </div>
   );
