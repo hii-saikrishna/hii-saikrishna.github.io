@@ -144,7 +144,7 @@ function HomePage({ go }) {
                   aria-label={`Read more about ${it.title}`}
                 >
                   <div className="glyph-wrap">
-                    <ThreeScene build={dioramaScene(it.scene, 0.8)} />
+                    <ThreeScene build={dioramaScene(it.scene)} />
                   </div>
                   <h3>{it.title}</h3>
                   <p>{it.desc}</p>

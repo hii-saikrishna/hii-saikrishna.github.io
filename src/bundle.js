@@ -3532,7 +3532,7 @@ function HomePage({
   }, /*#__PURE__*/React.createElement("div", {
     className: "glyph-wrap"
   }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: dioramaScene(int.scene, 0.8)
+    build: dioramaScene(int.scene)
   })), /*#__PURE__*/React.createElement("h3", null, int.title), /*#__PURE__*/React.createElement("p", null, int.desc))))))), /*#__PURE__*/React.createElement(MountainHome, null));
 }
 function ResearchPage() {
