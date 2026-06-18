@@ -1162,9 +1162,9 @@ function dioramaScene(kind, zoom = 1) {
         return tree;
       };
 
-      // 10 trees total, 6 on fire = exactly 60% tree fire coverage
+      // 10 trees total, 5 on fire = exactly 50% tree fire coverage
       addBurntTree(stage, -2.6, -1.8, 0.95, true); // 1. burning tree left-back
-      addBurntTree(stage, 2.8, 2.0, 0.85, true); // 2. burning tree right-back
+      addBurntTree(stage, 2.8, 2.0, 0.85, false); // 2. charred tree right-back (burnt only)
       addBurntTree(stage, -1.2, 2.8, 0.7, true); // 3. burning tree center-back
       addBurntTree(stage, 3.0, -1.4, 0.65, false); // 4. charred tree front-right (burnt only)
       addBurntTree(stage, -3.2, 0.5, 0.8, true); // 5. burning tree left
@@ -1215,7 +1215,7 @@ function dioramaScene(kind, zoom = 1) {
       addCharredLog(stage, 0.8, 1.2, Math.PI / 3, 0.9, true); // 1. burning log near center
       addCharredLog(stage, -1.8, -0.6, -Math.PI / 6, 0.75, true); // 2. burning log left
       addCharredLog(stage, 1.2, -1.8, Math.PI / 1.5, 0.6, true); // 3. burning log front-right
-      addCharredLog(stage, -0.5, 2.0, Math.PI / 4, 0.8, true); // 4. burning log back-center
+      addCharredLog(stage, -0.5, 2.0, Math.PI / 4, 0.8, false); // 4. cold burnt log back-center
       addCharredLog(stage, -2.5, 1.8, -Math.PI / 3, 0.7, false); // 5. cold burnt log left-back
 
       const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(0x3d3530));
@@ -1255,7 +1255,7 @@ function dioramaScene(kind, zoom = 1) {
       beacon.position.set(0, 0.5, 0);
       ruins.add(beacon);
 
-      // Wildfire spots spread across the forest floor (using larger multi-cone clusters for 60% fire)
+      // Wildfire spots spread across the forest floor (using larger multi-cone clusters for 50% fire)
       const spawnWildfire = (x, z, s) => {
         const f = new THREE.Group();
         f.position.set(x, 0.05, z);
@@ -1304,18 +1304,16 @@ function dioramaScene(kind, zoom = 1) {
         stage.add(f);
       };
 
-      // Spawn 9 wildfire zones (massively covering the scene ~60% fire)
-      spawnWildfire(2.0, -2.0, 1.45); // inside ruins
-      spawnWildfire(1.6, -1.5, 1.1);
-      spawnWildfire(-2.2, 1.4, 1.35); // left forest area
-      spawnWildfire(-1.6, -1.8, 1.25); // front-left
-      spawnWildfire(2.4, 1.8, 1.05); // back-right
-      spawnWildfire(-0.8, 0.8, 1.15); // center-left
-      spawnWildfire(0.2, -1.2, 1.0); // front-center
-      spawnWildfire(-2.8, -0.5, 0.9); // far-left
-      spawnWildfire(1.0, 2.2, 0.95); // back-center
+      // Spawn 7 wildfire zones (moderately covering the scene ~50% fire)
+      spawnWildfire(2.0, -2.0, 1.35); // inside ruins
+      spawnWildfire(1.6, -1.5, 1.05);
+      spawnWildfire(-2.2, 1.4, 1.25); // left forest area
+      spawnWildfire(-1.6, -1.8, 1.15); // front-left
+      spawnWildfire(2.4, 1.8, 0.95); // back-right
+      spawnWildfire(-0.8, 0.8, 1.05); // center-left
+      spawnWildfire(0.2, -1.2, 0.9); // front-center
 
-      // Smoke particles rising from fires (increased density)
+      // Smoke particles rising from fires (moderate density)
       const smokeParticles = [];
       const mSmoke = new THREE.MeshBasicMaterial({
         color: 0x3d3533,
@@ -1373,16 +1371,16 @@ function dioramaScene(kind, zoom = 1) {
         x: -1.8,
         z: -2.8
       }];
-      for (let i = 0; i < 55; i++) {
+      for (let i = 0; i < 40; i++) {
         const src = fireSources[Math.floor(Math.random() * fireSources.length)];
         spawnSmoke(stage, src.x, 0.1 + Math.random() * 1.5, src.z);
       }
 
-      // two flickering wildfire pointlights (increased brightness/range)
-      const fireLight1 = new THREE.PointLight(0xff5500, 2.5, 7.5);
+      // two flickering wildfire pointlights (moderate brightness/range)
+      const fireLight1 = new THREE.PointLight(0xff5500, 2.2, 7.0);
       fireLight1.position.set(2.0, 0.5, -2.0);
       stage.add(fireLight1);
-      const fireLight2 = new THREE.PointLight(0xff4400, 2.0, 6.5);
+      const fireLight2 = new THREE.PointLight(0xff4400, 1.7, 5.8);
       fireLight2.position.set(-1.8, 0.4, 0.5);
       stage.add(fireLight2);
       const q1 = buildQuadrupedModel(0xff3300);
