@@ -566,29 +566,55 @@ function UpdatesPage() {
     return list;
   }, []);
 
+  const isScrollingTo = React.useRef(null);
+  const scrollTimeout = React.useRef(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
+
+  const scrollToState = React.useCallback((targetState) => {
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    
+    isScrollingTo.current = targetState;
+    setActiveYear(targetState); // Snappy UI update
+
+    let selector = "";
+    if (targetState === "hero") {
+      selector = ".j-hero";
+    } else if (targetState === "outro") {
+      selector = ".j-outro";
+    } else {
+      selector = `section[data-screen-label="${targetState}"]`;
+    }
+
+    const el = document.querySelector(selector);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    scrollTimeout.current = setTimeout(() => {
+      isScrollingTo.current = null;
+    }, 850);
+  }, []);
+
   const navigateToState = React.useCallback((direction) => {
     const states = ["hero", ...years.map(String), "outro"];
-    const curIdx = states.indexOf(activeYear);
+    const current = isScrollingTo.current || activeYear;
+    const curIdx = states.indexOf(current);
     const targetIdx = curIdx + direction;
     if (targetIdx >= 0 && targetIdx < states.length) {
-      const targetState = states[targetIdx];
-      let selector = "";
-      if (targetState === "hero") {
-        selector = ".j-hero";
-      } else if (targetState === "outro") {
-        selector = ".j-outro";
-      } else {
-        selector = `section[data-screen-label="${targetState}"]`;
-      }
-      const el = document.querySelector(selector);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      scrollToState(states[targetIdx]);
     }
-  }, [activeYear, years]);
+  }, [activeYear, years, scrollToState]);
 
   React.useEffect(() => {
     const handleScroll = () => {
+      // If manually animating to a target, don't let intermediate scroll offsets override it
+      if (isScrollingTo.current) return;
+
       const sections = document.querySelectorAll(".j-section");
       let currentActive = "hero";
       let minDistance = Infinity;
@@ -653,10 +679,7 @@ function UpdatesPage() {
       <div className="j-nav-dots">
         <button
           className={`j-nav-dot ${activeYear === "hero" ? "active" : ""}`}
-          onClick={() => {
-            const el = document.querySelector(".j-hero");
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-          }}
+          onClick={() => scrollToState("hero")}
           title="Intro"
         >
           <span className="j-nav-dot-label">Intro</span>
@@ -666,10 +689,7 @@ function UpdatesPage() {
           <button
             key={y}
             className={`j-nav-dot ${activeYear === String(y) ? "active" : ""}`}
-            onClick={() => {
-              const el = document.querySelector(`section[data-screen-label="${y}"]`);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-            }}
+            onClick={() => scrollToState(String(y))}
             title={String(y)}
           >
             <span className="j-nav-dot-label">{y}</span>
@@ -678,10 +698,7 @@ function UpdatesPage() {
         ))}
         <button
           className={`j-nav-dot ${activeYear === "outro" ? "active" : ""}`}
-          onClick={() => {
-            const el = document.querySelector(".j-outro");
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-          }}
+          onClick={() => scrollToState("outro")}
           title="Credo"
         >
           <span className="j-nav-dot-label">Credo</span>
@@ -723,7 +740,7 @@ function UpdatesPage() {
           <p className="j-lede">A timeline of research milestones and career updates.</p>
           <div 
             className="j-cue interactive"
-            onClick={() => navigateToState(1)}
+            onClick={() => scrollToState(String(years[0]))}
             style={{ cursor: "pointer" }}
             title="Click to start traveling"
           >
