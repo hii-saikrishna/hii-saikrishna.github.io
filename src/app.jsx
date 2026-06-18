@@ -57,7 +57,8 @@ function App() {
     h = (h || "").replace(/^#\/?/, "");
     if (!h) return { page: "home", post: null };
     if (h.startsWith("blog/")) return { page: "blog", post: h.slice(5) };
-    return { page: h, post: null };
+    const [page, anchor] = h.split("/");
+    return { page, post: null, anchor: anchor || null };
   };
   const [route, setRoute] = React.useState(parseHash(initial));
 
@@ -68,11 +69,18 @@ function App() {
   }, []);
 
   React.useEffect(() => {
+    if (route.anchor) {
+      window.requestAnimationFrame(() => {
+        const target = document.getElementById(`research-${route.anchor}`);
+        if (target) target.scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+      return;
+    }
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [route.page, route.post]);
+  }, [route.page, route.post, route.anchor]);
 
-  const go = (page) => {
-    window.location.hash = page === "home" ? "" : `#/${page}`;
+  const go = (page, anchor) => {
+    window.location.hash = page === "home" ? "" : `#/${page}${anchor ? `/${anchor}` : ""}`;
   };
   const openPost = (id) => {
     window.location.hash = `#/blog/${id}`;

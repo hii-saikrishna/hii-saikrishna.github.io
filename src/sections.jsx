@@ -137,7 +137,12 @@ function HomePage({ go }) {
           <div className="interest-grid">
             {INTERESTS.map((it, i) => (
               <Reveal key={it.id} delay={i * 80}>
-                <div className="interest-card">
+                <button
+                  type="button"
+                  className="interest-card interest-card-link"
+                  onClick={() => go("research", it.id)}
+                  aria-label={`Read more about ${it.title}`}
+                >
                   <div className="glyph-wrap">
                     <ThreeScene build={dioramaScene(it.scene, 0.8)} />
                   </div>
@@ -146,7 +151,7 @@ function HomePage({ go }) {
                   <div className="topics">
                     {it.topics.map(t => <span key={t} className="topic">{t}</span>)}
                   </div>
-                </div>
+                </button>
               </Reveal>
             ))}
           </div>
@@ -239,7 +244,7 @@ function ResearchPage() {
 
         {THRUSTS.map((t, i) => (
           <Reveal key={t.num} delay={i * 80}>
-            <div className="thrust">
+            <div id={`research-${t.id}`} className="thrust">
               <div className="thrust-media">
                 <ThreeScene build={dioramaScene(t.scene)} style={{ position: "absolute", inset: 0 }} />
                 <span className="stamp">{t.num}</span>

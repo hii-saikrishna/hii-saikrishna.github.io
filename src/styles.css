@@ -523,10 +523,22 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   transform-style: preserve-3d;
   perspective: 800px;
 }
+.interest-card-link {
+  appearance: none;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
 .interest-card:hover {
   transform: translateY(-4px);
   border-color: color-mix(in oklch, var(--accent) 30%, var(--line));
   box-shadow: 0 30px 60px -28px color-mix(in oklch, var(--accent) 22%, transparent);
+}
+.interest-card-link:focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--accent) 45%, transparent);
+  outline-offset: 4px;
 }
 .interest-card .glyph-wrap {
   width: 100%;
@@ -2160,6 +2172,16 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .about-nature-page .mountain-3d { margin-top: clamp(20px, 3vw, 44px); }
 /* The mountain band is the page's own footer here — run it flush to the bottom. */
 .blog-nature-page { padding-bottom: 0; }
+
+/* Page-specific mountain overrides */
+.mountain-home { margin-top: clamp(32px, 4vw, 64px); height: clamp(180px, 20vw, 280px); }
+.mountain-research { margin-top: clamp(24px, 3vw, 52px); }
+.mountain-publications { margin-top: clamp(20px, 3vw, 48px); }
+.mountain-milestones { position: relative; z-index: 2; margin-top: clamp(16px, 2vw, 40px); }
+.mountain-blog-reader { margin-top: clamp(36px, 4vw, 64px); }
+.blog-reader + .mountain-3d { margin-top: clamp(36px, 4vw, 64px); }
+.research .mountain-3d { margin-top: clamp(28px, 3vw, 56px); }
+.publications ~ .mountain-3d { margin-top: 0; }
 
 /* ============ Blog (clean, non-immersive) + minimal motion ============ */
 .blog-page { padding: 80px 0 96px; }
