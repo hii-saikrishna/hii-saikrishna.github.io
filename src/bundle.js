@@ -903,23 +903,21 @@ function dioramaScene(kind, zoom = 1) {
       rBox(home, mBase, RW * 2 + 0.2, 0.1, 0.05, 0, 0.05, -RD - 0.02);
       rBox(home, mBase, 0.05, 0.1, RD * 2 + 0.2, -RW - 0.02, 0.05, 0);
 
-      // Window on the back wall (right half), mounted just IN FRONT of the wall so nothing z-fights.
-      // Opaque sky pane — a transparent pane would only reveal the opaque wall behind it.
+      // Window on the back wall. Built as ONE solid frame box embedded into the wall, with a
+      // smaller sky pane and the two muntins layered strictly in front at DISTINCT depths so no
+      // two faces are ever coplanar — this is what removes the z-fighting flicker.
       const mSky = rMat(0xaedcf5, {
         emissive: 0x8ec8ee,
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 0.4,
         roughness: 0.5
       });
       const windowG = new THREE.Group();
-      windowG.position.set(0.95, 0.82, -RD + 0.05);
+      windowG.position.set(0.95, 0.82, -RD + 0.02);
       home.add(windowG);
-      rBox(windowG, mSky, 1.0, 0.62, 0.02, 0, 0, 0.02); // sky pane (behind the frame)
-      rBox(windowG, mWood, 1.12, 0.08, 0.05, 0, 0.33, 0.04); // frame top
-      rBox(windowG, mWood, 1.12, 0.08, 0.05, 0, -0.33, 0.04); // frame bottom
-      rBox(windowG, mWood, 0.08, 0.74, 0.05, -0.56, 0, 0.04); // frame left
-      rBox(windowG, mWood, 0.08, 0.74, 0.05, 0.56, 0, 0.04); // frame right
-      rBox(windowG, mWood, 0.05, 0.62, 0.05, 0, 0, 0.05); // mullion vertical
-      rBox(windowG, mWood, 1.0, 0.05, 0.05, 0, 0, 0.05); // mullion horizontal
+      rBox(windowG, mWood, 1.1, 0.72, 0.12, 0, 0, 0.0); // frame (single box, back embedded in wall)
+      rBox(windowG, mSky, 0.92, 0.56, 0.03, 0, 0, 0.08); // sky pane, inset in front of the frame
+      rBox(windowG, mWood, 0.035, 0.56, 0.025, 0, 0, 0.115); // muntin vertical
+      rBox(windowG, mWood, 0.92, 0.035, 0.025, 0, 0, 0.145); // muntin horizontal
 
       // Framed picture on the left wall
       const frame = new THREE.Group();
