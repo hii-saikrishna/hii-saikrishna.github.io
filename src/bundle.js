@@ -4278,7 +4278,6 @@ function PublicationsPage() {
   }))), /*#__PURE__*/React.createElement(MountainPublications, null));
 }
 function UpdatesPage() {
-  const [activeYear, setActiveYear] = React.useState("hero");
   const years = React.useMemo(() => {
     const list = [];
     UPDATES.forEach(u => {
@@ -4286,150 +4285,29 @@ function UpdatesPage() {
     });
     return list;
   }, []);
-  const isScrollingTo = React.useRef(null);
-  const scrollTimeout = React.useRef(null);
-  const scrollTweenRef = React.useRef(null);
-
-  // Custom smooth scroll loop using requestAnimationFrame for buttery smooth easing
-  const animateScrollTo = React.useCallback((targetY, duration = 600) => {
-    if (scrollTweenRef.current) {
-      cancelAnimationFrame(scrollTweenRef.current);
-    }
-    const startY = window.scrollY;
-    const difference = targetY - startY;
-    const startTime = performance.now();
-    const tick = now => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing: easeInOutCubic (much smoother and more responsive than browser default)
-      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      window.scrollTo(0, startY + difference * ease);
-      if (progress < 1) {
-        scrollTweenRef.current = requestAnimationFrame(tick);
-      } else {
-        scrollTweenRef.current = null;
-      }
-    };
-    scrollTweenRef.current = requestAnimationFrame(tick);
-  }, []);
-
-  // Cancel tween if user manually scrolls (mousewheel, touch, or mouse click)
-  React.useEffect(() => {
-    const cancelTween = () => {
-      if (scrollTweenRef.current) {
-        cancelAnimationFrame(scrollTweenRef.current);
-        scrollTweenRef.current = null;
-        isScrollingTo.current = null;
-      }
-    };
-    window.addEventListener("wheel", cancelTween, {
-      passive: true
-    });
-    window.addEventListener("touchmove", cancelTween, {
-      passive: true
-    });
-    window.addEventListener("pointerdown", cancelTween, {
-      passive: true
-    });
-    return () => {
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      if (scrollTweenRef.current) cancelAnimationFrame(scrollTweenRef.current);
-      window.removeEventListener("wheel", cancelTween);
-      window.removeEventListener("touchmove", cancelTween);
-      window.removeEventListener("pointerdown", cancelTween);
-    };
-  }, []);
-  const scrollToState = React.useCallback(targetState => {
-    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-    isScrollingTo.current = targetState;
-    setActiveYear(targetState); // Snappy UI update
-
-    let selector = "";
-    if (targetState === "hero") {
-      selector = ".j-hero";
-    } else if (targetState === "outro") {
-      selector = ".j-outro";
-    } else {
-      selector = `section[data-screen-label="${targetState}"]`;
-    }
-    const el = document.querySelector(selector);
-    if (el) {
-      const rect = el.getBoundingClientRect();
-      const absoluteTop = rect.top + window.scrollY;
-      // Center the section exactly in the viewport
-      const targetY = absoluteTop - (window.innerHeight - rect.height) / 2;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const safeTargetY = Math.min(maxScroll, Math.max(0, targetY));
-      animateScrollTo(safeTargetY, 650); // 650ms animation duration for high responsiveness
-    }
-    scrollTimeout.current = setTimeout(() => {
-      isScrollingTo.current = null;
-    }, 700);
-  }, [animateScrollTo]);
-  const navigateToState = React.useCallback(direction => {
-    const states = ["hero", ...years.map(String), "outro"];
-    const current = isScrollingTo.current || activeYear;
-    const curIdx = states.indexOf(current);
-    const targetIdx = curIdx + direction;
-    if (targetIdx >= 0 && targetIdx < states.length) {
-      scrollToState(states[targetIdx]);
-    }
-  }, [activeYear, years, scrollToState]);
+  const [scrollPct, setScrollPct] = React.useState(0);
   React.useEffect(() => {
     const handleScroll = () => {
-      // If manually animating to a target, don't let intermediate scroll offsets override it
-      if (isScrollingTo.current) return;
-      const sections = document.querySelectorAll(".j-section");
-      let currentActive = "hero";
-      let minDistance = Infinity;
-      sections.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        const secCenter = (rect.top + rect.bottom) / 2;
-        const dist = Math.abs(secCenter - window.innerHeight / 2);
-        if (dist < minDistance) {
-          minDistance = dist;
-          currentActive = sec.getAttribute("data-screen-label") || "hero";
-        }
-      });
-      const hero = document.querySelector(".j-hero");
-      if (hero) {
-        const rect = hero.getBoundingClientRect();
-        if (rect.bottom > window.innerHeight / 3) {
-          currentActive = "hero";
-        }
-      }
-      const outro = document.querySelector(".j-outro");
-      if (outro) {
-        const rect = outro.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.8) {
-          currentActive = "outro";
-        }
-      }
-      setActiveYear(currentActive);
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pct = Math.min(1, Math.max(0, window.scrollY / max));
+      setScrollPct(pct);
     };
     window.addEventListener("scroll", handleScroll, {
       passive: true
     });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [years]);
-  React.useEffect(() => {
-    const handleKeyDown = e => {
-      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) {
-        return;
-      }
-      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
-        e.preventDefault();
-        navigateToState(1);
-      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft" || e.key === "PageUp") {
-        e.preventDefault();
-        navigateToState(-1);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [navigateToState]);
+  }, []);
+  const startTravel = () => {
+    const firstYear = years[0];
+    const el = document.querySelector(`section[data-screen-label="${firstYear}"]`);
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: "journey"
   }, /*#__PURE__*/React.createElement(JourneyWorld, null), /*#__PURE__*/React.createElement("div", {
@@ -4441,68 +4319,57 @@ function UpdatesPage() {
     id: "j-progress-fill",
     className: "j-progress-bar"
   })), /*#__PURE__*/React.createElement("div", {
-    className: "j-nav-dots"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: `j-nav-dot ${activeYear === "hero" ? "active" : ""}`,
-    onClick: () => scrollToState("hero"),
-    title: "Intro"
+    className: "j-trail-nav",
+    "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-label"
-  }, "Intro"), /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-circle"
-  })), years.map(y => /*#__PURE__*/React.createElement("button", {
-    key: y,
-    className: `j-nav-dot ${activeYear === String(y) ? "active" : ""}`,
-    onClick: () => scrollToState(String(y)),
-    title: String(y)
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-label"
-  }, y), /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-circle"
-  }))), /*#__PURE__*/React.createElement("button", {
-    className: `j-nav-dot ${activeYear === "outro" ? "active" : ""}`,
-    onClick: () => scrollToState("outro"),
-    title: "Credo"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-label"
-  }, "Credo"), /*#__PURE__*/React.createElement("span", {
-    className: "j-nav-dot-circle"
+    className: "j-trail-icon",
+    title: "Trailhead"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "14",
+    height: "14",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "4",
+    y1: "22",
+    x2: "4",
+    y2: "15"
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "j-travel-bar"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "j-travel-btn",
-    onClick: () => navigateToState(-1),
-    disabled: activeYear === "hero",
-    "aria-label": "Previous milestone"
+    className: "j-trail-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "j-trail-progress",
+    style: {
+      height: `${scrollPct * 100}%`
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "j-trail-dot",
+    style: {
+      top: `${scrollPct * 100}%`
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "j-trail-node start"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "j-trail-node end"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "j-trail-icon",
+    title: "Summit"
   }, /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 24 24",
-    width: "18",
-    height: "18",
+    width: "14",
+    height: "14",
     fill: "none",
     stroke: "currentColor",
     strokeWidth: "2.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: "15 18 9 12 15 6"
-  }))), /*#__PURE__*/React.createElement("span", {
-    className: "j-travel-active-label"
-  }, activeYear === "hero" ? "Intro" : activeYear === "outro" ? "Credo" : activeYear), /*#__PURE__*/React.createElement("button", {
-    className: "j-travel-btn",
-    onClick: () => navigateToState(1),
-    disabled: activeYear === "outro",
-    "aria-label": "Next milestone"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    width: "18",
-    height: "18",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: "9 18 15 12 9 6"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M4 20h16a1 1 0 0 0 .8-.4l-5-7a1 1 0 0 0-1.6 0L11.4 17l-3-4a1 1 0 0 0-1.6 0l-4 6a1 1 0 0 0 .8 1.4z"
   })))), /*#__PURE__*/React.createElement("div", {
     className: "j-content"
   }, /*#__PURE__*/React.createElement("header", {
@@ -4518,7 +4385,7 @@ function UpdatesPage() {
     className: "j-lede"
   }, "A timeline of research milestones and career updates."), /*#__PURE__*/React.createElement("div", {
     className: "j-cue interactive",
-    onClick: () => scrollToState(String(years[0])),
+    onClick: startTravel,
     style: {
       cursor: "pointer"
     },
