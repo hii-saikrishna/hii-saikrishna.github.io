@@ -2744,10 +2744,25 @@ function JourneyPage({
   }, titleB)), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
   }, lede), /*#__PURE__*/React.createElement("div", {
-    className: "j-cue"
+    className: "j-cue interactive",
+    onClick: () => {
+      const el = document.querySelector(".j-section");
+      if (el) el.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    },
+    style: {
+      cursor: "pointer"
+    },
+    title: "Click to start traveling"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
-  }), "Scroll to travel")), children, /*#__PURE__*/React.createElement("footer", {
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "j-mouse-scroll"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "j-mouse-wheel"
+  })), "Scroll to explore milestones")), children, /*#__PURE__*/React.createElement("footer", {
     className: "j-outro"
   }, /*#__PURE__*/React.createElement("div", {
     className: "j-outro-word"
@@ -4258,10 +4273,88 @@ function PublicationsPage() {
   }))), /*#__PURE__*/React.createElement(MountainPublications, null));
 }
 function UpdatesPage() {
-  const years = [];
-  UPDATES.forEach(u => {
-    if (!years.includes(u.year)) years.push(u.year);
-  });
+  const [activeYear, setActiveYear] = React.useState("hero");
+  const years = React.useMemo(() => {
+    const list = [];
+    UPDATES.forEach(u => {
+      if (!list.includes(u.year)) list.push(u.year);
+    });
+    return list;
+  }, []);
+  const navigateToState = React.useCallback(direction => {
+    const states = ["hero", ...years.map(String), "outro"];
+    const curIdx = states.indexOf(activeYear);
+    const targetIdx = curIdx + direction;
+    if (targetIdx >= 0 && targetIdx < states.length) {
+      const targetState = states[targetIdx];
+      let selector = "";
+      if (targetState === "hero") {
+        selector = ".j-hero";
+      } else if (targetState === "outro") {
+        selector = ".j-outro";
+      } else {
+        selector = `section[data-screen-label="${targetState}"]`;
+      }
+      const el = document.querySelector(selector);
+      if (el) {
+        el.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    }
+  }, [activeYear, years]);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll(".j-section");
+      let currentActive = "hero";
+      let minDistance = Infinity;
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        const dist = Math.abs(rect.top - window.innerHeight / 2);
+        if (dist < minDistance) {
+          minDistance = dist;
+          currentActive = sec.getAttribute("data-screen-label") || "hero";
+        }
+      });
+      const hero = document.querySelector(".j-hero");
+      if (hero) {
+        const rect = hero.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight / 3) {
+          currentActive = "hero";
+        }
+      }
+      const outro = document.querySelector(".j-outro");
+      if (outro) {
+        const rect = outro.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8) {
+          currentActive = "outro";
+        }
+      }
+      setActiveYear(currentActive);
+    };
+    window.addEventListener("scroll", handleScroll, {
+      passive: true
+    });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [years]);
+  React.useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) {
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+        e.preventDefault();
+        navigateToState(1);
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        navigateToState(-1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigateToState]);
   return /*#__PURE__*/React.createElement("div", {
     className: "journey"
   }, /*#__PURE__*/React.createElement(JourneyWorld, null), /*#__PURE__*/React.createElement("div", {
@@ -4273,6 +4366,87 @@ function UpdatesPage() {
     id: "j-progress-fill",
     className: "j-progress-bar"
   })), /*#__PURE__*/React.createElement("div", {
+    className: "j-nav-dots"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: `j-nav-dot ${activeYear === "hero" ? "active" : ""}`,
+    onClick: () => {
+      const el = document.querySelector(".j-hero");
+      if (el) el.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    },
+    title: "Intro"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-label"
+  }, "Intro"), /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-circle"
+  })), years.map(y => /*#__PURE__*/React.createElement("button", {
+    key: y,
+    className: `j-nav-dot ${activeYear === String(y) ? "active" : ""}`,
+    onClick: () => {
+      const el = document.querySelector(`section[data-screen-label="${y}"]`);
+      if (el) el.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    },
+    title: String(y)
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-label"
+  }, y), /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-circle"
+  }))), /*#__PURE__*/React.createElement("button", {
+    className: `j-nav-dot ${activeYear === "outro" ? "active" : ""}`,
+    onClick: () => {
+      const el = document.querySelector(".j-outro");
+      if (el) el.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    },
+    title: "Credo"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-label"
+  }, "Credo"), /*#__PURE__*/React.createElement("span", {
+    className: "j-nav-dot-circle"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "j-travel-bar"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "j-travel-btn",
+    onClick: () => navigateToState(-1),
+    disabled: activeYear === "hero",
+    "aria-label": "Previous milestone"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "18",
+    height: "18",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: "15 18 9 12 15 6"
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "j-travel-active-label"
+  }, activeYear === "hero" ? "Intro" : activeYear === "outro" ? "Credo" : activeYear), /*#__PURE__*/React.createElement("button", {
+    className: "j-travel-btn",
+    onClick: () => navigateToState(1),
+    disabled: activeYear === "outro",
+    "aria-label": "Next milestone"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "18",
+    height: "18",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: "9 18 15 12 9 6"
+  })))), /*#__PURE__*/React.createElement("div", {
     className: "j-content"
   }, /*#__PURE__*/React.createElement("header", {
     className: "j-hero",
@@ -4286,10 +4460,19 @@ function UpdatesPage() {
   }, "stones")), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
   }, "A timeline of research milestones and career updates."), /*#__PURE__*/React.createElement("div", {
-    className: "j-cue"
+    className: "j-cue interactive",
+    onClick: () => navigateToState(1),
+    style: {
+      cursor: "pointer"
+    },
+    title: "Click to start traveling"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
-  }), "Scroll to explore")), years.map((y, yi) => /*#__PURE__*/React.createElement("section", {
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "j-mouse-scroll"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "j-mouse-wheel"
+  })), "Scroll to explore milestones")), years.map((y, yi) => /*#__PURE__*/React.createElement("section", {
     key: y,
     className: "j-section",
     "data-screen-label": String(y)

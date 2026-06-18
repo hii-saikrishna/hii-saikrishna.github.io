@@ -559,19 +559,178 @@ function PublicationsPage() {
 }
 
 function UpdatesPage() {
-  const years = [];
-  UPDATES.forEach((u) => { if (!years.includes(u.year)) years.push(u.year); });
+  const [activeYear, setActiveYear] = React.useState("hero");
+  const years = React.useMemo(() => {
+    const list = [];
+    UPDATES.forEach((u) => { if (!list.includes(u.year)) list.push(u.year); });
+    return list;
+  }, []);
+
+  const navigateToState = React.useCallback((direction) => {
+    const states = ["hero", ...years.map(String), "outro"];
+    const curIdx = states.indexOf(activeYear);
+    const targetIdx = curIdx + direction;
+    if (targetIdx >= 0 && targetIdx < states.length) {
+      const targetState = states[targetIdx];
+      let selector = "";
+      if (targetState === "hero") {
+        selector = ".j-hero";
+      } else if (targetState === "outro") {
+        selector = ".j-outro";
+      } else {
+        selector = `section[data-screen-label="${targetState}"]`;
+      }
+      const el = document.querySelector(selector);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [activeYear, years]);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll(".j-section");
+      let currentActive = "hero";
+      let minDistance = Infinity;
+      
+      sections.forEach((sec) => {
+        const rect = sec.getBoundingClientRect();
+        const dist = Math.abs(rect.top - window.innerHeight / 2);
+        if (dist < minDistance) {
+          minDistance = dist;
+          currentActive = sec.getAttribute("data-screen-label") || "hero";
+        }
+      });
+
+      const hero = document.querySelector(".j-hero");
+      if (hero) {
+        const rect = hero.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight / 3) {
+          currentActive = "hero";
+        }
+      }
+
+      const outro = document.querySelector(".j-outro");
+      if (outro) {
+        const rect = outro.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8) {
+          currentActive = "outro";
+        }
+      }
+
+      setActiveYear(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [years]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) {
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+        e.preventDefault();
+        navigateToState(1);
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        navigateToState(-1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigateToState]);
+
   return (
     <div className="journey">
       <JourneyWorld />
       <div className="j-sky" id="j-sky"></div>
       <div className="j-progress"><div id="j-progress-fill" className="j-progress-bar"></div></div>
+      
+      {/* Immersive Floating Dot Navigation */}
+      <div className="j-nav-dots">
+        <button
+          className={`j-nav-dot ${activeYear === "hero" ? "active" : ""}`}
+          onClick={() => {
+            const el = document.querySelector(".j-hero");
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }}
+          title="Intro"
+        >
+          <span className="j-nav-dot-label">Intro</span>
+          <span className="j-nav-dot-circle"></span>
+        </button>
+        {years.map((y) => (
+          <button
+            key={y}
+            className={`j-nav-dot ${activeYear === String(y) ? "active" : ""}`}
+            onClick={() => {
+              const el = document.querySelector(`section[data-screen-label="${y}"]`);
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }}
+            title={String(y)}
+          >
+            <span className="j-nav-dot-label">{y}</span>
+            <span className="j-nav-dot-circle"></span>
+          </button>
+        ))}
+        <button
+          className={`j-nav-dot ${activeYear === "outro" ? "active" : ""}`}
+          onClick={() => {
+            const el = document.querySelector(".j-outro");
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }}
+          title="Credo"
+        >
+          <span className="j-nav-dot-label">Credo</span>
+          <span className="j-nav-dot-circle"></span>
+        </button>
+      </div>
+
+      {/* Floating Travel Controller */}
+      <div className="j-travel-bar">
+        <button 
+          className="j-travel-btn"
+          onClick={() => navigateToState(-1)}
+          disabled={activeYear === "hero"}
+          aria-label="Previous milestone"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <span className="j-travel-active-label">
+          {activeYear === "hero" ? "Intro" : activeYear === "outro" ? "Credo" : activeYear}
+        </span>
+        <button 
+          className="j-travel-btn"
+          onClick={() => navigateToState(1)}
+          disabled={activeYear === "outro"}
+          aria-label="Next milestone"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
       <div className="j-content">
         <header className="j-hero" data-screen-label="Milestones">
           <div className="j-eyebrow">The road so far</div>
           <h1 className="j-title">Mile<span className="outline">stones</span></h1>
           <p className="j-lede">A timeline of research milestones and career updates.</p>
-          <div className="j-cue"><span className="j-cue-line"></span>Scroll to explore</div>
+          <div 
+            className="j-cue interactive"
+            onClick={() => navigateToState(1)}
+            style={{ cursor: "pointer" }}
+            title="Click to start traveling"
+          >
+            <span className="j-cue-line"></span>
+            <div className="j-mouse-scroll"><div className="j-mouse-wheel"></div></div>
+            Scroll to explore milestones
+          </div>
         </header>
         {years.map((y, yi) => (
           <section key={y} className="j-section" data-screen-label={String(y)}>
