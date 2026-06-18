@@ -335,50 +335,52 @@ function HomePage({ go }) {
 
 function ResearchPage() {
   return (
-    <section className="research page" data-screen-label="Research">
-      <div className="container">
-        <div className="page-head">
-          <div className="page-eyebrow">What I work on</div>
-          <h1 className="page-title">Research <span className="ital">Interests</span></h1>
-          <p className="page-lede">Three intertwined directions — embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.</p>
+    <>
+      <section className="research page" data-screen-label="Research">
+        <div className="container">
+          <div className="page-head">
+            <div className="page-eyebrow">What I work on</div>
+            <h1 className="page-title">Research <span className="ital">Interests</span></h1>
+            <p className="page-lede">Three intertwined directions — embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.</p>
+          </div>
+          {THRUSTS.map((t, i) => (
+            <Reveal key={t.id} delay={i * 80}>
+              <div id={`research-${t.id}`} className="thrust" style={{ "--t-accent": t.accent, "--t-tint": t.tint }}>
+                <div className="thrust-body">
+                  <span className="thrust-badge"><span className="b-dot"></span>Interest {String(i + 1).padStart(2, "0")}</span>
+                  <h3>{t.title}</h3>
+                  <p className="thrust-tagline">{t.tagline}</p>
+                  <p>{t.body}</p>
+                  <div className="thrust-stats">
+                    {t.stats.map((s) => (
+                      <div key={s.k} className="thrust-stat">
+                        <span className="k">{s.k}</span>
+                        <span className="v">{s.v}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="thrust-keywords">
+                    {t.keywords.map((k) => <span key={k} className="thrust-keyword">{k}</span>)}
+                  </div>
+                  <div className="thrust-resources">
+                    {t.resources.map((r) => (
+                      <a key={r.label} className="thrust-resource" href={r.href}
+                        {...(r.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+                        <span>{r.label}</span><span className="arr">→</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                <div className="thrust-media">
+                  <ThreeScene build={dioramaScene(t.scene)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
-        {THRUSTS.map((t, i) => (
-          <Reveal key={t.id} delay={i * 80}>
-            <div id={`research-${t.id}`} className="thrust" style={{ "--t-accent": t.accent, "--t-tint": t.tint }}>
-              <div className="thrust-body">
-                <span className="thrust-badge"><span className="b-dot"></span>Interest {String(i + 1).padStart(2, "0")}</span>
-                <h3>{t.title}</h3>
-                <p className="thrust-tagline">{t.tagline}</p>
-                <p>{t.body}</p>
-                <div className="thrust-stats">
-                  {t.stats.map((s) => (
-                    <div key={s.k} className="thrust-stat">
-                      <span className="k">{s.k}</span>
-                      <span className="v">{s.v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="thrust-keywords">
-                  {t.keywords.map((k) => <span key={k} className="thrust-keyword">{k}</span>)}
-                </div>
-                <div className="thrust-resources">
-                  {t.resources.map((r) => (
-                    <a key={r.label} className="thrust-resource" href={r.href}
-                      {...(r.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
-                      <span>{r.label}</span><span className="arr">→</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div className="thrust-media">
-                <ThreeScene build={dioramaScene(t.scene)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+      </section>
       <MountainResearch />
-    </section>
+    </>
   );
 }
 
@@ -710,7 +712,7 @@ function buildMountainFooter({ scene, camera, renderer }) {
   camera.fov = 40;
   camera.position.set(0, 6.6, 20);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 6.1, -16);
+  camera.lookAt(0, 8.5, -16); // Look higher to crop bottom 25%
 
   scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb39a, 0.8));
   const sunLight = new THREE.DirectionalLight(0xfff0d2, 2.2); // strong key light → crisp relief
@@ -744,21 +746,8 @@ function buildMountainFooter({ scene, camera, renderer }) {
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97, metalness: 0 }))));
 
-  // ---- shining sun: golden disc + warm halo, rising behind the range ----
+  // ---- shining sun: golden disc rising behind the range ----
   const sunPos = new THREE.Vector3(-12, 20.5, -30);
-  const makeGlow = (c0, c1, scale, op) => {
-    const c = document.createElement("canvas"); c.width = c.height = 128;
-    const g = c.getContext("2d");
-    const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    rg.addColorStop(0, c0); rg.addColorStop(0.42, c1); rg.addColorStop(1, "rgba(255,238,190,0)");
-    g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
-    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(c)), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, opacity: op })));
-    sp.scale.set(scale, scale, 1); sp.position.copy(sunPos);
-    return sp;
-  };
-  const glowOuter = makeGlow("rgba(255,240,200,0.8)", "rgba(255,212,135,0.3)", 26, 0.85);
-  const glowInner = makeGlow("rgba(255,252,242,1)", "rgba(255,230,170,0.7)", 10, 1);
-  scene.add(glowOuter); scene.add(glowInner);
   const disc = new THREE.Mesh(
     track(new THREE.CircleGeometry(2.0, 40)),
     track(new THREE.MeshBasicMaterial({ color: 0xffe9a6, fog: false, transparent: true }))
@@ -766,32 +755,8 @@ function buildMountainFooter({ scene, camera, renderer }) {
   disc.position.copy(sunPos); disc.renderOrder = 1;
   scene.add(disc);
 
-  // ---- soft billboard clouds ----
-  const cloudTex = (() => {
-    const c = document.createElement("canvas"); c.width = 256; c.height = 128;
-    const g = c.getContext("2d");
-    for (let k = 0; k < 7; k++) {
-      const cx = 40 + Math.random() * 176, cy = 54 + Math.random() * 30, r = 26 + Math.random() * 30;
-      const rg = g.createRadialGradient(cx, cy, 0, cx, cy, r);
-      rg.addColorStop(0, "rgba(255,255,255,0.95)"); rg.addColorStop(1, "rgba(255,255,255,0)");
-      g.fillStyle = rg; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
-    }
-    return track(new THREE.CanvasTexture(c));
-  })();
-  const clouds = [];
-  for (let i = 0; i < 3; i++) {
-    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: cloudTex, transparent: true, depthWrite: false, opacity: 0.82, fog: false })));
-    sp.scale.set(20, 10, 1);
-    sp.position.set(-22 + i * 20, 12 + Math.random() * 3, -22 - Math.random() * 6);
-    clouds.push(sp); scene.add(sp);
-  }
-
   return {
-    update(t) {
-      const b = 1 + Math.sin(t * 0.8) * 0.05;
-      glowOuter.scale.set(26 * b, 26 * b, 1);
-      clouds.forEach((c, i) => { c.position.x += 0.01 + i * 0.004; if (c.position.x > 40) c.position.x = -40; });
-    },
+    update(t) {},
     dispose() {
       scene.background = null;
       disposables.forEach((d) => d.dispose && d.dispose());
@@ -904,7 +869,7 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   camera.fov = 42;
   camera.position.set(0, 8.2, 22);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 5.0, -18);
+  camera.lookAt(0, 7.5, -18); // Look higher to crop bottom 25%
 
   scene.add(new THREE.HemisphereLight(0xffffff, 0x8fb89a, 0.9));
   const sun = new THREE.DirectionalLight(0xfff5d6, 1.8);
@@ -934,12 +899,11 @@ function buildWaterfallValley({ scene, camera, renderer }) {
     const h = heightAt(x, z); pos.setY(i, h);
     const dd = 0.6, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
-    const veg = _mNoise(x * 0.12 + 3.3, z * 0.1 - 1.7);
     const g = gully(x, z);
 
-    // Base vegetation coloring
-    if (h < 3) baseC.copy(cMeadow).lerp(cLushGrass, h / 3 + veg * 0.15);
-    else if (h < 6) baseC.copy(cLushGrass).lerp(cForest, (h - 3) / 3 + veg * 0.1);
+    // Base vegetation coloring (clean, smooth gradients)
+    if (h < 3) baseC.copy(cMeadow).lerp(cLushGrass, h / 3);
+    else if (h < 6) baseC.copy(cLushGrass).lerp(cForest, (h - 3) / 3);
     else if (h < 9) baseC.copy(cForest).lerp(cDeepGreen, (h - 6) / 3);
     else if (h < 12) baseC.copy(cDeepGreen).lerp(cCliff, (h - 9) / 3);
     else baseC.copy(cCliff).lerp(cHaze, Math.min(1, (h - 12) / 4));
@@ -947,7 +911,6 @@ function buildWaterfallValley({ scene, camera, renderer }) {
     outC.copy(baseC);
     outC.lerp(cEarth, Math.min(0.4, Math.max(0, (slope - 0.8)) * 0.35));
     outC.lerp(cCliff, Math.min(0.35, Math.max(0, (slope - 1.4)) * 0.4));
-    if (slope < 0.5 && h < 8) outC.lerp(cMeadow, veg * 0.2);
     if (h > 10 && slope < 0.6) outC.lerp(cHighMoss, 0.3);
 
     // Waterfall: where gully channel meets steep slope at mid-to-high elevation
@@ -974,30 +937,8 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   // Pre-compute static foam/spray colors for animation blending
   const foamR = cFoam.r, foamG = cFoam.g, foamB = cFoam.b;
 
-  // Soft mist sprites at valley floor / waterfall bases
-  const mistTex = (() => {
-    const c = document.createElement("canvas"); c.width = 128; c.height = 64;
-    const g = c.getContext("2d");
-    const rg = g.createRadialGradient(64, 32, 0, 64, 32, 60);
-    rg.addColorStop(0, "rgba(220,242,230,0.65)"); rg.addColorStop(0.6, "rgba(210,235,220,0.3)"); rg.addColorStop(1, "rgba(210,235,220,0)");
-    g.fillStyle = rg; g.fillRect(0, 0, 128, 64);
-    return track(new THREE.CanvasTexture(c));
-  })();
-  const mists = [];
-  for (let i = 0; i < 6; i++) {
-    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: mistTex, transparent: true, depthWrite: false, opacity: 0.45, fog: false })));
-    sp.scale.set(12, 4, 1);
-    sp.position.set(-18 + i * 7, 2.5 + Math.random() * 2, -6 - Math.random() * 12);
-    mists.push(sp); scene.add(sp);
-  }
-
-  const clouds = _makeClouds(scene, track, 3, { yBase: 13, opacity: 0.7 });
-
   return {
     update(t) {
-      clouds.forEach((c, i) => { c.position.x += 0.008 + i * 0.003; if (c.position.x > 40) c.position.x = -40; });
-      mists.forEach((m, i) => { m.material.opacity = 0.35 + 0.15 * Math.sin(t * 0.5 + i * 1.1); });
-
       // Animate waterfall vertices — flowing shimmer effect
       const arr = colAttr.array;
       for (let w = 0; w < wfVerts.length; w++) {
@@ -1048,7 +989,7 @@ function buildSnowyPeaks({ scene, camera, renderer }) {
   camera.fov = 38;
   camera.position.set(0, 7.5, 21);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 7.0, -18);
+  camera.lookAt(0, 9.5, -18); // Look higher to crop bottom 25%
 
   scene.add(new THREE.HemisphereLight(0xffffff, 0x9abaaa, 0.7));
   const keyLight = new THREE.DirectionalLight(0xfff8e0, 2.4);
@@ -1090,30 +1031,8 @@ function buildSnowyPeaks({ scene, camera, renderer }) {
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.94, metalness: 0 }))));
 
-  // Sun behind peaks
-  const sunPos = new THREE.Vector3(-10, 22, -32);
-  const makeGlow = (c0, c1, scale, op) => {
-    const c = document.createElement("canvas"); c.width = c.height = 128;
-    const g = c.getContext("2d");
-    const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    rg.addColorStop(0, c0); rg.addColorStop(0.42, c1); rg.addColorStop(1, "rgba(255,238,190,0)");
-    g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
-    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(c)), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, opacity: op })));
-    sp.scale.set(scale, scale, 1); sp.position.copy(sunPos);
-    return sp;
-  };
-  const gOuter = makeGlow("rgba(255,245,215,0.7)", "rgba(255,220,150,0.25)", 22, 0.75);
-  const gInner = makeGlow("rgba(255,252,242,1)", "rgba(255,235,180,0.6)", 8, 0.9);
-  scene.add(gOuter); scene.add(gInner);
-
-  const clouds = _makeClouds(scene, track, 4, { yBase: 14, yRand: 4, opacity: 0.72, xSpread: 28 });
-
   return {
-    update(t) {
-      const b = 1 + Math.sin(t * 0.7) * 0.04;
-      gOuter.scale.set(22 * b, 22 * b, 1);
-      clouds.forEach((c, i) => { c.position.x += 0.007 + i * 0.003; if (c.position.x > 45) c.position.x = -45; });
-    },
+    update(t) {},
     dispose() { scene.background = null; disposables.forEach((d) => d.dispose && d.dispose()); },
   };
 }
@@ -1147,7 +1066,7 @@ function buildMossyCliffs({ scene, camera, renderer }) {
   camera.fov = 44;
   camera.position.set(0, 7.0, 19);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 5.8, -15);
+  camera.lookAt(0, 8.0, -15); // Look higher to crop bottom 25%
 
   // Soft diffuse lighting — overcast feel
   scene.add(new THREE.HemisphereLight(0xe0e8e0, 0x7a9a78, 1.0));
@@ -1171,10 +1090,9 @@ function buildMossyCliffs({ scene, camera, renderer }) {
     const h = heightAt(x, z); pos.setY(i, h);
     const dd = 0.6, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
-    // Noise-driven moss/lichen patchiness
-    const patch = _mNoise(x * 0.14 + 2.1, z * 0.12 - 4.5);
 
-    if (h < 4) baseC.copy(cMoss).lerp(cDeepMoss, h / 4 + patch * 0.12);
+    // Base vegetation/moss (clean gradient)
+    if (h < 4) baseC.copy(cMoss).lerp(cDeepMoss, h / 4);
     else if (h < 8) baseC.copy(cDeepMoss).lerp(cLichen, (h - 4) / 4);
     else if (h < 12) baseC.copy(cLichen).lerp(cWetRock, (h - 8) / 4);
     else baseC.copy(cWetRock).lerp(cDarkCliff, Math.min(1, (h - 12) / 3));
@@ -1183,10 +1101,10 @@ function buildMossyCliffs({ scene, camera, renderer }) {
     // Steep faces → dark wet rock with damp earth
     outC.lerp(cDampEarth, Math.min(0.35, Math.max(0, (slope - 0.8)) * 0.35));
     outC.lerp(cDarkCliff, Math.min(0.5, Math.max(0, (slope - 1.3)) * 0.45));
-    // Flat areas → thick natural moss patches
-    if (slope < 0.4 && h < 10) outC.lerp(cMoss, 0.35 + patch * 0.15);
+    // Flat areas → moss patches
+    if (slope < 0.4 && h < 10) outC.lerp(cMoss, 0.45);
     // Mid-height lichen variation
-    if (h > 5 && h < 10 && slope < 0.8) outC.lerp(cPaleMoss, patch * 0.2);
+    if (h > 5 && h < 10 && slope < 0.8) outC.lerp(cPaleMoss, 0.1);
 
     col[i * 3] = outC.r; col[i * 3 + 1] = outC.g; col[i * 3 + 2] = outC.b;
   }
@@ -1194,16 +1112,8 @@ function buildMossyCliffs({ scene, camera, renderer }) {
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.98, metalness: 0 }))));
 
-  // Low-hanging mist clouds
-  const clouds = _makeClouds(scene, track, 4, {
-    yBase: 8, yRand: 3, zBase: -15, zRand: 8, xSpread: 24, scaleW: 18, scaleH: 7, opacity: 0.6,
-    color: [200, 220, 200]
-  });
-
   return {
-    update(t) {
-      clouds.forEach((c, i) => { c.position.x += 0.006 + i * 0.002; if (c.position.x > 40) c.position.x = -40; });
-    },
+    update(t) {},
     dispose() { scene.background = null; disposables.forEach((d) => d.dispose && d.dispose()); },
   };
 }
@@ -1239,7 +1149,7 @@ function buildRollingHills({ scene, camera, renderer }) {
   camera.fov = 40;
   camera.position.set(0, 5.5, 22);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 4.2, -20);
+  camera.lookAt(0, 6.5, -20); // Look higher to crop bottom 25%
 
   scene.add(new THREE.HemisphereLight(0xfff8e8, 0x8aac7a, 0.9));
   const goldenSun = new THREE.DirectionalLight(0xffe8b0, 2.0);
@@ -1278,25 +1188,8 @@ function buildRollingHills({ scene, camera, renderer }) {
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.96, metalness: 0 }))));
 
-  // Warm sun glow on horizon
-  const sunPos = new THREE.Vector3(-20, 8, -35);
-  const glowC = document.createElement("canvas"); glowC.width = glowC.height = 128;
-  const gc = glowC.getContext("2d");
-  const rg = gc.createRadialGradient(64, 64, 0, 64, 64, 64);
-  rg.addColorStop(0, "rgba(255,230,170,0.9)"); rg.addColorStop(0.5, "rgba(255,200,120,0.3)"); rg.addColorStop(1, "rgba(255,180,80,0)");
-  gc.fillStyle = rg; gc.fillRect(0, 0, 128, 128);
-  const glow = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: track(new THREE.CanvasTexture(glowC)), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, opacity: 0.7 })));
-  glow.scale.set(20, 20, 1); glow.position.copy(sunPos);
-  scene.add(glow);
-
-  const clouds = _makeClouds(scene, track, 3, { yBase: 10, yRand: 2, opacity: 0.65, xSpread: 22 });
-
   return {
-    update(t) {
-      const b = 1 + Math.sin(t * 0.6) * 0.04;
-      glow.scale.set(20 * b, 20 * b, 1);
-      clouds.forEach((c, i) => { c.position.x += 0.009 + i * 0.003; if (c.position.x > 38) c.position.x = -38; });
-    },
+    update(t) {},
     dispose() { scene.background = null; disposables.forEach((d) => d.dispose && d.dispose()); },
   };
 }
@@ -1330,7 +1223,7 @@ function buildMistyForestRidge({ scene, camera, renderer }) {
   camera.fov = 42;
   camera.position.set(0, 6.8, 20);
   camera.updateProjectionMatrix();
-  camera.lookAt(0, 5.5, -16);
+  camera.lookAt(0, 7.5, -16); // Look higher to crop bottom 25%
 
   scene.add(new THREE.HemisphereLight(0xe0e8e0, 0x6a8a68, 0.85));
   const soft = new THREE.DirectionalLight(0xe8e8d8, 1.0);
@@ -1370,16 +1263,8 @@ function buildMistyForestRidge({ scene, camera, renderer }) {
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97, metalness: 0 }))));
 
-  // Dense mist layers
-  const clouds = _makeClouds(scene, track, 5, {
-    yBase: 6, yRand: 3, zBase: -12, zRand: 10, xSpread: 26, scaleW: 16, scaleH: 6, opacity: 0.55,
-    color: [190, 210, 195]
-  });
-
   return {
-    update(t) {
-      clouds.forEach((c, i) => { c.position.x += 0.005 + i * 0.002; if (c.position.x > 42) c.position.x = -42; });
-    },
+    update(t) {},
     dispose() { scene.background = null; disposables.forEach((d) => d.dispose && d.dispose()); },
   };
 }

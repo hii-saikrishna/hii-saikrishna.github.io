@@ -2165,7 +2165,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   position: relative;
   z-index: 1;
   width: 100%;
-  height: clamp(170px, 19vw, 260px);
+  height: clamp(128px, 14vw, 195px);
   margin-top: clamp(28px, 5vw, 72px);
   pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 100%);
@@ -2181,13 +2181,13 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .blog-nature-page { padding-bottom: 0; }
 
 /* Page-specific mountain overrides */
-.mountain-home { margin-top: clamp(32px, 4vw, 64px); height: clamp(180px, 20vw, 280px); }
+.mountain-home { margin-top: clamp(32px, 4vw, 64px); height: clamp(135px, 15vw, 210px); }
 .mountain-research { margin-top: clamp(24px, 3vw, 52px); }
 .mountain-publications { margin-top: clamp(20px, 3vw, 48px); }
 .mountain-milestones { position: relative; z-index: 2; margin-top: clamp(16px, 2vw, 40px); }
 .mountain-blog-reader { margin-top: clamp(36px, 4vw, 64px); }
 .blog-reader + .mountain-3d { margin-top: clamp(36px, 4vw, 64px); }
-.research .mountain-3d { margin-top: clamp(28px, 3vw, 56px); }
+.research + .mountain-3d { margin-top: clamp(28px, 3vw, 56px); }
 .publications ~ .mountain-3d { margin-top: 0; }
 
 /* ============ Blog (clean, non-immersive) + minimal motion ============ */
