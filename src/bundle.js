@@ -4285,11 +4285,11 @@ function UpdatesPage() {
     className: "outline"
   }, "stones")), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
-  }, "Scroll to explore milestones."), /*#__PURE__*/React.createElement("div", {
+  }, "A timeline of research milestones and career updates."), /*#__PURE__*/React.createElement("div", {
     className: "j-cue"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
-  }), "Scroll to travel")), years.map((y, yi) => /*#__PURE__*/React.createElement("section", {
+  }), "Scroll to explore")), years.map((y, yi) => /*#__PURE__*/React.createElement("section", {
     key: y,
     className: "j-section",
     "data-screen-label": String(y)
