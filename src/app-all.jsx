@@ -290,7 +290,7 @@ function PubLinks({ links }) {
 // ===== Publication card =====
 function PubRow({ p }) {
   return (
-    <article className="pub-card">
+    <article className={`pub-card ${p.image ? "" : "no-image"}`}>
       {p.image && (
         <div className="pub-thumb">
           <img src={p.image} alt="" loading="lazy" />

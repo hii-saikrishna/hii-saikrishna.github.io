@@ -2158,6 +2158,9 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   border-bottom: 1px solid var(--line-2);
   align-items: start;
 }
+.pub-card.no-image {
+  grid-template-columns: 1fr;
+}
 .pub-card:last-child { border-bottom: none; }
 .pub-thumb {
   position: relative;

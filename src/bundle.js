@@ -3835,7 +3835,7 @@ function PubRow({
   p
 }) {
   return /*#__PURE__*/React.createElement("article", {
-    className: "pub-card"
+    className: `pub-card ${p.image ? "" : "no-image"}`
   }, p.image && /*#__PURE__*/React.createElement("div", {
     className: "pub-thumb"
   }, /*#__PURE__*/React.createElement("img", {
