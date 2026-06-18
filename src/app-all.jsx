@@ -866,16 +866,16 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   const disposables = [];
   const track = (o) => { disposables.push(o); return o; };
 
-  // Terrain: deep valley with steep cliff walls, waterfall channels
+  // Terrain: lush valley with natural ridges and varied vegetation
   const ampZ = (z) => 2.4 + 18 * Math.exp(-Math.pow((z + 12) / 16, 2));
   const heightAt = (x, z) => {
-    // Create valley shape — low in center, high on sides
-    const valleyW = 12;
-    const valleyFactor = Math.min(1, Math.pow(Math.abs(x) / valleyW, 1.6));
-    const base = _mRidged(x * 0.025 + 3, z * 0.04 + 7, 2.6) * ampZ(z) * (0.3 + 0.7 * valleyFactor);
-    const detail = _mRidged(x * 0.08 + 1, z * 0.1 - 2, 2.8) * 2.0;
+    const valleyW = 14;
+    const valleyFactor = Math.min(1, Math.pow(Math.abs(x) / valleyW, 1.8));
+    const base = _mRidged(x * 0.025 + 3, z * 0.04 + 7, 2.6) * ampZ(z) * (0.35 + 0.65 * valleyFactor);
+    const detail = _mRidged(x * 0.07 + 1, z * 0.09 - 2, 2.5) * 2.2;
+    const micro = _mSmooth(x * 0.18 + 5, z * 0.16 - 7, 3) * 0.6;
     const broad = _mSmooth(x * 0.015 - 1, z * 0.02 + 4) * 1.2;
-    return base + detail + broad;
+    return base + detail + micro + broad;
   };
 
   // Misty morning sky
@@ -896,36 +896,39 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   scene.add(sun);
   scene.add(new THREE.AmbientLight(0xe2f0e8, 0.25));
 
-  // Terrain mesh with waterfall streaks
-  const geo = track(new THREE.PlaneGeometry(160, 130, 260, 200));
+  // Terrain mesh — natural vegetation bands with noise-driven variation
+  const geo = track(new THREE.PlaneGeometry(160, 130, 280, 220));
   geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position;
   const col = new Float32Array(pos.count * 3);
-  const cVerdant = new THREE.Color(0x6db85a), cForest = new THREE.Color(0x3d7a3e),
-    cDeepGreen = new THREE.Color(0x2a5c30), cCliff = new THREE.Color(0x7a8a72),
-    cWater = new THREE.Color(0xd0eaf5), cMist = new THREE.Color(0xc8e4d8);
+  const cMeadow = new THREE.Color(0x72b858), cLushGrass = new THREE.Color(0x5a9e48),
+    cForest = new THREE.Color(0x3d7a3e), cDeepGreen = new THREE.Color(0x2a5c30),
+    cEarth = new THREE.Color(0x6a7a5a), cCliff = new THREE.Color(0x7a8872),
+    cHighMoss = new THREE.Color(0x9aaa82), cHaze = new THREE.Color(0xc0d8c4);
   const outC = new THREE.Color(), baseC = new THREE.Color();
 
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), z = pos.getZ(i);
     const h = heightAt(x, z); pos.setY(i, h);
-    const dd = 0.7, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
+    const dd = 0.6, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
+    // Noise-driven vegetation variation — natural patchiness
+    const veg = _mNoise(x * 0.12 + 3.3, z * 0.1 - 1.7);
 
-    if (h < 4) baseC.copy(cVerdant).lerp(cForest, h / 4);
-    else if (h < 8) baseC.copy(cForest).lerp(cDeepGreen, (h - 4) / 4);
-    else if (h < 12) baseC.copy(cDeepGreen).lerp(cCliff, (h - 8) / 4);
-    else baseC.copy(cCliff).lerp(cMist, Math.min(1, (h - 12) / 4));
+    if (h < 3) baseC.copy(cMeadow).lerp(cLushGrass, h / 3 + veg * 0.15);
+    else if (h < 6) baseC.copy(cLushGrass).lerp(cForest, (h - 3) / 3 + veg * 0.1);
+    else if (h < 9) baseC.copy(cForest).lerp(cDeepGreen, (h - 6) / 3);
+    else if (h < 12) baseC.copy(cDeepGreen).lerp(cCliff, (h - 9) / 3);
+    else baseC.copy(cCliff).lerp(cHaze, Math.min(1, (h - 12) / 4));
 
     outC.copy(baseC);
-    outC.lerp(cCliff, Math.min(0.45, Math.max(0, (slope - 1.0)) * 0.45));
-
-    // Waterfall streaks: narrow vertical bands on steep cliff faces
-    const wf1 = Math.abs(Math.sin(x * 0.8 + 2.1)) < 0.06;
-    const wf2 = Math.abs(Math.sin(x * 1.2 - 3.5)) < 0.05;
-    if ((wf1 || wf2) && slope > 1.2 && h > 5 && h < 14) {
-      outC.lerp(cWater, 0.55 + 0.2 * Math.sin(z * 0.3 + h * 0.5));
-    }
+    // Slope-dependent rock/earth exposure
+    outC.lerp(cEarth, Math.min(0.4, Math.max(0, (slope - 0.8)) * 0.35));
+    outC.lerp(cCliff, Math.min(0.35, Math.max(0, (slope - 1.4)) * 0.4));
+    // Subtle vegetation patches on gentle slopes
+    if (slope < 0.5 && h < 8) outC.lerp(cMeadow, veg * 0.2);
+    // High-altitude moss on exposed rock
+    if (h > 10 && slope < 0.6) outC.lerp(cHighMoss, 0.3);
 
     col[i * 3] = outC.r; col[i * 3 + 1] = outC.g; col[i * 3 + 2] = outC.b;
   }
@@ -1104,31 +1107,31 @@ function buildMossyCliffs({ scene, camera, renderer }) {
   const col = new Float32Array(pos.count * 3);
   const cMoss = new THREE.Color(0x5a8a4a), cDeepMoss = new THREE.Color(0x3a6a35),
     cWetRock = new THREE.Color(0x6a7a68), cDarkCliff = new THREE.Color(0x5a6a58),
-    cLichen = new THREE.Color(0x88a878), cTrickle = new THREE.Color(0xb8d8cc);
+    cLichen = new THREE.Color(0x88a878), cDampEarth = new THREE.Color(0x5a6e50),
+    cPaleMoss = new THREE.Color(0x7a9a6a);
   const outC = new THREE.Color(), baseC = new THREE.Color();
 
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), z = pos.getZ(i);
     const h = heightAt(x, z); pos.setY(i, h);
-    const dd = 0.7, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
+    const dd = 0.6, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
+    // Noise-driven moss/lichen patchiness
+    const patch = _mNoise(x * 0.14 + 2.1, z * 0.12 - 4.5);
 
-    if (h < 4) baseC.copy(cMoss).lerp(cDeepMoss, h / 4);
+    if (h < 4) baseC.copy(cMoss).lerp(cDeepMoss, h / 4 + patch * 0.12);
     else if (h < 8) baseC.copy(cDeepMoss).lerp(cLichen, (h - 4) / 4);
     else if (h < 12) baseC.copy(cLichen).lerp(cWetRock, (h - 8) / 4);
     else baseC.copy(cWetRock).lerp(cDarkCliff, Math.min(1, (h - 12) / 3));
 
     outC.copy(baseC);
-    // Steep faces → dark wet rock
-    outC.lerp(cDarkCliff, Math.min(0.5, Math.max(0, (slope - 0.9)) * 0.5));
-    // Flat areas → thick moss
-    if (slope < 0.4 && h < 10) outC.lerp(cMoss, 0.45);
-
-    // Thin water trickles on vertical faces
-    const trickle = Math.abs(Math.sin(x * 1.5 + 1.3)) < 0.04;
-    if (trickle && slope > 1.5 && h > 4) {
-      outC.lerp(cTrickle, 0.4 + 0.15 * Math.sin(z * 0.5));
-    }
+    // Steep faces → dark wet rock with damp earth
+    outC.lerp(cDampEarth, Math.min(0.35, Math.max(0, (slope - 0.8)) * 0.35));
+    outC.lerp(cDarkCliff, Math.min(0.5, Math.max(0, (slope - 1.3)) * 0.45));
+    // Flat areas → thick natural moss patches
+    if (slope < 0.4 && h < 10) outC.lerp(cMoss, 0.35 + patch * 0.15);
+    // Mid-height lichen variation
+    if (h > 5 && h < 10 && slope < 0.8) outC.lerp(cPaleMoss, patch * 0.2);
 
     col[i * 3] = outC.r; col[i * 3 + 1] = outC.g; col[i * 3 + 2] = outC.b;
   }
