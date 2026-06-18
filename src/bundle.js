@@ -3099,6 +3099,24 @@ function TripGallery() {
       window.removeEventListener("resize", onScroll);
     };
   }, [items.length]);
+
+  // Center active thumbnail in the rail when featured changes
+  React.useEffect(() => {
+    const rail = stripRef.current;
+    if (!rail) return;
+    // The children inside .trips-rail are the individual thumbnail buttons
+    const activeThumb = rail.children[featured];
+    if (activeThumb) {
+      const railWidth = rail.clientWidth;
+      const thumbWidth = activeThumb.clientWidth;
+      const thumbLeft = activeThumb.offsetLeft;
+      const targetScroll = thumbLeft - railWidth / 2 + thumbWidth / 2;
+      rail.scrollTo({
+        left: targetScroll,
+        behavior: "smooth"
+      });
+    }
+  }, [featured]);
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
   const safeFeatured = Math.min(featured, items.length - 1);
@@ -3108,17 +3126,6 @@ function TripGallery() {
   };
   const handleLeafClick = i => {
     setFeatured(i);
-    const el = stripRef.current;
-    if (el) {
-      const max = el.scrollWidth - el.clientWidth;
-      if (max > 0) {
-        const targetScroll = i / (items.length - 1) * max;
-        el.scrollTo({
-          left: targetScroll,
-          behavior: "smooth"
-        });
-      }
-    }
   };
   return /*#__PURE__*/React.createElement("section", {
     className: "section trips",
