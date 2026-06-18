@@ -148,6 +148,53 @@ const Arrow = ({ dir = "right" }) => (
 );
 
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
+function LeafIcon({ active = false, sage = false, className = "" }) {
+  const gradId = React.useId();
+  const veinColor = active ? "#eefce3" : (sage ? "#d5e4d2" : "#eefce3");
+  const fillUrl = active ? `url(#leaf-grad-active-${gradId})` : (sage ? `url(#leaf-grad-sage-${gradId})` : `url(#leaf-grad-normal-${gradId})`);
+  
+  return (
+    <svg className={`leaf-svg-icon ${className}`} viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
+      <defs>
+        {/* Normal Leaf Gradient */}
+        <linearGradient id={`leaf-grad-normal-${gradId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#aae452" />
+          <stop offset="50%" stopColor="#5bb21a" />
+          <stop offset="100%" stopColor="#2a630e" />
+        </linearGradient>
+        {/* Active/Glowing Leaf Gradient */}
+        <linearGradient id={`leaf-grad-active-${gradId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#c5ff68" />
+          <stop offset="45%" stopColor="#7cdb26" />
+          <stop offset="100%" stopColor="#3d8515" />
+        </linearGradient>
+        {/* Sage Green Leaf Gradient (inactive indicators) */}
+        <linearGradient id={`leaf-grad-sage-${gradId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#b5cbb0" />
+          <stop offset="55%" stopColor="#7c9676" />
+          <stop offset="100%" stopColor="#4f624b" />
+        </linearGradient>
+      </defs>
+      
+      {/* Organic Leaf shape */}
+      <path d="M 3.5,8 C 6.5,2 14,1 21,8 C 14,15 6.5,14 3.5,8 Z" fill={fillUrl} stroke="#000" strokeWidth="0.25" strokeOpacity="0.12" />
+      
+      {/* Central main vein */}
+      <path d="M 3.5,8 Q 12,7.5 21,8" stroke={veinColor} strokeWidth="0.8" strokeLinecap="round" opacity="0.8" />
+      
+      {/* Veinlets (diagonal side veins) */}
+      <path d="M 7.5,7.8 Q 10,5.2 12.5,4.2" stroke={veinColor} strokeWidth="0.45" strokeLinecap="round" opacity="0.65" />
+      <path d="M 12.5,7.7 Q 15,4.8 18,4.0" stroke={veinColor} strokeWidth="0.45" strokeLinecap="round" opacity="0.65" />
+      
+      <path d="M 7.5,8.2 Q 9,10.8 11.5,11.8" stroke={veinColor} strokeWidth="0.45" strokeLinecap="round" opacity="0.65" />
+      <path d="M 12.5,8.3 Q 14.5,11.2 17,12.0" stroke={veinColor} strokeWidth="0.45" strokeLinecap="round" opacity="0.65" />
+      
+      {/* Wooden Stem */}
+      <path d="M 1,9 Q 2,8.8 3.5,8" stroke="#5d3b24" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
@@ -201,7 +248,9 @@ function HeroGallery() {
                 }}
                 onClick={(e) => { e.stopPropagation(); setIdx(i); }}
                 aria-label={`Go to slide ${i + 1}`}
-              />
+              >
+                <LeafIcon active={i === idx} sage={i !== idx} />
+              </button>
             );
           })}
         </div>
@@ -651,11 +700,13 @@ function TripGallery() {
               <button className="trips-nav-btn prev" onClick={() => {
                 if (stripRef.current) stripRef.current.scrollBy({ left: -240, behavior: "smooth" });
               }} aria-label="Scroll left">
+                <LeafIcon active={true} className="btn-leaf-bg" />
                 <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
               <button className="trips-nav-btn next" onClick={() => {
                 if (stripRef.current) stripRef.current.scrollBy({ left: 240, behavior: "smooth" });
               }} aria-label="Scroll right">
+                <LeafIcon active={true} className="btn-leaf-bg" />
                 <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             </>
@@ -710,7 +761,9 @@ function TripGallery() {
                     }}
                     onClick={() => handleLeafClick(i)}
                     aria-label={`Go to image ${i + 1}`}
-                  />
+                  >
+                    <LeafIcon active={i === activeLeaf} sage={i !== activeLeaf} />
+                  </button>
                 );
               })}
             </div>
@@ -724,6 +777,7 @@ function TripGallery() {
           {items.length > 1 && (
             <button className="tl-nav prev" aria-label="Previous"
               onClick={(e) => { e.stopPropagation(); setActive((i) => (i - 1 + items.length) % items.length); }}>
+              <LeafIcon active={true} className="btn-leaf-bg" />
               <Arrow dir="left" />
             </button>
           )}
@@ -743,6 +797,7 @@ function TripGallery() {
           {items.length > 1 && (
             <button className="tl-nav next" aria-label="Next"
               onClick={(e) => { e.stopPropagation(); setActive((i) => (i + 1) % items.length); }}>
+              <LeafIcon active={true} className="btn-leaf-bg" />
               <Arrow dir="right" />
             </button>
           )}

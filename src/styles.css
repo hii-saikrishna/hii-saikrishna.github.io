@@ -1824,26 +1824,21 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .hg-dot {
   position: absolute;
   top: 50%;
-  width: 16px;
-  height: 11px;
-  background: linear-gradient(135deg, #9bb594, #66825d);
-  border-radius: 0 100% 0 100%;
+  width: 22px;
+  height: 15px;
+  background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   z-index: 1;
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1);
-  transition: background 0.3s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .hg-dot:hover {
-  background: linear-gradient(135deg, #b8d4b0, #7b9c71);
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1.18);
 }
 .hg-dot.active {
-  background: linear-gradient(135deg, #a2e645, #449911);
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1.4);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), 0 0 8px rgba(162, 230, 69, 0.5);
   z-index: 2;
 }
 
@@ -1856,7 +1851,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 
 /* Base style for leaf navigation buttons */
-.hg-nav-btn, .trips-nav-btn, .tl-nav {
+.trips-nav-btn, .tl-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -1875,104 +1870,68 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Prev buttons: Leaf pointing Left (using border-radius) */
-.hg-nav-btn.prev, .trips-nav-btn.prev, .tl-nav.prev {
+.trips-nav-btn.prev, .tl-nav.prev {
   left: 12px;
 }
 .trips-nav-btn.prev {
-  left: -16px;
+  left: -20px;
 }
 .tl-nav.prev {
   left: 24px;
 }
-.hg-nav-btn.prev::before, .trips-nav-btn.prev::before, .tl-nav.prev::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #a2e645 10%, #55b21e 50%, #3a7d10 90%);
-  border-radius: 100% 0 100% 0; /* Left pointing leaf */
-  transform: rotate(15deg);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.3);
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: -1;
-}
 
-/* Next buttons: Leaf pointing Right (using border-radius) */
-.hg-nav-btn.next, .trips-nav-btn.next, .tl-nav.next {
+.trips-nav-btn.next, .tl-nav.next {
   right: 12px;
 }
 .trips-nav-btn.next {
-  right: -16px;
+  right: -20px;
 }
 .tl-nav.next {
   right: 24px;
 }
-.hg-nav-btn.next::before, .trips-nav-btn.next::before, .tl-nav.next::before {
-  content: '';
+
+/* Background leaf svg styling inside navigation buttons */
+.btn-leaf-bg {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #a2e645 10%, #55b21e 50%, #3a7d10 90%);
-  border-radius: 0 100% 0 100%; /* Right pointing leaf */
-  transform: rotate(-15deg);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.3);
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: -1;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+  transition: transform 0.25s ease;
 }
 
-/* Leaf Vein overlays */
-.hg-nav-btn.prev::after, .trips-nav-btn.prev::after, .tl-nav.prev::after {
-  content: '';
-  position: absolute;
-  width: 32px;
-  height: 1.5px;
-  background: rgba(255, 255, 255, 0.35);
-  transform: rotate(15deg);
-  pointer-events: none;
-  z-index: -1;
+/* Flip the left-pointing leaf backgrounds */
+.trips-nav-btn.prev .btn-leaf-bg, .tl-nav.prev .btn-leaf-bg {
+  transform: scaleX(-1) rotate(15deg);
 }
-.hg-nav-btn.next::after, .trips-nav-btn.next::after, .tl-nav.next::after {
-  content: '';
-  position: absolute;
-  width: 32px;
-  height: 1.5px;
-  background: rgba(255, 255, 255, 0.35);
+.trips-nav-btn.next .btn-leaf-bg, .tl-nav.next .btn-leaf-bg {
   transform: rotate(-15deg);
-  pointer-events: none;
-  z-index: -1;
 }
 
 /* Hover effects for buttons */
-.hg-nav-btn.prev:hover, .trips-nav-btn.prev:hover, .tl-nav.prev:hover {
+.trips-nav-btn.prev:hover, .tl-nav.prev:hover {
   transform: translateY(-50%) scale(1.12) rotate(-5deg);
 }
-.hg-nav-btn.next:hover, .trips-nav-btn.next:hover, .tl-nav.next:hover {
+.trips-nav-btn.next:hover, .tl-nav.next:hover {
   transform: translateY(-50%) scale(1.12) rotate(5deg);
 }
-.hg-nav-btn.prev:hover::before, .trips-nav-btn.prev:hover::before, .tl-nav.prev:hover::before {
-  background: linear-gradient(135deg, #b9f760 10%, #66cd2e 50%, #449712 90%);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(162, 230, 69, 0.45);
-}
-.hg-nav-btn.next:hover::before, .trips-nav-btn.next:hover::before, .tl-nav.next:hover::before {
-  background: linear-gradient(135deg, #b9f760 10%, #66cd2e 50%, #449712 90%);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(162, 230, 69, 0.45);
-}
 
-/* SVG Arrow alignment & effects */
-.hg-nav-btn svg, .trips-nav-btn svg, .tl-nav svg {
-  width: 22px;
-  height: 22px;
+/* SVG Arrow alignment & effects (sitting on top of the leaf vector) */
+.trips-nav-btn svg:not(.btn-leaf-bg), .tl-nav svg:not(.btn-leaf-bg) {
+  width: 20px;
+  height: 20px;
   color: #ffffff;
-  filter: drop-shadow(0 1.5px 2px rgba(0,0,0,0.45));
+  filter: drop-shadow(0 1.5px 2px rgba(0,0,0,0.55));
   transition: transform 0.2s ease;
   position: relative;
   z-index: 2;
 }
-.hg-nav-btn.prev:hover svg, .trips-nav-btn.prev:hover svg, .tl-nav.prev:hover svg {
+.trips-nav-btn.prev:hover svg:not(.btn-leaf-bg), .tl-nav.prev:hover svg:not(.btn-leaf-bg) {
   transform: translateX(-3px);
 }
-.hg-nav-btn.next:hover svg, .trips-nav-btn.next:hover svg, .tl-nav.next:hover svg {
+.trips-nav-btn.next:hover svg:not(.btn-leaf-bg), .tl-nav.next:hover svg:not(.btn-leaf-bg) {
   transform: translateX(3px);
 }
 
@@ -2022,56 +1981,32 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .trips-scroll-leaf-dot {
   position: absolute;
   top: 50%;
-  width: 15px;
-  height: 10px;
-  background: linear-gradient(135deg, #9bb594, #66825d);
-  border-radius: 0 100% 0 100%;
+  width: 22px;
+  height: 15px;
+  background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   z-index: 2;
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1);
-  transition: background 0.3s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-/* Leaf stem for each little scroll leaf dot for organic detail */
-.trips-scroll-leaf-dot::before {
-  content: '';
-  position: absolute;
-  left: -4px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-12deg);
-  width: 5px;
-  height: 2px;
-  background: #5d3b24;
-  border-radius: 0.5px;
-  opacity: 0.85;
-}
-
-/* Center vein for the leaf dot */
-.trips-scroll-leaf-dot::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 20%;
-  right: 20%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-50%);
-}
-
 .trips-scroll-leaf-dot:hover {
-  background: linear-gradient(135deg, #b8d4b0, #7b9c71);
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1.2);
   z-index: 4;
 }
-
 .trips-scroll-leaf-dot.active {
-  background: linear-gradient(135deg, #a2e645, #449911);
   transform: translate(-50%, calc(-50% + var(--y, 0px))) rotate(var(--rot, 0deg)) scale(1.45);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35), 0 0 8px rgba(162, 230, 69, 0.55);
   z-index: 5;
+}
+
+/* Beautiful organic drop-shadow and glowing aura filter for realistic SVGs */
+.leaf-svg-icon {
+  filter: drop-shadow(0 1.5px 2px rgba(0,0,0,0.3));
+  transition: filter 0.2s ease;
+}
+.active .leaf-svg-icon {
+  filter: drop-shadow(0 2px 3.5px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 5px rgba(162, 230, 69, 0.45));
 }
 /* ============ Home: merged CV / About section ============ */
 .home-cv { border-top: 1px solid var(--line-2); }

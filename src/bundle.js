@@ -2395,6 +2395,113 @@ const Arrow = ({
 }));
 
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
+function LeafIcon({
+  active = false,
+  sage = false,
+  className = ""
+}) {
+  const gradId = React.useId();
+  const veinColor = active ? "#eefce3" : sage ? "#d5e4d2" : "#eefce3";
+  const fillUrl = active ? `url(#leaf-grad-active-${gradId})` : sage ? `url(#leaf-grad-sage-${gradId})` : `url(#leaf-grad-normal-${gradId})`;
+  return /*#__PURE__*/React.createElement("svg", {
+    className: `leaf-svg-icon ${className}`,
+    viewBox: "0 0 24 16",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    style: {
+      display: 'block',
+      width: '100%',
+      height: '100%'
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: `leaf-grad-normal-${gradId}`,
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#aae452"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "50%",
+    stopColor: "#5bb21a"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#2a630e"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: `leaf-grad-active-${gradId}`,
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#c5ff68"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "45%",
+    stopColor: "#7cdb26"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#3d8515"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: `leaf-grad-sage-${gradId}`,
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#b5cbb0"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "55%",
+    stopColor: "#7c9676"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#4f624b"
+  }))), /*#__PURE__*/React.createElement("path", {
+    d: "M 3.5,8 C 6.5,2 14,1 21,8 C 14,15 6.5,14 3.5,8 Z",
+    fill: fillUrl,
+    stroke: "#000",
+    strokeWidth: "0.25",
+    strokeOpacity: "0.12"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 3.5,8 Q 12,7.5 21,8",
+    stroke: veinColor,
+    strokeWidth: "0.8",
+    strokeLinecap: "round",
+    opacity: "0.8"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 7.5,7.8 Q 10,5.2 12.5,4.2",
+    stroke: veinColor,
+    strokeWidth: "0.45",
+    strokeLinecap: "round",
+    opacity: "0.65"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 12.5,7.7 Q 15,4.8 18,4.0",
+    stroke: veinColor,
+    strokeWidth: "0.45",
+    strokeLinecap: "round",
+    opacity: "0.65"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 7.5,8.2 Q 9,10.8 11.5,11.8",
+    stroke: veinColor,
+    strokeWidth: "0.45",
+    strokeLinecap: "round",
+    opacity: "0.65"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 12.5,8.3 Q 14.5,11.2 17,12.0",
+    stroke: veinColor,
+    strokeWidth: "0.45",
+    strokeLinecap: "round",
+    opacity: "0.65"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M 1,9 Q 2,8.8 3.5,8",
+    stroke: "#5d3b24",
+    strokeWidth: "1.3",
+    strokeLinecap: "round"
+  }));
+}
+
 // ===== Hero photo gallery — passive auto-rotating portraits with manual controls =====
 function HeroGallery() {
   const items = window.HOME_GALLERY || [];
@@ -2479,7 +2586,10 @@ function HeroGallery() {
         setIdx(i);
       },
       "aria-label": `Go to slide ${i + 1}`
-    });
+    }, /*#__PURE__*/React.createElement(LeafIcon, {
+      active: i === idx,
+      sage: i !== idx
+    }));
   })));
 }
 
@@ -3081,7 +3191,10 @@ function TripGallery() {
       });
     },
     "aria-label": "Scroll left"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement(LeafIcon, {
+    active: true,
+    className: "btn-leaf-bg"
+  }), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 24 24"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M15 18l-6-6 6-6",
@@ -3099,7 +3212,10 @@ function TripGallery() {
       });
     },
     "aria-label": "Scroll right"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement(LeafIcon, {
+    active: true,
+    className: "btn-leaf-bg"
+  }), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 24 24"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M9 18l6-6-6-6",
@@ -3192,7 +3308,10 @@ function TripGallery() {
       },
       onClick: () => handleLeafClick(i),
       "aria-label": `Go to image ${i + 1}`
-    });
+    }, /*#__PURE__*/React.createElement(LeafIcon, {
+      active: i === activeLeaf,
+      sage: i !== activeLeaf
+    }));
   })))), cur && /*#__PURE__*/React.createElement("div", {
     className: "trip-lightbox",
     onClick: () => setActive(null),
@@ -3209,7 +3328,10 @@ function TripGallery() {
       e.stopPropagation();
       setActive(i => (i - 1 + items.length) % items.length);
     }
-  }, /*#__PURE__*/React.createElement(Arrow, {
+  }, /*#__PURE__*/React.createElement(LeafIcon, {
+    active: true,
+    className: "btn-leaf-bg"
+  }), /*#__PURE__*/React.createElement(Arrow, {
     dir: "left"
   })), /*#__PURE__*/React.createElement("figure", {
     className: "tl-figure",
@@ -3241,7 +3363,10 @@ function TripGallery() {
       e.stopPropagation();
       setActive(i => (i + 1) % items.length);
     }
-  }, /*#__PURE__*/React.createElement(Arrow, {
+  }, /*#__PURE__*/React.createElement(LeafIcon, {
+    active: true,
+    className: "btn-leaf-bg"
+  }), /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
   }))));
 }
