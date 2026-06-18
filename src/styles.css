@@ -1801,29 +1801,298 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .hg-img.active { opacity: 1; transform: scale(1); }
 
 /* Hero gallery dot navigation scroller */
+/* Hero gallery dot navigation scroller (styled as a wooden twig and sprouting leaves) */
 .hg-dots {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  margin-top: 14px;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 6px 12px;
 }
+.hg-dots::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 5px;
+  background: linear-gradient(to bottom, #8a5a36, #5d3b24 60%, #3a2212);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 1px rgba(255, 255, 255, 0.1);
+  z-index: 0;
+}
+/* Leaf sprouting effect for dots */
 .hg-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--line);
+  position: relative;
+  width: 15px;
+  height: 10px;
+  background: linear-gradient(135deg, #9bb594, #66825d);
+  border-radius: 0 100% 0 100%;
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 1;
+  transition: background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.hg-dot:nth-child(odd) {
+  transform: rotate(20deg);
+}
+.hg-dot:nth-child(even) {
+  transform: rotate(-20deg);
 }
 .hg-dot:hover {
-  background: var(--ink-3);
+  background: linear-gradient(135deg, #b8d4b0, #7b9c71);
+  transform: scale(1.2) rotate(20deg);
+}
+.hg-dot:nth-child(even):hover {
+  transform: scale(1.2) rotate(-20deg);
 }
 .hg-dot.active {
-  background: var(--accent);
-  transform: scale(1.2);
+  background: linear-gradient(135deg, #a2e645, #449911);
+  transform: scale(1.4) rotate(20deg);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), 0 0 8px rgba(162, 230, 69, 0.5);
+}
+.hg-dot.active:nth-child(even) {
+  transform: scale(1.4) rotate(-20deg);
+}
+
+/* ============ Naturistic Leaf & Twig Navigation Controls ============ */
+
+/* Base container for thumbnail rail to absolute position the side buttons */
+.trips-rail-container {
+  position: relative;
+  margin-top: 14px;
+}
+
+/* Base style for leaf navigation buttons */
+.hg-nav-btn, .trips-nav-btn, .tl-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  z-index: 10;
+  padding: 0;
+  outline: none;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Prev buttons: Leaf pointing Left (using border-radius) */
+.hg-nav-btn.prev, .trips-nav-btn.prev, .tl-nav.prev {
+  left: 12px;
+}
+.trips-nav-btn.prev {
+  left: -16px;
+}
+.tl-nav.prev {
+  left: 24px;
+}
+.hg-nav-btn.prev::before, .trips-nav-btn.prev::before, .tl-nav.prev::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #a2e645 10%, #55b21e 50%, #3a7d10 90%);
+  border-radius: 100% 0 100% 0; /* Left pointing leaf */
+  transform: rotate(15deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: -1;
+}
+
+/* Next buttons: Leaf pointing Right (using border-radius) */
+.hg-nav-btn.next, .trips-nav-btn.next, .tl-nav.next {
+  right: 12px;
+}
+.trips-nav-btn.next {
+  right: -16px;
+}
+.tl-nav.next {
+  right: 24px;
+}
+.hg-nav-btn.next::before, .trips-nav-btn.next::before, .tl-nav.next::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #a2e645 10%, #55b21e 50%, #3a7d10 90%);
+  border-radius: 0 100% 0 100%; /* Right pointing leaf */
+  transform: rotate(-15deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: -1;
+}
+
+/* Leaf Vein overlays */
+.hg-nav-btn.prev::after, .trips-nav-btn.prev::after, .tl-nav.prev::after {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(15deg);
+  pointer-events: none;
+  z-index: -1;
+}
+.hg-nav-btn.next::after, .trips-nav-btn.next::after, .tl-nav.next::after {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(-15deg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Hover effects for buttons */
+.hg-nav-btn.prev:hover, .trips-nav-btn.prev:hover, .tl-nav.prev:hover {
+  transform: translateY(-50%) scale(1.12) rotate(-5deg);
+}
+.hg-nav-btn.next:hover, .trips-nav-btn.next:hover, .tl-nav.next:hover {
+  transform: translateY(-50%) scale(1.12) rotate(5deg);
+}
+.hg-nav-btn.prev:hover::before, .trips-nav-btn.prev:hover::before, .tl-nav.prev:hover::before {
+  background: linear-gradient(135deg, #b9f760 10%, #66cd2e 50%, #449712 90%);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(162, 230, 69, 0.45);
+}
+.hg-nav-btn.next:hover::before, .trips-nav-btn.next:hover::before, .tl-nav.next:hover::before {
+  background: linear-gradient(135deg, #b9f760 10%, #66cd2e 50%, #449712 90%);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(162, 230, 69, 0.45);
+}
+
+/* SVG Arrow alignment & effects */
+.hg-nav-btn svg, .trips-nav-btn svg, .tl-nav svg {
+  width: 22px;
+  height: 22px;
+  color: #ffffff;
+  filter: drop-shadow(0 1.5px 2px rgba(0,0,0,0.45));
+  transition: transform 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+.hg-nav-btn.prev:hover svg, .trips-nav-btn.prev:hover svg, .tl-nav.prev:hover svg {
+  transform: translateX(-3px);
+}
+.hg-nav-btn.next:hover svg, .trips-nav-btn.next:hover svg, .tl-nav.next:hover svg {
+  transform: translateX(3px);
+}
+
+/* Hide thumbnail rail arrows and hide scrollbars */
+.trips-rail {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.trips-rail::-webkit-scrollbar {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  .trips-nav-btn {
+    display: none !important;
+  }
+}
+
+/* Custom Twig & Leaf Scroll Bar */
+.trips-scroll-track {
+  position: relative;
+  width: min(85%, 320px);
+  height: 28px;
+  margin: 18px auto 8px;
+  display: flex;
+  align-items: center;
+}
+
+.trips-scroll-twig {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(to bottom, #8a5a36, #5d3b24 60%, #3a2212);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(255,255,255,0.15);
+}
+
+/* Small sprouting leaf buds at the ends of the twig track */
+.trips-scroll-twig::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: -5px;
+  width: 11px;
+  height: 9px;
+  background: linear-gradient(135deg, #8bc34a, #4caf50);
+  border-radius: 0 100% 0 100%;
+  transform: rotate(-35deg);
+  opacity: 0.9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.trips-scroll-twig::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 2px;
+  width: 11px;
+  height: 9px;
+  background: linear-gradient(135deg, #8bc34a, #4caf50);
+  border-radius: 100% 0 100% 0;
+  transform: rotate(35deg);
+  opacity: 0.9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.trips-scroll-leaf {
+  position: absolute;
+  width: 24px;
+  height: 15px;
+  background: linear-gradient(135deg, #a2e645, #55b21e 60%, #3a7d10);
+  border-radius: 0 100% 0 100%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35), inset 1.5px -1.5px 2px rgba(255, 255, 255, 0.4), inset -1px 1px 2px rgba(0, 0, 0, 0.2);
+  cursor: grab;
+  z-index: 2;
+  transform-origin: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Stem for the scroll indicator leaf */
+.trips-scroll-leaf::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-10deg);
+  width: 7px;
+  height: 2.5px;
+  background: linear-gradient(to bottom, #8a5a36, #5d3b24);
+  border-radius: 1px;
+}
+
+/* Center vein for the leaf */
+.trips-scroll-leaf::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-50%);
+}
+
+.trips-scroll-leaf:hover {
+  transform: scale(1.22) rotate(4deg);
+  background: linear-gradient(135deg, #b9f760, #66cd2e 60%, #449712);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 8px rgba(162, 230, 69, 0.45);
 }
 /* ============ Home: merged CV / About section ============ */
 .home-cv { border-top: 1px solid var(--line-2); }
@@ -2505,26 +2774,14 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 }
 .tl-close:hover { background: rgba(255, 255, 255, 0.26); }
 .tl-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px; height: 48px;
-  display: grid; place-items: center;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.14);
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background .15s ease;
-  z-index: 2;
+  /* Inherits styles from .hg-nav-btn / .tl-nav base leaf button classes */
 }
-.tl-nav:hover { background: rgba(255, 255, 255, 0.26); }
-.tl-nav.prev { left: 16px; }
-.tl-nav.next { right: 16px; }
-.tl-nav svg { width: 22px; height: 22px; }
 @media (max-width: 560px) {
-  .tl-nav { top: auto; bottom: 16px; transform: none; }
+  .tl-nav { top: auto; bottom: 16px; transform: none !important; }
   .tl-nav.prev { left: 30%; }
   .tl-nav.next { right: 30%; }
+  .tl-nav:hover { transform: scale(1.12) !important; }
+  .tl-nav.prev:hover { transform: scale(1.12) rotate(-5deg) !important; }
+  .tl-nav.next:hover { transform: scale(1.12) rotate(5deg) !important; }
   .tl-figure img { max-height: 62vh; }
 }

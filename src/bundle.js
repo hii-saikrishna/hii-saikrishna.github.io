@@ -2405,6 +2405,14 @@ function HeroGallery() {
     return () => clearInterval(id);
   }, [n]);
   if (!n) return null;
+  const prev = e => {
+    e.stopPropagation();
+    setIdx(i => (i - 1 + n) % n);
+  };
+  const next = e => {
+    e.stopPropagation();
+    setIdx(i => (i + 1) % n);
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: "hero-gallery"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2422,7 +2430,33 @@ function HeroGallery() {
     draggable: "false",
     fetchpriority: i === 0 ? "high" : "auto",
     decoding: "async"
-  }))), n > 1 && /*#__PURE__*/React.createElement("div", {
+  })), n > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "hg-nav-btn prev",
+    onClick: prev,
+    "aria-label": "Previous photo"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M15 19l-7-7 7-7",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }))), /*#__PURE__*/React.createElement("button", {
+    className: "hg-nav-btn next",
+    onClick: next,
+    "aria-label": "Next photo"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M9 5l7 7-7 7",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }))))), n > 1 && /*#__PURE__*/React.createElement("div", {
     className: "hg-dots"
   }, items.map((_, i) => /*#__PURE__*/React.createElement("button", {
     key: i,
@@ -2873,6 +2907,7 @@ function TripGallery() {
   const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);
   const dragged = React.useRef(false);
+  const [scrollPct, setScrollPct] = React.useState(0);
 
   // Lightbox: keyboard nav + lock the page so it can't scroll behind the photo.
   React.useEffect(() => {
@@ -2922,6 +2957,25 @@ function TripGallery() {
       window.removeEventListener("pointerup", onUp);
     };
   }, []);
+
+  // Twig scroll progress track sync
+  React.useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      setScrollPct(max > 0 ? el.scrollLeft / max : 0);
+    };
+    el.addEventListener("scroll", onScroll, {
+      passive: true
+    });
+    onScroll();
+    window.addEventListener("resize", onScroll);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [items.length]);
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
   const safeFeatured = Math.min(featured, items.length - 1);
@@ -2987,6 +3041,47 @@ function TripGallery() {
   }, feat.title), feat.desc && /*#__PURE__*/React.createElement("span", {
     className: "tf-desc"
   }, feat.desc))), /*#__PURE__*/React.createElement("div", {
+    className: "trips-rail-container",
+    style: {
+      position: "relative"
+    }
+  }, items.length > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "trips-nav-btn prev",
+    onClick: () => {
+      if (stripRef.current) stripRef.current.scrollBy({
+        left: -240,
+        behavior: "smooth"
+      });
+    },
+    "aria-label": "Scroll left"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M15 18l-6-6 6-6",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }))), /*#__PURE__*/React.createElement("button", {
+    className: "trips-nav-btn next",
+    onClick: () => {
+      if (stripRef.current) stripRef.current.scrollBy({
+        left: 240,
+        behavior: "smooth"
+      });
+    },
+    "aria-label": "Scroll right"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M9 18l6-6-6-6",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  })))), /*#__PURE__*/React.createElement("div", {
     className: "trips-rail",
     ref: stripRef
   }, items.map((g, i) => /*#__PURE__*/React.createElement("button", {
@@ -3010,7 +3105,16 @@ function TripGallery() {
     "aria-hidden": "true"
   }, "\u25B6"), g.when && /*#__PURE__*/React.createElement("span", {
     className: "tt-when"
-  }, g.when))))), cur && /*#__PURE__*/React.createElement("div", {
+  }, g.when))))), items.length > 1 && /*#__PURE__*/React.createElement("div", {
+    className: "trips-scroll-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "trips-scroll-twig"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "trips-scroll-leaf",
+    style: {
+      left: `calc(${scrollPct * 100}% - ${scrollPct * 16}px)`
+    }
+  }))), cur && /*#__PURE__*/React.createElement("div", {
     className: "trip-lightbox",
     onClick: () => setActive(null),
     role: "dialog",

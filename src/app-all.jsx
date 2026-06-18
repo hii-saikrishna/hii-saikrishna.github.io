@@ -160,6 +160,16 @@ function HeroGallery() {
   }, [n]);
 
   if (!n) return null;
+
+  const prev = (e) => {
+    e.stopPropagation();
+    setIdx((i) => (i - 1 + n) % n);
+  };
+  const next = (e) => {
+    e.stopPropagation();
+    setIdx((i) => (i + 1) % n);
+  };
+
   return (
     <div className="hero-gallery">
       <div className="hg-stage" onClick={() => setIdx((i) => (i + 1) % n)} style={{ cursor: "pointer" }} title="Click to see next photo">
@@ -168,6 +178,16 @@ function HeroGallery() {
             className={`hg-img ${i === idx ? "active" : ""}`} draggable="false"
             fetchpriority={i === 0 ? "high" : "auto"} decoding="async" />
         ))}
+        {n > 1 && (
+          <>
+            <button className="hg-nav-btn prev" onClick={prev} aria-label="Previous photo">
+              <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <button className="hg-nav-btn next" onClick={next} aria-label="Next photo">
+              <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </>
+        )}
       </div>
       {n > 1 && (
         <div className="hg-dots">
@@ -515,6 +535,7 @@ function TripGallery() {
   const [featured, setFeatured] = React.useState(0);
   const stripRef = React.useRef(null);
   const dragged = React.useRef(false);
+  const [scrollPct, setScrollPct] = React.useState(0);
 
   // Lightbox: keyboard nav + lock the page so it can't scroll behind the photo.
   React.useEffect(() => {
@@ -556,6 +577,23 @@ function TripGallery() {
     };
   }, []);
 
+  // Twig scroll progress track sync
+  React.useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      setScrollPct(max > 0 ? el.scrollLeft / max : 0);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    window.addEventListener("resize", onScroll);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [items.length]);
+
   if (!items.length) return null;
   const cur = active !== null ? items[active] : null;
   const safeFeatured = Math.min(featured, items.length - 1);
@@ -591,20 +629,44 @@ function TripGallery() {
           </figcaption>
         </figure>
 
-        <div className="trips-rail" ref={stripRef}>
-          {items.map((g, i) => (
-            <button key={g.src + i} type="button"
-              className={`trip-thumb ${i === safeFeatured ? "active" : ""}`}
-              aria-label={`${g.place || ""} ${g.title || ""}`.trim()}
-              onClick={() => selectThumb(i)}>
-              {isVideo(g.src)
-                ? <video src={g.src + "#t=0.1"} muted playsInline preload="metadata" />
-                : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
-              {isVideo(g.src) && <span className="tt-vid" aria-hidden="true">▶</span>}
-              {g.when && <span className="tt-when">{g.when}</span>}
-            </button>
-          ))}
+        <div className="trips-rail-container" style={{ position: "relative" }}>
+          {items.length > 1 && (
+            <>
+              <button className="trips-nav-btn prev" onClick={() => {
+                if (stripRef.current) stripRef.current.scrollBy({ left: -240, behavior: "smooth" });
+              }} aria-label="Scroll left">
+                <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+              <button className="trips-nav-btn next" onClick={() => {
+                if (stripRef.current) stripRef.current.scrollBy({ left: 240, behavior: "smooth" });
+              }} aria-label="Scroll right">
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </>
+          )}
+
+          <div className="trips-rail" ref={stripRef}>
+            {items.map((g, i) => (
+              <button key={g.src + i} type="button"
+                className={`trip-thumb ${i === safeFeatured ? "active" : ""}`}
+                aria-label={`${g.place || ""} ${g.title || ""}`.trim()}
+                onClick={() => selectThumb(i)}>
+                {isVideo(g.src)
+                  ? <video src={g.src + "#t=0.1"} muted playsInline preload="metadata" />
+                  : <img src={g.src} alt={g.title} loading="lazy" draggable="false" />}
+                {isVideo(g.src) && <span className="tt-vid" aria-hidden="true">▶</span>}
+                {g.when && <span className="tt-when">{g.when}</span>}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {items.length > 1 && (
+          <div className="trips-scroll-track">
+            <div className="trips-scroll-twig" />
+            <div className="trips-scroll-leaf" style={{ left: `calc(${scrollPct * 100}% - ${scrollPct * 16}px)` }} />
+          </div>
+        )}
       </div>
 
       {cur && (
