@@ -866,8 +866,15 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   const disposables = [];
   const track = (o) => { disposables.push(o); return o; };
 
-  // Terrain: lush valley with natural ridges and varied vegetation
+  // Terrain: lush valley with natural gullies where waterfalls form
   const ampZ = (z) => 2.4 + 18 * Math.exp(-Math.pow((z + 12) / 16, 2));
+  // Noise-based drainage channels — natural gully paths
+  const gully = (x, z) => {
+    const g1 = Math.exp(-Math.pow((_mNoise(x * 0.06 + 1.5, z * 0.02 + 3.0) - 0.5) * 6, 2));
+    const g2 = Math.exp(-Math.pow((_mNoise(x * 0.04 - 2.3, z * 0.03 + 7.1) - 0.48) * 5.5, 2));
+    const g3 = Math.exp(-Math.pow((_mNoise(x * 0.05 + 4.2, z * 0.025 - 1.8) - 0.52) * 6.5, 2));
+    return Math.max(g1, g2, g3);
+  };
   const heightAt = (x, z) => {
     const valleyW = 14;
     const valleyFactor = Math.min(1, Math.pow(Math.abs(x) / valleyW, 1.8));
@@ -875,7 +882,10 @@ function buildWaterfallValley({ scene, camera, renderer }) {
     const detail = _mRidged(x * 0.07 + 1, z * 0.09 - 2, 2.5) * 2.2;
     const micro = _mSmooth(x * 0.18 + 5, z * 0.16 - 7, 3) * 0.6;
     const broad = _mSmooth(x * 0.015 - 1, z * 0.02 + 4) * 1.2;
-    return base + detail + micro + broad;
+    // Carve gullies slightly into the terrain
+    const g = gully(x, z);
+    const carve = g > 0.3 ? (g - 0.3) * 1.8 : 0;
+    return base + detail + micro + broad - carve;
   };
 
   // Misty morning sky
@@ -896,7 +906,7 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   scene.add(sun);
   scene.add(new THREE.AmbientLight(0xe2f0e8, 0.25));
 
-  // Terrain mesh — natural vegetation bands with noise-driven variation
+  // Terrain mesh with animated waterfall channels
   const geo = track(new THREE.PlaneGeometry(160, 130, 280, 220));
   geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position;
@@ -905,16 +915,23 @@ function buildWaterfallValley({ scene, camera, renderer }) {
     cForest = new THREE.Color(0x3d7a3e), cDeepGreen = new THREE.Color(0x2a5c30),
     cEarth = new THREE.Color(0x6a7a5a), cCliff = new THREE.Color(0x7a8872),
     cHighMoss = new THREE.Color(0x9aaa82), cHaze = new THREE.Color(0xc0d8c4);
+  // Waterfall colors — white foam with subtle green-teal tint
+  const cFoam = new THREE.Color(0xe8f4ee), cSpray = new THREE.Color(0xd5ebe0),
+    cWetRock = new THREE.Color(0x4a6a4e);
   const outC = new THREE.Color(), baseC = new THREE.Color();
+
+  // Track waterfall vertices for animation
+  const wfVerts = []; // { idx, strength, h, z, baseR, baseG, baseB }
 
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), z = pos.getZ(i);
     const h = heightAt(x, z); pos.setY(i, h);
     const dd = 0.6, hx = heightAt(x + dd, z) - heightAt(x - dd, z), hz = heightAt(x, z + dd) - heightAt(x, z - dd);
     const slope = Math.sqrt(hx * hx + hz * hz) / (2 * dd);
-    // Noise-driven vegetation variation — natural patchiness
     const veg = _mNoise(x * 0.12 + 3.3, z * 0.1 - 1.7);
+    const g = gully(x, z);
 
+    // Base vegetation coloring
     if (h < 3) baseC.copy(cMeadow).lerp(cLushGrass, h / 3 + veg * 0.15);
     else if (h < 6) baseC.copy(cLushGrass).lerp(cForest, (h - 3) / 3 + veg * 0.1);
     else if (h < 9) baseC.copy(cForest).lerp(cDeepGreen, (h - 6) / 3);
@@ -922,34 +939,49 @@ function buildWaterfallValley({ scene, camera, renderer }) {
     else baseC.copy(cCliff).lerp(cHaze, Math.min(1, (h - 12) / 4));
 
     outC.copy(baseC);
-    // Slope-dependent rock/earth exposure
     outC.lerp(cEarth, Math.min(0.4, Math.max(0, (slope - 0.8)) * 0.35));
     outC.lerp(cCliff, Math.min(0.35, Math.max(0, (slope - 1.4)) * 0.4));
-    // Subtle vegetation patches on gentle slopes
     if (slope < 0.5 && h < 8) outC.lerp(cMeadow, veg * 0.2);
-    // High-altitude moss on exposed rock
     if (h > 10 && slope < 0.6) outC.lerp(cHighMoss, 0.3);
+
+    // Waterfall: where gully channel meets steep slope at mid-to-high elevation
+    const isWaterfall = g > 0.35 && slope > 0.7 && h > 3.5 && h < 15;
+    const isSplash = g > 0.3 && h < 4 && h > 1; // pool/splash zone at bottom
+    if (isWaterfall) {
+      const wStr = Math.min(1, (g - 0.35) / 0.3) * Math.min(1, (slope - 0.7) / 0.8);
+      // Blend: steep + strong channel = more foam; less steep = wet rock
+      outC.lerp(cWetRock, wStr * 0.3);
+      outC.lerp(cFoam, wStr * 0.5);
+      wfVerts.push({ idx: i, strength: wStr, h, z, baseR: outC.r, baseG: outC.g, baseB: outC.b });
+    } else if (isSplash) {
+      const sStr = Math.min(1, (g - 0.3) / 0.35) * 0.35;
+      outC.lerp(cSpray, sStr);
+    }
 
     col[i * 3] = outC.r; col[i * 3 + 1] = outC.g; col[i * 3 + 2] = outC.b;
   }
-  geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+  const colAttr = new THREE.BufferAttribute(col, 3);
+  geo.setAttribute("color", colAttr);
   geo.computeVertexNormals();
   scene.add(new THREE.Mesh(geo, track(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 }))));
 
-  // Soft mist sprites at valley floor
+  // Pre-compute static foam/spray colors for animation blending
+  const foamR = cFoam.r, foamG = cFoam.g, foamB = cFoam.b;
+
+  // Soft mist sprites at valley floor / waterfall bases
   const mistTex = (() => {
     const c = document.createElement("canvas"); c.width = 128; c.height = 64;
     const g = c.getContext("2d");
     const rg = g.createRadialGradient(64, 32, 0, 64, 32, 60);
-    rg.addColorStop(0, "rgba(210,235,220,0.7)"); rg.addColorStop(1, "rgba(210,235,220,0)");
+    rg.addColorStop(0, "rgba(220,242,230,0.65)"); rg.addColorStop(0.6, "rgba(210,235,220,0.3)"); rg.addColorStop(1, "rgba(210,235,220,0)");
     g.fillStyle = rg; g.fillRect(0, 0, 128, 64);
     return track(new THREE.CanvasTexture(c));
   })();
   const mists = [];
-  for (let i = 0; i < 5; i++) {
-    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: mistTex, transparent: true, depthWrite: false, opacity: 0.5, fog: false })));
-    sp.scale.set(14, 5, 1);
-    sp.position.set(-16 + i * 8, 3 + Math.random() * 2, -8 - Math.random() * 10);
+  for (let i = 0; i < 6; i++) {
+    const sp = new THREE.Sprite(track(new THREE.SpriteMaterial({ map: mistTex, transparent: true, depthWrite: false, opacity: 0.45, fog: false })));
+    sp.scale.set(12, 4, 1);
+    sp.position.set(-18 + i * 7, 2.5 + Math.random() * 2, -6 - Math.random() * 12);
     mists.push(sp); scene.add(sp);
   }
 
@@ -958,7 +990,24 @@ function buildWaterfallValley({ scene, camera, renderer }) {
   return {
     update(t) {
       clouds.forEach((c, i) => { c.position.x += 0.008 + i * 0.003; if (c.position.x > 40) c.position.x = -40; });
-      mists.forEach((m, i) => { m.material.opacity = 0.4 + 0.15 * Math.sin(t * 0.4 + i); });
+      mists.forEach((m, i) => { m.material.opacity = 0.35 + 0.15 * Math.sin(t * 0.5 + i * 1.1); });
+
+      // Animate waterfall vertices — flowing shimmer effect
+      const arr = colAttr.array;
+      for (let w = 0; w < wfVerts.length; w++) {
+        const v = wfVerts[w];
+        // Flow pattern: noise that scrolls downward over time (using z + time offset)
+        const flow = _mNoise(v.h * 0.8 + t * 1.2 + v.z * 0.05, v.z * 0.15 - t * 0.8);
+        // Shimmer: high-frequency sparkle
+        const sparkle = _mNoise(v.h * 2.5 + t * 3.0, v.z * 0.3 + t * 1.5);
+        // Combine: base color ↔ foam, modulated by flow + sparkle
+        const blend = v.strength * (0.3 + flow * 0.5 + sparkle * 0.2);
+        const i3 = v.idx * 3;
+        arr[i3]     = v.baseR + (foamR - v.baseR) * blend;
+        arr[i3 + 1] = v.baseG + (foamG - v.baseG) * blend;
+        arr[i3 + 2] = v.baseB + (foamB - v.baseB) * blend;
+      }
+      if (wfVerts.length) colAttr.needsUpdate = true;
     },
     dispose() { scene.background = null; disposables.forEach((d) => d.dispose && d.dispose()); },
   };
