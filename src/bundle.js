@@ -4330,7 +4330,8 @@ function UpdatesPage() {
       let minDistance = Infinity;
       sections.forEach(sec => {
         const rect = sec.getBoundingClientRect();
-        const dist = Math.abs(rect.top - window.innerHeight / 2);
+        const secCenter = (rect.top + rect.bottom) / 2;
+        const dist = Math.abs(secCenter - window.innerHeight / 2);
         if (dist < minDistance) {
           minDistance = dist;
           currentActive = sec.getAttribute("data-screen-label") || "hero";
@@ -5956,6 +5957,17 @@ function App() {
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
+  React.useEffect(() => {
+    const titleMap = {
+      home: "Sai Krishna Ghanta — Research Portfolio",
+      research: "Research — Sai Krishna Ghanta",
+      publications: "Publications — Sai Krishna Ghanta",
+      updates: "Milestones — Sai Krishna Ghanta",
+      about: "About — Sai Krishna Ghanta",
+      blog: "Blog — Sai Krishna Ghanta"
+    };
+    document.title = titleMap[route.page] || "Sai Krishna Ghanta — Research Portfolio";
+  }, [route.page]);
   React.useEffect(() => {
     // Safe scroll-to-top — older Safari throws on { behavior: "instant" }.
     if (route.anchor) {
