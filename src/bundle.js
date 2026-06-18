@@ -2792,7 +2792,7 @@ function HomePage({
   }, "Recent Achievements"), /*#__PURE__*/React.createElement("h2", {
     style: {
       textAlign: "center",
-      marginBottom: 36
+      marginBottom: 30
     }
   }, "Recent ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
@@ -2810,7 +2810,7 @@ function HomePage({
     className: "mc-title"
   }, "NSF Fellowship"), /*#__PURE__*/React.createElement("p", {
     className: "mc-text"
-  }, "Selected as a recipient of the 2026 NSF Chishiki AI Fellowship at UT Austin, working with Dr. Krishna Kumar.")), /*#__PURE__*/React.createElement("div", {
+  }, "NSF Chishiki AI Fellow at UT Austin, working with Dr. Krishna Kumar.")), /*#__PURE__*/React.createElement("div", {
     className: "milestone-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "mc-header"
@@ -2822,7 +2822,7 @@ function HomePage({
     className: "mc-title"
   }, "KTH RPL School"), /*#__PURE__*/React.createElement("p", {
     className: "mc-text"
-  }, "Attending the prestigious KTH RPL Summer School 2026 in Stockholm, Sweden.")), /*#__PURE__*/React.createElement("div", {
+  }, "Attending KTH RPL Summer School 2026 in Stockholm, Sweden.")), /*#__PURE__*/React.createElement("div", {
     className: "milestone-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "mc-header"
@@ -2834,10 +2834,10 @@ function HomePage({
     className: "mc-title"
   }, "Candidacy Exam"), /*#__PURE__*/React.createElement("p", {
     className: "mc-text"
-  }, "Successfully completed and passed the Ph.D. candidacy exam at the University of Georgia."))), /*#__PURE__*/React.createElement("div", {
+  }, "Passed Ph.D. candidacy exam at the University of Georgia."))), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
-      marginTop: 32
+      marginTop: 24
     },
     className: "milestones-more-link"
   }, /*#__PURE__*/React.createElement("span", {
