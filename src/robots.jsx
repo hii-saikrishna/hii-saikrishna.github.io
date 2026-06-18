@@ -372,24 +372,27 @@ function dioramaScene(kind, zoom = 1) {
       rBox(windowG, mWood, 0.035, 0.56, 0.025, 0, 0, 0.115);   // muntin vertical
       rBox(windowG, mWood, 0.92, 0.035, 0.025, 0, 0, 0.145);   // muntin horizontal
 
-      // Framed picture on the left wall (positioned at -RW + 0.04 to stand out from the wall and resolve z-fighting)
+      // Framed picture on the left wall. Built as a strictly monotonic depth stack:
+      // every layer sits fully in FRONT of the one beneath it (each back face clears the
+      // previous front face by ~0.005), so no two faces are ever coplanar or embedded —
+      // that is what removes the painting's z-fighting flicker. Local +z points into the room.
       const frame = new THREE.Group(); frame.position.set(-RW + 0.04, 0.85, 0.7); frame.rotation.y = Math.PI / 2; home.add(frame);
-      rBox(frame, mWoodDark, 0.72, 0.52, 0.03, 0, 0, 0); // frame backing border
-      rBox(frame, rMat(0xf7f5f0, { roughness: 0.95 }), 0.58, 0.38, 0.02, 0, 0, 0.015); // white canvas background
-      
-      // Abstract art elements layered on the canvas at distinct depths
-      rBox(frame, rMat(0xde6b48, { roughness: 0.8 }), 0.22, 0.18, 0.005, -0.1, 0.05, 0.026);  // terracotta rectangle
-      rBox(frame, rMat(0x2f6df0, { roughness: 0.8 }), 0.12, 0.22, 0.005, 0.12, -0.04, 0.027); // cobalt rectangle
-      
-      const sunGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.005, 16);
-      const sunMat = rMat(0xf4d35e, { roughness: 0.7, emissive: 0xf4d35e, emissiveIntensity: 0.1 });
-      const sun = new THREE.Mesh(sunGeo, sunMat);
+      const artBlack = rMat(0x1a1a1a, { roughness: 0.9 });
+      rBox(frame, mWoodDark, 0.72, 0.52, 0.04, 0, 0, 0);                                // frame border (front face at z=0.02)
+      rBox(frame, rMat(0xf7f5f0, { roughness: 0.95 }), 0.58, 0.38, 0.02, 0, 0, 0.035);  // canvas (back 0.025, front 0.045)
+
+      // Abstract art, each layer clearly proud of the canvas and of each other (no overlap in depth)
+      rBox(frame, rMat(0xde6b48, { roughness: 0.8 }), 0.22, 0.18, 0.006, -0.1, 0.05, 0.054);  // terracotta rectangle
+      rBox(frame, rMat(0x2f6df0, { roughness: 0.8 }), 0.12, 0.22, 0.006, 0.12, -0.04, 0.062); // cobalt rectangle
+
+      const sun = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.006, 20),
+        rMat(0xf4d35e, { roughness: 0.7, emissive: 0xf4d35e, emissiveIntensity: 0.12 }));
       sun.rotation.x = Math.PI / 2;
-      sun.position.set(0.08, 0.06, 0.028);
+      sun.position.set(0.08, 0.06, 0.07);
       frame.add(sun); // golden sun circle
-      
-      rBox(frame, rMat(0x1a1a1a, { roughness: 0.9 }), 0.015, 0.32, 0.005, -0.16, -0.02, 0.029); // vertical black line
-      rBox(frame, rMat(0x1a1a1a, { roughness: 0.9 }), 0.44, 0.015, 0.005, 0.02, 0.08, 0.03);    // horizontal black line
+
+      rBox(frame, artBlack, 0.015, 0.32, 0.006, -0.16, -0.02, 0.078); // vertical black line
+      rBox(frame, artBlack, 0.44, 0.015, 0.006, 0.02, 0.08, 0.086);   // horizontal black line
       
       // ---- KITCHEN (back-left): fridge in the corner, then the counter run to its right (no overlap) ----
       const kitchen = new THREE.Group(); home.add(kitchen);

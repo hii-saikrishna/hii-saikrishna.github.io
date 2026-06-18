@@ -1077,41 +1077,41 @@ function dioramaScene(kind, zoom = 1) {
       rBox(windowG, mWood, 0.035, 0.56, 0.025, 0, 0, 0.115); // muntin vertical
       rBox(windowG, mWood, 0.92, 0.035, 0.025, 0, 0, 0.145); // muntin horizontal
 
-      // Framed picture on the left wall (positioned at -RW + 0.04 to stand out from the wall and resolve z-fighting)
+      // Framed picture on the left wall. Built as a strictly monotonic depth stack:
+      // every layer sits fully in FRONT of the one beneath it (each back face clears the
+      // previous front face by ~0.005), so no two faces are ever coplanar or embedded —
+      // that is what removes the painting's z-fighting flicker. Local +z points into the room.
       const frame = new THREE.Group();
       frame.position.set(-RW + 0.04, 0.85, 0.7);
       frame.rotation.y = Math.PI / 2;
       home.add(frame);
-      rBox(frame, mWoodDark, 0.72, 0.52, 0.03, 0, 0, 0); // frame backing border
+      const artBlack = rMat(0x1a1a1a, {
+        roughness: 0.9
+      });
+      rBox(frame, mWoodDark, 0.72, 0.52, 0.04, 0, 0, 0); // frame border (front face at z=0.02)
       rBox(frame, rMat(0xf7f5f0, {
         roughness: 0.95
-      }), 0.58, 0.38, 0.02, 0, 0, 0.015); // white canvas background
+      }), 0.58, 0.38, 0.02, 0, 0, 0.035); // canvas (back 0.025, front 0.045)
 
-      // Abstract art elements layered on the canvas at distinct depths
+      // Abstract art, each layer clearly proud of the canvas and of each other (no overlap in depth)
       rBox(frame, rMat(0xde6b48, {
         roughness: 0.8
-      }), 0.22, 0.18, 0.005, -0.1, 0.05, 0.026); // terracotta rectangle
+      }), 0.22, 0.18, 0.006, -0.1, 0.05, 0.054); // terracotta rectangle
       rBox(frame, rMat(0x2f6df0, {
         roughness: 0.8
-      }), 0.12, 0.22, 0.005, 0.12, -0.04, 0.027); // cobalt rectangle
+      }), 0.12, 0.22, 0.006, 0.12, -0.04, 0.062); // cobalt rectangle
 
-      const sunGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.005, 16);
-      const sunMat = rMat(0xf4d35e, {
+      const sun = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.006, 20), rMat(0xf4d35e, {
         roughness: 0.7,
         emissive: 0xf4d35e,
-        emissiveIntensity: 0.1
-      });
-      const sun = new THREE.Mesh(sunGeo, sunMat);
+        emissiveIntensity: 0.12
+      }));
       sun.rotation.x = Math.PI / 2;
-      sun.position.set(0.08, 0.06, 0.028);
+      sun.position.set(0.08, 0.06, 0.07);
       frame.add(sun); // golden sun circle
 
-      rBox(frame, rMat(0x1a1a1a, {
-        roughness: 0.9
-      }), 0.015, 0.32, 0.005, -0.16, -0.02, 0.029); // vertical black line
-      rBox(frame, rMat(0x1a1a1a, {
-        roughness: 0.9
-      }), 0.44, 0.015, 0.005, 0.02, 0.08, 0.03); // horizontal black line
+      rBox(frame, artBlack, 0.015, 0.32, 0.006, -0.16, -0.02, 0.078); // vertical black line
+      rBox(frame, artBlack, 0.44, 0.015, 0.006, 0.02, 0.08, 0.086); // horizontal black line
 
       // ---- KITCHEN (back-left): fridge in the corner, then the counter run to its right (no overlap) ----
       const kitchen = new THREE.Group();
@@ -3830,19 +3830,93 @@ function PubLinks({
   }));
 }
 
+// Quiet, non-textual placeholder cover for papers that have no figure — keeps
+// every publication card on the same two-column grid. The motif (two nodes over
+// nested contour fields, joined by a baseline) reads as relative localization /
+// a learned spatial field, on-theme for the lab without spelling anything out.
+function PubThumbArt() {
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "pub-ph-art",
+    viewBox: "0 0 160 120",
+    preserveAspectRatio: "xMidYMid slice",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("rect", {
+    width: "160",
+    height: "120",
+    fill: "var(--bg-soft)"
+  }), /*#__PURE__*/React.createElement("g", {
+    fill: "none",
+    stroke: "var(--accent)",
+    strokeOpacity: "0.16"
+  }, /*#__PURE__*/React.createElement("ellipse", {
+    cx: "54",
+    cy: "48",
+    rx: "14",
+    ry: "11"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "54",
+    cy: "48",
+    rx: "24",
+    ry: "19"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "54",
+    cy: "48",
+    rx: "34",
+    ry: "27"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "54",
+    cy: "48",
+    rx: "44",
+    ry: "35"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "116",
+    cy: "82",
+    rx: "12",
+    ry: "9"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "116",
+    cy: "82",
+    rx: "22",
+    ry: "17"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "116",
+    cy: "82",
+    rx: "32",
+    ry: "25"
+  })), /*#__PURE__*/React.createElement("line", {
+    x1: "54",
+    y1: "48",
+    x2: "116",
+    y2: "82",
+    stroke: "var(--accent-ink)",
+    strokeOpacity: "0.28",
+    strokeDasharray: "3 4"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "54",
+    cy: "48",
+    r: "3.2",
+    fill: "var(--accent-ink)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "116",
+    cy: "82",
+    r: "3.2",
+    fill: "var(--accent-ink)"
+  }));
+}
+
 // ===== Publication card =====
 function PubRow({
   p
 }) {
   return /*#__PURE__*/React.createElement("article", {
-    className: `pub-card ${p.image ? "" : "no-image"}`
-  }, p.image && /*#__PURE__*/React.createElement("div", {
-    className: "pub-thumb"
-  }, /*#__PURE__*/React.createElement("img", {
+    className: "pub-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `pub-thumb ${p.image ? "" : "is-placeholder"}`
+  }, p.image ? /*#__PURE__*/React.createElement("img", {
     src: p.image,
     alt: "",
     loading: "lazy"
-  }), p.featured && /*#__PURE__*/React.createElement("span", {
+  }) : /*#__PURE__*/React.createElement(PubThumbArt, null), p.featured && /*#__PURE__*/React.createElement("span", {
     className: "pub-feat"
   }, "Featured")), /*#__PURE__*/React.createElement("div", {
     className: "pub-main"
@@ -4288,7 +4362,7 @@ function ContactGlobe() {
     }
   }), /*#__PURE__*/React.createElement("p", {
     className: "contact-globe-cap mono"
-  }, "every dot is a place I've been \xB7 drag to spin"));
+  }, "every dot is a sample of where I've been, collected for my memory \xB7 drag to spin"));
 }
 
 // ===== Trip gallery — horizontal scroll strip (mixed sizes) + fitted lightbox =====
@@ -4694,9 +4768,9 @@ function AboutPage() {
     className: "about-combined"
   }, /*#__PURE__*/React.createElement("div", {
     className: "about-intro"
-  }, /*#__PURE__*/React.createElement("p", null, "I'm happiest outdoors \u2014 a quiet trail, a good viewpoint, somewhere to slow down and just look. I'm also a creature of habit. I'll run the exact same routine, every single day, and be perfectly content about it. ", /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("p", null, "I\u2019m happiest outdoors, on a quiet trail, at a good viewpoint, or anywhere I can slow down and just take it all in. I\u2019m also a creature of habit. I can follow the same routine every single day and be completely content with it. ", /*#__PURE__*/React.createElement("span", {
     className: "about-wink"
-  }, ":)")), /*#__PURE__*/React.createElement("p", null, "The one thing that breaks the routine is travel. I want to see as much of this planet as I possibly can. In robotics we have a word for it, ", /*#__PURE__*/React.createElement("em", null, "exploration"), " \u2014 pushing an agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place I've actually stood, and I'm nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null), /*#__PURE__*/React.createElement(MountainLandscape, null));
+  }, ":)")), /*#__PURE__*/React.createElement("p", null, "Travel is the one thing that pulls me out of that routine. I want to see as much of this planet as I possibly can. In robotics, we call it ", /*#__PURE__*/React.createElement("em", null, "exploration"), ", sending an agent out to map the unknown. In a way, this globe is my map. Every dot marks a place I\u2019ve actually stood, and I\u2019m nowhere near done filling it in.")), /*#__PURE__*/React.createElement(ContactGlobe, null)))), /*#__PURE__*/React.createElement(TripGallery, null), /*#__PURE__*/React.createElement(MountainLandscape, null));
 }
 function NatureBackdrop() {
   return /*#__PURE__*/React.createElement("div", {

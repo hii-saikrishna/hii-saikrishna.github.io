@@ -287,16 +287,38 @@ function PubLinks({ links }) {
   );
 }
 
+// Quiet, non-textual placeholder cover for papers that have no figure — keeps
+// every publication card on the same two-column grid. The motif (two nodes over
+// nested contour fields, joined by a baseline) reads as relative localization /
+// a learned spatial field, on-theme for the lab without spelling anything out.
+function PubThumbArt() {
+  return (
+    <svg className="pub-ph-art" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="160" height="120" fill="var(--bg-soft)" />
+      <g fill="none" stroke="var(--accent)" strokeOpacity="0.16">
+        <ellipse cx="54" cy="48" rx="14" ry="11" />
+        <ellipse cx="54" cy="48" rx="24" ry="19" />
+        <ellipse cx="54" cy="48" rx="34" ry="27" />
+        <ellipse cx="54" cy="48" rx="44" ry="35" />
+        <ellipse cx="116" cy="82" rx="12" ry="9" />
+        <ellipse cx="116" cy="82" rx="22" ry="17" />
+        <ellipse cx="116" cy="82" rx="32" ry="25" />
+      </g>
+      <line x1="54" y1="48" x2="116" y2="82" stroke="var(--accent-ink)" strokeOpacity="0.28" strokeDasharray="3 4" />
+      <circle cx="54" cy="48" r="3.2" fill="var(--accent-ink)" />
+      <circle cx="116" cy="82" r="3.2" fill="var(--accent-ink)" />
+    </svg>
+  );
+}
+
 // ===== Publication card =====
 function PubRow({ p }) {
   return (
-    <article className={`pub-card ${p.image ? "" : "no-image"}`}>
-      {p.image && (
-        <div className="pub-thumb">
-          <img src={p.image} alt="" loading="lazy" />
-          {p.featured && <span className="pub-feat">Featured</span>}
-        </div>
-      )}
+    <article className="pub-card">
+      <div className={`pub-thumb ${p.image ? "" : "is-placeholder"}`}>
+        {p.image ? <img src={p.image} alt="" loading="lazy" /> : <PubThumbArt />}
+        {p.featured && <span className="pub-feat">Featured</span>}
+      </div>
       <div className="pub-main">
         <div className="pub-meta-row">
           <span className="pub-year">{p.year}</span>
@@ -606,7 +628,7 @@ function ContactGlobe() {
         </span>
       )}
       <ThreeScene build={buildGlobeScene} style={{ width: "100%", height: "100%", minHeight: "var(--contact-globe-h)" }} />
-      <p className="contact-globe-cap mono">every dot is a place I've been · drag to spin</p>
+      <p className="contact-globe-cap mono">every dot is a sample of where I've been, collected for my memory · drag to spin</p>
     </div>
   );
 }
@@ -879,15 +901,15 @@ function AboutPage() {
           <div className="about-combined">
             <div className="about-intro">
               <p>
-                I'm happiest outdoors — a quiet trail, a good viewpoint, somewhere to slow down and
-                just look. I'm also a creature of habit. I'll run the exact same routine, every single
-                day, and be perfectly content about it. <span className="about-wink">:)</span>
+                I’m happiest outdoors, on a quiet trail, at a good viewpoint, or anywhere I can slow down and 
+                just take it all in. I’m also a creature of habit. I can follow the same routine every single 
+                day and be completely content with it. <span className="about-wink">:)</span>
               </p>
               <p>
-                The one thing that breaks the routine is travel. I want to see as much of this planet
-                as I possibly can. In robotics we have a word for it, <em>exploration</em> — pushing an
-                agent out to fill in the unknown parts of a map. This globe is mine. Every dot is a place
-                I've actually stood, and I'm nowhere near done filling it in.
+                Travel is the one thing that pulls me out of that routine. I want to see as much of this planet 
+                as I possibly can. In robotics, we call it <em>exploration</em>, sending an agent out to map the 
+                unknown. In a way, this globe is my map. Every dot marks a place I’ve actually stood, and 
+                I’m nowhere near done filling it in.
               </p>
             </div>
             <ContactGlobe />
