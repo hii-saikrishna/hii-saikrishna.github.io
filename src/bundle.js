@@ -4283,9 +4283,56 @@ function UpdatesPage() {
   }, []);
   const isScrollingTo = React.useRef(null);
   const scrollTimeout = React.useRef(null);
+  const scrollTweenRef = React.useRef(null);
+
+  // Custom smooth scroll loop using requestAnimationFrame for buttery smooth easing
+  const animateScrollTo = React.useCallback((targetY, duration = 600) => {
+    if (scrollTweenRef.current) {
+      cancelAnimationFrame(scrollTweenRef.current);
+    }
+    const startY = window.scrollY;
+    const difference = targetY - startY;
+    const startTime = performance.now();
+    const tick = now => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing: easeInOutCubic (much smoother and more responsive than browser default)
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      window.scrollTo(0, startY + difference * ease);
+      if (progress < 1) {
+        scrollTweenRef.current = requestAnimationFrame(tick);
+      } else {
+        scrollTweenRef.current = null;
+      }
+    };
+    scrollTweenRef.current = requestAnimationFrame(tick);
+  }, []);
+
+  // Cancel tween if user manually scrolls (mousewheel, touch, or mouse click)
   React.useEffect(() => {
+    const cancelTween = () => {
+      if (scrollTweenRef.current) {
+        cancelAnimationFrame(scrollTweenRef.current);
+        scrollTweenRef.current = null;
+        isScrollingTo.current = null;
+      }
+    };
+    window.addEventListener("wheel", cancelTween, {
+      passive: true
+    });
+    window.addEventListener("touchmove", cancelTween, {
+      passive: true
+    });
+    window.addEventListener("pointerdown", cancelTween, {
+      passive: true
+    });
     return () => {
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      if (scrollTweenRef.current) cancelAnimationFrame(scrollTweenRef.current);
+      window.removeEventListener("wheel", cancelTween);
+      window.removeEventListener("touchmove", cancelTween);
+      window.removeEventListener("pointerdown", cancelTween);
     };
   }, []);
   const scrollToState = React.useCallback(targetState => {
@@ -4303,15 +4350,18 @@ function UpdatesPage() {
     }
     const el = document.querySelector(selector);
     if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+      const rect = el.getBoundingClientRect();
+      const absoluteTop = rect.top + window.scrollY;
+      // Center the section exactly in the viewport
+      const targetY = absoluteTop - (window.innerHeight - rect.height) / 2;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const safeTargetY = Math.min(maxScroll, Math.max(0, targetY));
+      animateScrollTo(safeTargetY, 650); // 650ms animation duration for high responsiveness
     }
     scrollTimeout.current = setTimeout(() => {
       isScrollingTo.current = null;
-    }, 850);
-  }, []);
+    }, 700);
+  }, [animateScrollTo]);
   const navigateToState = React.useCallback(direction => {
     const states = ["hero", ...years.map(String), "outro"];
     const current = isScrollingTo.current || activeYear;
