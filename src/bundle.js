@@ -3853,6 +3853,7 @@ function LazyVideo({
     className: className,
     muted: true,
     loop: true,
+    autoPlay: true,
     playsInline: true,
     preload: "none",
     draggable: "false"
@@ -3889,15 +3890,11 @@ function MediaCarousel({
   }, /*#__PURE__*/React.createElement("div", {
     className: "mc-track",
     style: {
-      transform: `translateX(-${idx * 100}%)`,
-      width: `${n * 100}%`
+      transform: `translateX(-${idx * 100}%)`
     }
   }, list.map((s, i) => /*#__PURE__*/React.createElement("div", {
     className: "mc-slide",
-    key: i,
-    style: {
-      width: `${100 / n}%`
-    }
+    key: i
   }, s.src ? isVideoSrc(s.src) ? /*#__PURE__*/React.createElement(LazyVideo, {
     src: s.src,
     className: "mc-media"

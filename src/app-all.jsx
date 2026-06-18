@@ -164,7 +164,7 @@ function LazyVideo({ src, className }) {
     io.observe(el);
     return () => io.disconnect();
   }, [src]);
-  return <video ref={ref} className={className} muted loop playsInline preload="none" draggable="false" />;
+  return <video ref={ref} className={className} muted loop autoPlay playsInline preload="none" draggable="false" />;
 }
 
 // ===== Research media window — a sliding gallery of clips/images per interest =====
@@ -189,9 +189,9 @@ function MediaCarousel({ slides }) {
   return (
     <div className="media-carousel">
       <div className="mc-window">
-        <div className="mc-track" style={{ transform: `translateX(-${idx * 100}%)`, width: `${n * 100}%` }}>
+        <div className="mc-track" style={{ transform: `translateX(-${idx * 100}%)` }}>
           {list.map((s, i) => (
-            <div className="mc-slide" key={i} style={{ width: `${100 / n}%` }}>
+            <div className="mc-slide" key={i}>
               {s.src
                 ? (isVideoSrc(s.src)
                     ? <LazyVideo src={s.src} className="mc-media" />
