@@ -389,6 +389,44 @@ function HomePage({ go }) {
         </div>
       </section>
 
+      <section className="section recent-milestones" onClick={() => go("updates")} style={{ cursor: "pointer" }} aria-label="Recent Milestones">
+        <div className="container">
+          <Reveal>
+            <div className="page-eyebrow" style={{ textAlign: "center" }}>Recent Achievements</div>
+            <h2 style={{ textAlign: "center", marginBottom: 36 }}>Recent <span className="ital">Milestones</span></h2>
+            <div className="milestones-cards-grid">
+              <div className="milestone-card">
+                <div className="mc-header">
+                  <span className="mc-badge">Award</span>
+                  <span className="mc-date">2026</span>
+                </div>
+                <h3 className="mc-title">NSF Fellowship</h3>
+                <p className="mc-text">Selected as a recipient of the 2026 NSF Chishiki AI Fellowship at UT Austin, working with Dr. Krishna Kumar.</p>
+              </div>
+              <div className="milestone-card">
+                <div className="mc-header">
+                  <span className="mc-badge">School</span>
+                  <span className="mc-date">Summer 2026</span>
+                </div>
+                <h3 className="mc-title">KTH RPL School</h3>
+                <p className="mc-text">Attending the prestigious KTH RPL Summer School 2026 in Stockholm, Sweden.</p>
+              </div>
+              <div className="milestone-card">
+                <div className="mc-header">
+                  <span className="mc-badge">Academic</span>
+                  <span className="mc-date">Spring 2026</span>
+                </div>
+                <h3 className="mc-title">Candidacy Exam</h3>
+                <p className="mc-text">Successfully completed and passed the Ph.D. candidacy exam at the University of Georgia.</p>
+              </div>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 32 }} className="milestones-more-link">
+              <span className="btn-link">View complete journey →</span>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       <section className="section interests" data-screen-label="Interests">
         <div className="container">
           <Reveal>

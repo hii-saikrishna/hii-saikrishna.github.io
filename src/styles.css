@@ -2699,3 +2699,92 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   .tl-nav.next:hover { transform: scale(1.12) rotate(5deg) !important; }
   .tl-figure img { max-height: 62vh; }
 }
+
+/* ============ Recent Milestones Card-based Section ============ */
+.recent-milestones {
+  padding: 64px 0 54px;
+  background: var(--bg-soft);
+  border-top: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  transition: background 0.3s ease;
+}
+.recent-milestones:hover {
+  background: color-mix(in oklch, var(--accent-soft) 25%, var(--bg-soft));
+}
+.milestones-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 36px;
+}
+.milestone-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.milestone-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 16px 36px -16px rgba(0, 0, 0, 0.06), 0 0 10px rgba(126, 189, 38, 0.08);
+}
+.mc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.mc-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.mc-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.mc-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 10px;
+  color: var(--ink);
+  line-height: 1.15;
+}
+.mc-text {
+  font-size: 13.8px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+.milestones-more-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.milestones-more-link .btn-link {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.recent-milestones:hover .milestones-more-link .btn-link {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
