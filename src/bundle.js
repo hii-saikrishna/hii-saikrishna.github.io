@@ -99,7 +99,7 @@ const INTERESTS = [{
 }, {
   id: "multirobot",
   scene: "swarm",
-  title: "Mapping & Localization for Multi-Robot Systems",
+  title: "Multi-Robot Systems",
   desc: "Many robots, one shared map — even when comms drop."
 }, {
   id: "spatial",
@@ -135,7 +135,7 @@ const THRUSTS = [{
   }]
 }, {
   id: "multirobot",
-  title: "Mapping & Localization for Multi-Robot Systems",
+  title: "Multi-Robot Systems",
   tagline: "Many robots, one shared map — even when comms drop",
   scene: "swarm",
   accent: "#2f6df0",
@@ -534,6 +534,23 @@ function addTree(parent, x, z, s = 1) {
   parent.add(tree);
   return tree;
 }
+function addPathLine(parent, rx, rz, cx, cz, color = 0x2e8f5b, opacity = 0.2) {
+  const points = [];
+  const segments = 64;
+  for (let i = 0; i <= segments; i++) {
+    const theta = i / segments * Math.PI * 2;
+    points.push(new THREE.Vector3(cx + Math.sin(theta) * rx, 0.01, cz + Math.cos(theta) * rz));
+  }
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const mat = new THREE.LineBasicMaterial({
+    color,
+    transparent: true,
+    opacity
+  });
+  const line = new THREE.Line(geo, mat);
+  parent.add(line);
+  return line;
+}
 
 // ---------- Humanoid (mode: "wave" | "walk") ----------
 function buildHumanoidModel(mode = "wave") {
@@ -894,7 +911,9 @@ function dioramaScene(kind, zoom = 1) {
       update = t => {
         vac.update(t * 1.6);
         vac.group.position.set(-1.0 + Math.sin(t * 0.5) * 1.0, 0, 0.7 + Math.sin(t * 0.78 + 1.2) * 0.9);
-        vac.group.rotation.y = Math.atan2(Math.cos(t * 0.78 + 1.2) * 0.7, Math.cos(t * 0.5) * 0.5);
+        const vx = 0.5 * Math.cos(t * 0.5);
+        const vz = 0.702 * Math.cos(t * 0.78 + 1.2);
+        vac.group.rotation.y = Math.atan2(vx, vz) - Math.PI / 2;
         chef.update(t);
         duster.update(t);
         duster.group.position.set(-0.6 + Math.sin(t * 0.4) * 1.6, 1.4 + Math.sin(t * 1.1) * 0.12, -1.9);
@@ -912,33 +931,70 @@ function dioramaScene(kind, zoom = 1) {
       };
     }
     if (kind === "swarm") {
-      if (zoom < 1) {
-        camera.position.set(4.896, 3.4884, 5.3856);
-        camera.lookAt(0, -0.7, 0);
-      } else {
-        camera.position.set(2.9, 2.1, 3.4);
-        camera.lookAt(0, 0.5, 0);
-      }
-      addMeadow(stage, 1.9);
+      // Search & Rescue themed diorama with cinematic camera orbit
+      addMeadow(stage, 4.2);
+
+      // Add more trees & rocks
+      addTree(stage, -2.6, -1.8, 0.95);
+      addTree(stage, 2.8, 2.0, 0.85);
+      addTree(stage, -1.2, 2.8, 0.7);
+      addTree(stage, 3.0, -1.4, 0.65);
+      const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(RB.rock));
+      r1.position.set(-2.0, 0.07, 1.8);
+      r1.scale.set(1.2, 0.8, 1.4);
+      stage.add(r1);
+      const r2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(RB.rock));
+      r2.position.set(2.2, 0.06, -1.6);
+      r2.scale.set(1, 0.6, 1.2);
+      stage.add(r2);
+
+      // Search & Rescue collapsed concrete wall / ruins
+      const ruins = new THREE.Group();
+      ruins.position.set(2.0, 0, -2.0);
+      stage.add(ruins);
+      const mDebris = rMat(0x6b7280, {
+        roughness: 0.9
+      });
+      const mDebris2 = rMat(0x4b5563, {
+        roughness: 0.95
+      });
+      const b1 = rBox(ruins, mDebris, 0.4, 0.8, 0.4, -0.2, 0.4, 0.1);
+      b1.rotation.set(0.2, 0.1, -0.4);
+      const b2 = rBox(ruins, mDebris2, 0.35, 0.6, 0.35, 0.2, 0.3, -0.2);
+      b2.rotation.set(-0.5, 0.3, 0.2);
+      const b3 = rBox(ruins, mDebris, 0.5, 0.2, 0.8, 0, 0.1, 0.3);
+      b3.rotation.set(0.1, -0.6, 0.4);
+
+      // Pulsing rescue target beacon
+      const beaconGeo = new THREE.SphereGeometry(0.12, 16, 16);
+      const beaconMat = new THREE.MeshBasicMaterial({
+        color: 0xff3b30,
+        transparent: true,
+        opacity: 0.9
+      });
+      const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+      beacon.position.set(0, 0.5, 0);
+      ruins.add(beacon);
       const q1 = buildQuadrupedModel();
-      q1.group.position.set(-0.55, 0, 0.3);
-      q1.group.rotation.y = 0.5;
       q1.group.scale.setScalar(0.85);
       stage.add(q1.group);
       const q2 = buildQuadrupedModel();
-      q2.group.position.set(0.6, 0, -0.4);
-      q2.group.rotation.y = -0.7;
       q2.group.scale.setScalar(0.85);
       stage.add(q2.group);
       const d = buildDroneModel();
       d.group.scale.setScalar(0.8);
       stage.add(d.group);
-      // shared map: point cloud growing between the robots
-      const MN = 160;
+
+      // Trajectory paths for quadrupeds
+      addPathLine(stage, 1.8, 1.2, 0, 0.2, 0x2f6df0, 0.15); // blue path
+      addPathLine(stage, 1.4, 0.9, 0, -0.4, 0x2f6df0, 0.15);
+
+      // shared map: point cloud growing over a wider area
+      const MN = 300;
       const mapPos = new Float32Array(MN * 3);
       for (let i = 0; i < MN; i++) {
         const a = Math.random() * Math.PI * 2,
-          r = Math.random() * 1.4;
+          r = Math.random() * 2.8;
         mapPos[i * 3] = Math.cos(a) * r;
         mapPos[i * 3 + 1] = 0.02 + Math.random() * 0.04;
         mapPos[i * 3 + 2] = Math.sin(a) * r;
@@ -946,70 +1002,172 @@ function dioramaScene(kind, zoom = 1) {
       const mapGeo = new THREE.BufferGeometry();
       mapGeo.setAttribute("position", new THREE.BufferAttribute(mapPos, 3));
       const mapPts = new THREE.Points(mapGeo, new THREE.PointsMaterial({
-        color: 0x2e8f5b,
+        color: 0x2f6df0,
         size: 0.035,
         transparent: true,
         opacity: 0.0
       }));
       stage.add(mapPts);
-      const rings = [q1.group, q2.group].map(src => {
+      const rings = [q1.group, q2.group].map(() => {
         const r = new THREE.Mesh(new THREE.RingGeometry(0.3, 0.32, 32), new THREE.MeshBasicMaterial({
-          color: 0x2e8f5b,
+          color: 0x2f6df0,
           transparent: true,
           opacity: 0.5,
           side: THREE.DoubleSide
         }));
         r.rotation.x = -Math.PI / 2;
-        r.position.copy(src.position);
         r.position.y = 0.03;
         stage.add(r);
         return r;
       });
+
+      // Communication network lines
+      const commLineGeo = new THREE.BufferGeometry();
+      const commLineMat = new THREE.LineBasicMaterial({
+        color: 0x2f6df0,
+        transparent: true,
+        opacity: 0.7,
+        linewidth: 1.5
+      });
+      const commLine = new THREE.LineSegments(commLineGeo, commLineMat);
+      stage.add(commLine);
       update = t => {
-        q1.update(t);
-        q2.update(t + 1.3);
+        // Pulse beacon
+        beacon.material.opacity = 0.5 + Math.sin(t * 8) * 0.4;
+        beacon.scale.setScalar(0.9 + Math.sin(t * 8) * 0.25);
+
+        // Move q1 in an elliptical path
+        const q1X = Math.sin(t * 0.28) * 1.8;
+        const q1Z = Math.cos(t * 0.28) * 1.2 + 0.2;
+        q1.group.position.set(q1X, 0, q1Z);
+        q1.group.rotation.y = Math.atan2(Math.cos(t * 0.28) * 1.8, -Math.sin(t * 0.28) * 1.2) - Math.PI / 2;
+        q1.update(t * 1.5);
+
+        // Move q2 in a separate elliptical path
+        const q2X = Math.sin(t * 0.24 + 2.2) * 1.4;
+        const q2Z = Math.cos(t * 0.24 + 2.2) * 0.9 - 0.4;
+        q2.group.position.set(q2X, 0, q2Z);
+        q2.group.rotation.y = Math.atan2(Math.cos(t * 0.24 + 2.2) * 1.4, -Math.sin(t * 0.24 + 2.2) * 0.9) - Math.PI / 2;
+        q2.update(t * 1.3);
+
+        // Dynamic drone path
         d.update(t);
-        d.group.position.set(Math.sin(t * 0.5) * 0.7, 1.5 + Math.sin(t * 1.2) * 0.1, Math.cos(t * 0.5) * 0.7);
+        d.group.position.set(Math.sin(t * 0.4) * 2.0, 1.8 + Math.sin(t * 1.1) * 0.15, Math.cos(t * 0.4) * 2.0);
         mapPts.material.opacity = 0.35 + Math.sin(t * 0.8) * 0.25;
+
+        // Update rings to follow the moving robots
         rings.forEach((r, i) => {
+          const src = i === 0 ? q1.group : q2.group;
+          r.position.copy(src.position);
+          r.position.y = 0.03;
           const ph = (t * 0.6 + i * 0.5) % 1;
-          r.scale.setScalar(0.4 + ph * 2.4);
+          r.scale.setScalar(0.4 + ph * 2.8);
           r.material.opacity = 0.5 * (1 - ph);
         });
+
+        // Dynamic communication network links
+        const p1 = q1.group.position;
+        const p2 = q2.group.position;
+        const pd = d.group.position;
+        const pb = new THREE.Vector3(2.0, 0.5, -2.0); // beacon world position
+
+        const linePoints = new Float32Array([p1.x, p1.y + 0.5, p1.z, p2.x, p2.y + 0.5, p2.z,
+        // q1 to q2
+        p1.x, p1.y + 0.5, p1.z, pd.x, pd.y, pd.z,
+        // q1 to drone
+        p2.x, p2.y + 0.5, p2.z, pd.x, pd.y, pd.z,
+        // q2 to drone
+        p1.x, p1.y + 0.5, p1.z, pb.x, pb.y, pb.z,
+        // q1 to beacon
+        p2.x, p2.y + 0.5, p2.z, pb.x, pb.y, pb.z,
+        // q2 to beacon
+        pd.x, pd.y, pd.z, pb.x, pb.y, pb.z // drone to beacon
+        ]);
+        commLineGeo.setAttribute("position", new THREE.BufferAttribute(linePoints, 3));
+        commLineGeo.attributes.position.needsUpdate = true;
+
+        // Cinematic moving camera (orbits stage)
+        const camRadius = zoom < 1 ? 6.8 : 4.4;
+        const angle = t * 0.08 + ctx.mouse.x * 0.45;
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 4.8 : 3.4) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -0.2 : 0.5, 0);
       };
     }
     if (kind === "gp") {
-      // Spatial Intelligence: GP belief surface floating above the real world
-      if (zoom < 1) {
-        camera.position.set(5.049, 4.284, 6.273);
-        camera.lookAt(0, -0.9, 0);
-      } else {
-        camera.position.set(2.7, 2.3, 3.4);
-        camera.lookAt(0, 0.9, 0);
-      }
-      addMeadow(stage, 1.9);
-      addTree(stage, -1.3, -0.6, 0.7);
-      addTree(stage, 1.1, -1.0, 0.55);
+      // Environmental Monitoring themed diorama with cinematic camera orbit
+      addMeadow(stage, 4.2);
+
+      // Add winding river
+      const mRiver = rMat(0x3498db, {
+        roughness: 0.2,
+        metalness: 0.8
+      });
+      const river = rBox(stage, mRiver, 8.4, 0.02, 1.2, 0, 0.015, 0);
+      river.rotation.y = Math.PI / 4;
+
+      // Add rocks along river banks
+      const addRiverRock = (x, z, s = 1) => {
+        const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(RB.rock, {
+          roughness: 0.9
+        }));
+        r.position.set(x, 0.06, z);
+        r.scale.set(s, s * 0.6, s * 1.2);
+        stage.add(r);
+      };
+      addRiverRock(-1.5, -1.0, 1.2);
+      addRiverRock(1.2, 1.6, 0.95);
+      addRiverRock(-0.8, -1.6, 1.1);
+      addRiverRock(1.8, 1.0, 1.3);
+
+      // Add weather/sensor tower station
+      const station = new THREE.Group();
+      station.position.set(-2.2, 0, -2.2);
+      stage.add(station);
+      const mMetal = rMat(0x7f8c8d, {
+        metalness: 0.8,
+        roughness: 0.2
+      });
+      rCyl(station, mMetal, 0.04, 0.06, 1.2, 0, 0.6, 0);
+      rBox(station, mMetal, 0.5, 0.04, 0.04, 0, 1.2, 0);
+      rSph(station, RB.accent, 0.06, -0.25, 1.2, 0);
+      rSph(station, RB.accent, 0.06, 0.25, 1.2, 0);
+      const animHead = new THREE.Group();
+      animHead.position.set(0, 1.32, 0);
+      station.add(animHead);
+      rCyl(animHead, mMetal, 0.015, 0.015, 0.2, 0, 0, 0);
+      const cups = rBox(animHead, mMetal, 0.4, 0.02, 0.02, 0, 0.1, 0);
+      rSph(cups, mMetal, 0.045, -0.2, 0, 0);
+      rSph(cups, mMetal, 0.045, 0.2, 0, 0);
+
+      // Add other trees
+      addTree(stage, -2.4, 1.6, 0.9);
+      addTree(stage, 2.4, -2.2, 0.75);
+      addTree(stage, 2.6, 1.8, 0.75);
       const rover = buildRoverModel();
       rover.group.scale.setScalar(0.8);
       stage.add(rover.group);
-      // floating GP surface
-      const sGeo = new THREE.PlaneGeometry(2.6, 2.6, 22, 22);
+
+      // Draw rover trajectory path on ground
+      addPathLine(stage, 2.0, 2.0, 0, 0, 0xc59f3f, 0.15);
+
+      // Floating GP surface (expanded to cover the wider scene)
+      const sGeo = new THREE.PlaneGeometry(5.2, 5.2, 26, 26);
       sGeo.rotateX(-Math.PI / 2);
       const surf = new THREE.Mesh(sGeo, new THREE.MeshBasicMaterial({
         color: 0x2e8f5b,
         wireframe: true,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.45
       }));
-      surf.position.y = 1.7;
+      surf.position.y = 1.8;
       stage.add(surf);
       const base = sGeo.attributes.position.array.slice();
-      // measurement pillars connecting world → belief
+
+      // measurement pillars spread across the wider environment
       const samples = [];
-      for (let i = 0; i < 6; i++) {
-        const x = -1.0 + Math.random() * 2.0,
-          z = -1.0 + Math.random() * 2.0;
+      for (let i = 0; i < 12; i++) {
+        const x = -2.2 + Math.random() * 4.4,
+          z = -2.2 + Math.random() * 4.4;
         const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 1, 6), new THREE.MeshBasicMaterial({
           color: 0x7fc9a2,
           transparent: true,
@@ -1029,13 +1187,26 @@ function dioramaScene(kind, zoom = 1) {
       const d = buildDroneModel();
       d.group.scale.setScalar(0.6);
       stage.add(d.group);
-      const fieldY = (x, z, t) => 1.7 + Math.sin(x * 1.8 + t) * 0.16 + Math.cos(z * 2.2 + t * 0.7) * 0.12;
+      const fieldY = (x, z, t) => 1.8 + Math.sin(x * 1.4 + t) * 0.24 + Math.cos(z * 1.6 + t * 0.6) * 0.18;
+
+      // Scanning lasers
+      const laserGeo = new THREE.BufferGeometry();
+      const laserMat = new THREE.LineBasicMaterial({
+        color: 0xc59f3f,
+        transparent: true,
+        opacity: 0.8,
+        linewidth: 2
+      });
+      const laserLine = new THREE.LineSegments(laserGeo, laserMat);
+      stage.add(laserLine);
       update = t => {
+        // Spin anemometer on tower
+        animHead.rotation.y = t * 4.0;
         const p = sGeo.attributes.position;
         for (let i = 0; i < p.count; i++) {
           const x = base[i * 3],
             z = base[i * 3 + 2];
-          p.array[i * 3 + 1] = Math.sin(x * 1.8 + t) * 0.16 + Math.cos(z * 2.2 + t * 0.7) * 0.12;
+          p.array[i * 3 + 1] = Math.sin(x * 1.4 + t) * 0.24 + Math.cos(z * 1.6 + t * 0.6) * 0.18;
         }
         p.needsUpdate = true;
         samples.forEach(({
@@ -1050,11 +1221,31 @@ function dioramaScene(kind, zoom = 1) {
           bar.scale.y = y;
         });
         rover.update(t);
-        rover.group.position.set(Math.sin(t * 0.35) * 0.9, 0, Math.cos(t * 0.35) * 0.9);
-        rover.group.rotation.y = t * 0.35 + Math.PI / 2;
+        // Rover travels in a wider circle
+        rover.group.position.set(Math.sin(t * 0.3) * 2.0, 0, Math.cos(t * 0.3) * 2.0);
+        rover.group.rotation.y = t * 0.3;
+
+        // Drone flies in a wider, sweeping circle
         d.update(t);
-        d.group.position.set(Math.sin(t * 0.4) * 1.1, 2.4, Math.cos(t * 0.4) * 1.1);
-        stage.rotation.y = Math.sin(t * 0.15) * 0.2 + ctx.mouse.x * 0.25;
+        d.group.position.set(Math.sin(t * 0.35) * 2.2, 2.6 + Math.sin(t * 1.2) * 0.15, Math.cos(t * 0.35) * 2.2);
+
+        // Update scanning lasers
+        const px = rover.group.position.x;
+        const pz = rover.group.position.z;
+        const ry = fieldY(px, pz, t);
+        const dx = d.group.position.x;
+        const dz = d.group.position.z;
+        const dy = d.group.position.y;
+        const dSurfY = fieldY(dx, dz, t);
+        const laserPoints = new Float32Array([px, 0.25, pz, px, ry, pz, dx, dy - 0.05, dz, dx, dSurfY, dz]);
+        laserGeo.setAttribute("position", new THREE.BufferAttribute(laserPoints, 3));
+        laserGeo.attributes.position.needsUpdate = true;
+
+        // Cinematic moving camera (orbits stage)
+        const camRadius = zoom < 1 ? 6.8 : 4.4;
+        const angle = t * 0.08 + ctx.mouse.x * 0.45;
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 4.8 : 3.4) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -0.2 : 0.5, 0);
       };
     }
     return {

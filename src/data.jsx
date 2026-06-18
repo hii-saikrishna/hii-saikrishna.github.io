@@ -55,7 +55,7 @@ const TRIP_GALLERY = [
 const INTERESTS = [
   { id: "embodied",   scene: "embodied", title: "Robot Learning & Embodied Intelligence",
     desc: "Robots that reason about the world they live in." },
-  { id: "multirobot", scene: "swarm",    title: "Mapping & Localization for Multi-Robot Systems",
+  { id: "multirobot", scene: "swarm",    title: "Multi-Robot Systems",
     desc: "Many robots, one shared map — even when comms drop." },
   { id: "spatial",    scene: "gp",       title: "Spatial Intelligence",
     desc: "Learning a belief over space itself." },
@@ -80,7 +80,7 @@ const THRUSTS = [
   },
   {
     id: "multirobot",
-    title: "Mapping & Localization for Multi-Robot Systems",
+    title: "Multi-Robot Systems",
     tagline: "Many robots, one shared map — even when comms drop",
     scene: "swarm",
     accent: "#2f6df0", tint: "#e8f0ff",
