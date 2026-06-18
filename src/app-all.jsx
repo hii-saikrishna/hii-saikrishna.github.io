@@ -567,7 +567,7 @@ function PublicationsPage() {
           <div className="iw-hero">
             <div className="page-eyebrow">Selected work</div>
             <h1 className="iw-title">Publications</h1>
-            <p className="page-lede" style={{ marginTop: 14 }}>My work spans a wide range of research applications, but I lean increasingly toward my recent directions and the spin-offs they keep generating. <span style={{ color: "var(--accent-ink)" }}>* indicates lead / first author.</span></p>
+            <p className="page-lede" style={{ marginTop: 14 }}>My work spans a wide range of research applications, but I lean increasingly toward my recent directions and the spin-offs they keep generating.</p>
           </div>
           {PUB_GROUPS.map((group) => {
             const items = PUBLICATIONS

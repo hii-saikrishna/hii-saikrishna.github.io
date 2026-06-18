@@ -181,8 +181,7 @@ const THRUSTS = [
 //   featured : true → shows a small "Featured" badge on the media.
 //   title    : full paper title.
 //   authors  : array of names, in order. Put "*" after a name to mark lead/first
-//              author (the page renders a "* indicates lead / first author" note,
-//              and any name containing "Sai Krishna" is highlighted automatically).
+//              author. Any name containing "Sai Krishna" is highlighted automatically.
 //   venue    : full venue name WITH year, and for CONFERENCES the host city +
 //              country, e.g. "... (IROS), 2025, Hangzhou, China". (Journals have no
 //              city — just the journal name + year.) If a paper is accepted but the

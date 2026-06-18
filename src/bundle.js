@@ -254,8 +254,7 @@ const THRUSTS = [{
 //   featured : true → shows a small "Featured" badge on the media.
 //   title    : full paper title.
 //   authors  : array of names, in order. Put "*" after a name to mark lead/first
-//              author (the page renders a "* indicates lead / first author" note,
-//              and any name containing "Sai Krishna" is highlighted automatically).
+//              author. Any name containing "Sai Krishna" is highlighted automatically.
 //   venue    : full venue name WITH year, and for CONFERENCES the host city +
 //              country, e.g. "... (IROS), 2025, Hangzhou, China". (Journals have no
 //              city — just the journal name + year.) If a paper is accepted but the
@@ -4468,11 +4467,7 @@ function PublicationsPage() {
     style: {
       marginTop: 14
     }
-  }, "My work spans a wide range of research applications, but I lean increasingly toward my recent directions and the spin-offs they keep generating. ", /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "var(--accent-ink)"
-    }
-  }, "* indicates lead / first author."))), PUB_GROUPS.map(group => {
+  }, "My work spans a wide range of research applications, but I lean increasingly toward my recent directions and the spin-offs they keep generating.")), PUB_GROUPS.map(group => {
     const items = PUBLICATIONS.filter(p => p.kind === group.kind).sort((a, b) => b.year - a.year);
     if (!items.length) return null;
     return /*#__PURE__*/React.createElement("div", {
