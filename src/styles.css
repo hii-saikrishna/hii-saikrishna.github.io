@@ -2277,12 +2277,12 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   text-align: center;
   margin: 0 auto;
   padding: 36px 44px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px) saturate(130%);
-  -webkit-backdrop-filter: blur(14px) saturate(130%);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  /* Clean opaque panel — no backdrop-filter, which rendered a bad blurred copy
+     of the WebGL hills as a middle layer between the card and the animation. */
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  box-shadow: 0 20px 60px -30px rgba(15, 35, 20, 0.12);
+  box-shadow: 0 24px 60px -28px rgba(15, 35, 20, 0.22);
   will-change: opacity, transform;
 }
 .credo-quote {
