@@ -2,6 +2,7 @@
 
 const VISITED_PLACES = [
   { name: "Athens, GA", lat: 33.95, lon: -83.38, w: 1.0, current: true },
+  { name: "Greenville, SC", lat: 34.85, lon: -82.39, w: 0.4 },
   { name: "Guntur", lat: 16.31, lon: 80.44, w: 0.95, home: true },
   { name: "Vijayawada", lat: 16.51, lon: 80.65, w: 0.7 },
   { name: "Naya Raipur", lat: 21.16, lon: 81.79, w: 0.85 },
@@ -23,7 +24,7 @@ const TRAVEL_ARCS = [
   ["Guntur", "Delhi"], ["Delhi", "Manali"], ["Guntur", "Naya Raipur"],
   ["Naya Raipur", "Thailand"], ["Guntur", "Louisville"], ["Louisville", "Athens, GA"],
   ["Athens, GA", "Hangzhou"], ["Athens, GA", "New York"], ["Athens, GA", "Colorado"],
-  ["Athens, GA", "Toronto"], ["Toronto", "Detroit"],
+  ["Athens, GA", "Toronto"], ["Toronto", "Detroit"], ["Athens, GA", "Greenville, SC"],
 ];
 
 function latLonToV3(lat, lon, r) {
@@ -294,7 +295,7 @@ function buildGlobeScene(ctx) {
   el.addEventListener("pointermove", onDrag);
   el.style.cursor = "grab";
 
-  globe.rotation.y = 2.62;
+  globe.rotation.y = -0.1;
 
   return {
     update(t) {
