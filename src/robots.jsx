@@ -183,14 +183,14 @@ function buildHumanoidModel(mode = "wave") {
 }
 
 // ---------- Quadruped ----------
-function buildQuadrupedModel() {
+function buildQuadrupedModel(visorColor = 0x3fc88f) {
   const g = new THREE.Group();
   const mP = rMat(RB.panel), mD = rMat(RB.dark), mJ = rMat(RB.joint), mA = rMat(RB.accent);
 
   const body = rBox(g, mP, 0.92, 0.26, 0.42, 0, 0.62, 0);
   rBox(body, mD, 0.94, 0.08, 0.44, 0, -0.12, 0);
   rBox(body, mA, 0.3, 0.04, 0.43, 0.18, 0.13, 0);
-  const visorMat = rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.8 });
+  const visorMat = rMat(RB.visor, { emissive: visorColor, emissiveIntensity: 0.8 });
   const head = rBox(g, mP, 0.2, 0.16, 0.26, 0.56, 0.66, 0);
   rBox(head, visorMat, 0.03, 0.06, 0.16, 0.11, 0, 0);
   rCyl(g, mD, 0.008, 0.008, 0.22, -0.48, 0.78, 0);
@@ -226,12 +226,12 @@ function buildQuadrupedModel() {
 }
 
 // ---------- Drone ----------
-function buildDroneModel() {
+function buildDroneModel(visorColor = 0x3fc88f) {
   const g = new THREE.Group();
   const mP = rMat(RB.panel), mD = rMat(RB.dark), mA = rMat(RB.accent);
   const body = rBox(g, mP, 0.42, 0.14, 0.42, 0, 0, 0);
   rBox(body, mA, 0.44, 0.04, 0.12, 0, 0, 0);
-  const visorMat = rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.9, roughness: 0.2 });
+  const visorMat = rMat(RB.visor, { emissive: visorColor, emissiveIntensity: 0.9, roughness: 0.2 });
   rSph(g, visorMat, 0.07, 0, -0.1, 0.16);
   const rotors = [];
   [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([sx, sz]) => {
@@ -501,31 +501,133 @@ function dioramaScene(kind, zoom = 1) {
     }
 
     if (kind === "swarm") {
-      // Search & Rescue themed diorama with cinematic camera orbit
-      addMeadow(stage, 4.2);
+      // Wildfire Search & Rescue themed diorama with cinematic camera orbit
+      // Charred, burnt wildfire ground (ash/charcoal colors, no green grass)
+      const matCharred = rMat(0x27201c, { roughness: 0.95 });
+      const ground = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2 * 1.04, 0.1, 28), matCharred);
+      ground.position.y = -0.05;
+      stage.add(ground);
       
-      // Add more trees & rocks
-      addTree(stage, -2.6, -1.8, 0.95);
-      addTree(stage, 2.8, 2.0, 0.85);
-      addTree(stage, -1.2, 2.8, 0.7);
-      addTree(stage, 3.0, -1.4, 0.65);
+      const blob = new THREE.Mesh(
+        new THREE.CircleGeometry(2.1, 24),
+        new THREE.MeshBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.35 })
+      );
+      blob.rotation.x = -Math.PI / 2;
+      blob.position.y = 0.011;
+      stage.add(blob);
+
+      // Glow embers/veins on the charred ground
+      const emberMat = new THREE.MeshBasicMaterial({ color: 0xff2200, transparent: true, opacity: 0.7 });
+      const embers = [];
+      for (let i = 0; i < 10; i++) {
+        const emb = new THREE.Mesh(new THREE.BoxGeometry(0.12 + Math.random() * 0.25, 0.015, 0.04 + Math.random() * 0.06), emberMat);
+        const angle = Math.random() * Math.PI * 2;
+        const rad = 0.5 + Math.random() * 2.8;
+        emb.position.set(Math.cos(angle) * rad, 0.005, Math.sin(angle) * rad);
+        emb.rotation.y = Math.random() * Math.PI;
+        stage.add(emb);
+        embers.push({ mesh: emb, phase: Math.random() * Math.PI * 2, speed: 4.0 + Math.random() * 5.0 });
+      }
+
+      const mFlame = rMat(0xff4400, { emissive: 0xff1100, emissiveIntensity: 1.6, roughness: 0.1 });
+      const mFlameInner = rMat(0xffbb00, { emissive: 0xff8800, emissiveIntensity: 2.0, roughness: 0.1 });
+      const flames = [];
+
+      // Add burnt, charred trees (some burning)
+      const addBurntTree = (parent, x, z, s = 1, isOnFire = false) => {
+        const tree = new THREE.Group();
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.08, 0.8, 6), rMat(0x18110e, { roughness: 1.0 }));
+        trunk.position.y = 0.4;
+        tree.add(trunk);
+        const fol = new THREE.Mesh(new THREE.ConeGeometry(0.45, 0.9, 5), rMat(0x2b1c19, { roughness: 1.0 }));
+        fol.position.y = 1.0;
+        tree.add(fol);
+        tree.position.set(x, 0, z);
+        tree.scale.setScalar(s);
+        parent.add(tree);
+
+        if (isOnFire) {
+          const firePositions = [
+            { x: 0, y: 0.2, z: 0.06, sc: 0.35 },
+            { x: 0.05, y: 0.5, z: -0.04, sc: 0.4 },
+            { x: -0.06, y: 0.8, z: 0.02, sc: 0.45 },
+            { x: 0, y: 1.1, z: 0, sc: 0.5 },
+          ];
+          firePositions.forEach(p => {
+            const f = new THREE.Group();
+            f.position.set(p.x, p.y, p.z);
+            f.scale.setScalar(p.sc * s);
+            const outCone = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.45, 5), mFlame);
+            outCone.position.y = 0.22;
+            f.add(outCone);
+            const inCone = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 5), mFlameInner);
+            inCone.position.y = 0.12;
+            f.add(inCone);
+            tree.add(f);
+            flames.push({ group: f, outCone, inCone, baseScale: p.sc * s, seed: Math.random() * 10 });
+          });
+        }
+        return tree;
+      };
       
-      const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(RB.rock));
+      addBurntTree(stage, -2.6, -1.8, 0.95, true);   // burning tree left-back
+      addBurntTree(stage, 2.8, 2.0, 0.85, false);    // charred tree right-back
+      addBurntTree(stage, -1.2, 2.8, 0.7, true);     // burning tree center-back
+      addBurntTree(stage, 3.0, -1.4, 0.65, false);   // charred tree front-right
+
+      // Add charred logs lying on the ground, some burning
+      const addCharredLog = (parent, x, z, angleY, length = 0.7, burning = false) => {
+        const logGroup = new THREE.Group();
+        logGroup.position.set(x, 0.03, z);
+        logGroup.rotation.y = angleY;
+        logGroup.rotation.x = Math.PI / 2 + (Math.random() - 0.5) * 0.15; // slightly tilted on ground
+        
+        const logMat = rMat(0x1a1210, { roughness: 1.0 }); // charcoal black
+        const logMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, length, 6), logMat);
+        logMesh.rotation.z = Math.PI / 2; // lie down
+        logGroup.add(logMesh);
+        parent.add(logGroup);
+
+        if (burning) {
+          const numLogFlames = Math.floor(length * 5);
+          for (let i = 0; i < numLogFlames; i++) {
+            const fx = (i / (numLogFlames - 1) - 0.5) * length * 0.7;
+            const f = new THREE.Group();
+            f.position.set(fx, 0.05, (Math.random() - 0.5) * 0.05);
+            f.scale.setScalar(0.25 + Math.random() * 0.25);
+            
+            const outCone = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.3, 5), mFlame);
+            outCone.position.y = 0.15;
+            f.add(outCone);
+            const inCone = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.18, 5), mFlameInner);
+            inCone.position.y = 0.09;
+            f.add(inCone);
+            logGroup.add(f);
+            flames.push({ group: f, outCone, inCone, baseScale: f.scale.x, seed: Math.random() * 10 });
+          }
+        }
+      };
+
+      addCharredLog(stage, 0.8, 1.2, Math.PI / 3, 0.9, true); // burning log near center
+      addCharredLog(stage, -1.8, -0.6, -Math.PI / 6, 0.75, true); // burning log left
+      addCharredLog(stage, 1.2, -1.8, Math.PI / 1.5, 0.6, false); // cold burnt log right
+      
+      const r1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15, 0), rMat(0x3d3530));
       r1.position.set(-2.0, 0.07, 1.8);
       r1.scale.set(1.2, 0.8, 1.4);
       stage.add(r1);
       
-      const r2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(RB.rock));
+      const r2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(0x3d3530));
       r2.position.set(2.2, 0.06, -1.6);
       r2.scale.set(1, 0.6, 1.2);
       stage.add(r2);
 
-      // Search & Rescue collapsed concrete wall / ruins
+      // ruins
       const ruins = new THREE.Group();
       ruins.position.set(2.0, 0, -2.0);
       stage.add(ruins);
-      const mDebris = rMat(0x6b7280, { roughness: 0.9 });
-      const mDebris2 = rMat(0x4b5563, { roughness: 0.95 });
+      const mDebris = rMat(0x4a423e, { roughness: 0.95 }); // soot covered grey
+      const mDebris2 = rMat(0x2d2624, { roughness: 0.95 });
       const b1 = rBox(ruins, mDebris, 0.4, 0.8, 0.4, -0.2, 0.4, 0.1); b1.rotation.set(0.2, 0.1, -0.4);
       const b2 = rBox(ruins, mDebris2, 0.35, 0.6, 0.35, 0.2, 0.3, -0.2); b2.rotation.set(-0.5, 0.3, 0.2);
       const b3 = rBox(ruins, mDebris, 0.5, 0.2, 0.8, 0, 0.1, 0.3); b3.rotation.set(0.1, -0.6, 0.4);
@@ -537,41 +639,89 @@ function dioramaScene(kind, zoom = 1) {
       beacon.position.set(0, 0.5, 0);
       ruins.add(beacon);
 
-      // Low-poly animated fire clusters around ruins (no humans)
-      const fireGroup = new THREE.Group();
-      fireGroup.position.set(2.0, 0, -2.0);
-      stage.add(fireGroup);
-      const mFlame = rMat(0xff7700, { emissive: 0xff3300, emissiveIntensity: 1.2, roughness: 0.1 });
-      const mFlameInner = rMat(0xffcc00, { emissive: 0xffaa00, emissiveIntensity: 1.5, roughness: 0.1 });
-      const flames = [];
-      const makeFlame = (x, z, s) => {
+      // Wildfire spots spread across the forest floor (using multi-cone clusters)
+      const spawnWildfire = (x, z, s) => {
         const f = new THREE.Group();
         f.position.set(x, 0.05, z);
         f.scale.setScalar(s);
-        // Outer orange flame cone
-        const outCone = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.44, 5), mFlame);
-        outCone.position.y = 0.22;
-        f.add(outCone);
-        // Inner yellow core cone
-        const inCone = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.26, 5), mFlameInner);
-        inCone.position.y = 0.13;
-        f.add(inCone);
-        fireGroup.add(f);
-        flames.push({ group: f, outCone, inCone, baseScale: s, seed: Math.random() * 10 });
+        
+        const subFlames = [
+          { ox: 0, oz: 0, scY: 1.0, r: 0.18, h: 0.5 },
+          { ox: -0.08, oz: 0.06, scY: 0.75, r: 0.12, h: 0.35 },
+          { ox: 0.09, oz: -0.07, scY: 0.65, r: 0.1, h: 0.3 },
+        ];
+        
+        subFlames.forEach((sf, idx) => {
+          const outCone = new THREE.Mesh(new THREE.ConeGeometry(sf.r, sf.h, 5), mFlame);
+          outCone.position.set(sf.ox, sf.h * 0.5, sf.oz);
+          f.add(outCone);
+          const inCone = new THREE.Mesh(new THREE.ConeGeometry(sf.r * 0.55, sf.h * 0.6, 5), mFlameInner);
+          inCone.position.set(sf.ox, sf.h * 0.3, sf.oz);
+          f.add(inCone);
+          
+          flames.push({
+            group: f,
+            outCone,
+            inCone,
+            baseScale: s,
+            seed: Math.random() * 10 + idx * 3.0,
+            scY: sf.scY
+          });
+        });
+        stage.add(f);
       };
-      // Spawn fire spots around ruins
-      makeFlame(-0.3, 0.4, 1.2);
-      makeFlame(0.4, 0.2, 0.85);
-      makeFlame(0.1, -0.3, 1.05);
+      
+      // Spawn 6 wildfire zones (more fire, less green)
+      spawnWildfire(2.0, -2.0, 1.35);   // inside ruins
+      spawnWildfire(1.6, -1.5, 0.9);
+      spawnWildfire(-2.2, 1.4, 1.25);   // left forest area
+      spawnWildfire(-1.6, -1.8, 1.1);   // front-left
+      spawnWildfire(2.4, 1.8, 0.85);    // back-right
+      spawnWildfire(-0.8, 0.8, 0.75);   // center-left
 
-      // flickering fire pointlight
-      const fireLight = new THREE.PointLight(0xff5500, 1.8, 5.0);
-      fireLight.position.set(2.0, 0.5, -2.0);
-      stage.add(fireLight);
+      // Smoke particles rising from fires
+      const smokeParticles = [];
+      const mSmoke = new THREE.MeshBasicMaterial({ color: 0x3d3533, transparent: true, opacity: 0.4 });
+      const smokeGeo = new THREE.DodecahedronGeometry(0.06, 0);
+      
+      const spawnSmoke = (parent, x, y, z) => {
+        const p = new THREE.Mesh(smokeGeo, mSmoke);
+        p.position.set(x + (Math.random() - 0.5) * 0.2, y, z + (Math.random() - 0.5) * 0.2);
+        p.scale.setScalar(0.6 + Math.random() * 0.8);
+        parent.add(p);
+        smokeParticles.push({
+          mesh: p,
+          origX: x,
+          origZ: z,
+          speedY: 0.4 + Math.random() * 0.4,
+          speedXZ: 0.1 + Math.random() * 0.1,
+          angle: Math.random() * Math.PI * 2,
+          life: Math.random(),
+          scaleSpeed: 1.0 + Math.random() * 1.5
+        });
+      };
 
-      const q1 = buildQuadrupedModel(); q1.group.scale.setScalar(0.85); stage.add(q1.group);
-      const q2 = buildQuadrupedModel(); q2.group.scale.setScalar(0.85); stage.add(q2.group);
-      const d = buildDroneModel(); d.group.scale.setScalar(0.8); stage.add(d.group);
+      const fireSources = [
+        { x: 2.0, z: -2.0 }, { x: 1.6, z: -1.5 }, { x: -2.2, z: 1.4 }, { x: -1.6, z: -1.8 },
+        { x: 2.4, z: 1.8 }, { x: -0.8, z: 0.8 }, { x: -2.6, z: -1.8 }, { x: -1.2, z: 2.8 }
+      ];
+      for (let i = 0; i < 25; i++) {
+        const src = fireSources[Math.floor(Math.random() * fireSources.length)];
+        spawnSmoke(stage, src.x, 0.1 + Math.random() * 1.5, src.z);
+      }
+
+      // two flickering wildfire pointlights illuminating the scene
+      const fireLight1 = new THREE.PointLight(0xff5500, 1.8, 6.0);
+      fireLight1.position.set(2.0, 0.5, -2.0);
+      stage.add(fireLight1);
+      
+      const fireLight2 = new THREE.PointLight(0xff4400, 1.4, 5.0);
+      fireLight2.position.set(-1.8, 0.4, 0.5);
+      stage.add(fireLight2);
+
+      const q1 = buildQuadrupedModel(0xff3300); q1.group.scale.setScalar(0.85); stage.add(q1.group);
+      const q2 = buildQuadrupedModel(0xff3300); q2.group.scale.setScalar(0.85); stage.add(q2.group);
+      const d = buildDroneModel(0xff3300); d.group.scale.setScalar(0.8); stage.add(d.group);
 
       // Trajectory paths for quadrupeds
       addPathLine(stage, 1.8, 1.2, 0, 0.2, 0x2f6df0, 0.15); // blue path
@@ -618,21 +768,55 @@ function dioramaScene(kind, zoom = 1) {
         beacon.material.opacity = 0.5 + Math.sin(t * 8) * 0.4;
         beacon.scale.setScalar(0.9 + Math.sin(t * 8) * 0.25);
 
-        // Flicker fires
+        // Flicker fires (by scaling the individual inner/outer cones rather than the group)
         flames.forEach((f) => {
           const wave = Math.sin(t * 14.0 + f.seed);
           const cosWave = Math.cos(t * 12.0 + f.seed);
-          f.group.scale.set(
-            f.baseScale * (0.9 + wave * 0.15),
-            f.baseScale * (1.0 + cosWave * 0.25),
-            f.baseScale * (0.9 + wave * 0.15)
+          const localScaleY = f.scY ? f.scY : 1.0;
+          f.outCone.scale.set(
+            0.85 + wave * 0.18,
+            localScaleY * (1.0 + cosWave * 0.3),
+            0.85 + wave * 0.18
+          );
+          f.inCone.scale.set(
+            0.85 + wave * 0.18,
+            localScaleY * (1.0 + cosWave * 0.3),
+            0.85 + wave * 0.18
           );
           f.outCone.rotation.y = t * 3.0 + f.seed;
           f.inCone.rotation.y = -t * 5.0 + f.seed;
         });
 
-        // Flicker fire pointlight
-        fireLight.intensity = 1.4 + Math.sin(t * 16.0) * 0.5;
+        // Animate smoke particles rising from fires
+        smokeParticles.forEach((sp) => {
+          sp.life += 0.012 * sp.speedY;
+          if (sp.life > 1.0) {
+            sp.life = 0;
+            const src = fireSources[Math.floor(Math.random() * fireSources.length)];
+            sp.mesh.position.set(
+              src.x + (Math.random() - 0.5) * 0.2,
+              0.15,
+              src.z + (Math.random() - 0.5) * 0.2
+            );
+            sp.mesh.scale.setScalar(0.6 + Math.random() * 0.8);
+          } else {
+            sp.mesh.position.y += 0.015 * sp.speedY;
+            sp.mesh.position.x += Math.sin(t * 2.0 + sp.angle) * 0.003;
+            sp.mesh.position.z += Math.cos(t * 2.0 + sp.angle) * 0.003;
+            sp.mesh.scale.setScalar((0.6 + sp.life * sp.scaleSpeed) * (0.6 + Math.random() * 0.2));
+            sp.mesh.material.opacity = 0.45 * (1.0 - sp.life);
+          }
+        });
+
+        // Pulsate embers
+        embers.forEach((emb) => {
+          const val = Math.sin(t * emb.speed + emb.phase);
+          emb.mesh.material.opacity = 0.4 + val * 0.3;
+        });
+
+        // Flicker fire pointlights
+        fireLight1.intensity = 1.6 + Math.sin(t * 18.0) * 0.5;
+        fireLight2.intensity = 1.2 + Math.cos(t * 15.0) * 0.4;
 
         // Move q1 in an elliptical path
         const q1X = Math.sin(t * 0.28) * 1.8;
@@ -668,15 +852,17 @@ function dioramaScene(kind, zoom = 1) {
         const p1 = q1.group.position;
         const p2 = q2.group.position;
         const pd = d.group.position;
-        const pb = new THREE.Vector3(2.0, 0.5, -2.0); // beacon world position
+        const fb1 = new THREE.Vector3(2.0, 0.4, -2.0); // fire 1
+        const fb2 = new THREE.Vector3(-2.2, 0.4, 1.4); // fire 2
 
         const linePoints = new Float32Array([
           p1.x, p1.y + 0.5, p1.z,  p2.x, p2.y + 0.5, p2.z,  // q1 to q2
           p1.x, p1.y + 0.5, p1.z,  pd.x, pd.y, pd.z,        // q1 to drone
           p2.x, p2.y + 0.5, p2.z,  pd.x, pd.y, pd.z,        // q2 to drone
-          p1.x, p1.y + 0.5, p1.z,  pb.x, pb.y, pb.z,        // q1 to beacon
-          p2.x, p2.y + 0.5, p2.z,  pb.x, pb.y, pb.z,        // q2 to beacon
-          pd.x, pd.y, pd.z,        pb.x, pb.y, pb.z         // drone to beacon
+          p1.x, p1.y + 0.5, p1.z,  fb1.x, fb1.y, fb1.z,     // q1 to fire 1
+          p2.x, p2.y + 0.5, p2.z,  fb2.x, fb2.y, fb2.z,     // q2 to fire 2
+          pd.x, pd.y, pd.z,        fb1.x, fb1.y, fb1.z,     // drone to fire 1
+          pd.x, pd.y, pd.z,        fb2.x, fb2.y, fb2.z      // drone to fire 2
         ]);
         commLineGeo.setAttribute("position", new THREE.BufferAttribute(linePoints, 3));
         commLineGeo.attributes.position.needsUpdate = true;
