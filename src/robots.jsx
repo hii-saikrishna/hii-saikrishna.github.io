@@ -190,8 +190,9 @@ function buildQuadrupedModel() {
   const body = rBox(g, mP, 0.92, 0.26, 0.42, 0, 0.62, 0);
   rBox(body, mD, 0.94, 0.08, 0.44, 0, -0.12, 0);
   rBox(body, mA, 0.3, 0.04, 0.43, 0.18, 0.13, 0);
+  const visorMat = rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.8 });
   const head = rBox(g, mP, 0.2, 0.16, 0.26, 0.56, 0.66, 0);
-  rBox(head, rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.8 }), 0.03, 0.06, 0.16, 0.11, 0, 0);
+  rBox(head, visorMat, 0.03, 0.06, 0.16, 0.11, 0, 0);
   rCyl(g, mD, 0.008, 0.008, 0.22, -0.48, 0.78, 0);
 
   const legs = [];
@@ -219,6 +220,7 @@ function buildQuadrupedModel() {
       });
       g.position.y = Math.abs(Math.sin(t * sp)) * 0.025;
       head.rotation.y = Math.sin(t * 0.6) * 0.25;
+      visorMat.emissiveIntensity = 0.5 + Math.sin(t * 5) * 0.35;
     },
   };
 }
@@ -229,7 +231,8 @@ function buildDroneModel() {
   const mP = rMat(RB.panel), mD = rMat(RB.dark), mA = rMat(RB.accent);
   const body = rBox(g, mP, 0.42, 0.14, 0.42, 0, 0, 0);
   rBox(body, mA, 0.44, 0.04, 0.12, 0, 0, 0);
-  rSph(g, rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.9, roughness: 0.2 }), 0.07, 0, -0.1, 0.16);
+  const visorMat = rMat(RB.visor, { emissive: 0x3fc88f, emissiveIntensity: 0.9, roughness: 0.2 });
+  rSph(g, visorMat, 0.07, 0, -0.1, 0.16);
   const rotors = [];
   [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([sx, sz]) => {
     rCyl(g, mD, 0.022, 0.022, 0.4, sx * 0.22, 0.02, sz * 0.22).rotation.z = sx * -0.9;
@@ -245,6 +248,7 @@ function buildDroneModel() {
       rotors.forEach((r, i) => { r.rotation.y = t * (22 + i * 2); });
       g.rotation.z = Math.sin(t * 1.4) * 0.06;
       g.rotation.x = Math.cos(t * 1.1) * 0.05;
+      visorMat.emissiveIntensity = 0.6 + Math.sin(t * 6) * 0.35;
     },
   };
 }
@@ -560,6 +564,11 @@ function dioramaScene(kind, zoom = 1) {
       makeFlame(0.4, 0.2, 0.85);
       makeFlame(0.1, -0.3, 1.05);
 
+      // flickering fire pointlight
+      const fireLight = new THREE.PointLight(0xff5500, 1.8, 5.0);
+      fireLight.position.set(2.0, 0.5, -2.0);
+      stage.add(fireLight);
+
       const q1 = buildQuadrupedModel(); q1.group.scale.setScalar(0.85); stage.add(q1.group);
       const q2 = buildQuadrupedModel(); q2.group.scale.setScalar(0.85); stage.add(q2.group);
       const d = buildDroneModel(); d.group.scale.setScalar(0.8); stage.add(d.group);
@@ -621,6 +630,9 @@ function dioramaScene(kind, zoom = 1) {
           f.outCone.rotation.y = t * 3.0 + f.seed;
           f.inCone.rotation.y = -t * 5.0 + f.seed;
         });
+
+        // Flicker fire pointlight
+        fireLight.intensity = 1.4 + Math.sin(t * 16.0) * 0.5;
 
         // Move q1 in an elliptical path
         const q1X = Math.sin(t * 0.28) * 1.8;
@@ -686,6 +698,12 @@ function dioramaScene(kind, zoom = 1) {
       const river = rBox(stage, mRiver, 8.4, 0.02, 1.2, 0, 0.015, 0);
       river.rotation.y = Math.PI / 4;
 
+      // Current streaks (flowing water effect)
+      const mFoam = rMat(0xffffff, { roughness: 1, transparent: true, opacity: 0.65 });
+      const current1 = rBox(river, mFoam, 0.8, 0.005, 0.03, -3.0, 0.012, -0.2);
+      const current2 = rBox(river, mFoam, 1.2, 0.005, 0.02, 0.0, 0.012, 0.3);
+      const current3 = rBox(river, mFoam, 0.6, 0.005, 0.02, 2.5, 0.012, -0.4);
+
       // Add rocks along river banks
       const addRiverRock = (x, z, s = 1) => {
         const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 0), rMat(RB.rock, { roughness: 0.9 }));
@@ -749,6 +767,13 @@ function dioramaScene(kind, zoom = 1) {
 
       const d = buildDroneModel(); d.group.scale.setScalar(0.6); stage.add(d.group);
 
+      // Gold-colored scanning cone under drone
+      const gpScannerMat = new THREE.MeshBasicMaterial({ color: 0xc59f3f, transparent: true, opacity: 0.15, side: THREE.DoubleSide });
+      const gpScanner = new THREE.Mesh(new THREE.ConeGeometry(0.4, 1.6, 12), gpScannerMat);
+      gpScanner.rotation.x = Math.PI; // point down
+      gpScanner.position.y = -0.8;
+      d.group.add(gpScanner);
+
       const fieldY = (x, z, t) => 1.8 + Math.sin(x * 1.4 + t) * 0.24 + Math.cos(z * 1.6 + t * 0.6) * 0.18;
 
       // Scanning lasers
@@ -765,6 +790,14 @@ function dioramaScene(kind, zoom = 1) {
       update = (t) => {
         // Spin anemometer on tower
         animHead.rotation.y = t * 4.0;
+
+        // Flow river currents
+        current1.position.x = -4.2 + ((t * 0.6 + 0) % 8.4);
+        current2.position.x = -4.2 + ((t * 0.8 + 3) % 8.4);
+        current3.position.x = -4.2 + ((t * 0.7 + 6) % 8.4);
+
+        // Pulse drone scanning cone opacity
+        gpScannerMat.opacity = 0.12 + Math.sin(t * 4) * 0.04;
 
         const p = sGeo.attributes.position;
         for (let i = 0; i < p.count; i++) {
