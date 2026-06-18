@@ -2744,18 +2744,7 @@ function JourneyPage({
   }, titleB)), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
   }, lede), /*#__PURE__*/React.createElement("div", {
-    className: "j-cue interactive",
-    onClick: () => {
-      const el = document.querySelector(".j-section");
-      if (el) el.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    },
-    style: {
-      cursor: "pointer"
-    },
-    title: "Click to start traveling"
+    className: "j-cue"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
   }), /*#__PURE__*/React.createElement("div", {
@@ -4396,12 +4385,7 @@ function UpdatesPage() {
   }, "stones")), /*#__PURE__*/React.createElement("p", {
     className: "j-lede"
   }, "A timeline of research milestones and career updates."), /*#__PURE__*/React.createElement("div", {
-    className: "j-cue interactive",
-    onClick: startTravel,
-    style: {
-      cursor: "pointer"
-    },
-    title: "Click to start traveling"
+    className: "j-cue"
   }, /*#__PURE__*/React.createElement("span", {
     className: "j-cue-line"
   }), /*#__PURE__*/React.createElement("div", {

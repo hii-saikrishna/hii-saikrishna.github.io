@@ -267,15 +267,7 @@ function JourneyPage({ eyebrow, titleA, titleB, lede, children }) {
           <div className="j-eyebrow">{eyebrow}</div>
           <h1 className="j-title">{titleA}<br /><span className="outline">{titleB}</span></h1>
           <p className="j-lede">{lede}</p>
-          <div 
-            className="j-cue interactive"
-            onClick={() => {
-              const el = document.querySelector(".j-section");
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-            }}
-            style={{ cursor: "pointer" }}
-            title="Click to start traveling"
-          >
+          <div className="j-cue">
             <span className="j-cue-line"></span>
             <div className="j-mouse-scroll"><div className="j-mouse-wheel"></div></div>
             Scroll to explore milestones

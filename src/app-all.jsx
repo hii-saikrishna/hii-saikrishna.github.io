@@ -627,12 +627,7 @@ function UpdatesPage() {
           <div className="j-eyebrow">The road so far</div>
           <h1 className="j-title">Mile<span className="outline">stones</span></h1>
           <p className="j-lede">A timeline of research milestones and career updates.</p>
-          <div 
-            className="j-cue interactive"
-            onClick={startTravel}
-            style={{ cursor: "pointer" }}
-            title="Click to start traveling"
-          >
+          <div className="j-cue">
             <span className="j-cue-line"></span>
             <div className="j-mouse-scroll"><div className="j-mouse-wheel"></div></div>
             Scroll to explore milestones
