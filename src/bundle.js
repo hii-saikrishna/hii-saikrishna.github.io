@@ -1030,8 +1030,8 @@ function dioramaScene(kind, zoom = 1) {
         // 5. Cinematic panning camera (orbits within open front-right sector)
         const camRadius = zoom < 1 ? 14.5 : 10.5;
         const angle = Math.PI / 4 + Math.sin(t * 0.08) * 0.5 + ctx.mouse.x * 0.4;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 9.5 : 7.0) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -0.8 : -0.2, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.8) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -0.2 : 0.1, 0);
       };
     }
     if (kind === "swarm") {
@@ -1251,8 +1251,8 @@ function dioramaScene(kind, zoom = 1) {
         // Cinematic moving camera (orbits stage)
         const camRadius = zoom < 1 ? 13.5 : 9.5;
         const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 8.0 : 5.5) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? 0.2 : 0.4, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 4.5 : 3.0) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? 0.1 : 0.3, 0);
       };
     }
     if (kind === "gp") {
@@ -1436,8 +1436,8 @@ function dioramaScene(kind, zoom = 1) {
         // Cinematic moving camera (orbits stage)
         const camRadius = zoom < 1 ? 13.5 : 9.5;
         const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 8.0 : 5.5) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? 0.2 : 0.4, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 4.5 : 3.0) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? 0.1 : 0.3, 0);
       };
     }
     return {
