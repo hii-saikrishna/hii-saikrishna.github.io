@@ -1,5 +1,7 @@
-# Deploy the static 3D portfolio (index.html + src/*.jsx, rendered in-browser
-# via React + Babel standalone + Three.js — no build step required).
+# Deploy the static 3D portfolio. index.html loads the PRE-COMPILED src/bundle.js
+# (built locally via ./build.sh from src/*.jsx) plus src/styles.css and Three.js.
+# This job only copies files — it does NOT build. Always run ./build.sh and commit
+# the updated src/bundle.js before pushing, or the deployed site won't reflect edits.
 name: Deploy static content to Pages
 
 on:

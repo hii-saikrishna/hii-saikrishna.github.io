@@ -454,31 +454,21 @@ function HomePage({ go }) {
           <Reveal>
             <div className="page-eyebrow" style={{ textAlign: "center" }}>Recent Achievements</div>
             <h2 style={{ textAlign: "center", marginBottom: 30 }}>Recent <span className="ital">Milestones</span></h2>
+            {/* Recent Milestones cards are driven by the SAME data as the full
+                Milestones page: the UPDATES array in src/data.jsx. These show the
+                first 3 items flagged `home: true`. To change them, edit UPDATES
+                (add/remove `home: true` + a short `title`) — never hard-code here. */}
             <div className="milestones-cards-grid">
-              <div className="milestone-card">
-                <div className="mc-header">
-                  <span className="mc-badge">Award</span>
-                  <span className="mc-date">2026</span>
+              {UPDATES.filter((u) => u.home).slice(0, 3).map((u, i) => (
+                <div key={i} className="milestone-card">
+                  <div className="mc-header">
+                    <span className="mc-badge">{u.tag}</span>
+                    <span className="mc-date">{u.date}</span>
+                  </div>
+                  <h3 className="mc-title">{u.title || u.tag}</h3>
+                  <p className="mc-text">{u.text}</p>
                 </div>
-                <h3 className="mc-title">NSF Fellowship</h3>
-                <p className="mc-text">NSF Chishiki AI Fellow at UT Austin, working with Dr. Krishna Kumar.</p>
-              </div>
-              <div className="milestone-card">
-                <div className="mc-header">
-                  <span className="mc-badge">School</span>
-                  <span className="mc-date">Summer 2026</span>
-                </div>
-                <h3 className="mc-title">KTH RPL School</h3>
-                <p className="mc-text">Attending KTH RPL Summer School 2026 in Stockholm, Sweden.</p>
-              </div>
-              <div className="milestone-card">
-                <div className="mc-header">
-                  <span className="mc-badge">Academic</span>
-                  <span className="mc-date">Spring 2026</span>
-                </div>
-                <h3 className="mc-title">Candidacy Exam</h3>
-                <p className="mc-text">Passed Ph.D. candidacy exam at the University of Georgia.</p>
-              </div>
+              ))}
             </div>
             <div style={{ textAlign: "center", marginTop: 24 }} className="milestones-more-link">
               <span className="btn-link">View complete journey →</span>

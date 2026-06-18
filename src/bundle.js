@@ -1,8 +1,58 @@
 // AUTO-GENERATED BUNDLE — do not edit. Edit src/*.jsx then run ./build.sh
 
 /* ===== src/data.jsx ===== */
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  CONTENT FILE — read this before editing anything in the site.            ║
+// ╠═══════════════════════════════════════════════════════════════════════════╣
+// ║                                                                           ║
+// ║  WHAT IS LIVE                                                              ║
+// ║    The public site (hii-saikrishna.github.io) is served by                ║
+// ║    .github/workflows/static.yml, which deploys ONLY these on push to main:║
+// ║        index.html · src/ · attached_assets/ · 404.html                    ║
+// ║    The browser loads the PRE-COMPILED bundle  src/bundle.js  (NOT the .jsx ║
+// ║    files directly).                                                        ║
+// ║                                                                           ║
+// ║  ★ THE GOLDEN RULE — never skip this ★                                    ║
+// ║    1. Edit the SOURCE: src/*.jsx (content lives here in src/data.jsx).     ║
+// ║    2. Run  ./build.sh   → regenerates src/bundle.js from the .jsx sources. ║
+// ║    3. Commit BOTH the edited .jsx AND src/bundle.js, then push to main.    ║
+// ║    If you edit a .jsx but forget ./build.sh, the live site will NOT change.║
+// ║                                                                           ║
+// ║  ⛔ IGNORE  client/  — it is a legacy/unused React app. It is NOT deployed.║
+// ║     Editing client/** has ZERO effect on the live site. Only src/ ships.   ║
+// ║                                                                           ║
+// ║  WHERE THINGS LIVE                                                         ║
+// ║    src/data.jsx  → ALL editable content (this file). Exports below.        ║
+// ║    src/app-all.jsx → page layout/components (HomePage, PublicationsPage,   ║
+// ║                      UpdatesPage…). Edit only for structure/behavior.      ║
+// ║    src/robots.jsx, world.jsx, globe.jsx, scenes-pages.jsx → 3D scenes.     ║
+// ║    src/styles.css → all styling (loaded directly, no build needed for it). ║
+// ║    attached_assets/ → images & videos. publication_gallery/ = paper media, ║
+// ║                       Gallery/ = trip photos. COMPRESS videos before adding ║
+// ║                       (see "compress all videos" note); huge files = slow. ║
+// ║                                                                           ║
+// ║  CONTENT EXPORTS IN THIS FILE (each has its own how-to comment below)      ║
+// ║    PROFILE      – name, role, links, CV. Shown in hero/footer/contact.     ║
+// ║    HOME_GALLERY – hero portrait photos.                                    ║
+// ║    TRIP_GALLERY – About-page photo/video strip.                            ║
+// ║    INTERESTS    – 3 Home "Research Interests" cards. id MUST match THRUSTS.║
+// ║    THRUSTS      – 3 Research-page deep dives. id MUST match INTERESTS.     ║
+// ║    PUBLICATIONS – every paper. Grouped by `kind` via PUB_GROUPS.           ║
+// ║    PUB_GROUPS   – order + labels of the publication sections.              ║
+// ║    BLOG_POSTS   – blog articles (id is the #/blog/<id> URL).               ║
+// ║    UPDATES      – career timeline. Drives BOTH the Milestones page AND the ║
+// ║                   Home "Recent Milestones" cards (items with home:true).    ║
+// ║    CREDO        – closing quote on the Milestones page.                    ║
+// ║                                                                           ║
+// ║  All exports are attached to `window` at the bottom so app-all.jsx and the ║
+// ║  scene files can read them as globals (e.g. PUBLICATIONS, UPDATES).         ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+
 // ===== Data =====
 
+// PROFILE — identity + canonical links. Used in the hero, footer, contact button,
+// and as a link source elsewhere (e.g. THRUSTS resources reference PROFILE.scholar).
+// Update a link here once and it changes everywhere it is referenced.
 const PROFILE = {
   name: "Sai Krishna Ghanta",
   role: "Ph.D. Candidate, Artificial Intelligence",
@@ -90,7 +140,13 @@ const TRIP_GALLERY = [{
 // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
 
-// Home highlights — the same three directions as the Research page, each with a small 3D scene.
+// INTERESTS — the 3 cards in the Home "Research Interests" row. These are the
+// short teasers for the longer THRUSTS below.
+//   id    : MUST match a THRUSTS id — clicking a card opens that thrust on the
+//           Research page. If you add/rename one here, mirror it in THRUSTS.
+//   scene : key of the inline 3D diorama (built in src/robots.jsx → dioramaScene).
+//           Valid keys: "embodied", "swarm", "gp". Don't invent new ones without
+//           also adding the scene in robots.jsx.
 const INTERESTS = [{
   id: "embodied",
   scene: "embodied",
@@ -108,8 +164,13 @@ const INTERESTS = [{
   desc: "Learning a belief over space itself."
 }];
 
-// Research thrusts — colorful, resourceful, no "T#" index.
-// accent / tint drive the per-thrust color theme; scene picks the inline 3D diorama.
+// THRUSTS — the 3 deep-dive sections on the Research page. One per INTERESTS card.
+//   id       : MUST match the INTERESTS id (the Home card links here by id).
+//   scene    : 3D diorama key — "embodied" | "swarm" | "gp" (see robots.jsx).
+//   accent/tint : hex colors driving that section's color theme.
+//   body     : 1–2 sentence paragraph.   keywords : pills.   stats : {k,v} chips.
+//   resources: {label, href} links. Use "#/blog/<id>" for an internal blog link
+//              (must match a BLOG_POSTS id) or a full https URL for external.
 const THRUSTS = [{
   id: "embodied",
   title: "Robot Learning & Embodied Intelligence",
@@ -181,8 +242,38 @@ const THRUSTS = [{
   }]
 }];
 
-// Each paper carries a thumbnail, a one-line overview, and a links object.
-// Only links that exist are rendered — add paper / preprint / github / video / blog as available.
+// ─────────────────────────────────────────────────────────────────────────────
+// PUBLICATIONS — every paper. The Publications page splits them into sections by
+// `kind` and in the section order defined by PUB_GROUPS (below).
+//
+// Each entry:
+//   year     : number — shown as the meta pill and used to sort newest-first.
+//   kind     : "conference" | "journal" | "submitted"  → which PUB_GROUPS section
+//              it lands in. (A journal-venue paper presented at a conference may be
+//              listed as "conference" intentionally, e.g. SPACE/RA-L.)
+//   featured : true → shows a small "Featured" badge on the media.
+//   title    : full paper title.
+//   authors  : array of names, in order. Put "*" after a name to mark lead/first
+//              author (the page renders a "* indicates lead / first author" note,
+//              and any name containing "Sai Krishna" is highlighted automatically).
+//   venue    : full venue name WITH the year (e.g. "... (IROS), 2025"). Always
+//              include the year here for conferences.
+//   image    : path under attached_assets/publication_gallery/, OR null.
+//              • .png/.jpg/.jpeg  → shown as an <img>
+//              • .mp4/.webm/.mov  → shown as an autoplaying, muted, viewport-gated
+//                                   <video> (LazyVideo) — COMPRESS it first.
+//              • null             → a generated contour/node placeholder is drawn.
+//              Any aspect ratio fits (the media window adapts; nothing is cropped).
+//   overview : one-line summary shown under the venue.
+//   links    : object — only the keys present are rendered, as buttons. Supported
+//              keys: paper, preprint, github, video, blog, scholar. Values are URLs
+//              (use "#/blog/<id>" for an internal blog link). SPECIAL: set a value
+//              to the exact string "Coming Soon!" to render a non-clickable
+//              "<Label>: Coming Soon!" chip (used for unreleased preprints).
+//
+// To ADD a paper: copy an entry, fill the fields, drop its media in
+// attached_assets/publication_gallery/, then run ./build.sh.
+// ─────────────────────────────────────────────────────────────────────────────
 const PUBLICATIONS = [{
   year: 2026,
   kind: "conference",
@@ -460,6 +551,15 @@ const PUB_GROUPS = [{
   kind: "journal",
   label: "Journal Articles"
 }];
+
+// BLOG_POSTS — the articles on the Blog page and at #/blog/<id>.
+//   id       : URL slug. The post lives at #/blog/<id>; THRUSTS/PUBLICATIONS link
+//              to posts with "#/blog/<id>" — keep ids stable or fix the links too.
+//   title, category, date, readTime, excerpt : list-card + header metadata.
+//   cover    : key of the generated cover art (see app-all.jsx). Reuse an existing
+//              value ("home", "slam", "gp", …) unless you add a new cover renderer.
+//   body     : array of [tag, text] tuples rendered in order. tag is "p" or "h2".
+//              Add paragraphs/sub-headings by appending more tuples.
 const BLOG_POSTS = [{
   id: "smart-home-robots",
   title: "A Day in a Robot Home: What Embodied Intelligence Looks Like",
@@ -525,23 +625,52 @@ const BLOG_POSTS = [{
   body: [["p", "An LLM trained on human text has never felt gravity, never brushed against a wall, never gripped an object. Can it reason about physics at all?"], ["h2", "The Experiment"], ["p", "We created 150 spatial reasoning tasks (e.g., 'A box slides off a table. Where will it land?') and tested state-of-the-art LLMs. Average accuracy: 64%. Humans: 96%."], ["h2", "What This Means"], ["p", "LLMs are useful for high-level planning and communication, but they need grounding. Embodied feedback from robots closes the gap."]]
 }];
 
-// Milestones — grouped by year in the UI; tag drives the color pill.
+// ─────────────────────────────────────────────────────────────────────────────
+// UPDATES — the career timeline. SINGLE SOURCE OF TRUTH for BOTH:
+//   1. the full "Milestones" page  (every item, grouped by `year`, newest first)
+//   2. the "Recent Milestones" cards on the Home page (only items with `home:true`)
+// Editing this one array updates both places. Do NOT hard-code milestone cards
+// anywhere else.
+//
+// Each item:
+//   date  : "Mon YYYY" shown on the row/card (e.g. "Jun 2026"). Keep the year here
+//           matching the `year` field below.
+//   year  : number — groups rows on the Milestones page. One heading per distinct year.
+//   tag   : short label shown as the colored pill / card badge (e.g. Grant, Talk,
+//           Fellowship, Candidacy, Milestone, Research, Internship). Any string works;
+//           reuse existing tags for visual consistency.
+//   text  : one full sentence describing the milestone.
+//   home  : OPTIONAL boolean. Add `home: true` to surface this item as a card in the
+//           Home page "Recent Milestones" row. The Home page shows the FIRST 3 items
+//           (top of this array = newest) that have `home: true`. Flag exactly 3.
+//   title : OPTIONAL short headline (2–4 words) — only used for the Home card heading.
+//           Required whenever `home: true`. The Milestones page ignores `title`.
+//
+// ORDER: keep the whole array newest-first (top = most recent). Within a year, list
+// newest month first. After editing, run ./build.sh and commit src/bundle.js.
+// ─────────────────────────────────────────────────────────────────────────────
 const UPDATES = [
 // 2026
 {
   date: "Jun 2026",
   year: 2026,
   tag: "Grant",
+  home: true,
+  title: "KTH RPL Summer School",
   text: "Received a travel grant for the KTH RPL Summer School 2026 in Stockholm, Sweden."
 }, {
   date: "May 2026",
   year: 2026,
   tag: "Fellowship",
-  text: "Awarded the 2026–27 NSF Chishiki AI Fellowship from the University of Texas at Austin."
+  home: true,
+  title: "NSF Chishiki AI Fellowship",
+  text: "Awarded the 2026–27 NSF Chishiki AI Fellowship from the University of Texas at Austin, working with Dr. Krishna Kumar."
 }, {
   date: "May 2026",
   year: 2026,
   tag: "Candidacy",
+  home: true,
+  title: "PhD Candidacy",
   text: "Passed my PhD candidacy exam, before a committee of Dr. Ramviyas Parasuraman, Dr. Jin Sun, Dr. Fei Duo, and Dr. Sabur Baidya."
 }, {
   date: "Apr 2026",
@@ -4207,43 +4336,20 @@ function HomePage({
     className: "ital"
   }, "Milestones")), /*#__PURE__*/React.createElement("div", {
     className: "milestones-cards-grid"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, UPDATES.filter(u => u.home).slice(0, 3).map((u, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
     className: "milestone-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "mc-header"
   }, /*#__PURE__*/React.createElement("span", {
     className: "mc-badge"
-  }, "Award"), /*#__PURE__*/React.createElement("span", {
+  }, u.tag), /*#__PURE__*/React.createElement("span", {
     className: "mc-date"
-  }, "2026")), /*#__PURE__*/React.createElement("h3", {
+  }, u.date)), /*#__PURE__*/React.createElement("h3", {
     className: "mc-title"
-  }, "NSF Fellowship"), /*#__PURE__*/React.createElement("p", {
+  }, u.title || u.tag), /*#__PURE__*/React.createElement("p", {
     className: "mc-text"
-  }, "NSF Chishiki AI Fellow at UT Austin, working with Dr. Krishna Kumar.")), /*#__PURE__*/React.createElement("div", {
-    className: "milestone-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mc-header"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "mc-badge"
-  }, "School"), /*#__PURE__*/React.createElement("span", {
-    className: "mc-date"
-  }, "Summer 2026")), /*#__PURE__*/React.createElement("h3", {
-    className: "mc-title"
-  }, "KTH RPL School"), /*#__PURE__*/React.createElement("p", {
-    className: "mc-text"
-  }, "Attending KTH RPL Summer School 2026 in Stockholm, Sweden.")), /*#__PURE__*/React.createElement("div", {
-    className: "milestone-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mc-header"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "mc-badge"
-  }, "Academic"), /*#__PURE__*/React.createElement("span", {
-    className: "mc-date"
-  }, "Spring 2026")), /*#__PURE__*/React.createElement("h3", {
-    className: "mc-title"
-  }, "Candidacy Exam"), /*#__PURE__*/React.createElement("p", {
-    className: "mc-text"
-  }, "Passed Ph.D. candidacy exam at the University of Georgia."))), /*#__PURE__*/React.createElement("div", {
+  }, u.text)))), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       marginTop: 24

@@ -38,7 +38,46 @@ Workflow: grep the relevant CSV by keyword (e.g. `grep "portfolio" skills/ui-ux-
 Usage: when a task involves 3D scenes, scroll choreography, or animation, read the matching SKILL.md first and follow its patterns. For this portfolio (Three.js + React via Babel), `threejs-webgl`, `gsap-scrolltrigger`, `web3d-integration-patterns`, and `modern-web-design` are the most relevant.
 
 ## Project context
-- Main deliverable: `index.html` — academic portfolio (React + Babel, Three.js scenes, hash routing)
-- All content data (publications, blog posts, updates, CV) lives in `src/data.jsx`
-- Styles in `src/styles.css` — white background, Instrument Serif + Inter + JetBrains Mono, cobalt accent
-- User prefers: white background, top-notch academic feel, 3D animations
+- Academic portfolio: React (UMD) + Three.js, hash routing, rendered from a **pre-compiled bundle**.
+- Styles in `src/styles.css` — white background, Instrument Serif + Inter + JetBrains Mono, green/cobalt accents.
+- User prefers: white background, top-notch academic feel, 3D animations.
+
+## ★ Editing the site — READ BEFORE ANY CONTENT/CODE CHANGE ★
+This repo deploys to GitHub Pages (`hii-saikrishna.github.io`) via `.github/workflows/static.yml`,
+which on push to `main` deploys **only**: `index.html`, `src/`, `attached_assets/`, `404.html`.
+
+**The build step is mandatory.** `index.html` loads the pre-compiled `src/bundle.js`, NOT the `.jsx`
+sources. So the workflow:
+1. Edit the source `.jsx` files in `src/` (content lives in `src/data.jsx`).
+2. Run `./build.sh` — recompiles `src/*.jsx` → `src/bundle.js` (uses macOS `jsc`; no Node needed).
+3. Commit **both** the edited `.jsx` and the regenerated `src/bundle.js`, then push to `main`.
+- If you edit `.jsx` but skip `./build.sh`, **the live site will not change.**
+- `src/styles.css` is loaded directly — CSS-only changes don't need a rebuild (but still commit it).
+
+**⛔ Ignore `client/`.** It's a legacy/unused Vite app that is **never deployed**. Editing `client/**`
+has zero effect on the live site. Only touch it if the user explicitly asks.
+
+**Where things live**
+- `src/data.jsx` — ALL editable content. Has a big header comment + per-section how-to notes. Exports:
+  `PROFILE, HOME_GALLERY, TRIP_GALLERY, INTERESTS, THRUSTS, PUBLICATIONS, PUB_GROUPS, BLOG_POSTS, UPDATES, CREDO`.
+- `src/app-all.jsx` — pages & components (`HomePage`, `PublicationsPage`, `UpdatesPage`, `PubRow`, `LazyVideo`…).
+- `src/robots.jsx`, `world.jsx`, `globe.jsx`, `scenes-pages.jsx` — Three.js scenes/dioramas.
+- `attached_assets/` — media. `publication_gallery/` = paper figures/clips, `Gallery/` = trip photos.
+
+**Cross-file links to keep in sync** (the relevant arrays document this inline too)
+- `INTERESTS[].id` ⇄ `THRUSTS[].id` — the Home interest card opens the matching Research thrust.
+- `INTERESTS/THRUSTS[].scene` must be a real diorama key in `robots.jsx` (`embodied`/`swarm`/`gp`).
+- `UPDATES` is the single source for **both** the Milestones page **and** the Home "Recent Milestones"
+  cards (items with `home: true` + a short `title`). Never hard-code milestone cards in `app-all.jsx`.
+- Internal links use `#/blog/<id>` (must match a `BLOG_POSTS.id`) or `#/<page>`.
+
+**Media rules**
+- Publication `image` may be `.png/.jpg` (→ `<img>`), `.mp4` (→ autoplaying muted `LazyVideo`), or `null`
+  (→ generated placeholder). Any aspect ratio fits; nothing is cropped.
+- **Compress videos before committing.** No ffmpeg here — use macOS `avconvert`, e.g.
+  `avconvert -s in.mp4 -o out.mp4 -p Preset960x540 --multiPass --replace` (publication thumbnails),
+  `Preset1280x720` for larger gallery clips. Keep paper clips ≲ a few MB.
+
+**Verify a change** by serving locally and screenshotting with headless Chrome:
+`python3 -m http.server 8765` then load `http://localhost:8765/index.html#/<page>` (`#/publications`,
+`#/updates`, …). The red `#err-overlay` (in `index.html`) surfaces any runtime JS error.
