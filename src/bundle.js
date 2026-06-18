@@ -33,6 +33,12 @@ const HOME_GALLERY = [{
 // A .mp4 src is detected automatically and shown as a playable clip.
 // Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [{
+  src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4",
+  place: "Hangzhou, China",
+  title: "The Romance of the Song Dynasty",
+  when: "Fall 2025",
+  desc: "A spectacular performance at the Song Dynasty park during IROS 2025."
+}, {
   src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg",
   place: "HeRoLab",
   title: "Thanksgiving with the lab",
@@ -3003,7 +3009,9 @@ function TripGallery() {
     src: cur.src,
     controls: true,
     autoPlay: true,
-    playsInline: true
+    playsInline: true,
+    muted: true,
+    loop: true
   }) : /*#__PURE__*/React.createElement("img", {
     src: cur.src,
     alt: cur.title

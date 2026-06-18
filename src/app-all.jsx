@@ -605,7 +605,7 @@ function TripGallery() {
           )}
           <figure className="tl-figure" onClick={(e) => e.stopPropagation()}>
             {isVideo(cur.src)
-              ? <video src={cur.src} controls autoPlay playsInline />
+              ? <video src={cur.src} controls autoPlay playsInline muted loop />
               : <img src={cur.src} alt={cur.title} />}
             <figcaption>
               <div className="tl-head">
