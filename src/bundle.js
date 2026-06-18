@@ -1075,6 +1075,47 @@ function dioramaScene(kind, zoom = 1) {
       const beacon = new THREE.Mesh(beaconGeo, beaconMat);
       beacon.position.set(0, 0.5, 0);
       ruins.add(beacon);
+
+      // Low-poly animated fire clusters around ruins (no humans)
+      const fireGroup = new THREE.Group();
+      fireGroup.position.set(2.0, 0, -2.0);
+      stage.add(fireGroup);
+      const mFlame = rMat(0xff7700, {
+        emissive: 0xff3300,
+        emissiveIntensity: 1.2,
+        roughness: 0.1
+      });
+      const mFlameInner = rMat(0xffcc00, {
+        emissive: 0xffaa00,
+        emissiveIntensity: 1.5,
+        roughness: 0.1
+      });
+      const flames = [];
+      const makeFlame = (x, z, s) => {
+        const f = new THREE.Group();
+        f.position.set(x, 0.05, z);
+        f.scale.setScalar(s);
+        // Outer orange flame cone
+        const outCone = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.44, 5), mFlame);
+        outCone.position.y = 0.22;
+        f.add(outCone);
+        // Inner yellow core cone
+        const inCone = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.26, 5), mFlameInner);
+        inCone.position.y = 0.13;
+        f.add(inCone);
+        fireGroup.add(f);
+        flames.push({
+          group: f,
+          outCone,
+          inCone,
+          baseScale: s,
+          seed: Math.random() * 10
+        });
+      };
+      // Spawn fire spots around ruins
+      makeFlame(-0.3, 0.4, 1.2);
+      makeFlame(0.4, 0.2, 0.85);
+      makeFlame(0.1, -0.3, 1.05);
       const q1 = buildQuadrupedModel();
       q1.group.scale.setScalar(0.85);
       stage.add(q1.group);
@@ -1135,6 +1176,15 @@ function dioramaScene(kind, zoom = 1) {
         // Pulse beacon
         beacon.material.opacity = 0.5 + Math.sin(t * 8) * 0.4;
         beacon.scale.setScalar(0.9 + Math.sin(t * 8) * 0.25);
+
+        // Flicker fires
+        flames.forEach(f => {
+          const wave = Math.sin(t * 14.0 + f.seed);
+          const cosWave = Math.cos(t * 12.0 + f.seed);
+          f.group.scale.set(f.baseScale * (0.9 + wave * 0.15), f.baseScale * (1.0 + cosWave * 0.25), f.baseScale * (0.9 + wave * 0.15));
+          f.outCone.rotation.y = t * 3.0 + f.seed;
+          f.inCone.rotation.y = -t * 5.0 + f.seed;
+        });
 
         // Move q1 in an elliptical path
         const q1X = Math.sin(t * 0.28) * 1.8;
