@@ -493,10 +493,10 @@ function dioramaScene(kind, zoom = 1) {
         patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
 
         // 5. Cinematic panning camera (orbits within open front-right sector)
-        const camRadius = zoom < 1 ? 16.5 : 14.0;
+        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
         const angle = Math.PI / 4 + Math.sin(t * 0.08) * 0.5 + ctx.mouse.x * 0.4;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 4.5) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -0.5 : -0.2, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
 
@@ -883,10 +883,10 @@ function dioramaScene(kind, zoom = 1) {
         commLineGeo.attributes.position.needsUpdate = true;
 
         // Cinematic moving camera (orbits stage)
-        const camRadius = zoom < 1 ? 16.5 : 14.0;
+        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
         const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 4.5) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -0.5 : -0.2, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
 
@@ -1041,10 +1041,10 @@ function dioramaScene(kind, zoom = 1) {
         laserGeo.attributes.position.needsUpdate = true;
 
         // Cinematic moving camera (orbits stage)
-        const camRadius = zoom < 1 ? 16.5 : 14.0;
+        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
         const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 4.5) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -0.5 : -0.2, 0);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
 
