@@ -330,100 +330,166 @@ function dioramaScene(kind, zoom = 1) {
 
 
     if (kind === "embodied") {
-      // open dollhouse room — robots living and working in a real home
+      // open dollhouse home — compact, furnished apartment with large robots living and working in it
       const home = new THREE.Group();
       stage.add(home);
 
-      const mFloor = rMat(0xece2d0, { roughness: 0.95 });
-      const mRug = rMat(0xcfe3cf, { roughness: 1 });
-      const mWall = rMat(0xf5f5f1, { roughness: 0.95 });
-      const mWood = rMat(0xb08a5e, { roughness: 0.85 });
-      const mSofa = rMat(RB.grass, { roughness: 1 });
+      // Compact footprint so the robots read large at human scale (RW/RD = half width/depth)
+      const RW = 2.5, RD = 2.2;
+
+      const mFloor = rMat(0xe6d6ba, { roughness: 0.9 });
+      const mRug = rMat(0xd7e7da, { roughness: 1 });
+      const mWall = rMat(0xf3efe7, { roughness: 0.97 });
+      const mWallBack = rMat(0xe9e2d4, { roughness: 0.97 });
+      const mBase = rMat(0xccbfa6, { roughness: 0.9 });
+      const mWood = rMat(0xb0875a, { roughness: 0.8 });
+      const mWoodDark = rMat(0x7c5a3a, { roughness: 0.85 });
+      const mSofa = rMat(0x6f93b8, { roughness: 0.95 });
+      const mSofaCushion = rMat(0x83a6c8, { roughness: 0.95 });
+      const mMetal = rMat(0xcfd6dc, { roughness: 0.3, metalness: 0.6 });
+      const mDark = rMat(0x2b3038, { roughness: 0.4 });
+      const mGlass = rMat(0xbfe0ef, { roughness: 0.1, metalness: 0.2, transparent: true, opacity: 0.5 });
+      const mScreen = rMat(0x12161c, { emissive: 0x153a6b, emissiveIntensity: 0.6, roughness: 0.3 });
       const mPot = rMat(0xc96f4a, { roughness: 0.9 });
 
-      rBox(home, mFloor, 6, 0.18, 5, 0, -0.09, 0);
-      const rug = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.03, 24), mRug);
-      rug.position.set(-1.0, 0.02, 0.7); home.add(rug);
-      // two open walls (back and left are solid, front and right are open)
-      rBox(home, mWall, 6, 0.95, 0.12, 0, 0.47, -2.44);
-      rBox(home, mWall, 0.12, 0.95, 5, -2.94, 0.47, 0);
+      // Floor + rug
+      rBox(home, mFloor, RW * 2 + 0.2, 0.18, RD * 2 + 0.2, 0, -0.09, 0);
+      const rug = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 0.03, 28), mRug);
+      rug.position.set(0.8, 0.02, 0.75); home.add(rug);
+
+      // Two solid walls (back -z, left -x); front + right stay open to the camera
+      rBox(home, mWallBack, RW * 2 + 0.2, 1.3, 0.1, 0, 0.65, -RD - 0.04);
+      rBox(home, mWall, 0.1, 1.3, RD * 2 + 0.2, -RW - 0.04, 0.65, 0);
+      rBox(home, mBase, RW * 2 + 0.2, 0.1, 0.05, 0, 0.05, -RD - 0.02);
+      rBox(home, mBase, 0.05, 0.1, RD * 2 + 0.2, -RW - 0.02, 0.05, 0);
+
+      // Window on the back wall (right half): frame, sky glass, mullions
+      const windowG = new THREE.Group(); windowG.position.set(0.95, 0.8, -RD - 0.005); home.add(windowG);
+      rBox(windowG, mWood, 1.15, 0.72, 0.04, 0, 0, 0);
+      rBox(windowG, mGlass, 0.98, 0.58, 0.02, 0, 0, 0.02);
+      rBox(windowG, mWood, 0.04, 0.58, 0.05, 0, 0, 0.03);
+      rBox(windowG, mWood, 0.98, 0.04, 0.05, 0, 0, 0.03);
+
+      // Framed picture on the left wall
+      const frame = new THREE.Group(); frame.position.set(-RW - 0.005, 0.85, 0.7); frame.rotation.y = Math.PI / 2; home.add(frame);
+      rBox(frame, mWoodDark, 0.72, 0.52, 0.03, 0, 0, 0);
+      rBox(frame, rMat(0xbcd8c4), 0.58, 0.38, 0.02, 0, 0, 0.02);
       
-      // kitchen counter + fridge
-      rBox(home, mWood, 1.7, 0.5, 0.5, -1.7, 0.25, -2.0);
-      rBox(home, mWall, 0.5, 0.8, 0.45, -0.5, 0.4, -2.05);
+      // ---- KITCHEN (back-left): counter, countertop, cabinets, sink, stove, fridge ----
+      const kitchen = new THREE.Group(); home.add(kitchen);
+      const counterZ = -RD + 0.3;
+      rBox(kitchen, mWood, 1.9, 0.52, 0.5, -1.3, 0.26, counterZ);                         // base
+      rBox(kitchen, rMat(0xe9e2d4, { roughness: 0.6 }), 1.96, 0.06, 0.56, -1.3, 0.55, counterZ); // countertop
+      [-2.1, -1.6, -1.1, -0.6].forEach(cx => rBox(kitchen, mWoodDark, 0.02, 0.4, 0.02, cx, 0.26, counterZ + 0.24)); // door seams
+      rBox(kitchen, mDark, 0.34, 0.06, 0.26, -1.75, 0.57, counterZ);                       // sink basin
+      rCyl(kitchen, mMetal, 0.018, 0.018, 0.16, -1.75, 0.66, counterZ - 0.06, 8);          // faucet riser
+      rBox(kitchen, mMetal, 0.018, 0.018, 0.12, -1.75, 0.74, counterZ - 0.01);             // faucet spout
+      [[-0.7, 0.1], [-0.7, -0.1], [-0.95, 0.1], [-0.95, -0.1]].forEach(([bx, bz]) => {     // stove burners
+        const burner = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.012, 12), mDark);
+        burner.position.set(bx, 0.585, counterZ + bz); kitchen.add(burner);
+      });
+      rBox(kitchen, mWood, 1.9, 0.4, 0.28, -1.3, 1.08, -RD + 0.16);                        // upper cabinets
+      rBox(kitchen, rMat(0xdfe3e6, { roughness: 0.5, metalness: 0.3 }), 0.52, 1.18, 0.5, -RW + 0.32, 0.59, counterZ); // fridge
+      rBox(kitchen, mMetal, 0.03, 0.5, 0.03, -RW + 0.56, 0.62, counterZ - 0.22);           // fridge handle
+
+      // ---- LIVING: sofa, coffee table, TV console ----
+      const sofa = new THREE.Group(); sofa.position.set(0.8, 0, 1.7); home.add(sofa); // faces -z (toward TV)
+      rBox(sofa, mSofa, 1.5, 0.2, 0.66, 0, 0.2, 0);            // seat base
+      rBox(sofa, mSofa, 1.5, 0.46, 0.16, 0, 0.45, 0.27);       // backrest
+      rBox(sofa, mSofa, 0.16, 0.36, 0.66, -0.67, 0.38, 0);     // arm L
+      rBox(sofa, mSofa, 0.16, 0.36, 0.66, 0.67, 0.38, 0);      // arm R
+      rBox(sofa, mSofaCushion, 0.62, 0.13, 0.5, -0.34, 0.34, -0.04); // cushion L
+      rBox(sofa, mSofaCushion, 0.62, 0.13, 0.5, 0.34, 0.34, -0.04);  // cushion R
+      [[-0.66, -0.28], [0.66, -0.28], [-0.66, 0.28], [0.66, 0.28]].forEach(([fx, fz]) => rCyl(sofa, mWoodDark, 0.03, 0.03, 0.12, fx, 0.06, fz, 8));
+
+      const table = new THREE.Group(); table.position.set(0.8, 0, 0.7); home.add(table);
+      rBox(table, mWoodDark, 0.92, 0.05, 0.52, 0, 0.34, 0);
+      [[-0.4, -0.2], [0.4, -0.2], [-0.4, 0.2], [0.4, 0.2]].forEach(([lx, lz]) => rCyl(table, mWoodDark, 0.025, 0.025, 0.34, lx, 0.17, lz, 6));
+
+      const media = new THREE.Group(); media.position.set(-0.5, 0, -RD + 0.2); home.add(media);
+      rBox(media, mWoodDark, 1.3, 0.3, 0.32, 0, 0.15, 0);      // console
+      rBox(media, mDark, 1.2, 0.72, 0.06, 0, 0.74, -0.07);     // TV bezel
+      rBox(media, mScreen, 1.08, 0.6, 0.02, 0, 0.74, -0.03);   // TV screen
+      rCyl(media, mDark, 0.04, 0.04, 0.12, 0, 0.42, -0.05, 8); // TV stand
+
+      // Floor lamp (front-right) with a warm point light
+      const lamp = new THREE.Group(); lamp.position.set(RW - 0.3, 0, 1.7); home.add(lamp);
+      rCyl(lamp, mMetal, 0.06, 0.09, 0.04, 0, 0.02, 0, 12);
+      rCyl(lamp, mMetal, 0.02, 0.02, 1.1, 0, 0.57, 0, 8);
+      const shade = new THREE.Mesh(new THREE.ConeGeometry(0.19, 0.26, 14, 1, true), rMat(0xf2e6c8, { emissive: 0xffe9b0, emissiveIntensity: 0.5, side: THREE.DoubleSide }));
+      shade.position.y = 1.12; lamp.add(shade);
+      const lampLight = new THREE.PointLight(0xffe2ad, 0.55, 3.2); lampLight.position.set(RW - 0.3, 1.12, 1.7); home.add(lampLight);
+
+      // Pendant light over the coffee table
+      const pendant = new THREE.Group(); pendant.position.set(0.8, 1.9, 0.7); home.add(pendant);
+      rCyl(pendant, mDark, 0.004, 0.004, 0.45, 0, 0.22, 0, 6);
+      const shade2 = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.18, 14, 1, true), rMat(0x2b3038, { side: THREE.DoubleSide }));
+      pendant.add(shade2);
+      rSph(pendant, rMat(0xfff1c8, { emissive: 0xffe6a0, emissiveIntensity: 1.0 }), 0.05, 0, -0.02, 0);
       
-      // sofa + coffee table
-      const sofa = new THREE.Group(); sofa.position.set(1.7, 0, 0.4); sofa.rotation.y = -Math.PI / 2;
-      rBox(sofa, mSofa, 1.5, 0.34, 0.6, 0, 0.18, 0);
-      rBox(sofa, mSofa, 1.5, 0.4, 0.18, 0, 0.5, -0.22);
-      home.add(sofa);
-      rBox(home, mWood, 0.7, 0.22, 0.4, 0.7, 0.12, 0.5);
-      
-      // plants
+      // plants (the .y is the drone's hover height above each plant; base sits on the floor)
       const plantPositions = [
-        new THREE.Vector3(-2.4, 1.4, -1.9), // Plant 1
-        new THREE.Vector3(2.3, 1.3, -2.0),  // Plant 2
-        new THREE.Vector3(-2.4, 1.4, 1.9),  // Plant 3
+        new THREE.Vector3(-RW + 0.32, 1.05, 1.7),    // front-left corner
+        new THREE.Vector3(RW - 0.35, 1.05, -RD + 0.45), // back-right corner, by the window
+        new THREE.Vector3(-RW + 0.32, 1.05, -0.2),   // mid-left wall
       ];
       const addPlant = (pos, s = 1) => {
         const p = new THREE.Group();
-        rCyl(p, mPot, 0.13, 0.1, 0.2, 0, 0.1, 0, 8);
-        const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.46, 7), rMat(RB.grass2)); l1.position.y = 0.42; p.add(l1);
-        const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.32, 7), rMat(RB.grass)); l2.position.set(0.07, 0.56, 0.04); p.add(l2);
+        rCyl(p, mPot, 0.14, 0.1, 0.22, 0, 0.11, 0, 8);
+        const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.21, 0.5, 7), rMat(RB.grass2)); l1.position.y = 0.46; p.add(l1);
+        const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.34, 7), rMat(RB.grass)); l2.position.set(0.07, 0.62, 0.04); p.add(l2);
         p.position.copy(pos);
         p.position.y = 0; // base on floor
         p.scale.setScalar(s); home.add(p);
       };
-      addPlant(plantPositions[0], 1.0);
-      addPlant(plantPositions[1], 0.85);
-      addPlant(plantPositions[2], 0.9);
+      addPlant(plantPositions[0], 1.05);
+      addPlant(plantPositions[1], 0.9);
+      addPlant(plantPositions[2], 0.95);
 
-      // UGV Charging Dock Station
+      // UGV charging dock against the left wall
       const dock = new THREE.Group();
-      dock.position.set(2.5, 0.05, -2.0);
+      dock.position.set(-RW + 0.3, 0.05, -0.7);
       const mDock = rMat(0x2d3748, { roughness: 0.2 });
-      rBox(dock, mDock, 0.3, 0.1, 0.3, 0, 0, 0);
-      rBox(dock, rMat(0xe2e8f0), 0.2, 0.15, 0.05, 0, 0.08, -0.12);
+      rBox(dock, mDock, 0.34, 0.1, 0.34, 0, 0, 0);
+      rBox(dock, rMat(0xe2e8f0), 0.22, 0.16, 0.05, -0.12, 0.08, 0);
       home.add(dock);
 
-      // robots doing chores
-      const vac = buildRoverModel(); vac.group.scale.setScalar(0.42); home.add(vac.group);
-      
-      // Humanoid chef in cook (chopping) mode
-      const chef = buildHumanoidModel("cook"); chef.group.scale.setScalar(0.5);
-      chef.group.position.set(-1.7, 0, -1.45); chef.group.rotation.y = Math.PI; home.add(chef.group);
-      
+      // robots doing chores — scaled up ~45% so they read large in the compact home
+      const vac = buildRoverModel(); vac.group.scale.setScalar(0.62); home.add(vac.group);
+
+      // Humanoid chef in cook (chopping) mode, working at the counter
+      const chef = buildHumanoidModel("cook"); chef.group.scale.setScalar(0.72);
+      chef.group.position.set(-1.15, 0, counterZ + 0.55); chef.group.rotation.y = Math.PI; home.add(chef.group);
+
       // Drone duster with scanning spotlight cone
-      const duster = buildDroneModel(); duster.group.scale.setScalar(0.42); home.add(duster.group);
+      const duster = buildDroneModel(); duster.group.scale.setScalar(0.56); home.add(duster.group);
       const dScannerMat = new THREE.MeshBasicMaterial({ color: 0x3fc88f, transparent: true, opacity: 0.0, side: THREE.DoubleSide });
       const dScanner = new THREE.Mesh(new THREE.ConeGeometry(0.35, 0.9, 16), dScannerMat);
       dScanner.rotation.x = Math.PI; // point down
       dScanner.position.y = -0.45;
       duster.group.add(dScanner);
-      
-      const patrol = buildQuadrupedModel(); patrol.group.scale.setScalar(0.4); home.add(patrol.group);
-      
-      // Systematic zigzag waypoints for vacuum cleaner avoiding sofa
+
+      const patrol = buildQuadrupedModel(); patrol.group.scale.setScalar(0.56); home.add(patrol.group);
+
+      // Systematic zigzag sweep for the vacuum across the open floor (passes under the coffee table)
       const vacWaypoints = [
-        new THREE.Vector3(2.5, 0, -2.0), // Dock
-        new THREE.Vector3(0.8, 0, -1.2), // Sweep starts
-        new THREE.Vector3(-2.2, 0, -1.2),
-        new THREE.Vector3(-2.2, 0, -0.5),
-        new THREE.Vector3(0.8, 0, -0.5),
-        new THREE.Vector3(0.8, 0, 0.2),
-        new THREE.Vector3(-2.2, 0, 0.2),
-        new THREE.Vector3(-2.2, 0, 0.9),
-        new THREE.Vector3(0.8, 0, 0.9),
-        new THREE.Vector3(0.8, 0, 1.6),
-        new THREE.Vector3(-2.2, 0, 1.6),
-        new THREE.Vector3(2.5, 0, -2.0), // Back to dock
+        new THREE.Vector3(-RW + 0.3, 0, -0.7), // dock
+        new THREE.Vector3(1.9, 0, -1.0),
+        new THREE.Vector3(-1.9, 0, -1.0),
+        new THREE.Vector3(-1.9, 0, -0.4),
+        new THREE.Vector3(1.9, 0, -0.4),
+        new THREE.Vector3(1.9, 0, 0.3),
+        new THREE.Vector3(-1.9, 0, 0.3),
+        new THREE.Vector3(-1.9, 0, 1.0),
+        new THREE.Vector3(1.9, 0, 1.0),
+        new THREE.Vector3(-RW + 0.3, 0, -0.7), // back to dock
       ];
 
-      // Draw patrol path line loop
+      // Quadruped patrol loop through the open left-central area (clear of sofa/table)
       const waypoints = [
-        new THREE.Vector3(2.2, 0, 1.7), new THREE.Vector3(2.2, 0, -1.4),
-        new THREE.Vector3(0.4, 0, -1.4), new THREE.Vector3(0.4, 0, 1.7),
-        new THREE.Vector3(2.2, 0, 1.7)
+        new THREE.Vector3(0.0, 0, 0.6), new THREE.Vector3(0.0, 0, -1.0),
+        new THREE.Vector3(-1.9, 0, -1.0), new THREE.Vector3(-1.9, 0, 0.6),
+        new THREE.Vector3(0.0, 0, 0.6)
       ];
       const patrolPathGeo = new THREE.BufferGeometry().setFromPoints(waypoints);
       const patrolPathLine = new THREE.Line(patrolPathGeo, new THREE.LineBasicMaterial({ color: 0x2e8f5b, transparent: true, opacity: 0.15 }));
