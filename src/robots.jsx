@@ -158,6 +158,15 @@ function buildHumanoidModel(mode = "wave") {
         armR.elbow.rotation.x = -0.2;
         g.position.y = Math.abs(Math.sin(w)) * 0.035;
         headG.rotation.y = Math.sin(t * 0.6) * 0.2;
+      } else if (mode === "cook") {
+        g.rotation.z = Math.sin(t * 0.8) * 0.005;
+        // Left arm holds bowl/cutting board
+        armL.sh.rotation.set(-0.4, 0.2, 0.1);
+        armL.elbow.rotation.set(-0.6, 0, 0);
+        // Right arm chops rapidly
+        armR.sh.rotation.set(-0.6, -0.2, -0.1);
+        armR.elbow.rotation.x = -0.7 + Math.sin(t * 12) * 0.35; // rapid chopping!
+        headG.rotation.y = -0.2 + Math.sin(t * 0.5) * 0.2; // look at counter
       } else {
         g.rotation.z = Math.sin(t * 0.8) * 0.015;
         headG.rotation.y = Math.sin(t * 0.45) * 0.45;
@@ -318,8 +327,6 @@ function dioramaScene(kind, zoom = 1) {
 
     if (kind === "embodied") {
       // open dollhouse room — robots living and working in a real home
-      if (zoom < 1) { camera.position.set(6.3648, 5.508, 7.0992); camera.lookAt(0, -1.45, 0); }
-      else { camera.position.set(4.4, 3.6, 4.6); camera.lookAt(0, 0.35, 0); }
       const home = new THREE.Group();
       stage.add(home);
 
@@ -333,57 +340,159 @@ function dioramaScene(kind, zoom = 1) {
       rBox(home, mFloor, 6, 0.18, 5, 0, -0.09, 0);
       const rug = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.03, 24), mRug);
       rug.position.set(-1.0, 0.02, 0.7); home.add(rug);
-      // two open walls
+      // two open walls (back and left are solid, front and right are open)
       rBox(home, mWall, 6, 0.95, 0.12, 0, 0.47, -2.44);
       rBox(home, mWall, 0.12, 0.95, 5, -2.94, 0.47, 0);
+      
       // kitchen counter + fridge
       rBox(home, mWood, 1.7, 0.5, 0.5, -1.7, 0.25, -2.0);
       rBox(home, mWall, 0.5, 0.8, 0.45, -0.5, 0.4, -2.05);
+      
       // sofa + coffee table
       const sofa = new THREE.Group(); sofa.position.set(1.7, 0, 0.4); sofa.rotation.y = -Math.PI / 2;
       rBox(sofa, mSofa, 1.5, 0.34, 0.6, 0, 0.18, 0);
       rBox(sofa, mSofa, 1.5, 0.4, 0.18, 0, 0.5, -0.22);
       home.add(sofa);
       rBox(home, mWood, 0.7, 0.22, 0.4, 0.7, 0.12, 0.5);
+      
       // plants
-      const addPlant = (x, z, s = 1) => {
+      const plantPositions = [
+        new THREE.Vector3(-2.4, 1.4, -1.9), // Plant 1
+        new THREE.Vector3(2.3, 1.3, -2.0),  // Plant 2
+        new THREE.Vector3(-2.4, 1.4, 1.9),  // Plant 3
+      ];
+      const addPlant = (pos, s = 1) => {
         const p = new THREE.Group();
         rCyl(p, mPot, 0.13, 0.1, 0.2, 0, 0.1, 0, 8);
         const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.46, 7), rMat(RB.grass2)); l1.position.y = 0.42; p.add(l1);
         const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.32, 7), rMat(RB.grass)); l2.position.set(0.07, 0.56, 0.04); p.add(l2);
-        p.position.set(x, 0, z); p.scale.setScalar(s); home.add(p);
+        p.position.copy(pos);
+        p.position.y = 0; // base on floor
+        p.scale.setScalar(s); home.add(p);
       };
-      addPlant(-2.4, -1.9, 1.0); addPlant(2.3, -2.0, 0.85); addPlant(-2.4, 1.9, 0.9);
+      addPlant(plantPositions[0], 1.0);
+      addPlant(plantPositions[1], 0.85);
+      addPlant(plantPositions[2], 0.9);
+
+      // UGV Charging Dock Station
+      const dock = new THREE.Group();
+      dock.position.set(2.5, 0.05, -2.0);
+      const mDock = rMat(0x2d3748, { roughness: 0.2 });
+      rBox(dock, mDock, 0.3, 0.1, 0.3, 0, 0, 0);
+      rBox(dock, rMat(0xe2e8f0), 0.2, 0.15, 0.05, 0, 0.08, -0.12);
+      home.add(dock);
 
       // robots doing chores
       const vac = buildRoverModel(); vac.group.scale.setScalar(0.42); home.add(vac.group);
-      const chef = buildHumanoidModel("wave"); chef.group.scale.setScalar(0.5);
+      
+      // Humanoid chef in cook (chopping) mode
+      const chef = buildHumanoidModel("cook"); chef.group.scale.setScalar(0.5);
       chef.group.position.set(-1.7, 0, -1.45); chef.group.rotation.y = Math.PI; home.add(chef.group);
+      
+      // Drone duster with scanning spotlight cone
       const duster = buildDroneModel(); duster.group.scale.setScalar(0.42); home.add(duster.group);
+      const dScannerMat = new THREE.MeshBasicMaterial({ color: 0x3fc88f, transparent: true, opacity: 0.0, side: THREE.DoubleSide });
+      const dScanner = new THREE.Mesh(new THREE.ConeGeometry(0.35, 0.9, 16), dScannerMat);
+      dScanner.rotation.x = Math.PI; // point down
+      dScanner.position.y = -0.45;
+      duster.group.add(dScanner);
+      
       const patrol = buildQuadrupedModel(); patrol.group.scale.setScalar(0.4); home.add(patrol.group);
+      
+      // Systematic zigzag waypoints for vacuum cleaner avoiding sofa
+      const vacWaypoints = [
+        new THREE.Vector3(2.5, 0, -2.0), // Dock
+        new THREE.Vector3(0.8, 0, -1.2), // Sweep starts
+        new THREE.Vector3(-2.2, 0, -1.2),
+        new THREE.Vector3(-2.2, 0, -0.5),
+        new THREE.Vector3(0.8, 0, -0.5),
+        new THREE.Vector3(0.8, 0, 0.2),
+        new THREE.Vector3(-2.2, 0, 0.2),
+        new THREE.Vector3(-2.2, 0, 0.9),
+        new THREE.Vector3(0.8, 0, 0.9),
+        new THREE.Vector3(0.8, 0, 1.6),
+        new THREE.Vector3(-2.2, 0, 1.6),
+        new THREE.Vector3(2.5, 0, -2.0), // Back to dock
+      ];
+
+      // Draw patrol path line loop
       const waypoints = [
         new THREE.Vector3(2.2, 0, 1.7), new THREE.Vector3(2.2, 0, -1.4),
         new THREE.Vector3(0.4, 0, -1.4), new THREE.Vector3(0.4, 0, 1.7),
+        new THREE.Vector3(2.2, 0, 1.7)
       ];
+      const patrolPathGeo = new THREE.BufferGeometry().setFromPoints(waypoints);
+      const patrolPathLine = new THREE.Line(patrolPathGeo, new THREE.LineBasicMaterial({ color: 0x2e8f5b, transparent: true, opacity: 0.15 }));
+      home.add(patrolPathLine);
 
       update = (t) => {
+        // 1. UGV systematic sweeping path
+        const vTotal = vacWaypoints.length;
+        const vProg = (t * 0.12) % vTotal;
+        const v0 = Math.floor(vProg), v1 = (v0 + 1) % vTotal, vf = vProg - v0;
+        const currentPos = new THREE.Vector3().lerpVectors(vacWaypoints[v0], vacWaypoints[v1], vf);
+        vac.group.position.copy(currentPos);
         vac.update(t * 1.6);
-        vac.group.position.set(-1.0 + Math.sin(t * 0.5) * 1.0, 0, 0.7 + Math.sin(t * 0.78 + 1.2) * 0.9);
-        const vx = 0.5 * Math.cos(t * 0.5);
-        const vz = 0.702 * Math.cos(t * 0.78 + 1.2);
-        vac.group.rotation.y = Math.atan2(vx, vz) - Math.PI / 2;
+        
+        const vDir = vacWaypoints[v1].clone().sub(vacWaypoints[v0]);
+        if (vDir.lengthSq() > 0.0001) {
+          vac.group.rotation.y = Math.atan2(vDir.x, vDir.z) - Math.PI / 2;
+        }
+
+        // 2. Humanoid chef (chopping counter animation)
         chef.update(t);
+
+        // 3. Drone visiting plants with scanning spotlight
+        const cycle = 24;
+        const tc = t % cycle;
+        let targetPos = new THREE.Vector3();
+        let isInspecting = false;
+        
+        if (tc < 5) {
+          const f = tc / 5;
+          targetPos.lerpVectors(plantPositions[2], plantPositions[0], f);
+        } else if (tc < 8) {
+          targetPos.copy(plantPositions[0]);
+          isInspecting = true;
+        } else if (tc < 13) {
+          const f = (tc - 8) / 5;
+          targetPos.lerpVectors(plantPositions[0], plantPositions[1], f);
+        } else if (tc < 16) {
+          targetPos.copy(plantPositions[1]);
+          isInspecting = true;
+        } else if (tc < 21) {
+          const f = (tc - 16) / 5;
+          targetPos.lerpVectors(plantPositions[1], plantPositions[2], f);
+        } else {
+          targetPos.copy(plantPositions[2]);
+          isInspecting = true;
+        }
+        
+        duster.group.position.copy(targetPos);
+        duster.group.position.y += Math.sin(t * 1.8) * 0.05;
         duster.update(t);
-        duster.group.position.set(-0.6 + Math.sin(t * 0.4) * 1.6, 1.4 + Math.sin(t * 1.1) * 0.12, -1.9);
-        duster.group.rotation.y = Math.sin(t * 0.4) > 0 ? 0 : Math.PI;
+        
+        let activePlantIdx = tc < 8 ? 0 : (tc < 16 ? 1 : 2);
+        const lookTarget = plantPositions[activePlantIdx];
+        const dirToPlant = lookTarget.clone().sub(duster.group.position);
+        duster.group.rotation.y = Math.atan2(dirToPlant.x, dirToPlant.z);
+
+        dScannerMat.opacity = isInspecting ? 0.3 + Math.sin(t * 6) * 0.12 : 0.0;
+
+        // 4. Quadruped patroller
         patrol.update(t);
-        const total = waypoints.length;
+        const total = 4;
         const prog = (t * 0.18) % total;
-        const i0 = Math.floor(prog), i1 = (i0 + 1) % total, f = prog - i0;
+        const i0 = Math.floor(prog), i1 = i0 + 1, f = prog - i0;
         patrol.group.position.lerpVectors(waypoints[i0], waypoints[i1], f);
         const dir = waypoints[i1].clone().sub(waypoints[i0]);
         patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
-        stage.rotation.y = Math.sin(t * 0.12) * 0.14 + ctx.mouse.x * 0.22;
+
+        // 5. Cinematic panning camera (orbits within open front-right sector)
+        const camRadius = zoom < 1 ? 14.5 : 10.5;
+        const angle = Math.PI / 4 + Math.sin(t * 0.08) * 0.5 + ctx.mouse.x * 0.4;
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 9.5 : 7.0) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? -0.8 : -0.2, 0);
       };
     }
 
