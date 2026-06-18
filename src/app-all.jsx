@@ -354,12 +354,7 @@ function HomePage({ go }) {
                   <a href="https://engineering.louisville.edu/faculty/sabur-h-baidya/" target="_blank" rel="noopener noreferrer">Dr. Sabur Baidya</a>,
                   and an AI research intern at Samsung R&amp;D Institute through the PRISM program.
                 </p>
-                <p className="hero-bio hero-bio-highlight">
-                  I was selected as a recipient of the{" "}
-                  <a href="https://www.chishiki-ai.org/awardees/" target="_blank" rel="noopener noreferrer">2026 NSF Chishiki AI Fellowship</a>{" "}
-                  at the University of Texas at Austin, and will also be working with{" "}
-                  <a href="https://oden.utexas.edu/people/directory/Krishna-Kumar/" target="_blank" rel="noopener noreferrer">Dr. Krishna Kumar</a>.
-                </p>
+
                 <div className="hero-socials" aria-label="Academic and social links">
                   <a href={PROFILE.scholar} target="_blank" rel="noopener noreferrer" className="btn-link social-link" aria-label="Google Scholar profile">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.8 8.1 12 13.2l9.2-5.1L12 3Zm-6.6 7.5v4.2c0 2.3 3 4.3 6.6 4.3s6.6-2 6.6-4.3v-4.2L12 14.2l-6.6-3.7Z" fill="currentColor" /></svg>

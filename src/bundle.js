@@ -2702,17 +2702,7 @@ function HomePage({
     href: "https://engineering.louisville.edu/faculty/sabur-h-baidya/",
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "Dr. Sabur Baidya"), ", and an AI research intern at Samsung R&D Institute through the PRISM program."), /*#__PURE__*/React.createElement("p", {
-    className: "hero-bio hero-bio-highlight"
-  }, "I was selected as a recipient of the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://www.chishiki-ai.org/awardees/",
-    target: "_blank",
-    rel: "noopener noreferrer"
-  }, "2026 NSF Chishiki AI Fellowship"), " ", "at the University of Texas at Austin, and will also be working with", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://oden.utexas.edu/people/directory/Krishna-Kumar/",
-    target: "_blank",
-    rel: "noopener noreferrer"
-  }, "Dr. Krishna Kumar"), "."), /*#__PURE__*/React.createElement("div", {
+  }, "Dr. Sabur Baidya"), ", and an AI research intern at Samsung R&D Institute through the PRISM program."), /*#__PURE__*/React.createElement("div", {
     className: "hero-socials",
     "aria-label": "Academic and social links"
   }, /*#__PURE__*/React.createElement("a", {
