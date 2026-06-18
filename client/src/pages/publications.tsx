@@ -39,8 +39,8 @@ const Publications = () => {
       ...publications.conference.map(p => ({ ...p, kind: "conference" })),
       ...publications.submitted.map(p => ({ ...p, kind: "submitted" }))
     ];
-    // Sort primarily by kind (journals first, conferences, under review), then by year descending
-    const kindOrder = ["journal", "conference", "submitted"];
+    // Sort primarily by kind (conferences first, journals, under review), then by year descending
+    const kindOrder = ["conference", "journal", "submitted"];
     return list.sort((a, b) => {
       const orderA = kindOrder.indexOf(a.kind || "");
       const orderB = kindOrder.indexOf(b.kind || "");
@@ -240,12 +240,19 @@ const Publications = () => {
                           {/* Action Links */}
                           <div className="flex flex-wrap items-center gap-3">
                             {pub.link && (
-                              <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
-                                <a href={pub.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
-                                  <FileText className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
-                                  <span>Paper</span>
-                                </a>
-                              </Button>
+                              pub.link === "Coming Soon!" ? (
+                                <Button size="sm" variant="outline" className="border-slate-200 text-slate-400 bg-slate-50 cursor-default" disabled>
+                                  <FileText className="h-4 w-4 text-slate-300" />
+                                  <span>Preprint: Coming Soon!</span>
+                                </Button>
+                              ) : (
+                                <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
+                                  <a href={pub.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
+                                    <FileText className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
+                                    <span>Paper</span>
+                                  </a>
+                                </Button>
+                              )
                             )}
                             {pub.github && (
                               <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>

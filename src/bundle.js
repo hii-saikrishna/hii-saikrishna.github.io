@@ -184,6 +184,18 @@ const THRUSTS = [{
 // Each paper carries a thumbnail, a one-line overview, and a links object.
 // Only links that exist are rendered — add paper / preprint / github / video / blog as available.
 const PUBLICATIONS = [{
+  year: 2026,
+  kind: "conference",
+  featured: true,
+  title: "Semantic Kernel",
+  authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
+  venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026",
+  image: "attached_assets/publication_gallery/Semantic Kernel.mp4",
+  overview: "Incorporating semantics directly into spatial modeling preserves spatial heterogeneity, accelerates convergence, and provides reliable uncertainty quantification under both quality and budget constrained regimes, especially in real-world environments where learned kernels often struggle.",
+  links: {
+    preprint: "Coming Soon!"
+  }
+}, {
   year: 2023,
   kind: "journal",
   featured: false,
@@ -272,7 +284,7 @@ const PUBLICATIONS = [{
   }
 }, {
   year: 2025,
-  kind: "journal",
+  kind: "conference",
   featured: true,
   title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
@@ -436,16 +448,17 @@ const PUBLICATIONS = [{
   }
 }];
 
-// Groups for the segregated Publications view (order matters).
+// Groups for the segregated Publications view (order matters: conferences first,
+// under-review next, journals last).
 const PUB_GROUPS = [{
-  kind: "journal",
-  label: "Journal Articles"
-}, {
   kind: "conference",
   label: "Conference Papers"
 }, {
   kind: "submitted",
   label: "Under Review"
+}, {
+  kind: "journal",
+  label: "Journal Articles"
 }];
 const BLOG_POSTS = [{
   id: "smart-home-robots",
@@ -513,66 +526,115 @@ const BLOG_POSTS = [{
 }];
 
 // Milestones — grouped by year in the UI; tag drives the color pill.
-const UPDATES = [{
-  date: "Dec 2025",
-  year: 2025,
-  tag: "Paper",
-  text: "SPACE framework submitted to IROS 2025. Excited to see it in the community."
+const UPDATES = [
+// 2026
+{
+  date: "Jun 2026",
+  year: 2026,
+  tag: "Grant",
+  text: "Received a travel grant for the KTH RPL Summer School 2026 in Stockholm, Sweden."
 }, {
-  date: "Nov 2025",
-  year: 2025,
-  tag: "Collab",
-  text: "Started collaborating with TU Delft on distributed Bayesian optimization for multi-robot exploration."
+  date: "May 2026",
+  year: 2026,
+  tag: "Fellowship",
+  text: "Awarded the 2026–27 NSF Chishiki AI Fellowship from the University of Texas at Austin."
 }, {
+  date: "May 2026",
+  year: 2026,
+  tag: "Candidacy",
+  text: "Passed my PhD candidacy exam, before a committee of Dr. Ramviyas Parasuraman, Dr. Jin Sun, Dr. Fei Duo, and Dr. Sabur Baidya."
+}, {
+  date: "Apr 2026",
+  year: 2026,
+  tag: "Talk",
+  text: "Presented “Spatial Intelligence Models for Reasoning” at UGA AI Research Day 2026."
+},
+// 2025
+{
   date: "Oct 2025",
   year: 2025,
   tag: "Talk",
-  text: "Gave a talk on embodied reasoning at the NeurIPS 2025 workshop on Embodied AI. Great discussions."
+  text: "Presented MGPRL and 3DS-SLAM at IROS 2025 in Hangzhou, China (travel grant awarded)."
 }, {
-  date: "Sep 2025",
+  date: "May 2025",
   year: 2025,
-  tag: "Field Work",
-  text: "Completed field trials of MGPRL in the HeRoLab warehouse. Four quadrupeds, GPS-denied, 10 hours of autonomous operation."
+  tag: "Talk",
+  text: "Presented SPACE at the Block-by-Block Workshop, ICRA 2025 in Atlanta, USA (travel grant awarded)."
 }, {
-  date: "Jul 2025",
+  date: "Apr 2025",
   year: 2025,
-  tag: "Paper",
-  text: "MGPRL submitted to IROS 2025 — Wi-Fi-based relative localization for large indoor teams."
-}, {
+  tag: "Talk",
+  text: "Presented SPACE at UGA AI Research Day 2025."
+},
+// 2024
+{
   date: "Aug 2024",
   year: 2024,
   tag: "Milestone",
-  text: "Started PhD at UGA under Dr. Ramviyas Parasuraman. Building robots that think."
-}, {
-  date: "Jun 2024",
-  year: 2024,
-  tag: "Milestone",
-  text: "Graduated from IIIT Naya Raipur with a B.Tech in Computer Science & Engineering."
+  text: "Joined the University of Georgia as a PhD student in Artificial Intelligence, advised by Dr. Ramviyas Parasuraman."
 }, {
   date: "Mar 2024",
   year: 2024,
-  tag: "Award",
-  text: "Recognized for undergraduate research in semantic SLAM and explainable vision."
+  tag: "Talk",
+  text: "Presented 3DS-SLAM at the KY NSF EPSCoR SuperCollider in Lexington, Kentucky."
 }, {
-  date: "Oct 2023",
+  date: "Jan 2024",
+  year: 2024,
+  tag: "Research",
+  text: "Continued as a visiting research intern at the Louisville Automation & Robotics Research Institute (LARRI) for Spring 2024."
+}, {
+  date: "Jan 2024",
+  year: 2024,
+  tag: "Grant",
+  text: "Received a $1,200 travel grant for IEEE TENCON 2023 (IIIT-NR TEQIP)."
+},
+// 2023
+{
+  date: "May 2023",
   year: 2023,
-  tag: "Paper",
-  text: "3DS-SLAM released on arXiv — semantic SLAM for dynamic indoor environments."
+  tag: "Research",
+  text: "Began as a visiting research intern at the Louisville Automation & Robotics Research Institute (LARRI) for Summer 2023, where I authored 3DS-SLAM."
 }, {
   date: "May 2023",
   year: 2023,
-  tag: "Internship",
-  text: "Joined Samsung R&D as a Software Engineer Intern, working on on-device ML."
+  tag: "Grant",
+  text: "Recipient of IIIT-NR TEQIP-II international travel grants ($2,500 and $6,000)."
 }, {
-  date: "Feb 2023",
+  date: "Jan 2023",
   year: 2023,
-  tag: "Paper",
-  text: "Adversarial security & differential privacy for mmWave beam prediction accepted at IEEE CSNet 2023."
-}, {
-  date: "2022",
+  tag: "Research",
+  text: "Started working remotely with Dr. Sabur Baidya on adversarial security and differential privacy for 6G networks, which led to an onsite internship that summer."
+},
+// 2022
+{
+  date: "Jul 2022",
   year: 2022,
-  tag: "Paper",
-  text: "Holistic visual speech recognition published in IEEE Transactions on Artificial Intelligence."
+  tag: "Internship",
+  text: "Started as a research intern at Samsung R&D Institute India through the PRISM program at IIIT Naya Raipur."
+},
+// 2021
+{
+  date: "Dec 2021",
+  year: 2021,
+  tag: "Research",
+  text: "Began tackling my own problems — drowsiness detection, LesionAid, and Vision-Transformer methods — as minor projects and published them, including LIPAR, a person-independent spatio-temporal visual speech recognition app, and ViTDD, real-time Vision-Transformer drowsiness detection."
+}, {
+  date: "Sep 2021",
+  year: 2021,
+  tag: "Internship",
+  text: "Served as a volunteer intern at the School of Innovation and Leadership."
+}, {
+  date: "Jan 2021",
+  year: 2021,
+  tag: "Research",
+  text: "Joined Dr. Venkanna’s work on dScout — my first publication, and where I really started to understand research."
+},
+// 2020
+{
+  date: "Aug 2020",
+  year: 2020,
+  tag: "Milestone",
+  text: "Admitted to IIIT Naya Raipur after scoring in the 98.69 percentile on India’s largest engineering entrance exam."
 }];
 
 // A short, original line to keep me pointed at the goal — shown at the end of Milestones.
@@ -3600,6 +3662,51 @@ function Reveal({
     className: "reveal"
   }, children);
 }
+
+// ===== Lazy, viewport-gated video =====
+// Attaches its source only when the clip nears the viewport and plays only while
+// it is on-screen — so several videos never decode at once. This keeps scrolling
+// smooth and the initial page light. Honors prefers-reduced-motion by holding a
+// still first frame instead of looping.
+function LazyVideo({
+  src,
+  className
+}) {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || !src) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let attached = false;
+    const io = new IntersectionObserver(entries => {
+      const e = entries[0];
+      if (!e) return;
+      if (e.isIntersecting) {
+        if (!attached) {
+          el.src = reduce ? src + "#t=0.1" : src;
+          attached = true;
+        }
+        if (!reduce) el.play().catch(() => {});
+      } else if (attached && !reduce) {
+        el.pause();
+      }
+    }, {
+      rootMargin: "200px 0px",
+      threshold: 0.1
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [src]);
+  return /*#__PURE__*/React.createElement("video", {
+    ref: ref,
+    className: className,
+    muted: true,
+    loop: true,
+    playsInline: true,
+    preload: "none",
+    draggable: "false"
+  });
+}
 const Arrow = ({
   dir = "right"
 }) => /*#__PURE__*/React.createElement("svg", {
@@ -3825,6 +3932,21 @@ function PubLinks({
     className: "pub-links"
   }, present.map(([k, label]) => {
     const href = links[k];
+    if (href === "Coming Soon!") {
+      return /*#__PURE__*/React.createElement("span", {
+        key: k,
+        className: `pub-linkbtn ${k} disabled`,
+        style: {
+          opacity: 0.6,
+          cursor: "default"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "dot",
+        style: {
+          background: "var(--ink-4)"
+        }
+      }), label, ": Coming Soon!");
+    }
     const internal = href.charAt(0) === "#";
     return /*#__PURE__*/React.createElement("a", _extends({
       key: k,
@@ -3920,19 +4042,9 @@ function PubRow({
     className: "pub-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: `pub-thumb ${p.image ? "" : "is-placeholder"}`
-  }, p.image ? isVideo ? /*#__PURE__*/React.createElement("video", {
+  }, p.image ? isVideo ? /*#__PURE__*/React.createElement(LazyVideo, {
     src: p.image,
-    muted: true,
-    playsInline: true,
-    autoPlay: true,
-    loop: true,
-    className: "pub-video-thumb",
-    style: {
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-      display: "block"
-    }
+    className: "pub-video-thumb"
   }) : /*#__PURE__*/React.createElement("img", {
     src: p.image,
     alt: "",
@@ -4625,18 +4737,9 @@ function TripGallery() {
         setActive(safeFeatured);
       }
     }
-  }, isVideo(feat.src) ? /*#__PURE__*/React.createElement("video", {
+  }, isVideo(feat.src) ? /*#__PURE__*/React.createElement(LazyVideo, {
     key: feat.src,
-    ref: el => {
-      if (el) el.muted = true;
-    },
-    src: feat.src,
-    muted: true,
-    loop: true,
-    autoPlay: true,
-    playsInline: true,
-    preload: "auto",
-    draggable: "false"
+    src: feat.src
   }) : /*#__PURE__*/React.createElement("img", {
     key: feat.src,
     src: feat.src,

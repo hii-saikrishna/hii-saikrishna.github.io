@@ -2284,7 +2284,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 /* rich publication cards (image + overview + links) */
 .pub-card {
   display: grid;
-  grid-template-columns: 156px 1fr;
+  grid-template-columns: 200px 1fr;
   gap: 24px;
   padding: 24px 0;
   border-bottom: 1px solid var(--line-2);
@@ -2293,16 +2293,31 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
 .pub-card:last-child { border-bottom: none; }
 .pub-thumb {
   position: relative;
-  aspect-ratio: 4 / 3;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--bg-soft);
+  align-self: start;
 }
-.pub-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+/* Versatile media window — any aspect ratio (wide video, tall figure, square)
+   fits fully: never cropped, never stretched. The media keeps its natural ratio
+   up to a height cap; anything taller is letterboxed onto the soft background. */
+.pub-thumb img,
+.pub-thumb video {
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+  object-fit: contain;
+  display: block;
+  background: var(--bg-soft);
+  transition: transform .5s ease;
+}
+/* Papers without a figure get the placeholder art on a fixed 4:3 cover. */
+.pub-thumb.is-placeholder { aspect-ratio: 4 / 3; }
 .pub-thumb .pub-ph-art { width: 100%; height: 100%; display: block; transition: transform .5s ease; }
 .pub-card:hover .pub-thumb .pub-ph-art { transform: scale(1.04); }
-.pub-card:hover .pub-thumb img { transform: scale(1.05); }
+.pub-card:hover .pub-thumb img,
+.pub-card:hover .pub-thumb video { transform: scale(1.04); }
 .pub-feat {
   position: absolute; top: 8px; left: 8px;
   font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase;

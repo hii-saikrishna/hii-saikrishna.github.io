@@ -139,6 +139,34 @@ function Reveal({ children, delay = 0 }) {
   return <div ref={ref} className="reveal">{children}</div>;
 }
 
+// ===== Lazy, viewport-gated video =====
+// Attaches its source only when the clip nears the viewport and plays only while
+// it is on-screen — so several videos never decode at once. This keeps scrolling
+// smooth and the initial page light. Honors prefers-reduced-motion by holding a
+// still first frame instead of looping.
+function LazyVideo({ src, className }) {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || !src) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let attached = false;
+    const io = new IntersectionObserver((entries) => {
+      const e = entries[0];
+      if (!e) return;
+      if (e.isIntersecting) {
+        if (!attached) { el.src = reduce ? src + "#t=0.1" : src; attached = true; }
+        if (!reduce) el.play().catch(() => {});
+      } else if (attached && !reduce) {
+        el.pause();
+      }
+    }, { rootMargin: "200px 0px", threshold: 0.1 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [src]);
+  return <video ref={ref} className={className} muted loop playsInline preload="none" draggable="false" />;
+}
+
 const Arrow = ({ dir = "right" }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     {dir === "left"
@@ -275,6 +303,13 @@ function PubLinks({ links }) {
     <div className="pub-links">
       {present.map(([k, label]) => {
         const href = links[k];
+        if (href === "Coming Soon!") {
+          return (
+            <span key={k} className={`pub-linkbtn ${k} disabled`} style={{ opacity: 0.6, cursor: "default" }}>
+              <span className="dot" style={{ background: "var(--ink-4)" }}></span>{label}: Coming Soon!
+            </span>
+          );
+        }
         const internal = href.charAt(0) === "#";
         return (
           <a key={k} className={`pub-linkbtn ${k}`} href={href}
@@ -318,7 +353,7 @@ function PubRow({ p }) {
       <div className={`pub-thumb ${p.image ? "" : "is-placeholder"}`}>
         {p.image ? (
           isVideo ? (
-            <video src={p.image} muted playsInline autoPlay loop className="pub-video-thumb" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <LazyVideo src={p.image} className="pub-video-thumb" />
           ) : (
             <img src={p.image} alt="" loading="lazy" />
           )
@@ -817,8 +852,7 @@ function TripGallery() {
           onClick={() => setActive(safeFeatured)}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setActive(safeFeatured); } }}>
           {isVideo(feat.src)
-            ? <video key={feat.src} ref={(el) => { if (el) el.muted = true; }} src={feat.src}
-                muted loop autoPlay playsInline preload="auto" draggable="false" />
+            ? <LazyVideo key={feat.src} src={feat.src} />
             : <img key={feat.src} src={feat.src} alt={feat.title} draggable="false" />}
           <span className="tf-zoom" aria-hidden="true"><Arrow dir="right" /></span>
           <figcaption className="tf-cap">

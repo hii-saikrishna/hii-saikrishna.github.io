@@ -129,17 +129,6 @@ export const publications = {
         image: null
       },
       {
-        title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
-        authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-        venue: "Journal: IEEE Robotics and Automation Letters",
-        year: "2025",
-        description: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
-        link: "https://doi.org/10.1109/LRA.2025.3627118",
-        github: "https://github.com/herolab-uga/SPACE-MAP",
-        video: "https://youtu.be/EE0velFrJgI",
-        image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4"
-      },
-      {
         title: "LesionAid: Vision Transformers-Based Skin Lesion Generation and Classification - A Practical Review",
         authors: [ "Sai Krishna Ghanta", "Mallikharjuna Rao", "Kundrapu Supriya" ],
         venue: "Multimedia Tools and Applications, 2025",
@@ -152,6 +141,28 @@ export const publications = {
       }
     ],
     conference: [
+      {
+        title: "Semantic Kernel",
+        authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
+        venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026",
+        year: "2026",
+        description: "Incorporating semantics directly into spatial modeling preserves spatial heterogeneity, accelerates convergence, and provides reliable uncertainty quantification under both quality and budget constrained regimes, especially in real-world environments where learned kernels often struggle.",
+        link: "Coming Soon!",
+        github: null,
+        video: null,
+        image: "attached_assets/publication_gallery/Semantic Kernel.mp4"
+      },
+      {
+        title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
+        authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
+        venue: "IEEE Robotics and Automation Letters (L-RA), 2025",
+        year: "2025",
+        description: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
+        link: "https://doi.org/10.1109/LRA.2025.3627118",
+        github: "https://github.com/herolab-uga/SPACE-MAP",
+        video: "https://youtu.be/EE0velFrJgI",
+        image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4"
+      },
       {
         title: "A Novel End-to-End Framework for Occluded Pixel Reconstruction with Spatio-Temporal Features for Improved Person Re-Identification",
         authors: [ "P. R. Medi", "P. Nemani", "Sai Krishna Ghanta", "S. Vollala" ],
