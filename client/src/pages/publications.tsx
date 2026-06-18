@@ -39,8 +39,16 @@ const Publications = () => {
       ...publications.conference.map(p => ({ ...p, kind: "conference" })),
       ...publications.submitted.map(p => ({ ...p, kind: "submitted" }))
     ];
-    // Sort primarily by year descending, and then by title
-    return list.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+    // Sort primarily by kind (journals first, conferences, under review), then by year descending
+    const kindOrder = ["journal", "conference", "submitted"];
+    return list.sort((a, b) => {
+      const orderA = kindOrder.indexOf(a.kind || "");
+      const orderB = kindOrder.indexOf(b.kind || "");
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      return parseInt(b.year) - parseInt(a.year);
+    });
   }, []);
 
   // Filter and search publications
@@ -144,110 +152,124 @@ const Publications = () => {
           {/* Publications List */}
           {filteredPublications.length > 0 ? (
             <div className="space-y-6">
-              {filteredPublications.map((pub, index) => (
-                <Card 
-                  key={index} 
-                  className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-slate-200 bg-white"
-                >
-                  <CardContent className="p-0">
-                    <div className="flex flex-col md:flex-row">
-                      {/* Paper Figure (if exists) */}
-                      {pub.image && (
-                        <div className="md:w-1/3 xl:w-1/4 relative group min-h-[200px] md:min-h-auto bg-slate-50 border-r border-slate-200 flex items-center justify-center p-4">
-                          <img 
-                            src={pub.image} 
-                            alt={`Figure from: ${pub.title}`}
-                            className="max-h-48 md:max-h-full object-contain rounded transition-transform duration-300 group-hover:scale-105"
-                          />
-                          <div 
-                            onClick={() => setSelectedImage(pub.image)}
-                            className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 text-white font-medium text-sm transition-opacity duration-300 cursor-pointer rounded"
-                          >
-                            <Eye className="h-5 w-5" />
-                            <span>Zoom Figure</span>
-                          </div>
-                          <span className="absolute top-3 left-3 bg-blue-primary text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded shadow-sm">
-                            Paper Figure
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Paper Details */}
-                      <div className={`p-6 sm:p-8 flex-1 ${pub.image ? "md:w-2/3 xl:w-3/4" : "w-full"}`}>
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-700 uppercase tracking-wide">
-                            {pub.kind === "journal" ? "Journal" : pub.kind === "conference" ? "Conference" : "Preprint"}
-                          </span>
-                          <span className="text-xs font-medium text-slate-400">
-                            {pub.year}
-                          </span>
-                        </div>
-
-                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 leading-snug mb-3 hover:text-blue-primary transition-colors">
-                          <a href={pub.link || undefined} target="_blank" rel="noopener noreferrer">
-                            {pub.title}
-                          </a>
-                        </h2>
-
-                        <div className="mb-4">
-                          {pub.authors.map((author, authorIndex) => {
-                            const isMe = author.toLowerCase().includes("sai krishna");
-                            return (
-                              <span key={authorIndex}>
-                                <span className={`text-sm ${isMe ? "text-blue-primary font-bold underline" : "text-slate-600 font-medium"}`}>
-                                  {author}
-                                </span>
-                                {authorIndex < pub.authors.length - 1 && ", "}
-                              </span>
-                            );
-                          })}
-                        </div>
-
-                        <div className="text-xs sm:text-sm text-slate-500 font-medium italic mb-4 flex items-center gap-1.5">
-                          <BookOpen className="h-4 w-4 shrink-0 text-slate-400" />
-                          <span>{pub.venue}</span>
-                        </div>
-
-                        {pub.description && (
-                          <div className="bg-slate-50 rounded-lg p-4 mb-6 border-l-4 border-blue-primary">
-                            <p className="text-slate-600 text-sm leading-relaxed italic">
-                              &ldquo;{pub.description}&rdquo;
-                            </p>
+              {filteredPublications.map((pub, index) => {
+                const isVideo = pub.image && /\.(mp4|webm|mov|m4v)$/i.test(pub.image);
+                return (
+                  <Card 
+                    key={index} 
+                    className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-slate-200 bg-white"
+                  >
+                    <CardContent className="p-0">
+                      <div className="flex flex-col md:flex-row">
+                        {/* Paper Figure (if exists) */}
+                        {pub.image && (
+                          <div className="md:w-1/3 xl:w-1/4 relative group min-h-[200px] md:min-h-auto bg-slate-50 border-r border-slate-200 flex items-center justify-center p-4">
+                            {isVideo ? (
+                              <video
+                                src={pub.image}
+                                muted
+                                playsInline
+                                autoPlay
+                                loop
+                                className="max-h-48 md:max-h-full w-full h-full object-contain rounded transition-transform duration-300 group-hover:scale-105"
+                              />
+                            ) : (
+                              <img 
+                                src={pub.image} 
+                                alt={`Figure from: ${pub.title}`}
+                                className="max-h-48 md:max-h-full object-contain rounded transition-transform duration-300 group-hover:scale-105"
+                              />
+                            )}
+                            <div 
+                              onClick={() => setSelectedImage(pub.image)}
+                              className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 text-white font-medium text-sm transition-opacity duration-300 cursor-pointer rounded"
+                            >
+                              <Eye className="h-5 w-5" />
+                              <span>Zoom Figure</span>
+                            </div>
+                            <span className="absolute top-3 left-3 bg-blue-primary text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded shadow-sm">
+                              Paper Figure
+                            </span>
                           </div>
                         )}
 
-                        {/* Action Links */}
-                        <div className="flex flex-wrap items-center gap-3">
-                          {pub.link && (
-                            <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
-                              <a href={pub.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
-                                <FileText className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
-                                <span>Paper</span>
-                              </a>
-                            </Button>
+                        {/* Paper Details */}
+                        <div className={`p-6 sm:p-8 flex-1 ${pub.image ? "md:w-2/3 xl:w-3/4" : "w-full"}`}>
+                          <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <span className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-700 uppercase tracking-wide">
+                              {pub.kind === "journal" ? "Journal" : pub.kind === "conference" ? "Conference" : "Preprint"}
+                            </span>
+                            <span className="text-xs font-medium text-slate-400">
+                              {pub.year}
+                            </span>
+                          </div>
+
+                          <h2 className="text-xl sm:text-2xl font-bold text-slate-800 leading-snug mb-3 hover:text-blue-primary transition-colors">
+                            <a href={pub.link || undefined} target="_blank" rel="noopener noreferrer">
+                              {pub.title}
+                            </a>
+                          </h2>
+
+                          <div className="mb-4">
+                            {pub.authors.map((author, authorIndex) => {
+                              const isMe = author.toLowerCase().includes("sai krishna");
+                              return (
+                                <span key={authorIndex}>
+                                  <span className={`text-sm ${isMe ? "text-blue-primary font-bold underline" : "text-slate-600 font-medium"}`}>
+                                    {author}
+                                  </span>
+                                  {authorIndex < pub.authors.length - 1 && ", "}
+                                </span>
+                              );
+                            })}
+                          </div>
+
+                          <div className="text-xs sm:text-sm text-slate-500 font-medium italic mb-4 flex items-center gap-1.5">
+                            <BookOpen className="h-4 w-4 shrink-0 text-slate-400" />
+                            <span>{pub.venue}</span>
+                          </div>
+
+                          {pub.description && (
+                            <div className="bg-slate-50 rounded-lg p-4 mb-6 border-l-4 border-blue-primary">
+                              <p className="text-slate-600 text-sm leading-relaxed italic">
+                                &ldquo;{pub.description}&rdquo;
+                              </p>
+                            </div>
                           )}
-                          {pub.github && (
-                            <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
-                              <a href={pub.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
-                                <Github className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
-                                <span>Code</span>
-                              </a>
-                            </Button>
-                          )}
-                          {pub.video && (
-                            <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
-                              <a href={pub.video} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
-                                <Play className="h-4 w-4 text-slate-500 hover:text-blue-primary fill-slate-500 hover:fill-blue-primary" />
-                                <span>Video</span>
-                              </a>
-                            </Button>
-                          )}
+
+                          {/* Action Links */}
+                          <div className="flex flex-wrap items-center gap-3">
+                            {pub.link && (
+                              <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
+                                <a href={pub.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
+                                  <FileText className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
+                                  <span>Paper</span>
+                                </a>
+                              </Button>
+                            )}
+                            {pub.github && (
+                              <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
+                                <a href={pub.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
+                                  <Github className="h-4 w-4 text-slate-500 hover:text-blue-primary" />
+                                  <span>Code</span>
+                                </a>
+                              </Button>
+                            )}
+                            {pub.video && (
+                              <Button size="sm" variant="outline" className="border-slate-300 hover:border-blue-primary hover:text-blue-primary text-slate-700 bg-white" asChild>
+                                <a href={pub.video} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
+                                  <Play className="h-4 w-4 text-slate-500 hover:text-blue-primary fill-slate-500 hover:fill-blue-primary" />
+                                  <span>Video</span>
+                                </a>
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           ) : (
             <div className="text-center bg-white rounded-xl shadow-sm border border-slate-200 py-16 px-4">
@@ -273,28 +295,42 @@ const Publications = () => {
       </div>
 
       {/* Lightbox Zoom Modal */}
-      {selectedImage && (
-        <div 
-          className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-w-4xl max-h-[85vh] w-full flex items-center justify-center">
-            <button 
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 md:-right-12 text-white hover:text-slate-300 p-2 cursor-pointer bg-slate-800/50 rounded-full"
-              aria-label="Close image zoom"
-            >
-              <X className="h-6 w-6" />
-            </button>
-            <img 
-              src={selectedImage} 
-              alt="High-resolution zoomed figure" 
-              className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
+      {selectedImage && (() => {
+        const isZoomVideo = /\.(mp4|webm|mov|m4v)$/i.test(selectedImage);
+        return (
+          <div 
+            className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative max-w-4xl max-h-[85vh] w-full flex items-center justify-center">
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-12 right-0 md:-right-12 text-white hover:text-slate-300 p-2 cursor-pointer bg-slate-800/50 rounded-full"
+                aria-label="Close media zoom"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              {isZoomVideo ? (
+                <video 
+                  src={selectedImage} 
+                  controls
+                  autoPlay
+                  loop
+                  className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <img 
+                  src={selectedImage} 
+                  alt="High-resolution zoomed figure" 
+                  className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 };

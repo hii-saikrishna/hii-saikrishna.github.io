@@ -131,7 +131,7 @@ const PUBLICATIONS = [
       title: "Vision Transformers and YOLOv5 based Driver Drowsiness Detection Framework",
       authors: [ "Ghanta Sai Krishna", "Kundrapu Supriya", "Jai Vardhan", "Mallikharjuna Rao K" ],
       venue: "arXiv preprint, 2022",
-      image: null,
+      image: "attached_assets/publication_gallery/Drowsiness Detection.png",
       overview: "Combines YOLOv5-based region extraction with Vision Transformers to classify driver drowsiness from visual cues.",
       links: {
         preprint: "https://arxiv.org/abs/2209.01401"
@@ -158,7 +158,7 @@ const PUBLICATIONS = [
       title: "Epersist: A Two-Wheeled Self Balancing Robot Using PID Controller and Deep Reinforcement Learning",
       authors: [ "Sai Krishna Ghanta", "Dyavat Sumith", "Garika Akshay" ],
       venue: "2022 22nd International Conference on Control, Automation and Systems (ICCAS) (2022)",
-      image: null,
+      image: "attached_assets/publication_gallery/ePersist.png",
       overview: "Compares PID control and deep reinforcement learning strategies for stabilizing a two-wheeled self-balancing robot.",
       links: {
         preprint: "https://arxiv.org/abs/2207.11431"
@@ -177,7 +177,7 @@ const PUBLICATIONS = [
         "S. Kumar"
       ],
       venue: "IEEE Transactions on Artificial Intelligence, 2023",
-      image: null,
+      image: "attached_assets/publication_gallery/DL based Holistic Visual Speech Recognition.png",
       overview: "Builds a holistic deep-learning visual speech recognition system that recognizes speech from facial/mouth motion independent of speaker identity.",
       links: {
         paper: "https://doi.org/10.1109/TAI.2022.3220190"
@@ -203,7 +203,7 @@ const PUBLICATIONS = [
       title: "3DS-SLAM: A 3D Object Detection Based Semantic SLAM Towards Dynamic Indoor Environments",
       authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
       venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025",
-      image: "attached_assets/publication_gallery/3ds-slam_figure_2.jpeg",
+      image: "attached_assets/publication_gallery/3DS-SLAM.mp4",
       overview: "Integrates 3D object detection with dynamic feature filtering to improve semantic SLAM robustness in dynamic indoor environments.",
       links: {
         preprint: "https://arxiv.org/abs/2310.06385",
@@ -218,7 +218,7 @@ const PUBLICATIONS = [
       title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
       authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
       venue: "IEEE Robotics and Automation Letters (L-RA), 2025",
-      image: "attached_assets/publication_gallery/space_figure_1.jpeg",
+      image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4",
       overview: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
       links: {
         paper: "https://doi.org/10.1109/LRA.2025.3627118",
@@ -234,7 +234,7 @@ const PUBLICATIONS = [
       title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
       authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
       venue: "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025",
-      image: "attached_assets/publication_gallery/mgprl_figure_3.png",
+      image: "attached_assets/publication_gallery/MGPRL.mp4",
       overview: "Uses Wi-Fi RSSI fields and distributed multi-output Gaussian Processes for relative localization among robots in GPS-denied indoor environments.",
       links: {
         preprint: "https://arxiv.org/abs/2506.23514",
@@ -249,7 +249,7 @@ const PUBLICATIONS = [
       title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
       authors: ["Sai Krishna Ghanta*", "Kundrapu Supriya", "Sabur Baidya"],
       venue: "IEEE Cyber Security in Networking Conference (CSNet), 2023",
-      image: null,
+      image: "attached_assets/publication_gallery/Adversarial Security.png",
       overview: "Studies adversarial robustness and differential privacy for machine-learning-based mmWave beam prediction in 6G communication systems.",
       links: {
         preprint: "https://arxiv.org/abs/2305.09679"
@@ -262,7 +262,7 @@ const PUBLICATIONS = [
       title: "Policies Over Poses: Reinforcement Learning Based Distributed Pose-Graph Optimization for Multi-Robot SLAM",
       authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
       venue: "IEEE International Symposium on Multi-Robot and Multi-Agent Systems (MRS), 2025",
-      image: null,
+      image: "attached_assets/publication_gallery/Policies Over Poses.png",
       overview: "Uses multi-agent reinforcement learning and graph-based representations to improve distributed pose-graph optimization for multi-robot SLAM.",
       links: {
         preprint: "https://arxiv.org/abs/2510.22740",
@@ -284,7 +284,7 @@ const PUBLICATIONS = [
         "Yanhai Xiong"
       ],
       venue: "arXiv review preprint, 2026",
-      image: null,
+      image: "attached_assets/publication_gallery/EV.png",
       overview: "Frames EV charging research across planning, scheduling, and user behavior while highlighting fidelity-tractability tradeoffs.",
       links: {
         preprint: "https://arxiv.org/abs/2605.21665"
@@ -297,7 +297,7 @@ const PUBLICATIONS = [
       title: "CAMP-HiVe: Cyclic Pair Merging Based Efficient DNN Pruning with Hessian-Vector Approximation for Resource-Constrained Systems",
       authors: [ "Mohammad Helal Uddin", "Sai Krishna Ghanta", "Liam Seymour", "Sabur Baidya" ],
       venue: "International Conference on Machine Learning and Applications (ICMLA), 2025",
-      image: null,
+      image: "attached_assets/publication_gallery/CampHiVe.png",
       overview: "Proposes Hessian-vector-guided cyclic pair merging to prune deep neural networks efficiently for resource-constrained deployment.",
       links: {
         preprint: "https://arxiv.org/abs/2511.06265"
@@ -310,7 +310,7 @@ const PUBLICATIONS = [
       title: "Integrated Survey of EV Charging Planning, Scheduling, and Behavior",
       authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
       venue: "SSRN working preprint, 2026",
-      image: null,
+      image: "attached_assets/publication_gallery/EV.png",
       overview: "An SSRN-listed version or closely related version of the EV charging planning, scheduling, and behavior survey.",
       links: {
         preprint: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6697442"
@@ -323,7 +323,7 @@ const PUBLICATIONS = [
       title: "LesionAid: Vision Transformers-Based Skin Lesion Generation and Classification - A Practical Review",
       authors: [ "Sai Krishna Ghanta", "Mallikharjuna Rao", "Kundrapu Supriya" ],
       venue: "Multimedia Tools and Applications, 2025",
-      image: null,
+      image: "attached_assets/publication_gallery/LesionAID.png",
       overview: "Combines ViT-based lesion generation/classification ideas to address skin-lesion data imbalance and improve explainable lesion classification workflows.",
       links: {
         paper: "https://link.springer.com/article/10.1007/s11042-025-20797-z"
@@ -336,7 +336,7 @@ const PUBLICATIONS = [
       title: "dScout: Unmanned Ground Vehicle for Automatic Disease Detection and Pesticide Atomizer",
       authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
       venue: "IEEE 7th International Conference for Convergence in Technology (I2CT), 2022",
-      image: null,
+      image: "attached_assets/publication_gallery/dSCOUT.png",
       overview: "Presents an IoT-enabled unmanned ground vehicle that detects plant disease with computer vision and supports targeted pesticide atomization.",
       links: {
         paper: "https://doi.org/10.1109/I2CT54291.2022.9824236",
@@ -409,8 +409,8 @@ const PUBLICATIONS = [
 
 // Groups for the segregated Publications view (order matters).
 const PUB_GROUPS = [
-  { kind: "conference", label: "Conference Papers" },
   { kind: "journal",    label: "Journal Articles" },
+  { kind: "conference", label: "Conference Papers" },
   { kind: "submitted",  label: "Under Review" },
 ];
 

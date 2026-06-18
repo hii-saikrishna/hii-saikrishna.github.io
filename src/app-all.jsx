@@ -311,12 +311,20 @@ function PubThumbArt() {
   );
 }
 
-// ===== Publication card =====
 function PubRow({ p }) {
+  const isVideo = p.image && /\.(mp4|webm|mov|m4v)$/i.test(p.image);
   return (
     <article className="pub-card">
       <div className={`pub-thumb ${p.image ? "" : "is-placeholder"}`}>
-        {p.image ? <img src={p.image} alt="" loading="lazy" /> : <PubThumbArt />}
+        {p.image ? (
+          isVideo ? (
+            <video src={p.image} muted playsInline autoPlay loop className="pub-video-thumb" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          ) : (
+            <img src={p.image} alt="" loading="lazy" />
+          )
+        ) : (
+          <PubThumbArt />
+        )}
         {p.featured && <span className="pub-feat">Featured</span>}
       </div>
       <div className="pub-main">

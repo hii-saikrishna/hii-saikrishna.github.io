@@ -115,7 +115,7 @@ export const publications = {
         link: "https://doi.org/10.1109/TAI.2022.3220190",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/DL based Holistic Visual Speech Recognition.png"
       },
       {
         title: "Speaker Independent Visual Speech Recognition: A Systematic Review and Futuristic Applications",
@@ -137,7 +137,7 @@ export const publications = {
         link: "https://doi.org/10.1109/LRA.2025.3627118",
         github: "https://github.com/herolab-uga/SPACE-MAP",
         video: "https://youtu.be/EE0velFrJgI",
-        image: "attached_assets/publication_gallery/space_figure_1.jpeg"
+        image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4"
       },
       {
         title: "LesionAid: Vision Transformers-Based Skin Lesion Generation and Classification - A Practical Review",
@@ -148,7 +148,7 @@ export const publications = {
         link: "https://link.springer.com/article/10.1007/s11042-025-20797-z",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/LesionAID.png"
       }
     ],
     conference: [
@@ -172,7 +172,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2207.11431",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/ePersist.png"
       },
       {
         title: "3DS-SLAM: A 3D Object Detection Based Semantic SLAM Towards Dynamic Indoor Environments",
@@ -183,7 +183,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2310.06385",
         github: "https://github.com/sai-krishna-ghanta/3DS-SLAM",
         video: null,
-        image: "attached_assets/publication_gallery/3ds-slam_figure_2.jpeg"
+        image: "attached_assets/publication_gallery/3DS-SLAM.mp4"
       },
       {
         title: "MGPRL: Distributed Multi-Gaussian Processes for Wi-Fi-based Multi-Robot Relative Localization in Large Indoor Environments",
@@ -194,7 +194,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2506.23514",
         github: "https://github.com/herolab-uga/MGPRL",
         video: null,
-        image: "attached_assets/publication_gallery/mgprl_figure_3.png"
+        image: "attached_assets/publication_gallery/MGPRL.mp4"
       },
       {
         title: "Adversarial Security and Differential Privacy in mmWave Beam Prediction in 6G Networks",
@@ -205,7 +205,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2305.09679",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/Adversarial Security.png"
       },
       {
         title: "Policies Over Poses: Reinforcement Learning Based Distributed Pose-Graph Optimization for Multi-Robot SLAM",
@@ -216,7 +216,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2510.22740",
         github: "https://github.com/herolab-uga/policies-over-poses",
         video: "https://www.youtube.com/watch?v=fdKdeQT6cHw",
-        image: null
+        image: "attached_assets/publication_gallery/Policies Over Poses.png"
       },
       {
         title: "CAMP-HiVe: Cyclic Pair Merging Based Efficient DNN Pruning with Hessian-Vector Approximation for Resource-Constrained Systems",
@@ -227,7 +227,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2511.06265",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/CampHiVe.png"
       },
       {
         title: "dScout: Unmanned Ground Vehicle for Automatic Disease Detection and Pesticide Atomizer",
@@ -238,7 +238,7 @@ export const publications = {
         link: "https://doi.org/10.1109/I2CT54291.2022.9824236",
         github: "https://github.com/sai-krishna-ghanta/Leaf_disease_Detection",
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/dSCOUT.png"
       },
       {
         title: "Parkinson's Disease Detection from Speech Signals Using Explainable Artificial Intelligence",
@@ -273,7 +273,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2209.01401",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/Drowsiness Detection.png"
       },
       {
         title: "Planning, Scheduling, and Behavior in EV Charging Systems: A Critical Survey and Trilemma Framework",
@@ -291,7 +291,7 @@ export const publications = {
         link: "https://arxiv.org/abs/2605.21665",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/EV.png"
       },
       {
         title: "Integrated Survey of EV Charging Planning, Scheduling, and Behavior",
@@ -302,7 +302,7 @@ export const publications = {
         link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6697442",
         github: null,
         video: null,
-        image: null
+        image: "attached_assets/publication_gallery/EV.png"
       },
       {
         title: "Breast Cancer Segmentation Using Attention-Based Convolutional Network and Explainable AI",
