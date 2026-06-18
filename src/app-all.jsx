@@ -1139,23 +1139,23 @@ function buildRollingHills({ scene, camera, renderer }) {
     return roll + gentle + far + distFactor * 6;
   };
 
-  // Golden hour sky
+  // Blue sky gradient to match milestones journey end
   const skyTex = track(new THREE.CanvasTexture(_makeSky([
-    [0, "#a8cee0"], [0.25, "#bcd9d8"], [0.5, "#d0e5d8"], [0.75, "#e2eeda"], [1, "#eaf4e2"]
+    [0, "#6fb1e8"], [0.35, "#a7d2f2"], [0.65, "#cbe3f7"], [0.9, "#d8edfa"], [1, "#eef7fc"]
   ])));
   scene.background = skyTex;
-  scene.fog = new THREE.Fog(0xdde8da, 28, 95);
+  scene.fog = new THREE.Fog(0xd8edfa, 28, 95);
 
   camera.fov = 40;
   camera.position.set(0, 5.5, 22);
   camera.updateProjectionMatrix();
   camera.lookAt(0, 6.5, -20); // Look higher to crop bottom 25%
 
-  scene.add(new THREE.HemisphereLight(0xfff8e8, 0x8aac7a, 0.9));
-  const goldenSun = new THREE.DirectionalLight(0xffe8b0, 2.0);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9abaaa, 0.85));
+  const goldenSun = new THREE.DirectionalLight(0xfff5d6, 1.8);
   goldenSun.position.set(-18, 10, 4);
   scene.add(goldenSun);
-  scene.add(new THREE.AmbientLight(0xe4eee2, 0.22));
+  scene.add(new THREE.AmbientLight(0xeef7fc, 0.25));
 
   const geo = track(new THREE.PlaneGeometry(160, 130, 260, 200));
   geo.rotateX(-Math.PI / 2);

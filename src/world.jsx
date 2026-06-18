@@ -197,6 +197,16 @@ function JourneyWorld() {
       const skyEl = document.getElementById("j-sky");
       if (skyEl) skyEl.style.opacity = skyAmt;
 
+      // Animate outro text (credo quote + button) to fade in and slide up near the end
+      const outro = document.querySelector(".j-outro");
+      if (outro) {
+        const startFade = 0.75;
+        const endFade = 0.95;
+        const alpha = Math.min(1, Math.max(0, (p - startFade) / (endFade - startFade)));
+        outro.style.opacity = alpha;
+        outro.style.transform = `translate3d(0, ${(1 - alpha) * 45}px, 0)`;
+      }
+
       worldRobots.forEach((r) => {
         r.built.update(t + r.ph);
         if (r.kind === "drone") r.built.group.position.y = r.baseY + Math.sin(t + r.ph) * 0.3;

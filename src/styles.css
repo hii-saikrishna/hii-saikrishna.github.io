@@ -1402,6 +1402,7 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   align-items: center;
   justify-content: center;
   gap: 24px;
+  will-change: opacity, transform;
 }
 .j-outro-word {
   font-family: var(--serif);
