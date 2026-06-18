@@ -167,6 +167,89 @@ function LazyVideo({ src, className }) {
   return <video ref={ref} className={className} muted loop playsInline preload="none" draggable="false" />;
 }
 
+// ===== Research media window — a sliding gallery of clips/images per interest =====
+// Replaces the old 3D dioramas with a calm, swipeable window. Each slide is an
+// image or a (muted, viewport-gated) video, with a narrative caption beneath it.
+// Driven entirely by a thrust's `media` array, so adding a slide is a one-line edit.
+function isVideoSrc(s) { return /\.(mp4|webm|mov|m4v)$/i.test(s || ""); }
+function MediaCarousel({ slides }) {
+  const list = slides || [];
+  const n = list.length;
+  const [idx, setIdx] = React.useState(0);
+  const go = (i) => setIdx((i + n) % n);
+  React.useEffect(() => {
+    if (n <= 1) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return; // don't auto-advance for reduced-motion users
+    const id = setInterval(() => setIdx((i) => (i + 1) % n), 6000);
+    return () => clearInterval(id);
+  }, [n]);
+  if (!n) return null;
+  const slide = list[Math.min(idx, n - 1)];
+  return (
+    <div className="media-carousel">
+      <div className="mc-window">
+        <div className="mc-track" style={{ transform: `translateX(-${idx * 100}%)`, width: `${n * 100}%` }}>
+          {list.map((s, i) => (
+            <div className="mc-slide" key={i} style={{ width: `${100 / n}%` }}>
+              {s.src
+                ? (isVideoSrc(s.src)
+                    ? <LazyVideo src={s.src} className="mc-media" />
+                    : <img src={s.src} alt="" className="mc-media" loading="lazy" draggable="false" />)
+                : <div className="mc-placeholder"><span className="mc-ph-tag">{s.note || "Media coming soon"}</span></div>}
+            </div>
+          ))}
+        </div>
+        {n > 1 && (
+          <>
+            <button type="button" className="mc-nav prev" onClick={() => go(idx - 1)} aria-label="Previous">‹</button>
+            <button type="button" className="mc-nav next" onClick={() => go(idx + 1)} aria-label="Next">›</button>
+          </>
+        )}
+      </div>
+      {slide.caption && <p className="mc-caption">{slide.caption}</p>}
+      {n > 1 && (
+        <div className="mc-dots">
+          {list.map((_, i) => (
+            <button type="button" key={i} className={`mc-dot ${i === idx ? "on" : ""}`}
+              onClick={() => go(i)} aria-label={`Slide ${i + 1}`} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Related-work links for a thrust: papers + blogs, each an expandable list.
+function ThrustLinks({ papers, blogs }) {
+  const ps = papers || [], bs = blogs || [];
+  if (!ps.length && !bs.length) return null;
+  const Row = ({ label, href }) => {
+    const internal = href.charAt(0) === "#";
+    return (
+      <a className="thrust-link" href={href} {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+        <span>{label}</span><span className="arr">→</span>
+      </a>
+    );
+  };
+  return (
+    <div className="thrust-links">
+      {ps.length > 0 && (
+        <div className="tl-group">
+          <span className="tl-label">Papers</span>
+          {ps.map((p) => <Row key={p.href + p.label} {...p} />)}
+        </div>
+      )}
+      {bs.length > 0 && (
+        <div className="tl-group">
+          <span className="tl-label">Writing</span>
+          {bs.map((b) => <Row key={b.href + b.label} {...b} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const Arrow = ({ dir = "right" }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     {dir === "left"
@@ -515,38 +598,21 @@ function ResearchPage() {
           <div className="page-head">
             <div className="page-eyebrow">What I work on</div>
             <h1 className="page-title">Research <span className="ital">Interests</span></h1>
-            <p className="page-lede">Three intertwined directions — embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.</p>
+            <p className="page-lede">These are the three directions I'm working in right now. My interests tend to shift every couple of years, so I stay open to new problems that genuinely pull me in.</p>
           </div>
           {THRUSTS.map((t, i) => (
             <Reveal key={t.id} delay={i * 80}>
               <div id={`research-${t.id}`} className="thrust" style={{ "--t-accent": t.accent, "--t-tint": t.tint }}>
                 <div className="thrust-body">
-                  <span className="thrust-badge"><span className="b-dot"></span>Interest {String(i + 1).padStart(2, "0")}</span>
-                  <h3>{t.title}</h3>
-                  <p className="thrust-tagline">{t.tagline}</p>
-                  <p>{t.body}</p>
-                  <div className="thrust-stats">
-                    {t.stats.map((s) => (
-                      <div key={s.k} className="thrust-stat">
-                        <span className="k">{s.k}</span>
-                        <span className="v">{s.v}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3><span className="thrust-num">{i + 1}.</span> {t.title}</h3>
                   <div className="thrust-keywords">
                     {t.keywords.map((k) => <span key={k} className="thrust-keyword">{k}</span>)}
                   </div>
-                  <div className="thrust-resources">
-                    {t.resources.map((r) => (
-                      <a key={r.label} className="thrust-resource" href={r.href}
-                        {...(r.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
-                        <span>{r.label}</span><span className="arr">→</span>
-                      </a>
-                    ))}
-                  </div>
+                  <p>{t.body}</p>
+                  <ThrustLinks papers={t.papers} blogs={t.blogs} />
                 </div>
                 <div className="thrust-media">
-                  <ThreeScene build={dioramaScene(t.scene)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+                  <MediaCarousel slides={t.media} />
                 </div>
               </div>
             </Reveal>

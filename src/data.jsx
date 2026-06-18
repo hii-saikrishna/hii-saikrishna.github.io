@@ -117,54 +117,87 @@ const INTERESTS = [
     desc: "Spatial Intelligence Models for Information Gathering" },
 ];
 
-// THRUSTS — the 3 deep-dive sections on the Research page. One per INTERESTS card.
+// ─────────────────────────────────────────────────────────────────────────────
+// THRUSTS — the deep-dive sections on the Research page. One per INTERESTS card.
+// The Research page renders, for each thrust: a numbered title, the focus
+// keywords, the paragraph, a sliding MEDIA window, and the related papers + blogs.
+//
 //   id       : MUST match the INTERESTS id (the Home card links here by id).
-//   scene    : 3D diorama key — "embodied" | "swarm" | "gp" (see robots.jsx).
-//   accent/tint : hex colors driving that section's color theme.
-//   body     : 1–2 sentence paragraph.   keywords : pills.   stats : {k,v} chips.
-//   resources: {label, href} links. Use "#/blog/<id>" for an internal blog link
-//              (must match a BLOG_POSTS id) or a full https URL for external.
+//   title    : section heading. The page auto-numbers it ("1. …", "2. …").
+//   accent/tint : on-theme colors for that section (kept in the green family so
+//              they match the site). accent = text/border, tint = soft background.
+//   body     : the paragraph (rough draft — safe to rewrite).
+//   keywords : small focus pills under the title.
+//   media    : slides for the sliding media window (MediaCarousel). Each slide is
+//                { src, caption }  where src is an image (.png/.jpg) OR a video
+//                (.mp4 → plays muted, only while on-screen) and caption is the
+//                narrative under it. A slide with no src ({ caption, note }) renders
+//                a labeled placeholder, useful to reserve space for media you will
+//                add later. ADD MORE by appending objects — order = display order.
+//   papers / blogs : related-work links shown under the paragraph. {label, href}.
+//                Use a full URL for papers, "#/blog/<id>" for posts, "#/publications"
+//                for the full list. Append to either array to cite more.
+//   scene    : (currently unused) old 3D diorama key, kept for when the animated
+//              dioramas come back; the Research page shows the media window instead.
+// ─────────────────────────────────────────────────────────────────────────────
 const THRUSTS = [
   {
     id: "embodied",
     title: "Robot Learning & Embodied Intelligence",
-    tagline: "Robots that reason about the world they live in",
     scene: "embodied",
     accent: "#2e8f5b", tint: "#eaf6ee",
-    body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them inside real homes and buildings. The goal is agents that reason in language about a physical environment, then plan and move through it.",
+    body: "I'm drawn to robots that learn to act from large pretrained models: foundation models that carry broad visual and language priors, and world / action models that let an agent imagine the result of a move before it commits to it. The aim is behaviour that transfers across tasks and rooms instead of being tuned to a single demo.",
     keywords: ["Foundation Models", "World Action Models"],
-    stats: [{ k: "Domains", v: "Homes · Warehouses" }, { k: "Modalities", v: "Vision · Language · RF" }],
-    resources: [
-      { label: "Embodied reasoning — blog", href: "#/blog/embodied-reasoning" },
-      { label: "Smart-home robotics — blog", href: "#/blog/smart-home-robots" },
+    media: [
+      { src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4", caption: "A learned policy opening a door from perception alone, with no scripted trajectory." },
+      { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "A Go1 quadruped pushing a box to its goal: a whole-body skill learned in simulation and run on hardware." },
+      // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
+    ],
+    papers: [],
+    blogs: [
+      { label: "Embodied reasoning", href: "#/blog/embodied-reasoning" },
+      { label: "A day in a robot home", href: "#/blog/smart-home-robots" },
     ],
   },
   {
     id: "multirobot",
     title: "Multi-Robot Systems",
-    tagline: "Many robots, one shared map — even when comms drop",
     scene: "swarm",
-    accent: "#2f6df0", tint: "#e8f0ff",
-    body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting-trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
+    accent: "#1f8a86", tint: "#e3f4f1",
+    body: "SPACE is my framework for 3D spatial cooperation and exploration; it reduces the ghosting artifacts in fused reconstructions and holds up when communication drops. MGPRL recovers relative poses from Wi-Fi RSSI where GPS can't reach, and a thread through all of it is distributing the mapping, localization, and task planning so a team stays consistent without a central node.",
     keywords: ["Distributed Mapping", "Localization", "Task Planning"],
-    stats: [{ k: "Boundary artifacts", v: "−34%" }, { k: "Comms dropout", v: "robust to 90s" }],
-    resources: [
-      { label: "SPACE — arXiv:2411.02524", href: "https://arxiv.org/abs/2411.02524" },
-      { label: "3DS-SLAM — arXiv:2310.06385", href: "https://arxiv.org/abs/2310.06385" },
+    media: [
+      { src: "attached_assets/Multi Robot Systems Gallery/MRS.mp4", caption: "A robot team cooperatively mapping and dividing a space, staying consistent as communication links drop." },
+      { src: "attached_assets/Multi_Robot_Systems.png", caption: "Local maps fused into one shared, drift-corrected reconstruction." },
+      // { src: "…", caption: "…" },  // ← add more slides here
+    ],
+    papers: [
+      { label: "SPACE — IEEE RA-L 2025", href: "https://doi.org/10.1109/LRA.2025.3627118" },
+      { label: "3DS-SLAM — IROS 2025", href: "https://arxiv.org/abs/2310.06385" },
+      { label: "MGPRL — IROS 2025", href: "https://arxiv.org/abs/2506.23514" },
+      { label: "Policies Over Poses — MRS 2025", href: "https://arxiv.org/abs/2510.22740" },
+    ],
+    blogs: [
+      { label: "The SLAM odyssey", href: "#/blog/slam-odyssey" },
     ],
   },
   {
     id: "spatial",
     title: "Spatial Intelligence",
-    tagline: "Learning a belief over space itself",
     scene: "gp",
-    accent: "#c9821f", tint: "#fbf1df",
-    body: "Robots that learn a belief over space itself: Gaussian-process fields for Wi-Fi, humidity, and other invisible signals, floating above the real world they describe. MGPRL uses these uncertainty-aware fields for multi-robot relative localization where GPS can't reach.",
+    accent: "#5f8c3a", tint: "#eef4e2",
+    body: "I build models that learn a belief over space itself: Gaussian-process and semantic-kernel fields over invisible signals like Wi-Fi and humidity, and use that belief to decide where to sense next. Good spatial models turn raw measurements into uncertainty-aware maps, which is what makes active information gathering efficient.",
     keywords: ["Spatial Intelligence Models", "Information Gathering"],
-    stats: [{ k: "Signal", v: "Wi-Fi RSSI" }, { k: "Estimate", v: "Uncertainty-aware" }],
-    resources: [
-      { label: "Invisible fields — blog", href: "#/blog/gp-fields" },
-      { label: "MGPRL — IEEE IROS 2025", href: PROFILE.scholar },
+    media: [
+      { src: "attached_assets/Spatial Intellgience Gallery/spatial-intelligence-1.mp4", caption: "A learned spatial belief guiding where to sense next: uncertainty-aware information gathering." },
+      // { src: "…", caption: "…" },  // ← add more slides here
+    ],
+    papers: [
+      { label: "SK: Semantic Kernel — IROS 2026 (accepted)", href: "#/publications" },
+      { label: "MGPRL — IROS 2025", href: "https://arxiv.org/abs/2506.23514" },
+    ],
+    blogs: [
+      { label: "Learning invisible fields", href: "#/blog/gp-fields" },
     ],
   },
 ];

@@ -164,81 +164,112 @@ const INTERESTS = [{
   desc: "Spatial Intelligence Models for Information Gathering"
 }];
 
-// THRUSTS — the 3 deep-dive sections on the Research page. One per INTERESTS card.
+// ─────────────────────────────────────────────────────────────────────────────
+// THRUSTS — the deep-dive sections on the Research page. One per INTERESTS card.
+// The Research page renders, for each thrust: a numbered title, the focus
+// keywords, the paragraph, a sliding MEDIA window, and the related papers + blogs.
+//
 //   id       : MUST match the INTERESTS id (the Home card links here by id).
-//   scene    : 3D diorama key — "embodied" | "swarm" | "gp" (see robots.jsx).
-//   accent/tint : hex colors driving that section's color theme.
-//   body     : 1–2 sentence paragraph.   keywords : pills.   stats : {k,v} chips.
-//   resources: {label, href} links. Use "#/blog/<id>" for an internal blog link
-//              (must match a BLOG_POSTS id) or a full https URL for external.
+//   title    : section heading. The page auto-numbers it ("1. …", "2. …").
+//   accent/tint : on-theme colors for that section (kept in the green family so
+//              they match the site). accent = text/border, tint = soft background.
+//   body     : the paragraph (rough draft — safe to rewrite).
+//   keywords : small focus pills under the title.
+//   media    : slides for the sliding media window (MediaCarousel). Each slide is
+//                { src, caption }  where src is an image (.png/.jpg) OR a video
+//                (.mp4 → plays muted, only while on-screen) and caption is the
+//                narrative under it. A slide with no src ({ caption, note }) renders
+//                a labeled placeholder, useful to reserve space for media you will
+//                add later. ADD MORE by appending objects — order = display order.
+//   papers / blogs : related-work links shown under the paragraph. {label, href}.
+//                Use a full URL for papers, "#/blog/<id>" for posts, "#/publications"
+//                for the full list. Append to either array to cite more.
+//   scene    : (currently unused) old 3D diorama key, kept for when the animated
+//              dioramas come back; the Research page shows the media window instead.
+// ─────────────────────────────────────────────────────────────────────────────
 const THRUSTS = [{
   id: "embodied",
   title: "Robot Learning & Embodied Intelligence",
-  tagline: "Robots that reason about the world they live in",
   scene: "embodied",
   accent: "#2e8f5b",
   tint: "#eaf6ee",
-  body: "I build reasoning frameworks that let robots understand invisible spatial phenomena — Wi-Fi field strength, humidity, scent — and act on them inside real homes and buildings. The goal is agents that reason in language about a physical environment, then plan and move through it.",
+  body: "I'm drawn to robots that learn to act from large pretrained models: foundation models that carry broad visual and language priors, and world / action models that let an agent imagine the result of a move before it commits to it. The aim is behaviour that transfers across tasks and rooms instead of being tuned to a single demo.",
   keywords: ["Foundation Models", "World Action Models"],
-  stats: [{
-    k: "Domains",
-    v: "Homes · Warehouses"
+  media: [{
+    src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4",
+    caption: "A learned policy opening a door from perception alone, with no scripted trajectory."
   }, {
-    k: "Modalities",
-    v: "Vision · Language · RF"
-  }],
-  resources: [{
-    label: "Embodied reasoning — blog",
+    src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4",
+    caption: "A Go1 quadruped pushing a box to its goal: a whole-body skill learned in simulation and run on hardware."
+  }
+  // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
+  ],
+  papers: [],
+  blogs: [{
+    label: "Embodied reasoning",
     href: "#/blog/embodied-reasoning"
   }, {
-    label: "Smart-home robotics — blog",
+    label: "A day in a robot home",
     href: "#/blog/smart-home-robots"
   }]
 }, {
   id: "multirobot",
   title: "Multi-Robot Systems",
-  tagline: "Many robots, one shared map — even when comms drop",
   scene: "swarm",
-  accent: "#2f6df0",
-  tint: "#e8f0ff",
-  body: "SPACE is our framework for 3D spatial cooperation and exploration — it mitigates the ghosting-trail effect in fused reconstructions and stays robust to communication dropouts. MGPRL recovers relative poses from Wi-Fi RSSI in GPS-denied indoors, and 3DS-SLAM extends semantic SLAM with 3D object detection in dynamic scenes.",
+  accent: "#1f8a86",
+  tint: "#e3f4f1",
+  body: "SPACE is my framework for 3D spatial cooperation and exploration; it reduces the ghosting artifacts in fused reconstructions and holds up when communication drops. MGPRL recovers relative poses from Wi-Fi RSSI where GPS can't reach, and a thread through all of it is distributing the mapping, localization, and task planning so a team stays consistent without a central node.",
   keywords: ["Distributed Mapping", "Localization", "Task Planning"],
-  stats: [{
-    k: "Boundary artifacts",
-    v: "−34%"
+  media: [{
+    src: "attached_assets/Multi Robot Systems Gallery/MRS.mp4",
+    caption: "A robot team cooperatively mapping and dividing a space, staying consistent as communication links drop."
   }, {
-    k: "Comms dropout",
-    v: "robust to 90s"
-  }],
-  resources: [{
-    label: "SPACE — arXiv:2411.02524",
-    href: "https://arxiv.org/abs/2411.02524"
+    src: "attached_assets/Multi_Robot_Systems.png",
+    caption: "Local maps fused into one shared, drift-corrected reconstruction."
+  }
+  // { src: "…", caption: "…" },  // ← add more slides here
+  ],
+  papers: [{
+    label: "SPACE — IEEE RA-L 2025",
+    href: "https://doi.org/10.1109/LRA.2025.3627118"
   }, {
-    label: "3DS-SLAM — arXiv:2310.06385",
+    label: "3DS-SLAM — IROS 2025",
     href: "https://arxiv.org/abs/2310.06385"
+  }, {
+    label: "MGPRL — IROS 2025",
+    href: "https://arxiv.org/abs/2506.23514"
+  }, {
+    label: "Policies Over Poses — MRS 2025",
+    href: "https://arxiv.org/abs/2510.22740"
+  }],
+  blogs: [{
+    label: "The SLAM odyssey",
+    href: "#/blog/slam-odyssey"
   }]
 }, {
   id: "spatial",
   title: "Spatial Intelligence",
-  tagline: "Learning a belief over space itself",
   scene: "gp",
-  accent: "#c9821f",
-  tint: "#fbf1df",
-  body: "Robots that learn a belief over space itself: Gaussian-process fields for Wi-Fi, humidity, and other invisible signals, floating above the real world they describe. MGPRL uses these uncertainty-aware fields for multi-robot relative localization where GPS can't reach.",
+  accent: "#5f8c3a",
+  tint: "#eef4e2",
+  body: "I build models that learn a belief over space itself: Gaussian-process and semantic-kernel fields over invisible signals like Wi-Fi and humidity, and use that belief to decide where to sense next. Good spatial models turn raw measurements into uncertainty-aware maps, which is what makes active information gathering efficient.",
   keywords: ["Spatial Intelligence Models", "Information Gathering"],
-  stats: [{
-    k: "Signal",
-    v: "Wi-Fi RSSI"
+  media: [{
+    src: "attached_assets/Spatial Intellgience Gallery/spatial-intelligence-1.mp4",
+    caption: "A learned spatial belief guiding where to sense next: uncertainty-aware information gathering."
+  }
+  // { src: "…", caption: "…" },  // ← add more slides here
+  ],
+  papers: [{
+    label: "SK: Semantic Kernel — IROS 2026 (accepted)",
+    href: "#/publications"
   }, {
-    k: "Estimate",
-    v: "Uncertainty-aware"
+    label: "MGPRL — IROS 2025",
+    href: "https://arxiv.org/abs/2506.23514"
   }],
-  resources: [{
-    label: "Invisible fields — blog",
+  blogs: [{
+    label: "Learning invisible fields",
     href: "#/blog/gp-fields"
-  }, {
-    label: "MGPRL — IEEE IROS 2025",
-    href: PROFILE.scholar
   }]
 }];
 
@@ -3827,6 +3858,121 @@ function LazyVideo({
     draggable: "false"
   });
 }
+
+// ===== Research media window — a sliding gallery of clips/images per interest =====
+// Replaces the old 3D dioramas with a calm, swipeable window. Each slide is an
+// image or a (muted, viewport-gated) video, with a narrative caption beneath it.
+// Driven entirely by a thrust's `media` array, so adding a slide is a one-line edit.
+function isVideoSrc(s) {
+  return /\.(mp4|webm|mov|m4v)$/i.test(s || "");
+}
+function MediaCarousel({
+  slides
+}) {
+  const list = slides || [];
+  const n = list.length;
+  const [idx, setIdx] = React.useState(0);
+  const go = i => setIdx((i + n) % n);
+  React.useEffect(() => {
+    if (n <= 1) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return; // don't auto-advance for reduced-motion users
+    const id = setInterval(() => setIdx(i => (i + 1) % n), 6000);
+    return () => clearInterval(id);
+  }, [n]);
+  if (!n) return null;
+  const slide = list[Math.min(idx, n - 1)];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "media-carousel"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mc-window"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mc-track",
+    style: {
+      transform: `translateX(-${idx * 100}%)`,
+      width: `${n * 100}%`
+    }
+  }, list.map((s, i) => /*#__PURE__*/React.createElement("div", {
+    className: "mc-slide",
+    key: i,
+    style: {
+      width: `${100 / n}%`
+    }
+  }, s.src ? isVideoSrc(s.src) ? /*#__PURE__*/React.createElement(LazyVideo, {
+    src: s.src,
+    className: "mc-media"
+  }) : /*#__PURE__*/React.createElement("img", {
+    src: s.src,
+    alt: "",
+    className: "mc-media",
+    loading: "lazy",
+    draggable: "false"
+  }) : /*#__PURE__*/React.createElement("div", {
+    className: "mc-placeholder"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "mc-ph-tag"
+  }, s.note || "Media coming soon"))))), n > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "mc-nav prev",
+    onClick: () => go(idx - 1),
+    "aria-label": "Previous"
+  }, "\u2039"), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "mc-nav next",
+    onClick: () => go(idx + 1),
+    "aria-label": "Next"
+  }, "\u203A"))), slide.caption && /*#__PURE__*/React.createElement("p", {
+    className: "mc-caption"
+  }, slide.caption), n > 1 && /*#__PURE__*/React.createElement("div", {
+    className: "mc-dots"
+  }, list.map((_, i) => /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    key: i,
+    className: `mc-dot ${i === idx ? "on" : ""}`,
+    onClick: () => go(i),
+    "aria-label": `Slide ${i + 1}`
+  }))));
+}
+
+// Related-work links for a thrust: papers + blogs, each an expandable list.
+function ThrustLinks({
+  papers,
+  blogs
+}) {
+  const ps = papers || [],
+    bs = blogs || [];
+  if (!ps.length && !bs.length) return null;
+  const Row = ({
+    label,
+    href
+  }) => {
+    const internal = href.charAt(0) === "#";
+    return /*#__PURE__*/React.createElement("a", _extends({
+      className: "thrust-link",
+      href: href
+    }, internal ? {} : {
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }), /*#__PURE__*/React.createElement("span", null, label), /*#__PURE__*/React.createElement("span", {
+      className: "arr"
+    }, "\u2192"));
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "thrust-links"
+  }, ps.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "tl-group"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "tl-label"
+  }, "Papers"), ps.map(p => /*#__PURE__*/React.createElement(Row, _extends({
+    key: p.href + p.label
+  }, p)))), bs.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "tl-group"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "tl-label"
+  }, "Writing"), bs.map(b => /*#__PURE__*/React.createElement(Row, _extends({
+    key: b.href + b.label
+  }, b)))));
+}
 const Arrow = ({
   dir = "right"
 }) => /*#__PURE__*/React.createElement("svg", {
@@ -4395,7 +4541,7 @@ function ResearchPage() {
     className: "ital"
   }, "Interests")), /*#__PURE__*/React.createElement("p", {
     className: "page-lede"
-  }, "Three intertwined directions \u2014 embodied reasoning in real spaces, cooperative mapping across many robots, and learning a belief over the invisible fields that fill a room.")), THRUSTS.map((t, i) => /*#__PURE__*/React.createElement(Reveal, {
+  }, "These are the three directions I'm working in right now. My interests tend to shift every couple of years, so I stay open to new problems that genuinely pull me in.")), THRUSTS.map((t, i) => /*#__PURE__*/React.createElement(Reveal, {
     key: t.id,
     delay: i * 80
   }, /*#__PURE__*/React.createElement("div", {
@@ -4407,47 +4553,20 @@ function ResearchPage() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "thrust-body"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "thrust-badge"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "b-dot"
-  }), "Interest ", String(i + 1).padStart(2, "0")), /*#__PURE__*/React.createElement("h3", null, t.title), /*#__PURE__*/React.createElement("p", {
-    className: "thrust-tagline"
-  }, t.tagline), /*#__PURE__*/React.createElement("p", null, t.body), /*#__PURE__*/React.createElement("div", {
-    className: "thrust-stats"
-  }, t.stats.map(s => /*#__PURE__*/React.createElement("div", {
-    key: s.k,
-    className: "thrust-stat"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "k"
-  }, s.k), /*#__PURE__*/React.createElement("span", {
-    className: "v"
-  }, s.v)))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("h3", null, /*#__PURE__*/React.createElement("span", {
+    className: "thrust-num"
+  }, i + 1, "."), " ", t.title), /*#__PURE__*/React.createElement("div", {
     className: "thrust-keywords"
   }, t.keywords.map(k => /*#__PURE__*/React.createElement("span", {
     key: k,
     className: "thrust-keyword"
-  }, k))), /*#__PURE__*/React.createElement("div", {
-    className: "thrust-resources"
-  }, t.resources.map(r => /*#__PURE__*/React.createElement("a", _extends({
-    key: r.label,
-    className: "thrust-resource",
-    href: r.href
-  }, r.href.startsWith("#") ? {} : {
-    target: "_blank",
-    rel: "noopener noreferrer"
-  }), /*#__PURE__*/React.createElement("span", null, r.label), /*#__PURE__*/React.createElement("span", {
-    className: "arr"
-  }, "\u2192"))))), /*#__PURE__*/React.createElement("div", {
+  }, k))), /*#__PURE__*/React.createElement("p", null, t.body), /*#__PURE__*/React.createElement(ThrustLinks, {
+    papers: t.papers,
+    blogs: t.blogs
+  })), /*#__PURE__*/React.createElement("div", {
     className: "thrust-media"
-  }, /*#__PURE__*/React.createElement(ThreeScene, {
-    build: dioramaScene(t.scene),
-    style: {
-      position: "absolute",
-      inset: 0,
-      width: "100%",
-      height: "100%"
-    }
+  }, /*#__PURE__*/React.createElement(MediaCarousel, {
+    slides: t.media
   }))))))), /*#__PURE__*/React.createElement(MountainResearch, null));
 }
 function PublicationsPage() {
