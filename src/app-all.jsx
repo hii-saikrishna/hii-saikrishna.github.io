@@ -35,10 +35,13 @@ function ThreeScene({ build, className, style }) {
       const w = el.clientWidth || 400;
       const h = el.clientHeight || 400;
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(w, h, false);
       renderer.setClearColor(0x000000, 0);
+      // Start canvas invisible; fade in after first render to avoid flash
+      renderer.domElement.style.opacity = "0";
+      renderer.domElement.style.transition = "opacity .4s ease";
       el.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
@@ -48,13 +51,15 @@ function ThreeScene({ build, className, style }) {
       const ctx = { scene, camera, renderer, el, mouse: { x: 0, y: 0 } };
       const api = build(ctx) || {};
 
-      let raf = 0, running = false;
+      let raf = 0, running = false, firstFrame = true;
       const start = performance.now();
       const tick = () => {
         if (!running) return;
         const t = (performance.now() - start) / 1000;
         api.update && api.update(t);
         renderer.render(scene, camera);
+        // Show canvas after first render completes — no blank flash
+        if (firstFrame) { firstFrame = false; renderer.domElement.style.opacity = "1"; }
         raf = requestAnimationFrame(tick);
       };
       const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(tick); } };
@@ -62,7 +67,7 @@ function ThreeScene({ build, className, style }) {
 
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => (e.isIntersecting ? startLoop() : stopLoop()));
-      }, { rootMargin: "60px" });
+      }, { rootMargin: "200px" });
       io.observe(el);
 
       const onVis = () => (document.hidden ? stopLoop() : startLoop());
@@ -160,7 +165,8 @@ function HeroGallery() {
       <div className="hg-stage">
         {items.map((g, i) => (
           <img key={g.src} src={g.src} alt={PROFILE.name}
-            className={`hg-img ${i === idx ? "active" : ""}`} draggable="false" />
+            className={`hg-img ${i === idx ? "active" : ""}`} draggable="false"
+            fetchpriority={i === 0 ? "high" : "auto"} decoding="async" />
         ))}
       </div>
     </div>
@@ -465,11 +471,11 @@ function ContactGlobe() {
   React.useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
-    // Child (ThreeScene) effects run before this one, so the canvas — if WebGL
-    // succeeded — already exists. Re-check shortly after in case THREE loaded late.
-    const check = () => setShowFallback(!host.querySelector("canvas"));
-    check();
-    const t = setTimeout(check, 400);
+    // Only show fallback if WebGL truly failed — wait long enough for the scene
+    // to build and render its first frame before deciding.
+    const t = setTimeout(() => {
+      if (!host.querySelector("canvas")) setShowFallback(true);
+    }, 800);
     return () => clearTimeout(t);
   }, []);
   return (
