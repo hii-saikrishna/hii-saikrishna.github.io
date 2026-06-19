@@ -408,7 +408,6 @@ const PUB_LINK_DEFS = [
   ["preprint", "Preprint"],
   ["github", "Code"],
   ["video", "Video"],
-  ["blog", "Blog"],
   ["scholar", "Scholar"],
 ];
 function PubLinks({ links }) {

@@ -570,70 +570,7 @@ const PUB_GROUPS = [{
 //              value ("home", "slam", "gp", …) unless you add a new cover renderer.
 //   body     : array of [tag, text] tuples rendered in order. tag is "p" or "h2".
 //              Add paragraphs/sub-headings by appending more tuples.
-const BLOG_POSTS = [{
-  id: "smart-home-robots",
-  title: "A Day in a Robot Home: What Embodied Intelligence Looks Like",
-  category: "Embodied AI",
-  date: "Jun 2024",
-  readTime: "7 min",
-  excerpt: "Vacuums, quadrupeds, drones and humanoids sharing one home. A field note on grounding language plans in a lived-in space.",
-  cover: "home",
-  body: [["p", "Picture an ordinary apartment: a rover sweeping the living room, a quadruped patrolling the hallway, a drone dusting the shelves, a humanoid prepping the kitchen counter. None of them are impressive on their own. Together, in one space, they are a small model of embodied intelligence."], ["h2", "Why the home is the hard problem"], ["p", "A home is cluttered, dynamic, and full of intent. Furniture moves, people cross paths, and a plan written in language — 'tidy the living room' — has to survive contact with a physical, changing world. That is exactly the setting where robot learning stops being a benchmark and starts being a behavior."], ["p", "We use the home scene as a sandbox for grounding: every object the robots reason about has a place, a cost to reach, and a consequence if you bump it. The language plan is only as good as the spatial grounding underneath it."], ["h2", "From chores to capabilities"], ["p", "Each chore exercises a different capability — coverage, patrolling, manipulation, aerial inspection. Stitching them into one coherent home is what moves us from 'a robot that can' to 'robots that live here.'"]]
-}, {
-  id: "slam-odyssey",
-  title: "The SLAM Odyssey: From Monocular Vision to Cooperative Mapping",
-  category: "Research",
-  date: "Jun 2024",
-  readTime: "8 min",
-  excerpt: "A deep dive into multi-robot SLAM and how fused reconstructions can mislead. What we learned building SPACE.",
-  cover: "slam",
-  body: [["p", "When three robots fuse their local maps, something strange happens: their fusion becomes unreliable at the boundaries. We call this the \"ghosting trail\" effect—a phantom artifact that grows as reconstructions age."], ["h2", "The Problem with Classical Fusion"], ["p", "Traditional approaches assume that local maps are independent and Gaussian-distributed. They're neither. Uncertainty grows with time, and correlations between robots' observations are nonlinear and coupled."], ["p", "SPACE solves this by explicitly modeling spatial correlation windows and using probabilistic occupancy grids that degrade gracefully under communication loss."], ["h2", "Real-World Trials"], ["p", "We tested SPACE in a 400m² GPS-denied warehouse with four quadrupeds. The result: 34% reduction in boundary artifacts and robust coverage even when one robot loses comms for 90 seconds straight."]]
-}, {
-  id: "gp-fields",
-  title: "Learning Invisible Fields: Gaussian Processes for Spatial Sensing",
-  category: "Research",
-  date: "May 2024",
-  readTime: "6 min",
-  excerpt: "How robots learn invisible environmental fields—Wi-Fi, humidity, radiation—and why uncertainty matters more than accuracy.",
-  cover: "gp",
-  body: [["p", "A robot's Wi-Fi signal strength varies wildly in indoor spaces. Reflections, interference, multipath propagation—all invisible to the robot's eyes. How do we turn RSSI readings into spatial knowledge?"], ["h2", "The Gaussian Process Trick"], ["p", "Instead of predicting a single Wi-Fi strength value, we predict a *distribution* over possible strengths. The width of that distribution is our uncertainty. High uncertainty = 'I need more samples here.'"], ["p", "MGPRL uses this principle to help robots localize each other in GPS-denied spaces. Two robots with only Wi-Fi can co-estimate their relative pose by pooling their observations."]]
-}, {
-  id: "embodied-reasoning",
-  title: "Embodied Reasoning: Teaching Robots to Think Like Scientists",
-  category: "Exploration",
-  date: "Apr 2024",
-  readTime: "7 min",
-  excerpt: "Can robots hypothesize, experiment, and refine beliefs like humans? A fresh take on embodied AI.",
-  cover: "reasoning",
-  body: [["p", "When a scientist explores a new phenomenon, they form hypotheses, design experiments, and update their beliefs. Why can't robots do the same?"], ["h2", "A New Framework"], ["p", "We're building a neuro-symbolic reasoning layer that sits on top of visual and inertial sensors. It lets robots ask: 'Where is my uncertainty highest? What action would reduce it most?'"], ["p", "Early results show robots can autonomously plan efficient exploration paths—reducing sample time by 40% compared to random strategies."]]
-}, {
-  id: "vision-3d",
-  title: "From 2D to 3D: Scaling Semantic Vision in Dynamic Worlds",
-  category: "Research",
-  date: "Mar 2024",
-  readTime: "9 min",
-  excerpt: "3DS-SLAM merges object detection, SLAM, and semantic understanding into one coherent pipeline.",
-  cover: "vision",
-  body: [["p", "Existing semantic SLAM systems treat dynamic objects as noise. But in human-filled environments, 'dynamic' is the norm. We needed a better approach."], ["h2", "The 3DS-SLAM Pipeline"], ["p", "Instead of ignoring detected objects, we track them. Moving people, robots, and furniture become features that anchor the map and aid localization."], ["p", "In 7 real-world indoor sequences, 3DS-SLAM reduced drift by 26% and improved loop closure detection in crowded scenes."]]
-}, {
-  id: "multi-robot-tasks",
-  title: "Task Allocation in Uncertain Multi-Robot Teams",
-  category: "Systems",
-  date: "Feb 2024",
-  readTime: "6 min",
-  excerpt: "How do five robots decide who explores where when communication is intermittent?",
-  cover: "tasks",
-  body: [["p", "Classic task allocation assumes instant communication and perfect knowledge. Real robots live in silence and fog."], ["h2", "Decentralized Allocation"], ["p", "We designed a gossip-based algorithm where robots broadcast their planned task set and locally resolve conflicts using a shared entropy function. No central authority needed."], ["p", "Tested on simulated teams of 6–15 robots. Even with 50% comms dropout, task coverage stayed above 94%."]]
-}, {
-  id: "llm-robotics",
-  title: "Do Large Language Models Understand Physics? Testing Spatial Reasoning in LLMs",
-  category: "AI",
-  date: "Jan 2024",
-  readTime: "8 min",
-  excerpt: "We probed frontier LLMs with spatial reasoning tasks. The results are surprising.",
-  cover: "llm",
-  body: [["p", "An LLM trained on human text has never felt gravity, never brushed against a wall, never gripped an object. Can it reason about physics at all?"], ["h2", "The Experiment"], ["p", "We created 150 spatial reasoning tasks (e.g., 'A box slides off a table. Where will it land?') and tested state-of-the-art LLMs. Average accuracy: 64%. Humans: 96%."], ["h2", "What This Means"], ["p", "LLMs are useful for high-level planning and communication, but they need grounding. Embodied feedback from robots closes the gap."]]
-}];
+const BLOG_POSTS = [];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // UPDATES — the career timeline. SINGLE SOURCE OF TRUTH for BOTH:
@@ -4233,7 +4170,7 @@ function HeroGallery() {
 }
 
 // ===== Publication link buttons =====
-const PUB_LINK_DEFS = [["paper", "Paper"], ["preprint", "Preprint"], ["github", "Code"], ["video", "Video"], ["blog", "Blog"], ["scholar", "Scholar"]];
+const PUB_LINK_DEFS = [["paper", "Paper"], ["preprint", "Preprint"], ["github", "Code"], ["video", "Video"], ["scholar", "Scholar"]];
 function PubLinks({
   links
 }) {
