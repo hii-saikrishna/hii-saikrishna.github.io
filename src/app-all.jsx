@@ -176,25 +176,57 @@ function MediaCarousel({ slides }) {
   const list = slides || [];
   const n = list.length;
   const [idx, setIdx] = React.useState(0);
-  const go = (i) => setIdx((i + n) % n);
+  const [inView, setInView] = React.useState(false);
+  const winRef = React.useRef(null);
+  const vids = React.useRef([]);
+  const go = (i) => setIdx((((i % n) + n) % n));
+  const next = () => setIdx((i) => (i + 1) % n);
+
+  // Run media only while the window is on screen.
   React.useEffect(() => {
-    if (n <= 1) return;
+    const el = winRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { rootMargin: "120px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Play the active slide, then advance: a video plays to its END and *then* the
+  // carousel switches to the next slide; an image/placeholder dwells a few seconds.
+  // A single-slide window just loops. Honors prefers-reduced-motion (no switching).
+  React.useEffect(() => {
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return; // don't auto-advance for reduced-motion users
-    const id = setInterval(() => setIdx((i) => (i + 1) % n), 6000);
-    return () => clearInterval(id);
-  }, [n]);
+    vids.current.forEach((v, i) => { if (v && i !== idx) { try { v.pause(); v.currentTime = 0; } catch (e) {} } });
+    const active = vids.current[idx];
+    const cur = list[idx] || {};
+    if (!inView) { if (active) { try { active.pause(); } catch (e) {} } return; }
+    if (active && isVideoSrc(cur.src)) {
+      active.loop = (n <= 1) || reduce;          // lone clip loops; in a set, play once then switch
+      try { if (n > 1) active.currentTime = 0; } catch (e) {}
+      const p = active.play(); if (p && p.catch) p.catch(() => {});
+      if (n <= 1 || reduce) return;
+      const onEnd = () => next();
+      active.addEventListener("ended", onEnd);
+      active.addEventListener("error", onEnd);   // don't get stuck on a bad clip
+      return () => { active.removeEventListener("ended", onEnd); active.removeEventListener("error", onEnd); };
+    }
+    if (n <= 1 || reduce) return;                // image / placeholder slide: dwell, then advance
+    const t = setTimeout(next, 5000);
+    return () => clearTimeout(t);
+  }, [idx, n, inView]);
+
   if (!n) return null;
   const slide = list[Math.min(idx, n - 1)];
   return (
     <div className="media-carousel">
-      <div className="mc-window">
+      <div className="mc-window" ref={winRef}>
         <div className="mc-track" style={{ transform: `translateX(-${idx * 100}%)` }}>
           {list.map((s, i) => (
             <div className="mc-slide" key={i}>
               {s.src
                 ? (isVideoSrc(s.src)
-                    ? <LazyVideo src={s.src} className="mc-media" />
+                    ? <video ref={(el) => { vids.current[i] = el; }} src={s.src}
+                        className="mc-media" muted playsInline preload="metadata" draggable="false" />
                     : <img src={s.src} alt="" className="mc-media" loading="lazy" draggable="false" />)
                 : <div className="mc-placeholder"><span className="mc-ph-tag">{s.note || "Media coming soon"}</span></div>}
             </div>

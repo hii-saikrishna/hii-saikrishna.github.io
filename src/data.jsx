@@ -168,7 +168,7 @@ const THRUSTS = [
     keywords: ["Distributed Mapping", "Localization", "Task Planning"],
     media: [
       { src: "attached_assets/Multi Robot Systems Gallery/MRS.mp4", caption: "A robot team cooperatively mapping and dividing a space, staying consistent as communication links drop." },
-      { src: "attached_assets/Multi_Robot_Systems.png", caption: "Local maps fused into one shared, drift-corrected reconstruction." },
+      { src: "attached_assets/Multi Robot Systems Gallery/SPACE.mp4", caption: "SPACE fusing multi-robot reconstructions into one clean 3D map, without the usual ghosting artifacts." },
       // { src: "…", caption: "…" },  // ← add more slides here
     ],
     papers: [
