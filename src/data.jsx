@@ -79,24 +79,24 @@ const HOME_GALLERY = [
 // A .mp4 src is detected automatically and shown as a playable clip.
 // Order: newest first — the strip scrolls from recent to older.
 const TRIP_GALLERY = [
-  { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", place: "HeRoLab",
-    title: "Thanksgiving with the lab", when: "Nov 2025", desc: "Thanksgiving lunch with the lab." },
+  { src: "attached_assets/Gallery/herolab-thanksgiving-2025.jpeg", place: "Thai Spoon, UGA",
+    title: "HeRoLab Thanksgiving Lunch", when: "Nov 2025", desc: "An amazing lunch celebrating Thanksgiving with the wonderful members of HeRoLab." },
   { src: "attached_assets/Gallery/The Romance of the Song Dynasty - IROS 2025 Hangzhou.mp4", place: "Hangzhou, China",
-    title: "The Romance of the Song Dynasty", when: "Oct 2025", desc: "A spectacular performance at the Song Dynasty park during IROS 2025." },
+    title: "IEEE IROS 2025 Happy Hour Tour", when: "Oct 2025", desc: "Enjoyed a spectacular performance of The Romance of the Song Dynasty at the Song Dynasty park during the IROS 2025 Happy Hour Tour." },
   { src: "attached_assets/Gallery/iros-2025-hangzhou.jpeg", place: "Hangzhou, China",
-    title: "IROS 2025", when: "Oct 2025", desc: "At the IROS conference in Hangzhou." },
-  { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", place: "HeRoLab",
-    title: "Aiman's farewell", when: "Jul 2025", desc: "Sending off a labmate." },
+    title: "IEEE IROS 2025", when: "Oct 2025", desc: "Had a great opportunity to travel with my major advisor for a week, learning about cutting-edge research, academia, industry trends, and novel research ideas." },
+  { src: "attached_assets/Gallery/aimans-farewell-2025.jpeg", place: "Cali N Titos, UGA",
+    title: "Aiman's Farewell", when: "Jul 2025", desc: "Sending off a great labmate and wishing them the absolute best in their next journey." },
   { src: "attached_assets/Gallery/icra-2025-atlanta.mp4", place: "Atlanta, GA",
-    title: "ICRA 2025", when: "May 2025", desc: "My first time watching live demonstrations of all kinds of robots." },
+    title: "IEEE ICRA 2025", when: "May 2025", desc: "My first time watching live demonstrations of diverse robotic systems, gaining insights into real-world applications, attending numerous poster sessions and presentations, which significantly expanded my exposure in the field of robotics." },
   { src: "attached_assets/Gallery/nsf-supercollider-2024-lexington.jpeg", place: "Lexington, KY",
-    title: "NSF EPSCoR SuperCollider", when: "Apr 2024", desc: "The NSF EPSCoR SuperCollider convening." },
+    title: "NSF EPSCoR SuperCollider", when: "Apr 2024", desc: "Delivered my first poster presentation and engaged in stimulating discussions with researchers and peers." },
   { src: "attached_assets/Gallery/aimslab-louisville-2023.jpeg", place: "Louisville, KY",
     title: "AIMSLab", when: "Jan 2024", desc: "A great learning stretch with Dr. Sabur at the University of Louisville." },
   { src: "attached_assets/Gallery/tencon-2023.png", title: "IEEE TENCON 2023", when: "Oct 2023",
     desc: "The IEEE Region 10 (TENCON) conference." },
   { src: "attached_assets/Gallery/iiitnr-aiml-club-2021.jpeg", place: "IIIT Naya Raipur",
-    title: "Teaching AI/ML", when: "Sep 2021", desc: "Running hands-on AI/ML sessions as the AIML Club in-charge." },
+    title: "Where I Started Learning AI", when: "Sep 2021", desc: "Running hands-on AI sessions as the AIML Club in-charge and learning topics in parallel to teach others effectively." },
   // —— Add more (newest at the top): drop the file in attached_assets/Gallery/ and add a line ——
   // { src: "attached_assets/Gallery/manali.jpg", place: "Manali, India", title: "Road trip", when: "2024" },
 ];
