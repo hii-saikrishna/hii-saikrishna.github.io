@@ -268,7 +268,7 @@ function ThrustLinks({ papers, blogs }) {
     <div className="thrust-links">
       {ps.length > 0 && (
         <div className="tl-group">
-          <span className="tl-label">Papers</span>
+          <span className="tl-label">Selected Papers</span>
           {ps.map((p) => <Row key={p.href + p.label} {...p} />)}
         </div>
       )}

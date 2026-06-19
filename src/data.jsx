@@ -110,11 +110,11 @@ const TRIP_GALLERY = [
 //           also adding the scene in robots.jsx.
 const INTERESTS = [
   { id: "embodied",   scene: "embodied", title: "Robot Learning & Embodied Intelligence",
-    desc: "Foundation Models, World Action Models" },
+    desc: "Foundation Models, World Action Models, Reinforcement Learning" },
   { id: "multirobot", scene: "swarm",    title: "Multi-Robot Systems",
-    desc: "Distributed Mapping, Localization and Task Planning" },
+    desc: "Distributed Mapping and Localization, Decentralized Task Planning" },
   { id: "spatial",    scene: "gp",       title: "Spatial Intelligence",
-    desc: "Spatial Intelligence Models for Information Gathering" },
+    desc: "Robotic Information Gathering, Continuous & Temporal Spatial Reasoning" },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -146,26 +146,23 @@ const THRUSTS = [
     title: "Robot Learning & Embodied Intelligence",
     scene: "embodied",
     accent: "#2e8f5b", tint: "#eaf6ee",
-    body: "I'm drawn to robots that learn to act from large pretrained models: foundation models that carry broad visual and language priors, and world / action models that let an agent imagine the result of a move before it commits to it. The aim is behaviour that transfers across tasks and rooms instead of being tuned to a single demo.",
-    keywords: ["Foundation Models", "World Action Models"],
+    body: "I am particularly interested in multi-robot learning for collaborative embodied intelligence, where teams of robots learn to perceive, communicate, coordinate, and act together in shared physical environments. Rather than training a single robot for a narrow demonstration, I want systems that draw on large pretrained foundation models with broad visual, language, and spatial priors, combined with world models, action models, and reinforcement learning that let robots predict the consequences of their actions before they execute them.",
+    keywords: ["Foundation Models", "World Action Models", "Reinforcement Learning"],
     media: [
       { src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4", caption: "A learned policy opening a door from perception alone, with no scripted trajectory." },
       { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "A Go1 quadruped pushing a box to its goal: a whole-body skill learned in simulation and run on hardware." },
       // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
     ],
     papers: [],
-    blogs: [
-      { label: "Embodied reasoning", href: "#/blog/embodied-reasoning" },
-      { label: "A day in a robot home", href: "#/blog/smart-home-robots" },
-    ],
+    blogs: [],  // ← cleared; add fresh { label, href: "#/blog/<id>" } posts later
   },
   {
     id: "multirobot",
     title: "Multi-Robot Systems",
     scene: "swarm",
     accent: "#1f8a86", tint: "#e3f4f1",
-    body: "SPACE is my framework for 3D spatial cooperation and exploration; it reduces the ghosting artifacts in fused reconstructions and holds up when communication drops. MGPRL recovers relative poses from Wi-Fi RSSI where GPS can't reach, and a thread through all of it is distributing the mapping, localization, and task planning so a team stays consistent without a central node.",
-    keywords: ["Distributed Mapping", "Localization", "Task Planning"],
+    body: "I am particularly interested in how multi-robot systems can perceive, locate, and act together in complex real-world environments. So far I have mostly tackled these problems separately across my work, and what I am looking forward to next is instantaneous localization for multi-robot teams: having every robot recover where it is, and where its teammates are, the moment it matters, even without GPS and with only intermittent communication. The larger goal is to bring perception, localization, and decentralized planning into one real-time system, so a team stays coordinated and consistent without depending on a central node.",
+    keywords: ["Distributed Mapping and Localization", "Decentralized Task Planning"],
     media: [
       { src: "attached_assets/Multi Robot Systems Gallery/MRS.mp4", caption: "A robot team cooperatively mapping and dividing a space, staying consistent as communication links drop." },
       { src: "attached_assets/Multi Robot Systems Gallery/SPACE.mp4", caption: "SPACE fusing multi-robot reconstructions into one clean 3D map, without the usual ghosting artifacts." },
@@ -177,17 +174,15 @@ const THRUSTS = [
       { label: "MGPRL — IROS 2025", href: "https://arxiv.org/abs/2506.23514" },
       { label: "Policies Over Poses — MRS 2025", href: "https://arxiv.org/abs/2510.22740" },
     ],
-    blogs: [
-      { label: "The SLAM odyssey", href: "#/blog/slam-odyssey" },
-    ],
+    blogs: [],  // ← cleared; add fresh { label, href: "#/blog/<id>" } posts later
   },
   {
     id: "spatial",
     title: "Spatial Intelligence",
     scene: "gp",
     accent: "#5f8c3a", tint: "#eef4e2",
-    body: "I build models that learn a belief over space itself: Gaussian-process and semantic-kernel fields over invisible signals like Wi-Fi and humidity, and use that belief to decide where to sense next. Good spatial models turn raw measurements into uncertainty-aware maps, which is what makes active information gathering efficient.",
-    keywords: ["Spatial Intelligence Models", "Information Gathering"],
+    body: "Spatial intelligence is often framed as reasoning over discrete object spaces for planning, but I think it is just as much about reasoning over continuous spatial phenomena: the invisible fields and signals that shape how a robot should plan and act in settings like disaster response and search and rescue. I am looking forward to developing spatial intelligence models that learn these continuous fields, reason about how they evolve across space and time, and decide where to sense next, so a robot gathers the most useful information with the least effort.",
+    keywords: ["Robotic Information Gathering", "Continuous & Temporal Spatial Reasoning"],
     media: [
       { src: "attached_assets/Spatial Intellgience Gallery/spatial-intelligence-1.mp4", caption: "A learned spatial belief guiding where to sense next: uncertainty-aware information gathering." },
       // { src: "…", caption: "…" },  // ← add more slides here
@@ -196,9 +191,7 @@ const THRUSTS = [
       { label: "SK: Semantic Kernel — IROS 2026 (accepted)", href: "#/publications" },
       { label: "MGPRL — IROS 2025", href: "https://arxiv.org/abs/2506.23514" },
     ],
-    blogs: [
-      { label: "Learning invisible fields", href: "#/blog/gp-fields" },
-    ],
+    blogs: [],  // ← cleared; add fresh { label, href: "#/blog/<id>" } posts later
   },
 ];
 
