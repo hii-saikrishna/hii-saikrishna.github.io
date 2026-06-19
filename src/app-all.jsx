@@ -932,8 +932,8 @@ function TripGallery() {
     <section className="section trips" data-screen-label="Trips">
       <div className="container">
         <div className="page-eyebrow">Out in the world</div>
-        <h2 className="trips-title">Places I've <span className="ital">wandered</span></h2>
-        <p className="trips-lede">Conferences, labs, and the people along the way — newest first. Pick a moment below; tap the big one to open it full screen.</p>
+        <h2 className="trips-title">Conferences, Labs & <span className="ital">People</span></h2>
+        <p className="trips-lede">The conferences, research labs, and wonderful people along the way shaping my academic journey and learning arc.</p>
 
         <figure className="trips-featured" role="button" tabIndex={0}
           aria-label={`Open ${feat.title}`}

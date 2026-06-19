@@ -4978,11 +4978,11 @@ function TripGallery() {
     className: "page-eyebrow"
   }, "Out in the world"), /*#__PURE__*/React.createElement("h2", {
     className: "trips-title"
-  }, "Places I've ", /*#__PURE__*/React.createElement("span", {
+  }, "Conferences, Labs & ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
-  }, "wandered")), /*#__PURE__*/React.createElement("p", {
+  }, "People")), /*#__PURE__*/React.createElement("p", {
     className: "trips-lede"
-  }, "Conferences, labs, and the people along the way \u2014 newest first. Pick a moment below; tap the big one to open it full screen."), /*#__PURE__*/React.createElement("figure", {
+  }, "The conferences, research labs, and wonderful people along the way shaping my academic journey and learning arc."), /*#__PURE__*/React.createElement("figure", {
     className: "trips-featured",
     role: "button",
     tabIndex: 0,
