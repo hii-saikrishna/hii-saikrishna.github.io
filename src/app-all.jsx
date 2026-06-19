@@ -932,7 +932,7 @@ function TripGallery() {
     <section className="section trips" data-screen-label="Trips">
       <div className="container">
         <div className="page-eyebrow">Out in the world</div>
-        <h2 className="trips-title">Conferences, Labs & <span className="ital">People</span></h2>
+        <h2 className="trips-title">Experiences that <span className="ital">shaped me</span></h2>
         <p className="trips-lede">The conferences, research labs, and wonderful people along the way shaping my academic journey and learning arc.</p>
 
         <figure className="trips-featured" role="button" tabIndex={0}

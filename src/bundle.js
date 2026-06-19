@@ -4978,9 +4978,9 @@ function TripGallery() {
     className: "page-eyebrow"
   }, "Out in the world"), /*#__PURE__*/React.createElement("h2", {
     className: "trips-title"
-  }, "Conferences, Labs & ", /*#__PURE__*/React.createElement("span", {
+  }, "Experiences that ", /*#__PURE__*/React.createElement("span", {
     className: "ital"
-  }, "People")), /*#__PURE__*/React.createElement("p", {
+  }, "shaped me")), /*#__PURE__*/React.createElement("p", {
     className: "trips-lede"
   }, "The conferences, research labs, and wonderful people along the way shaping my academic journey and learning arc."), /*#__PURE__*/React.createElement("figure", {
     className: "trips-featured",
