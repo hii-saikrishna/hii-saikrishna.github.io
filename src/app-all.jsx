@@ -1721,24 +1721,50 @@ function BlogList({ openPost }) {
         <div className="page-head">
           <div className="page-eyebrow">Writing</div>
           <h1 className="page-title">Blog</h1>
-          <p className="page-lede">Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.</p>
+          <p className="page-lede">Notes on robots, perception, and the messy gap between robotics, humans, and the physical world they have to survive.</p>
         </div>
-        <div className="blog-grid">
-          {BLOG_POSTS.map((p, i) => (
-            <Reveal key={p.id} delay={i * 70}>
-              <div className="blog-card" onClick={() => openPost(p.id)}>
-                <span className="blog-aurora" aria-hidden="true"></span>
-                <div className="meta">
-                  <span>{p.category}</span><span className="dot"></span>
-                  <span>{p.date}</span><span className="dot"></span>
-                  <span>{p.readTime}</span>
+        <div className="blog-grid" style={BLOG_POSTS.length === 0 ? { display: "block" } : {}}>
+          {BLOG_POSTS.length > 0 ? (
+            BLOG_POSTS.map((p, i) => (
+              <Reveal key={p.id} delay={i * 70}>
+                <div className="blog-card" onClick={() => openPost(p.id)}>
+                  <span className="blog-aurora" aria-hidden="true"></span>
+                  <div className="meta">
+                    <span>{p.category}</span><span className="dot"></span>
+                    <span>{p.date}</span><span className="dot"></span>
+                    <span>{p.readTime}</span>
+                  </div>
+                  <h3>{p.title}</h3>
+                  <p>{p.excerpt}</p>
+                  <span className="arrow">Read <Arrow dir="right" /></span>
                 </div>
-                <h3>{p.title}</h3>
-                <p>{p.excerpt}</p>
-                <span className="arrow">Read <Arrow dir="right" /></span>
+              </Reveal>
+            ))
+          ) : (
+            <Reveal>
+              <div className="blog-placeholder-card" style={{
+                background: "rgba(255, 255, 255, 0.45)",
+                backdropFilter: "blur(10px)",
+                border: "1px dashed var(--line)",
+                borderRadius: "18px",
+                padding: "60px 40px",
+                textAlign: "center",
+                maxWidth: "600px",
+                margin: "40px auto 0",
+                boxShadow: "0 10px 30px -15px rgba(0,0,0,0.05)"
+              }}>
+                <span className="blog-aurora" style={{ opacity: 0.15 }} aria-hidden="true"></span>
+                <div style={{ position: "relative", zIndex: 1 }}>
+                  <h3 style={{ fontSize: "1.4rem", fontWeight: "600", color: "var(--ink)", marginBottom: "12px", fontFamily: "var(--font-sans)" }}>
+                    I am working on writing some cool blogs
+                  </h3>
+                  <p style={{ fontSize: "1.05rem", color: "var(--ink-3)", margin: 0, fontFamily: "var(--font-sans)" }}>
+                    Coming soon!
+                  </p>
+                </div>
               </div>
             </Reveal>
-          ))}
+          )}
         </div>
       </div>
       <MountainLandscape />

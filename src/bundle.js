@@ -5989,9 +5989,12 @@ function BlogList({
     className: "page-title"
   }, "Blog"), /*#__PURE__*/React.createElement("p", {
     className: "page-lede"
-  }, "Notes on robots, perception, and the messy gap between a language plan and the physical world it has to survive.")), /*#__PURE__*/React.createElement("div", {
-    className: "blog-grid"
-  }, BLOG_POSTS.map((p, i) => /*#__PURE__*/React.createElement(Reveal, {
+  }, "Notes on robots, perception, and the messy gap between robotics, humans, and the physical world they have to survive.")), /*#__PURE__*/React.createElement("div", {
+    className: "blog-grid",
+    style: BLOG_POSTS.length === 0 ? {
+      display: "block"
+    } : {}
+  }, BLOG_POSTS.length > 0 ? BLOG_POSTS.map((p, i) => /*#__PURE__*/React.createElement(Reveal, {
     key: p.id,
     delay: i * 70
   }, /*#__PURE__*/React.createElement("div", {
@@ -6010,7 +6013,46 @@ function BlogList({
     className: "arrow"
   }, "Read ", /*#__PURE__*/React.createElement(Arrow, {
     dir: "right"
-  }))))))), /*#__PURE__*/React.createElement(MountainLandscape, null));
+  }))))) : /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
+    className: "blog-placeholder-card",
+    style: {
+      background: "rgba(255, 255, 255, 0.45)",
+      backdropFilter: "blur(10px)",
+      border: "1px dashed var(--line)",
+      borderRadius: "18px",
+      padding: "60px 40px",
+      textAlign: "center",
+      maxWidth: "600px",
+      margin: "40px auto 0",
+      boxShadow: "0 10px 30px -15px rgba(0,0,0,0.05)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "blog-aurora",
+    style: {
+      opacity: 0.15
+    },
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: "1.4rem",
+      fontWeight: "600",
+      color: "var(--ink)",
+      marginBottom: "12px",
+      fontFamily: "var(--font-sans)"
+    }
+  }, "I am working on writing some cool blogs"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: "1.05rem",
+      color: "var(--ink-3)",
+      margin: 0,
+      fontFamily: "var(--font-sans)"
+    }
+  }, "Coming soon!")))))), /*#__PURE__*/React.createElement(MountainLandscape, null));
 }
 function BlogReader({
   postId,
