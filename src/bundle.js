@@ -197,10 +197,10 @@ const THRUSTS = [{
   keywords: ["Foundation Models", "World Action Models", "Reinforcement Learning"],
   media: [{
     src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4",
-    caption: "A learned policy opening a door from perception alone, with no scripted trajectory."
+    caption: "A collaborative learned policy opening a door from perception alone."
   }, {
     src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4",
-    caption: "A Go1 quadruped pushing a box to its goal: a whole-body skill learned in simulation and run on hardware."
+    caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: a collaborative whole-body skill learned in simulation."
   }
   // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
   ],

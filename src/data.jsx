@@ -149,8 +149,8 @@ const THRUSTS = [
     body: "I am particularly interested in multi-robot learning for collaborative embodied intelligence, where teams of robots learn to perceive, communicate, coordinate, and act together in shared physical environments. Rather than training a single robot for a narrow demonstration, I want systems that draw on large pretrained foundation models with broad visual, language, and spatial priors, combined with world models, action models, and reinforcement learning that let robots predict the consequences of their actions before they execute them.",
     keywords: ["Foundation Models", "World Action Models", "Reinforcement Learning"],
     media: [
-      { src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4", caption: "A learned policy opening a door from perception alone, with no scripted trajectory." },
-      { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "A Go1 quadruped pushing a box to its goal: a whole-body skill learned in simulation and run on hardware." },
+      { src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4", caption: "A collaborative learned policy opening a door from perception alone." },
+      { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: a collaborative whole-body skill learned in simulation." },
       // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
     ],
     papers: [],
