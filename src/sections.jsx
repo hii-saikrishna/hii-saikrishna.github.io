@@ -426,7 +426,7 @@ function ContactPage() {
             </p>
             <div className="contact-links">
               <a className="contact-link" href={`mailto:${PROFILE.email}`}>
-                <span><span className="label">Email</span>{PROFILE.email}</span>
+                <span><span className="label">Email</span>{PROFILE.emailDisplay || PROFILE.email}</span>
                 <span className="arrow">→</span>
               </a>
               <a className="contact-link" href={PROFILE.scholar} target="_blank" rel="noopener">

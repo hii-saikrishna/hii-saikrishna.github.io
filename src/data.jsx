@@ -57,6 +57,7 @@ const PROFILE = {
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",
   email: "sai.krishna@uga.edu",
+  emailDisplay: "sai[dot]krishna@uga[dot]edu",
   scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao",
   github: "https://github.com/sai-krishna-ghanta",
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
@@ -150,7 +151,7 @@ const THRUSTS = [
     keywords: ["Foundation Models", "World Action Models", "Reinforcement Learning"],
     media: [
       { src: "attached_assets/Robot Learning Gallery/door_open_inward_00.mp4", caption: "A collaborative learned policy opening a door from perception alone." },
-      { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: a collaborative whole-body skill learned in simulation." },
+      { src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4", caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: with learned policies for collaboration and learned low level RL control policies." },
       // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
     ],
     papers: [],
@@ -474,22 +475,6 @@ const PUBLICATIONS = [
       overview: "Uses explainable machine learning on speech signals to detect Parkinson's disease and provide interpretable evidence for predictions.",
       links: {
         paper: "https://conf.papercept.net/images/temp/TENCON/files/0190.pdf"
-      }
-    },
-    {
-      year: 2023,
-      kind: "submitted",
-      featured: false,
-      title: "Breast Cancer Segmentation Using Attention-Based Convolutional Network and Explainable AI",
-      authors: [
-        "Jai Vardhan",
-        "Taraka Satya Krishna Teja Malisetti"
-      ],
-      venue: "arXiv preprint, 2023",
-      image: null,
-      overview: "Applies an attention-based convolutional segmentation network with explainable-AI visualization to breast cancer screening images.",
-      links: {
-        preprint: "https://arxiv.org/abs/2305.14389"
       }
     },
     {

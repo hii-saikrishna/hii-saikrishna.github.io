@@ -61,7 +61,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-slate-800">Email</h3>
-                    <p className="text-slate-600">{personalInfo.email}</p>
+                    <p className="text-slate-600">{personalInfo.emailDisplay || personalInfo.email}</p>
                   </div>
                 </div>
 

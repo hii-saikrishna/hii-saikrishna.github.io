@@ -4,7 +4,8 @@ export const personalInfo = {
   affiliation: "University of Georgia",
   lab: "HeRoLab",
   advisor: "Dr. Ramviyas Parasuraman",
-  email: "saikrishna311002@gmail.com",
+  email: "sai.krishna@uga.edu",
+  emailDisplay: "sai[dot]krishna@uga[dot]edu",
   phone: "+1-502-821-2059",
   location: "Athens, Georgia, USA",
   profileImage: "@attached_assets/image_1750648862297.png",
@@ -314,20 +315,6 @@ export const publications = {
         github: null,
         video: null,
         image: "attached_assets/publication_gallery/EV.png"
-      },
-      {
-        title: "Breast Cancer Segmentation Using Attention-Based Convolutional Network and Explainable AI",
-        authors: [
-          "Jai Vardhan",
-          "Taraka Satya Krishna Teja Malisetti"
-        ],
-        venue: "arXiv preprint, 2023",
-        year: "2023",
-        description: "Applies an attention-based convolutional segmentation network with explainable-AI visualization to breast cancer screening images.",
-        link: "https://arxiv.org/abs/2305.14389",
-        github: null,
-        video: null,
-        image: null
       },
       {
         title: "Video Vision Transformers for Violence Detection",

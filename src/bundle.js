@@ -60,6 +60,7 @@ const PROFILE = {
   advisor: "Dr. Ramviyas Parasuraman",
   location: "Athens, GA",
   email: "sai.krishna@uga.edu",
+  emailDisplay: "sai[dot]krishna@uga[dot]edu",
   scholar: "https://scholar.google.com/citations?user=lrK_Y8AAAAAJ&hl=en&oi=ao",
   github: "https://github.com/sai-krishna-ghanta",
   linkedin: "https://www.linkedin.com/in/sai-krishna-ghanta-320ab0211/",
@@ -200,7 +201,7 @@ const THRUSTS = [{
     caption: "A collaborative learned policy opening a door from perception alone."
   }, {
     src: "attached_assets/Robot Learning Gallery/go1_pushbox_front_seed0.mp4",
-    caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: a collaborative whole-body skill learned in simulation."
+    caption: "Two Go1 quadrupeds cooperatively pushing a box to its goal: with learned policies for collaboration and learned low level RL control policies."
   }
   // { src: "attached_assets/Robot Learning Gallery/<new clip>.mp4", caption: "…" },  // ← add more slides here
   ],
@@ -510,18 +511,6 @@ const PUBLICATIONS = [{
   overview: "Uses explainable machine learning on speech signals to detect Parkinson's disease and provide interpretable evidence for predictions.",
   links: {
     paper: "https://conf.papercept.net/images/temp/TENCON/files/0190.pdf"
-  }
-}, {
-  year: 2023,
-  kind: "submitted",
-  featured: false,
-  title: "Breast Cancer Segmentation Using Attention-Based Convolutional Network and Explainable AI",
-  authors: ["Jai Vardhan", "Taraka Satya Krishna Teja Malisetti"],
-  venue: "arXiv preprint, 2023",
-  image: null,
-  overview: "Applies an attention-based convolutional segmentation network with explainable-AI visualization to breast cancer screening images.",
-  links: {
-    preprint: "https://arxiv.org/abs/2305.14389"
   }
 }, {
   year: 2022,
@@ -1571,10 +1560,11 @@ function dioramaScene(kind, zoom = 1) {
         patrol.group.rotation.y = Math.atan2(dir.x, dir.z) - Math.PI / 2;
 
         // 5. Cinematic panning camera (orbits within open front-right sector)
-        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
-        const angle = Math.PI / 4 + Math.sin(t * 0.08) * 0.5 + ctx.mouse.x * 0.4;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
+        const isMobile = window.innerWidth < 768;
+        const camRadius = zoom < 1 ? isMobile ? 24.0 : 16.5 : 7.875; // Zoomed in another 25% on Research page
+        const angle = Math.PI / 4 + Math.sin(t * 0.08) * 0.5 + (isMobile ? 0 : ctx.mouse.x * 0.4);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? isMobile ? 4.5 : 5.5 : 3.6) + (isMobile ? 0 : ctx.mouse.y * 1.5), Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? isMobile ? 0.4 : -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
     if (kind === "swarm") {
@@ -2216,10 +2206,11 @@ function dioramaScene(kind, zoom = 1) {
         commLineGeo.attributes.position.needsUpdate = true;
 
         // Cinematic moving camera (orbits stage)
-        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
-        const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
+        const isMobile = window.innerWidth < 768;
+        const camRadius = zoom < 1 ? isMobile ? 24.0 : 16.5 : 7.875; // Zoomed in another 25% on Research page
+        const angle = t * 0.08 + (isMobile ? 0 : ctx.mouse.x * 0.45);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? isMobile ? 4.5 : 5.5 : 3.6) + (isMobile ? 0 : ctx.mouse.y * 1.5), Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? isMobile ? 0.4 : -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
     if (kind === "gp") {
@@ -2401,10 +2392,11 @@ function dioramaScene(kind, zoom = 1) {
         laserGeo.attributes.position.needsUpdate = true;
 
         // Cinematic moving camera (orbits stage)
-        const camRadius = zoom < 1 ? 16.5 : 7.875; // Zoomed in another 25% on Research page
-        const angle = t * 0.08 + ctx.mouse.x * 0.45;
-        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? 5.5 : 3.6) + ctx.mouse.y * 1.5, Math.cos(angle) * camRadius);
-        camera.lookAt(0, zoom < 1 ? -3.0 : -0.2, 0); // Tilted further downwards on Home page
+        const isMobile = window.innerWidth < 768;
+        const camRadius = zoom < 1 ? isMobile ? 24.0 : 16.5 : 7.875; // Zoomed in another 25% on Research page
+        const angle = t * 0.08 + (isMobile ? 0 : ctx.mouse.x * 0.45);
+        camera.position.set(Math.sin(angle) * camRadius, (zoom < 1 ? isMobile ? 4.5 : 5.5 : 3.6) + (isMobile ? 0 : ctx.mouse.y * 1.5), Math.cos(angle) * camRadius);
+        camera.lookAt(0, zoom < 1 ? isMobile ? 0.4 : -3.0 : -0.2, 0); // Tilted further downwards on Home page
       };
     }
     return {
@@ -4432,7 +4424,7 @@ function HomePage({
     fill: "currentColor"
   })), /*#__PURE__*/React.createElement("span", null, "I\u2019ll be happy to hear from you about research, collaboration, ideas, or anything else \u2014 feel free to reach out to ", /*#__PURE__*/React.createElement("span", {
     className: "email-inline"
-  }, PROFILE.email), ".")))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
+  }, PROFILE.emailDisplay || PROFILE.email))))), /*#__PURE__*/React.createElement(HeroGallery, null)))), /*#__PURE__*/React.createElement("section", {
     className: "section recent-milestones",
     onClick: () => go("updates"),
     style: {

@@ -1202,6 +1202,8 @@ h1.hero-name .italic { font-style: italic; color: var(--accent-ink); }
   .pub-actions { display: none; }
   .cv-row { grid-template-columns: 1fr; gap: 8px; }
   .skills-grid { grid-template-columns: 1fr; }
+  .interest-grid { grid-template-columns: 1fr; justify-content: center; }
+  .interest-card { max-width: 380px; margin: 0 auto; }
   .hero { padding: 50px 0 60px; }
   .section { padding: 56px 0; }
 }
