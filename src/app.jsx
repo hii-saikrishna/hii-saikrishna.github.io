@@ -28,12 +28,10 @@ function Nav({ page, go, blogPostOpen }) {
     <nav className="nav">
       <div className="container nav-inner">
         <div className={`nav-brand ${isExpanded ? "expanded" : ""}`} onClick={() => go("home")}>
+          <span className="brand-monogram">GSK</span>
           <svg className="brand-leaf" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c4 0 8.68-3 11-8a13.62 13.62 0 0 0 1-5c0-.34 0-.67-.05-1C18.63 6.42 17.12 6.86 17 8Z" fill="var(--accent)"/>
             <path d="M11 14a5.82 5.82 0 0 0 4-2 11.61 11.61 0 0 0 2.25-4" stroke="var(--bg)" strokeWidth="0.7" strokeLinecap="round" fill="none" opacity="0.5"/>
-          </svg>
-          <svg className="brand-monogram" viewBox="0 0 48 22" xmlns="http://www.w3.org/2000/svg">
-            <text x="0" y="17" fontFamily="'Instrument Serif', Georgia, serif" fontWeight="400" fontSize="20" letterSpacing="-0.5" fill="currentColor">GSK</text>
           </svg>
           <span className="brand-name">Sai Krishna Ghanta</span>
         </div>

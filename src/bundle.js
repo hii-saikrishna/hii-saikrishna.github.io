@@ -6143,7 +6143,9 @@ function Nav({
   }, /*#__PURE__*/React.createElement("div", {
     className: `nav-brand ${isExpanded ? "expanded" : ""}`,
     onClick: () => go("home")
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "brand-monogram"
+  }, "GSK"), /*#__PURE__*/React.createElement("svg", {
     className: "brand-leaf",
     viewBox: "0 0 24 24",
     fill: "none",
@@ -6158,19 +6160,7 @@ function Nav({
     strokeLinecap: "round",
     fill: "none",
     opacity: "0.5"
-  })), /*#__PURE__*/React.createElement("svg", {
-    className: "brand-monogram",
-    viewBox: "0 0 48 22",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /*#__PURE__*/React.createElement("text", {
-    x: "0",
-    y: "17",
-    fontFamily: "'Instrument Serif', Georgia, serif",
-    fontWeight: "400",
-    fontSize: "20",
-    letterSpacing: "-0.5",
-    fill: "currentColor"
-  }, "GSK")), /*#__PURE__*/React.createElement("span", {
+  })), /*#__PURE__*/React.createElement("span", {
     className: "brand-name"
   }, "Sai Krishna Ghanta")), /*#__PURE__*/React.createElement("div", {
     className: `nav-links ${open ? "open" : ""}`

@@ -216,51 +216,44 @@ em { font-style: italic; }
   position: relative;
 }
 
-/* ── Leaf SVG: hidden at first, grows in on expand ── */
-.nav-brand .brand-leaf {
-  width: 0;
-  height: 22px;
-  opacity: 0;
-  transform: scale(0.3) rotate(-30deg);
-  transform-origin: center center;
-  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.35s ease,
-              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  flex-shrink: 0;
-  margin-right: 0;
-}
-.nav-brand.expanded .brand-leaf {
-  width: 22px;
+/* ── GSK monogram: big, bold, visible by default ── */
+.nav-brand .brand-monogram {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  max-width: 60px;
   opacity: 1;
-  transform: scale(1) rotate(-8deg);
-  margin-right: 6px;
-}
-.nav-brand.expanded:hover .brand-leaf {
-  transform: scale(1.1) rotate(8deg);
+  transform: translateX(0) scale(1);
+  transform-origin: left center;
+  transition: max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Monogram SVG: visible by default, slides out on expand ── */
-.nav-brand .brand-monogram {
-  width: 48px;
-  height: 22px;
-  opacity: 1;
-  transform: translateX(0);
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.25s ease,
-              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-  overflow: visible;
-}
-.nav-brand.expanded .brand-monogram {
+/* ── Leaf SVG: hidden, sprouts in on expand ── */
+.nav-brand .brand-leaf {
   width: 0;
+  height: 26px;
   opacity: 0;
-  transform: translateX(-10px);
+  transform: scale(0) rotate(-90deg);
+  transform-origin: bottom center;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+              opacity 0.4s ease 0.15s,
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+  flex-shrink: 0;
+  margin-right: 0;
 }
 
 /* ── Full name text ── */
 .nav-brand .brand-name {
   font-family: var(--serif);
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -268,31 +261,53 @@ em { font-style: italic; }
   overflow: hidden;
   max-width: 0;
   opacity: 0;
-  transform: translateX(-8px);
-  transition: max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.35s ease 0.08s,
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-12px);
+  transition: max-width 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
+              opacity 0.4s ease 0.35s,
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
 }
+
+/* ═══ EXPANDED STATE (scrolled / other pages) ═══ */
+/* Stage 1: monogram dissolves */
+.nav-brand.expanded .brand-monogram {
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-8px) scale(0.85);
+}
+/* Stage 2: leaf sprouts in */
+.nav-brand.expanded .brand-leaf {
+  width: 26px;
+  opacity: 1;
+  transform: scale(1) rotate(-12deg);
+  margin-right: 5px;
+}
+/* Stage 3: name sweeps in */
 .nav-brand.expanded .brand-name {
-  max-width: 250px;
+  max-width: 260px;
   opacity: 1;
   transform: translateX(0);
 }
 
-/* ── Hover on collapsed (home, top): preview the expansion ── */
-.nav-brand:not(.expanded):hover .brand-leaf {
-  width: 22px;
-  opacity: 1;
-  transform: scale(1) rotate(-8deg);
-  margin-right: 6px;
+/* Leaf bounce on hover when expanded */
+.nav-brand.expanded:hover .brand-leaf {
+  transform: scale(1.15) rotate(10deg);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* ═══ HOVER PREVIEW (collapsed, home top) ═══ */
 .nav-brand:not(.expanded):hover .brand-monogram {
-  width: 0;
+  max-width: 0;
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-8px) scale(0.85);
+}
+.nav-brand:not(.expanded):hover .brand-leaf {
+  width: 26px;
+  opacity: 1;
+  transform: scale(1) rotate(-12deg);
+  margin-right: 5px;
 }
 .nav-brand:not(.expanded):hover .brand-name {
-  max-width: 250px;
+  max-width: 260px;
   opacity: 1;
   transform: translateX(0);
 }
