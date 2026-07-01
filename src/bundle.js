@@ -3198,8 +3198,13 @@ const VISITED_PLACES = [{
   lat: 42.32,
   lon: -83.0,
   w: 0.3
+}, {
+  name: "Sweden",
+  lat: 59.33,
+  lon: 18.07,
+  w: 0.5
 }];
-const TRAVEL_ARCS = [["Guntur", "Delhi"], ["Delhi", "Manali"], ["Guntur", "Naya Raipur"], ["Naya Raipur", "Thailand"], ["Guntur", "Louisville"], ["Louisville", "Athens, GA"], ["Athens, GA", "Hangzhou"], ["Athens, GA", "New York"], ["Athens, GA", "Colorado"], ["Athens, GA", "Toronto"], ["Toronto", "Detroit"], ["Athens, GA", "Greenville, SC"]];
+const TRAVEL_ARCS = [["Guntur", "Delhi"], ["Delhi", "Manali"], ["Guntur", "Naya Raipur"], ["Naya Raipur", "Thailand"], ["Guntur", "Louisville"], ["Louisville", "Athens, GA"], ["Athens, GA", "Hangzhou"], ["Athens, GA", "New York"], ["Athens, GA", "Colorado"], ["Athens, GA", "Toronto"], ["Toronto", "Detroit"], ["Athens, GA", "Greenville, SC"], ["Athens, GA", "Sweden"]];
 function latLonToV3(lat, lon, r) {
   const phi = (90 - lat) * Math.PI / 180;
   const theta = (lon + 180) * Math.PI / 180;
@@ -6100,6 +6105,16 @@ function Nav({
   blogPostOpen
 }) {
   const [open, setOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, {
+      passive: true
+    });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const items = [{
     id: "home",
     label: "Home"
@@ -6120,16 +6135,23 @@ function Nav({
     label: "About"
   }];
   const activeId = blogPostOpen ? "blog" : page;
+  const isCollapsed = scrolled || page !== "home";
   return /*#__PURE__*/React.createElement("nav", {
     className: "nav"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container nav-inner"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "nav-brand",
+    className: `nav-brand ${isCollapsed ? "collapsed" : ""}`,
     onClick: () => go("home")
   }, /*#__PURE__*/React.createElement("span", {
-    className: "dot"
-  }), /*#__PURE__*/React.createElement("span", null, "Sai Krishna Ghanta")), /*#__PURE__*/React.createElement("div", {
+    className: "brand-slash"
+  }, "/"), /*#__PURE__*/React.createElement("span", {
+    className: "brand-text"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "brand-collapsed"
+  }, "GSK"), /*#__PURE__*/React.createElement("span", {
+    className: "brand-expanded"
+  }, "Sai Krishna Ghanta"))), /*#__PURE__*/React.createElement("div", {
     className: `nav-links ${open ? "open" : ""}`
   }, items.map(it => /*#__PURE__*/React.createElement("span", {
     key: it.id,

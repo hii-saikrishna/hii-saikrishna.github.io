@@ -1805,6 +1805,16 @@ function BlogReader({ postId, back }) {
 // ===== Nav & Footer =====
 function Nav({ page, go, blogPostOpen }) {
   const [open, setOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const items = [
     { id: "home", label: "Home" },
     { id: "research", label: "Research" },
@@ -1814,12 +1824,17 @@ function Nav({ page, go, blogPostOpen }) {
     { id: "about", label: "About" },
   ];
   const activeId = blogPostOpen ? "blog" : page;
+  const isCollapsed = scrolled || page !== "home";
+
   return (
     <nav className="nav">
       <div className="container nav-inner">
-        <div className="nav-brand" onClick={() => go("home")}>
-          <span className="dot"></span>
-          <span>Sai Krishna Ghanta</span>
+        <div className={`nav-brand ${isCollapsed ? "collapsed" : ""}`} onClick={() => go("home")}>
+          <span className="brand-slash">/</span>
+          <span className="brand-text">
+            <span className="brand-collapsed">GSK</span>
+            <span className="brand-expanded">Sai Krishna Ghanta</span>
+          </span>
         </div>
         <div className={`nav-links ${open ? "open" : ""}`}>
           {items.map((it) => (

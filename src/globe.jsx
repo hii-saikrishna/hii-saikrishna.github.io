@@ -18,6 +18,7 @@ const VISITED_PLACES = [
   { name: "Toronto", lat: 43.65, lon: -79.38, w: 0.4 },
   { name: "Detroit", lat: 42.33, lon: -83.05, w: 0.35 },
   { name: "Windsor", lat: 42.32, lon: -83.0, w: 0.3 },
+  { name: "Sweden", lat: 59.33, lon: 18.07, w: 0.5 },
 ];
 
 const TRAVEL_ARCS = [
@@ -25,6 +26,7 @@ const TRAVEL_ARCS = [
   ["Naya Raipur", "Thailand"], ["Guntur", "Louisville"], ["Louisville", "Athens, GA"],
   ["Athens, GA", "Hangzhou"], ["Athens, GA", "New York"], ["Athens, GA", "Colorado"],
   ["Athens, GA", "Toronto"], ["Toronto", "Detroit"], ["Athens, GA", "Greenville, SC"],
+  ["Athens, GA", "Sweden"],
 ];
 
 function latLonToV3(lat, lon, r) {
