@@ -402,7 +402,7 @@ const PUBLICATIONS = [{
   featured: true,
   title: "SPACE: 3D Spatial Co-operation and Exploration Framework for Robust Mapping and Coverage with Multi-Robot Systems",
   authors: ["Sai Krishna Ghanta*", "Ramviyas Parasuraman"],
-  venue: "To be presented at IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026, Pittsburgh, USA; also presented at the Block-by-Block Workshop, ICRA 2025, Atlanta, USA",
+  venue: "To be presented at IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026, Pittsburgh, USA; accepted in IEEE Robotics and Automation Letters; also presented at the Block-by-Block Workshop, ICRA 2025, Atlanta, USA",
   image: "attached_assets/publication_gallery/SPACE-Dont use Audio.mp4",
   overview: "Coordinates multiple RGB-D robots for cooperative exploration, mapping, and coverage while filtering dynamic robot-induced artifacts.",
   links: {
