@@ -210,7 +210,7 @@ em { font-style: italic; }
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   font-family: var(--sans);
   font-size: 15px;
   font-weight: 600;
@@ -219,12 +219,16 @@ em { font-style: italic; }
   cursor: pointer;
   user-select: none;
 }
-.nav-brand .brand-slash {
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: -0.05em;
-  margin-right: 2px;
+.nav-brand .brand-leaf {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transform: rotate(-15deg);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nav-brand:hover .brand-leaf {
+  transform: rotate(15deg);
 }
 .brand-text {
   display: inline-flex;

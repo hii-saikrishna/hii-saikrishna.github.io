@@ -6143,9 +6143,11 @@ function Nav({
   }, /*#__PURE__*/React.createElement("div", {
     className: `nav-brand ${isExpanded ? "expanded" : ""}`,
     onClick: () => go("home")
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "brand-slash"
-  }, "//"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "attached_assets/dark_realistic_leaf.png",
+    className: "brand-leaf",
+    alt: ""
+  }), /*#__PURE__*/React.createElement("span", {
     className: "brand-text"
   }, /*#__PURE__*/React.createElement("span", {
     className: "brand-collapsed"

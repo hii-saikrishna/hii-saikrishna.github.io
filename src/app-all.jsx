@@ -1830,7 +1830,7 @@ function Nav({ page, go, blogPostOpen }) {
     <nav className="nav">
       <div className="container nav-inner">
         <div className={`nav-brand ${isExpanded ? "expanded" : ""}`} onClick={() => go("home")}>
-          <span className="brand-slash">//</span>
+          <img src="attached_assets/dark_realistic_leaf.png" className="brand-leaf" alt="" />
           <span className="brand-text">
             <span className="brand-collapsed">GSK</span>
             <span className="brand-expanded">Sai Krishna Ghanta</span>
