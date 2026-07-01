@@ -6143,17 +6143,36 @@ function Nav({
   }, /*#__PURE__*/React.createElement("div", {
     className: `nav-brand ${isExpanded ? "expanded" : ""}`,
     onClick: () => go("home")
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "attached_assets/dark_realistic_leaf.png",
+  }, /*#__PURE__*/React.createElement("svg", {
     className: "brand-leaf",
-    alt: ""
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "brand-text"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "brand-collapsed"
-  }, "GSK"), /*#__PURE__*/React.createElement("span", {
-    className: "brand-expanded"
-  }, "Sai Krishna Ghanta"))), /*#__PURE__*/React.createElement("div", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c4 0 8.68-3 11-8a13.62 13.62 0 0 0 1-5c0-.34 0-.67-.05-1C18.63 6.42 17.12 6.86 17 8Z",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M11 14a5.82 5.82 0 0 0 4-2 11.61 11.61 0 0 0 2.25-4",
+    stroke: "var(--bg)",
+    strokeWidth: "0.7",
+    strokeLinecap: "round",
+    fill: "none",
+    opacity: "0.5"
+  })), /*#__PURE__*/React.createElement("svg", {
+    className: "brand-monogram",
+    viewBox: "0 0 36 22",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("text", {
+    x: "0",
+    y: "17",
+    fontFamily: "Inter, system-ui, sans-serif",
+    fontWeight: "800",
+    fontSize: "17",
+    letterSpacing: "-0.5",
+    fill: "currentColor"
+  }, "SK")), /*#__PURE__*/React.createElement("span", {
+    className: "brand-name"
+  }, "Sai Krishna Ghanta")), /*#__PURE__*/React.createElement("div", {
     className: `nav-links ${open ? "open" : ""}`
   }, items.map(it => /*#__PURE__*/React.createElement("span", {
     key: it.id,
