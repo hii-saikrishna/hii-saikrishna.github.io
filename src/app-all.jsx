@@ -1824,13 +1824,13 @@ function Nav({ page, go, blogPostOpen }) {
     { id: "about", label: "About" },
   ];
   const activeId = blogPostOpen ? "blog" : page;
-  const isCollapsed = scrolled || page !== "home";
+  const isExpanded = scrolled || page !== "home";
 
   return (
     <nav className="nav">
       <div className="container nav-inner">
-        <div className={`nav-brand ${isCollapsed ? "collapsed" : ""}`} onClick={() => go("home")}>
-          <span className="brand-slash">/</span>
+        <div className={`nav-brand ${isExpanded ? "expanded" : ""}`} onClick={() => go("home")}>
+          <span className="brand-slash">//</span>
           <span className="brand-text">
             <span className="brand-collapsed">GSK</span>
             <span className="brand-expanded">Sai Krishna Ghanta</span>

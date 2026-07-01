@@ -210,77 +210,72 @@ em { font-style: italic; }
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
+  gap: 4px;
+  font-family: var(--sans);
   font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--ink);
   cursor: pointer;
   user-select: none;
 }
 .nav-brand .brand-slash {
   color: var(--accent);
-  font-weight: 700;
-  font-size: 17px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.05em;
+  margin-right: 2px;
 }
 .brand-text {
   display: inline-flex;
   align-items: center;
   position: relative;
+  height: 20px;
+  overflow: hidden;
+  max-width: 45px;
+  transition: max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .brand-collapsed {
   opacity: 1;
-  transform: scale(1);
-  transition: opacity 0.25s ease, transform 0.25s ease, max-width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  max-width: 80px;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   display: inline-block;
 }
 .brand-expanded {
   opacity: 0;
-  max-width: 0;
-  transform: scale(0.9);
-  overflow: hidden;
+  transform: translateY(100%);
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   display: inline-block;
-  transition: opacity 0.25s ease, transform 0.25s ease, max-width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  position: absolute;
+  left: 0;
 }
 
-/* Default state: Expanded */
-.nav-brand:not(.collapsed) .brand-collapsed {
-  max-width: 0;
-  opacity: 0;
-  transform: scale(0.9);
+/* Expanded state (scrolled or on other pages) */
+.nav-brand.expanded .brand-text {
+  max-width: 170px;
 }
-.nav-brand:not(.collapsed) .brand-expanded {
-  max-width: 300px;
+.nav-brand.expanded .brand-collapsed {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.nav-brand.expanded .brand-expanded {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
 }
 
-/* Collapsed state (scrolled or other pages) */
-.nav-brand.collapsed .brand-collapsed {
-  max-width: 80px;
-  opacity: 1;
-  transform: scale(1);
+/* Hovering collapsed state: Expand it! */
+.nav-brand:not(.expanded):hover .brand-text {
+  max-width: 170px;
 }
-.nav-brand.collapsed .brand-expanded {
-  max-width: 0;
+.nav-brand:not(.expanded):hover .brand-collapsed {
   opacity: 0;
-  transform: scale(0.9);
+  transform: translateY(-100%);
 }
-
-/* Hovering collapsed state */
-.nav-brand.collapsed:hover .brand-collapsed {
-  max-width: 0;
-  opacity: 0;
-  transform: scale(0.9);
-}
-.nav-brand.collapsed:hover .brand-expanded {
-  max-width: 300px;
+.nav-brand:not(.expanded):hover .brand-expanded {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
 }
 .nav-links {
   display: flex;

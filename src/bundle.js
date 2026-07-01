@@ -6135,17 +6135,17 @@ function Nav({
     label: "About"
   }];
   const activeId = blogPostOpen ? "blog" : page;
-  const isCollapsed = scrolled || page !== "home";
+  const isExpanded = scrolled || page !== "home";
   return /*#__PURE__*/React.createElement("nav", {
     className: "nav"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container nav-inner"
   }, /*#__PURE__*/React.createElement("div", {
-    className: `nav-brand ${isCollapsed ? "collapsed" : ""}`,
+    className: `nav-brand ${isExpanded ? "expanded" : ""}`,
     onClick: () => go("home")
   }, /*#__PURE__*/React.createElement("span", {
     className: "brand-slash"
-  }, "/"), /*#__PURE__*/React.createElement("span", {
+  }, "//"), /*#__PURE__*/React.createElement("span", {
     className: "brand-text"
   }, /*#__PURE__*/React.createElement("span", {
     className: "brand-collapsed"
