@@ -6139,28 +6139,86 @@ function Nav({
   }, /*#__PURE__*/React.createElement("div", {
     className: "container nav-inner"
   }, /*#__PURE__*/React.createElement("div", {
-    className: `nav-brand ${isExpanded ? "expanded" : ""}`,
+    className: "nav-brand",
     onClick: () => go("home")
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "brand-monogram"
-  }, "GSK"), /*#__PURE__*/React.createElement("svg", {
-    className: "brand-leaf",
-    viewBox: "0 0 24 24",
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "brand-tree",
+    viewBox: "0 0 40 40",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c4 0 8.68-3 11-8a13.62 13.62 0 0 0 1-5c0-.34 0-.67-.05-1C18.63 6.42 17.12 6.86 17 8Z",
+  }, /*#__PURE__*/React.createElement("line", {
+    className: "tree-ground",
+    x1: "8",
+    y1: "36",
+    x2: "32",
+    y2: "36",
+    stroke: "var(--accent)",
+    strokeWidth: "1.2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "tree-trunk",
+    d: "M20 36 L20 20",
+    stroke: "var(--accent)",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "tree-branches",
+    d: "M20 26 C14 22, 10 20, 8 16 M20 24 C26 20, 30 18, 32 14 M20 22 C16 18, 12 14, 11 10 M20 22 C24 18, 28 14, 29 10",
+    stroke: "var(--accent)",
+    strokeWidth: "1.4",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c1",
+    cx: "8",
+    cy: "14",
+    r: "4",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c2",
+    cx: "14",
+    cy: "8",
+    r: "5",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c3",
+    cx: "20",
+    cy: "6",
+    r: "5.5",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c4",
+    cx: "26",
+    cy: "8",
+    r: "5",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c5",
+    cx: "32",
+    cy: "12",
+    r: "4.5",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c6",
+    cx: "11",
+    cy: "10",
+    r: "3.5",
+    fill: "var(--accent)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tree-canopy c7",
+    cx: "29",
+    cy: "9",
+    r: "3.5",
     fill: "var(--accent)"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M11 14a5.82 5.82 0 0 0 4-2 11.61 11.61 0 0 0 2.25-4",
-    stroke: "var(--bg)",
-    strokeWidth: "0.7",
+    className: "tree-roots",
+    d: "M12 16 L11 28 M14 14 L13 26 M26 14 L27 26 M28 13 L29 27 M10 17 L9 30 M30 15 L31 29",
+    stroke: "var(--accent)",
+    strokeWidth: "0.8",
     strokeLinecap: "round",
-    fill: "none",
-    opacity: "0.5"
+    strokeDasharray: "1.5 2"
   })), /*#__PURE__*/React.createElement("span", {
-    className: "brand-name"
-  }, "Sai Krishna Ghanta")), /*#__PURE__*/React.createElement("div", {
+    className: "brand-monogram"
+  }, "GSK")), /*#__PURE__*/React.createElement("div", {
     className: `nav-links ${open ? "open" : ""}`
   }, items.map(it => /*#__PURE__*/React.createElement("span", {
     key: it.id,
