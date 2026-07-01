@@ -593,7 +593,7 @@ const UPDATES = [
   tag: "Grant",
   home: true,
   title: "KTH RPL Summer School",
-  text: "Received a travel grant for the KTH RPL Summer School 2026 in Stockholm, Sweden."
+  text: "Received a travel grant for and attended the KTH RPL Summer School 2026 in Stockholm, Sweden."
 }, {
   date: "May 2026",
   year: 2026,
