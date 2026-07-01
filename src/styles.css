@@ -237,11 +237,11 @@ em { font-style: italic; }
 .tree-canopy {
   opacity: 0.95;
 }
-/* Alternating canopy greens for 18 circles */
-.tree-canopy.c1, .tree-canopy.c3, .tree-canopy.c5, .tree-canopy.c7, .tree-canopy.c9, .tree-canopy.c11, .tree-canopy.c13, .tree-canopy.c15, .tree-canopy.c17 {
+/* Alternating canopy greens for 24 circles */
+.tree-canopy.c1, .tree-canopy.c3, .tree-canopy.c5, .tree-canopy.c7, .tree-canopy.c9, .tree-canopy.c11, .tree-canopy.c13, .tree-canopy.c15, .tree-canopy.c17, .tree-canopy.c19, .tree-canopy.c21, .tree-canopy.c23 {
   fill: #3B5B43;
 }
-.tree-canopy.c2, .tree-canopy.c4, .tree-canopy.c6, .tree-canopy.c8, .tree-canopy.c10, .tree-canopy.c12, .tree-canopy.c14, .tree-canopy.c16, .tree-canopy.c18 {
+.tree-canopy.c2, .tree-canopy.c4, .tree-canopy.c6, .tree-canopy.c8, .tree-canopy.c10, .tree-canopy.c12, .tree-canopy.c14, .tree-canopy.c16, .tree-canopy.c18, .tree-canopy.c20, .tree-canopy.c22, .tree-canopy.c24 {
   fill: #4A7C59;
 }
 
@@ -306,7 +306,7 @@ em { font-style: italic; }
   85%      { transform: scale(1.08); opacity: 1; }
   90%, 100% { transform: scale(1); opacity: 1; }
 }
-/* Staggered bloom for 18 clusters */
+/* Staggered bloom for 24 clusters */
 .tree-canopy.c1  { animation-delay: 0.05s; }
 .tree-canopy.c2  { animation-delay: 0.15s; }
 .tree-canopy.c3  { animation-delay: 0.25s; }
@@ -325,6 +325,12 @@ em { font-style: italic; }
 .tree-canopy.c16 { animation-delay: 0.14s; }
 .tree-canopy.c17 { animation-delay: 0.24s; }
 .tree-canopy.c18 { animation-delay: 0.38s; }
+.tree-canopy.c19 { animation-delay: 0.11s; }
+.tree-canopy.c20 { animation-delay: 0.29s; }
+.tree-canopy.c21 { animation-delay: 0.21s; }
+.tree-canopy.c22 { animation-delay: 0.06s; }
+.tree-canopy.c23 { animation-delay: 0.16s; }
+.tree-canopy.c24 { animation-delay: 0.31s; }
 
 /* Stage 5: Hanging aerial roots descend */
 .tree-roots {

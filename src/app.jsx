@@ -36,7 +36,7 @@ function Nav({ page, go, blogPostOpen }) {
             <line className="tree-ground" x1="5" y1="46" x2="45" y2="46" strokeWidth="1.5" strokeLinecap="round"/>
             <path className="tree-trunk" d="M21 46 C22 38, 20 34, 18 30 C22 28, 28 28, 32 30 C30 34, 28 38, 29 46 Z"/>
             <path className="tree-branches" d="M18 30 C12 26, 8 24, 4 18 C8 20, 13 22, 18 30 Z M32 30 C38 26, 42 24, 46 18 C42 20, 37 22, 32 30 Z M22 30 C18 22, 14 18, 12 10 C16 14, 19 18, 22 30 Z M28 30 C32 22, 36 18, 38 10 C34 14, 31 18, 28 30 Z"/>
-            <path className="tree-twigs" d="M4 18 L6 14 M46 18 L44 14 M12 10 L6 14 M12 10 L18 7 M38 10 L30 7 M38 10 L44 14 M22 30 L25 15 M25 15 L25 11 M25 15 L15 12 M25 15 L35 12 M4 18 L2 20 M46 18 L48 20 M18 7 L20 5 M30 7 L30 5 M6 14 L10 15 M44 14 L40 15" strokeWidth="1.0" strokeLinecap="round"/>
+            <path className="tree-twigs" d="M4 18 L6 14 M46 18 L44 14 M12 10 L6 14 M12 10 L18 7 M38 10 L30 7 M38 10 L44 14 M22 30 L25 15 M25 15 L25 11 M25 15 L15 12 M25 15 L35 12 M4 18 L2 20 M46 18 L48 20 M18 7 L20 5 M30 7 L30 5 M6 14 L10 15 M44 14 L40 15 M22 30 L18 16 M28 30 L32 16 M25 15 L22 14 M25 15 L28 14 M18 30 L15 19 M32 30 L35 19" strokeWidth="1.0" strokeLinecap="round"/>
             <circle className="tree-canopy c1" cx="4" cy="18" r="3.2"/>
             <circle className="tree-canopy c2" cx="6" cy="14" r="3.8"/>
             <circle className="tree-canopy c3" cx="12" cy="9" r="4.2"/>
@@ -55,6 +55,12 @@ function Nav({ page, go, blogPostOpen }) {
             <circle className="tree-canopy c16" cx="30" cy="5" r="3.8"/>
             <circle className="tree-canopy c17" cx="10" cy="15" r="3.2"/>
             <circle className="tree-canopy c18" cx="40" cy="15" r="3.2"/>
+            <circle className="tree-canopy c19" cx="18" cy="16" r="3.5"/>
+            <circle className="tree-canopy c20" cx="32" cy="16" r="3.5"/>
+            <circle className="tree-canopy c21" cx="22" cy="14" r="4.0"/>
+            <circle className="tree-canopy c22" cx="28" cy="14" r="4.0"/>
+            <circle className="tree-canopy c23" cx="15" cy="19" r="3.0"/>
+            <circle className="tree-canopy c24" cx="35" cy="19" r="3.0"/>
             <path className="tree-roots" d="M10 20 L10 40 M16 22 L16 38 M34 22 L34 38 M40 20 L40 40 M6 22 L6 32 M44 22 L44 32" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="1.5 2"/>
           </svg>
           <span className="brand-monogram">GSK</span>
