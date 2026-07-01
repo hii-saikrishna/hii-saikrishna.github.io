@@ -474,7 +474,6 @@ function PubRow({ p }) {
         ) : (
           <PubThumbArt />
         )}
-        {p.featured && <span className="pub-feat">Featured</span>}
       </div>
       <div className="pub-main">
         <div className="pub-meta-row">

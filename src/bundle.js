@@ -4294,9 +4294,7 @@ function PubRow({
     src: p.image,
     alt: "",
     loading: "lazy"
-  }) : /*#__PURE__*/React.createElement(PubThumbArt, null), p.featured && /*#__PURE__*/React.createElement("span", {
-    className: "pub-feat"
-  }, "Featured")), /*#__PURE__*/React.createElement("div", {
+  }) : /*#__PURE__*/React.createElement(PubThumbArt, null)), /*#__PURE__*/React.createElement("div", {
     className: "pub-main"
   }, /*#__PURE__*/React.createElement("div", {
     className: "pub-meta-row"
