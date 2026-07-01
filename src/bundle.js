@@ -6104,13 +6104,18 @@ function Nav({
 }) {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const [scrollPct, setScrollPct] = React.useState(0);
   React.useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pct = Math.min(1, Math.max(0, window.scrollY / max));
+      setScrollPct(pct);
     };
     window.addEventListener("scroll", handleScroll, {
       passive: true
     });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const items = [{
@@ -6133,86 +6138,73 @@ function Nav({
     label: "About"
   }];
   const activeId = blogPostOpen ? "blog" : page;
-  const isExpanded = scrolled || page !== "home";
   return /*#__PURE__*/React.createElement("nav", {
     className: "nav"
   }, /*#__PURE__*/React.createElement("div", {
     className: "container nav-inner"
   }, /*#__PURE__*/React.createElement("div", {
     className: "nav-brand",
+    style: {
+      "--scroll-pct": scrollPct
+    },
     onClick: () => go("home")
   }, /*#__PURE__*/React.createElement("svg", {
     className: "brand-tree",
-    viewBox: "0 0 40 40",
+    viewBox: "0 0 50 50",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, /*#__PURE__*/React.createElement("line", {
     className: "tree-ground",
-    x1: "8",
-    y1: "36",
-    x2: "32",
-    y2: "36",
-    stroke: "var(--accent)",
-    strokeWidth: "1.2",
+    x1: "5",
+    y1: "46",
+    x2: "45",
+    y2: "46",
+    strokeWidth: "1.5",
     strokeLinecap: "round"
   }), /*#__PURE__*/React.createElement("path", {
     className: "tree-trunk",
-    d: "M20 36 L20 20",
-    stroke: "var(--accent)",
-    strokeWidth: "2",
-    strokeLinecap: "round"
+    d: "M21 46 C22 38, 20 34, 18 30 C22 28, 28 28, 32 30 C30 34, 28 38, 29 46 Z"
   }), /*#__PURE__*/React.createElement("path", {
     className: "tree-branches",
-    d: "M20 26 C14 22, 10 20, 8 16 M20 24 C26 20, 30 18, 32 14 M20 22 C16 18, 12 14, 11 10 M20 22 C24 18, 28 14, 29 10",
-    stroke: "var(--accent)",
-    strokeWidth: "1.4",
-    strokeLinecap: "round"
+    d: "M18 30 C12 26, 8 24, 4 18 C8 20, 13 22, 18 30 Z M32 30 C38 26, 42 24, 46 18 C42 20, 37 22, 32 30 Z M22 30 C18 22, 14 18, 12 10 C16 14, 19 18, 22 30 Z M28 30 C32 22, 36 18, 38 10 C34 14, 31 18, 28 30 Z"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c1",
-    cx: "8",
-    cy: "14",
-    r: "4",
-    fill: "var(--accent)"
+    cx: "6",
+    cy: "16",
+    r: "4.5"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c2",
-    cx: "14",
-    cy: "8",
-    r: "5",
-    fill: "var(--accent)"
+    cx: "12",
+    cy: "10",
+    r: "5.5"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c3",
     cx: "20",
-    cy: "6",
-    r: "5.5",
-    fill: "var(--accent)"
+    cy: "7",
+    r: "6"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c4",
-    cx: "26",
-    cy: "8",
-    r: "5",
-    fill: "var(--accent)"
+    cx: "30",
+    cy: "7",
+    r: "6"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c5",
-    cx: "32",
-    cy: "12",
-    r: "4.5",
-    fill: "var(--accent)"
+    cx: "38",
+    cy: "10",
+    r: "5.5"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c6",
-    cx: "11",
-    cy: "10",
-    r: "3.5",
-    fill: "var(--accent)"
+    cx: "44",
+    cy: "16",
+    r: "4.5"
   }), /*#__PURE__*/React.createElement("circle", {
     className: "tree-canopy c7",
-    cx: "29",
-    cy: "9",
-    r: "3.5",
-    fill: "var(--accent)"
+    cx: "25",
+    cy: "12",
+    r: "7"
   }), /*#__PURE__*/React.createElement("path", {
     className: "tree-roots",
-    d: "M12 16 L11 28 M14 14 L13 26 M26 14 L27 26 M28 13 L29 27 M10 17 L9 30 M30 15 L31 29",
-    stroke: "var(--accent)",
+    d: "M10 20 L10 40 M16 22 L16 38 M34 22 L34 38 M40 20 L40 40 M6 22 L6 32 M44 22 L44 32",
     strokeWidth: "0.8",
     strokeLinecap: "round",
     strokeDasharray: "1.5 2"

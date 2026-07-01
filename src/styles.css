@@ -210,7 +210,7 @@ em { font-style: italic; }
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   cursor: pointer;
   user-select: none;
 }
@@ -222,78 +222,101 @@ em { font-style: italic; }
   flex-shrink: 0;
 }
 
-/* Growth animation: 5 stages across 180s (3 min) */
-
-/* Stage 1 (0–10%): Ground line fades in */
+/* Realistic Tree Colors */
 .tree-ground {
-  animation: tree-fade-in 180s ease both;
-  animation-delay: 0s;
+  stroke: #6E473B;
+}
+.tree-trunk, .tree-branches {
+  fill: #6E473B;
+}
+.tree-roots {
+  stroke: #6E473B;
+  opacity: 0.6;
+}
+.tree-canopy {
+  opacity: 0.95;
+}
+/* Alternating canopy greens */
+.tree-canopy.c1, .tree-canopy.c3, .tree-canopy.c5, .tree-canopy.c7 {
+  fill: #3B5B43;
+}
+.tree-canopy.c2, .tree-canopy.c4, .tree-canopy.c6 {
+  fill: #4A7C59;
 }
 
-/* Stage 2 (10–25%): Trunk draws upward */
-.tree-trunk {
-  stroke-dasharray: 16;
-  stroke-dashoffset: 16;
-  animation: tree-draw 180s ease both;
+/* Dynamic scroll acceleration */
+.tree-ground, .tree-trunk, .tree-branches, .tree-canopy, .tree-roots {
+  animation-duration: calc(15s / (1 + var(--scroll-pct, 0) * 12)) !important;
 }
-@keyframes tree-draw {
-  0%, 5%   { stroke-dashoffset: 16; }
-  25%      { stroke-dashoffset: 0; }
+
+/* Stage 1: Ground line appears */
+.tree-ground {
+  animation: tree-fade-in 15s ease both;
+}
+
+/* Stage 2: Trunk grows */
+.tree-trunk {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: tree-draw-trunk 15s ease both;
+}
+@keyframes tree-draw-trunk {
+  0%, 5%   { stroke-dashoffset: 40; opacity: 0; }
+  10%      { opacity: 1; }
+  30%      { stroke-dashoffset: 0; }
   100%     { stroke-dashoffset: 0; }
 }
 
-/* Stage 3 (25–50%): Branches spread */
+/* Stage 3: Spreading branches grow */
 .tree-branches {
-  stroke-dasharray: 80;
-  stroke-dashoffset: 80;
-  animation: tree-branches-draw 180s ease both;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: tree-draw-branches 15s ease both;
 }
-@keyframes tree-branches-draw {
-  0%, 20%  { stroke-dashoffset: 80; opacity: 0; }
-  25%      { opacity: 1; }
-  55%      { stroke-dashoffset: 0; }
+@keyframes tree-draw-branches {
+  0%, 25%  { stroke-dashoffset: 120; opacity: 0; }
+  30%      { opacity: 1; }
+  60%      { stroke-dashoffset: 0; }
   100%     { stroke-dashoffset: 0; opacity: 1; }
 }
 
-/* Stage 4 (45–75%): Canopy foliage blooms */
+/* Stage 4: Canopy foliage blooms */
 .tree-canopy {
   transform-origin: center center;
   transform: scale(0);
-  animation: tree-bloom 180s ease both;
+  animation: tree-bloom-canopy 15s ease both;
 }
-@keyframes tree-bloom {
-  0%, 40%  { transform: scale(0); opacity: 0; }
-  55%      { transform: scale(0.6); opacity: 0.7; }
-  70%      { transform: scale(1.08); opacity: 1; }
-  75%      { transform: scale(1); opacity: 1; }
-  100%     { transform: scale(1); opacity: 1; }
+@keyframes tree-bloom-canopy {
+  0%, 50%  { transform: scale(0); opacity: 0; }
+  60%      { transform: scale(0.6); opacity: 0.7; }
+  80%      { transform: scale(1.08); opacity: 1; }
+  85%, 100% { transform: scale(1); opacity: 1; }
 }
-/* Staggered bloom per cluster */
-.tree-canopy.c1 { animation-delay: 0s; }
-.tree-canopy.c2 { animation-delay: 3s; }
-.tree-canopy.c3 { animation-delay: 6s; }
-.tree-canopy.c4 { animation-delay: 4s; }
-.tree-canopy.c5 { animation-delay: 2s; }
-.tree-canopy.c6 { animation-delay: 8s; }
-.tree-canopy.c7 { animation-delay: 5s; }
+/* Staggered bloom */
+.tree-canopy.c1 { animation-delay: 0.1s; }
+.tree-canopy.c2 { animation-delay: 0.3s; }
+.tree-canopy.c3 { animation-delay: 0.5s; }
+.tree-canopy.c4 { animation-delay: 0.4s; }
+.tree-canopy.c5 { animation-delay: 0.2s; }
+.tree-canopy.c6 { animation-delay: 0.6s; }
+.tree-canopy.c7 { animation-delay: 0.45s; }
 
-/* Stage 5 (70–100%): Hanging aerial roots descend */
+/* Stage 5: Hanging aerial roots descend */
 .tree-roots {
   stroke-dasharray: 40;
   stroke-dashoffset: 40;
-  animation: tree-roots-drop 180s ease both;
+  animation: tree-roots-descend 15s ease both;
 }
-@keyframes tree-roots-drop {
-  0%, 65%  { stroke-dashoffset: 40; opacity: 0; }
-  70%      { opacity: 0.4; }
-  90%      { stroke-dashoffset: 0; opacity: 0.5; }
-  100%     { stroke-dashoffset: 0; opacity: 0.5; }
+@keyframes tree-roots-descend {
+  0%, 75%  { stroke-dashoffset: 40; opacity: 0; }
+  80%      { opacity: 0.4; }
+  95%, 100% { stroke-dashoffset: 0; opacity: 0.6; }
 }
 
 /* Universal fade-in */
 @keyframes tree-fade-in {
   0%       { opacity: 0; }
-  8%       { opacity: 1; }
+  5%       { opacity: 1; }
   100%     { opacity: 1; }
 }
 
@@ -309,15 +332,16 @@ em { font-style: italic; }
   100% { transform: rotate(0); }
 }
 
-/* ── GSK monogram — Bodoni Moda, bold ── */
+/* ── GSK monogram — Fraunces font, bold and italic ── */
 .nav-brand .brand-monogram {
-  font-family: "Bodoni Moda", "Didot", "Playfair Display", serif;
+  font-family: "Fraunces", "Didot", "Georgia", serif;
   font-size: 26px;
   font-weight: 900;
-  font-optical-sizing: auto;
-  letter-spacing: 0.04em;
+  font-style: italic;
+  letter-spacing: 0.02em;
   color: var(--ink);
   line-height: 1;
+  margin-left: 2px;
 }
 .nav-links {
   display: flex;
