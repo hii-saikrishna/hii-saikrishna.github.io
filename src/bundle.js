@@ -6160,17 +6160,17 @@ function Nav({
     opacity: "0.5"
   })), /*#__PURE__*/React.createElement("svg", {
     className: "brand-monogram",
-    viewBox: "0 0 36 22",
+    viewBox: "0 0 48 22",
     xmlns: "http://www.w3.org/2000/svg"
   }, /*#__PURE__*/React.createElement("text", {
     x: "0",
     y: "17",
-    fontFamily: "Inter, system-ui, sans-serif",
-    fontWeight: "800",
-    fontSize: "17",
+    fontFamily: "'Instrument Serif', Georgia, serif",
+    fontWeight: "400",
+    fontSize: "20",
     letterSpacing: "-0.5",
     fill: "currentColor"
-  }, "SK")), /*#__PURE__*/React.createElement("span", {
+  }, "GSK")), /*#__PURE__*/React.createElement("span", {
     className: "brand-name"
   }, "Sai Krishna Ghanta")), /*#__PURE__*/React.createElement("div", {
     className: `nav-links ${open ? "open" : ""}`

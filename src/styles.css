@@ -241,7 +241,7 @@ em { font-style: italic; }
 
 /* ── Monogram SVG: visible by default, slides out on expand ── */
 .nav-brand .brand-monogram {
-  width: 36px;
+  width: 48px;
   height: 22px;
   opacity: 1;
   transform: translateX(0);

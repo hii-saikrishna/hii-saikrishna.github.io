@@ -1836,8 +1836,8 @@ function Nav({ page, go, blogPostOpen }) {
             <path d="M11 14a5.82 5.82 0 0 0 4-2 11.61 11.61 0 0 0 2.25-4" stroke="var(--bg)" strokeWidth="0.7" strokeLinecap="round" fill="none" opacity="0.5"/>
           </svg>
           {/* SVG monogram — visible by default, slides out on expand */}
-          <svg className="brand-monogram" viewBox="0 0 36 22" xmlns="http://www.w3.org/2000/svg">
-            <text x="0" y="17" fontFamily="Inter, system-ui, sans-serif" fontWeight="800" fontSize="17" letterSpacing="-0.5" fill="currentColor">SK</text>
+          <svg className="brand-monogram" viewBox="0 0 48 22" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="17" fontFamily="'Instrument Serif', Georgia, serif" fontWeight="400" fontSize="20" letterSpacing="-0.5" fill="currentColor">GSK</text>
           </svg>
           <span className="brand-name">Sai Krishna Ghanta</span>
         </div>
