@@ -600,6 +600,13 @@ const BLOG_POSTS = [];
 const UPDATES = [
 // 2026
 {
+  date: "Sep 2026",
+  year: 2026,
+  tag: "Award",
+  home: true,
+  title: "IROS 2026 Competition 1st Prize",
+  text: "Team Lead of 1st Prize Winner at the IROS 2026 Competition on Intelligent Information Gathering for Multi-Robot Systems."
+}, {
   date: "Aug 2026",
   year: 2026,
   tag: "Grant",
@@ -624,8 +631,6 @@ const UPDATES = [
   date: "May 2026",
   year: 2026,
   tag: "Fellowship",
-  home: true,
-  title: "NSF Chishiki AI Fellowship",
   text: "Awarded the 2026–27 NSF Chishiki AI Fellowship from the University of Texas at Austin, working with Dr. Krishna Kumar."
 }, {
   date: "May 2026",
