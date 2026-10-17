@@ -560,9 +560,11 @@ const BLOG_POSTS = [];
 // ─────────────────────────────────────────────────────────────────────────────
 const UPDATES = [
   // 2026
+  { date: "Oct 2026", year: 2026, tag: "Award",      home: true, title: "Carmon Honorable Mention", text: "Recipient of the James L. Carmon Honorable Mention Scholarship." },
+  { date: "Oct 2026", year: 2026, tag: "Talk",       home: true, title: "IROS 2026 — 3 Presentations", text: "Attended IEEE IROS 2026 and received a UGA Graduate School travel grant to present 2 research papers and the 1st-Prize competition solution on Intelligent Information Gathering for Multi-Robot Systems." },
   { date: "Sep 2026", year: 2026, tag: "Award",      home: true, title: "IROS 2026 Competition 1st Prize", text: "Team Lead of 1st Prize Winner at the IROS 2026 Competition on Intelligent Information Gathering for Multi-Robot Systems." },
-  { date: "Aug 2026", year: 2026, tag: "Grant",      home: true, title: "NHERI SPARC & NSF Grant", text: <>Received an NSF travel grant and attended the <a href="https://www.designsafe-ci.org/learning-center/sparc/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>NHERI SPARC Program</a> at the Texas Advanced Computing Center (TACC), UT Austin.</> },
-  { date: "Jun 2026", year: 2026, tag: "Grant",      home: true, title: "KTH RPL Summer School", text: "Received a travel grant for and attended the KTH RPL Summer School 2026 in Stockholm, Sweden." },
+  { date: "Aug 2026", year: 2026, tag: "Grant",      text: <>Received an NSF travel grant and attended the <a href="https://www.designsafe-ci.org/learning-center/sparc/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>NHERI SPARC Program</a> at the Texas Advanced Computing Center (TACC), UT Austin.</> },
+  { date: "Jun 2026", year: 2026, tag: "Grant",      text: "Received a travel grant for and attended the KTH RPL Summer School 2026 in Stockholm, Sweden." },
   { date: "May 2026", year: 2026, tag: "Fellowship", text: "Awarded the 2026–27 NSF Chishiki AI Fellowship from the University of Texas at Austin, working with Dr. Krishna Kumar." },
   { date: "May 2026", year: 2026, tag: "Candidacy",  text: "Passed my PhD candidacy exam, before a committee of Dr. Ramviyas Parasuraman, Dr. Jin Sun, Dr. Fei Duo, and Dr. Sabur Baidya." },
   { date: "Apr 2026", year: 2026, tag: "Talk",       text: "Presented “Spatial Intelligence Models for Reasoning” at UGA AI Research Day 2026." },

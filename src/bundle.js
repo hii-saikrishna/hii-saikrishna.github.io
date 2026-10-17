@@ -600,6 +600,20 @@ const BLOG_POSTS = [];
 const UPDATES = [
 // 2026
 {
+  date: "Oct 2026",
+  year: 2026,
+  tag: "Award",
+  home: true,
+  title: "Carmon Honorable Mention",
+  text: "Recipient of the James L. Carmon Honorable Mention Scholarship."
+}, {
+  date: "Oct 2026",
+  year: 2026,
+  tag: "Talk",
+  home: true,
+  title: "IROS 2026 — 3 Presentations",
+  text: "Attended IEEE IROS 2026 and received a UGA Graduate School travel grant to present 2 research papers and the 1st-Prize competition solution on Intelligent Information Gathering for Multi-Robot Systems."
+}, {
   date: "Sep 2026",
   year: 2026,
   tag: "Award",
@@ -610,8 +624,6 @@ const UPDATES = [
   date: "Aug 2026",
   year: 2026,
   tag: "Grant",
-  home: true,
-  title: "NHERI SPARC & NSF Grant",
   text: /*#__PURE__*/React.createElement(React.Fragment, null, "Received an NSF travel grant and attended the ", /*#__PURE__*/React.createElement("a", {
     href: "https://www.designsafe-ci.org/learning-center/sparc/",
     target: "_blank",
@@ -624,8 +636,6 @@ const UPDATES = [
   date: "Jun 2026",
   year: 2026,
   tag: "Grant",
-  home: true,
-  title: "KTH RPL Summer School",
   text: "Received a travel grant for and attended the KTH RPL Summer School 2026 in Stockholm, Sweden."
 }, {
   date: "May 2026",
