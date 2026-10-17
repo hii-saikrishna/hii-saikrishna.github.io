@@ -605,7 +605,7 @@ const UPDATES = [
   tag: "Award",
   home: true,
   title: "Carmon Honorable Mention",
-  text: "Recipient of the James L. Carmon Honorable Mention Scholarship."
+  text: "Recipient of the James L. Carmon Honorable Mention Award."
 }, {
   date: "Oct 2026",
   year: 2026,
